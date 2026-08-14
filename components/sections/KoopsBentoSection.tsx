@@ -64,8 +64,8 @@ export function KoopsBentoSection() {
             aria-label="Sužinoti apie restoraną „Vilkmergė“"
           >
             <img
-              src="/vilkmerge.jpg"
-              alt="Restorano „Vilkmergė“ salė"
+              src="/vilkmerge-table.jpg"
+              alt="Šventiškai serviruotas restorano „Vilkmergė“ stalas"
               loading="lazy"
             />
           </a>
