@@ -104,9 +104,6 @@ a.text-link:focus-visible > span[aria-hidden], a:focus-visible .text-link > span
 .tt-hero-top h1 { max-width: 1020px; display: flex; flex-wrap: wrap; align-items: center; gap: 0 24px; font-size: clamp(72px, 7.5vw, 112px); line-height: .933; letter-spacing: -.04em; }
 .tt-hero-top .body-large { max-width: 560px; color: rgba(255,255,255,.82); }
 .hero-headline-line { width: clamp(120px, 22vw, 317px); height: 4px; margin-top: .16em; background: var(--color-morning-mist); }
-.hero-orbit { position: absolute; z-index: -2; border: 1px dashed var(--color-morning-mist); border-radius: 50%; pointer-events: none; animation: hero-orbit-spin 50s linear infinite; }
-.hero-orbit-large { width: 1024px; height: 1024px; top: -478px; left: -376px; }
-.hero-orbit-small { width: 256px; height: 256px; right: -99px; bottom: 277px; animation-duration: 18s; animation-direction: reverse; }
 .hero-update-card { position: absolute; z-index: 3; right: 24px; bottom: 24px; width: 300px; padding: 8px; color: white; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.18); border-radius: var(--radius-card); backdrop-filter: blur(16px); }
 .hero-update-link { display: grid; gap: 10px; animation: hero-update-in .45s ease-out both; }
 .hero-update-media { position: relative; height: 160px; display: block; overflow: hidden; border-radius: 12px; background: var(--color-midnight-moss); }
@@ -123,7 +120,6 @@ a.text-link:focus-visible > span[aria-hidden], a:focus-visible .text-link > span
 .hero-update-dots button.is-active::before { width: 18px; background: var(--color-honey-pollen); border-radius: 8px; }
 
 @keyframes hero-image-drift { from { transform: scale(1); } to { transform: scale(1.035); } }
-@keyframes hero-orbit-spin { to { transform: rotate(360deg); } }
 @keyframes hero-update-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
 .koops-bento-section { padding-block: 120px; background: white; }
@@ -281,7 +277,6 @@ a.text-link:focus-visible > span[aria-hidden], a:focus-visible .text-link > span
   .tt-hero-content { padding: 128px 0 240px; }
   .tt-hero-top h1 { max-width: 760px; font-size: 72px; }
   .hero-headline-line { width: 220px; }
-  .hero-orbit-large { width: 550px; height: 550px; top: -144px; left: -173px; }
   .koops-bento-section, .tt-news, .tt-contact { padding-block: 64px; }
   .koops-bento-header { margin-bottom: 48px; }
   .koops-bento-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: 304px 304px; grid-auto-rows: 304px; }
@@ -340,8 +335,6 @@ a.text-link:focus-visible > span[aria-hidden], a:focus-visible .text-link > span
   .tt-hero-top h1 { font-size: 14vw; }
   .tt-hero-top { gap: 18px; }
   .hero-headline-line { width: 80px; height: 3px; }
-  .hero-orbit-large { width: 256px; height: 256px; top: -45px; left: -109px; }
-  .hero-orbit-small { width: 156px; height: 156px; right: -55px; bottom: 156px; }
   .hero-update-card { right: 16px; bottom: 16px; width: 160px; }
   .hero-update-media { height: 80px; }
   .hero-update-kicker { left: 8px; bottom: 7px; padding: 3px 6px; font-size: 8px; }
@@ -389,5 +382,5 @@ a.text-link:focus-visible > span[aria-hidden], a:focus-visible .text-link > span
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .tt-hero-background img, .hero-orbit, .hero-update-link { animation: none !important; }
+  .tt-hero-background img, .hero-update-link { animation: none !important; }
 }

@@ -132,9 +132,6 @@ export default function Home() {
             <img src="/koops-hero-market.jpg" alt="" />
           </div>
           <div className="tt-hero-overlay" aria-hidden="true" />
-          <div className="hero-orbit hero-orbit-large" aria-hidden="true" />
-          <div className="hero-orbit hero-orbit-small" aria-hidden="true" />
-
           <div className="tt-container tt-hero-stage">
             <div className="tt-hero-content">
               <div className="tt-hero-top">
