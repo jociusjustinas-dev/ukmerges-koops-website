@@ -133,7 +133,7 @@ export default function Home() {
         {/* BYQ: terra-tory-hero-1 adapted to KOOPS */}
         <section className="tt-hero" id="pradzia" data-byq-component="terra-tory-hero-1">
           <div className="tt-hero-background" aria-hidden="true">
-            <img src="/koops-hero.jpg" alt="" />
+            <img src="/koops-hero-market.jpg" alt="" />
           </div>
           <div className="tt-hero-overlay" aria-hidden="true" />
           <div className="hero-orbit hero-orbit-large" aria-hidden="true" />
