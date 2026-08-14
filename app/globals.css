@@ -123,22 +123,23 @@ h1, h2, h3 { font-family: var(--font-field-sans); font-weight: 400; }
 @keyframes hero-orbit-spin { to { transform: rotate(360deg); } }
 @keyframes hero-update-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-.tt-features { padding-block: 80px; background: white; }
-.tt-features .dashed-divider { margin-bottom: 64px; }
-.tt-features-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 32px; }
-.tt-features-intro { max-width: 500px; display: flex; flex-direction: column; gap: 32px; }
-.tt-features-intro h2, .tt-section-header h2, .story-headline h2, .jobs-header h2, .contact-heading h2 { font-size: 48px; line-height: .92; letter-spacing: -.04em; }
-.tt-features-intro h2 { max-width: 8ch; }
-.tt-feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-.tt-feature-card { position: relative; min-height: 300px; display: flex; flex-direction: column; justify-content: space-between; gap: 32px; padding: 40px; background: var(--color-bone-canvas); border-radius: var(--radius-card); transition: transform .25s ease, background-color .25s ease; }
-.tt-feature-card:first-child { background: var(--color-honey-pollen); }
-.tt-feature-card:hover { transform: translateY(-5px); }
-.feature-icon { width: 32px; height: 32px; display: block; }
-.feature-icon svg { width: 100%; height: 100%; display: block; }
-.tt-feature-card h3 { margin-bottom: 16px; font-size: 24px; line-height: 1.16; letter-spacing: -.02em; }
-.tt-feature-card p { max-width: 310px; }
-.feature-arrow { position: absolute; right: 24px; top: 24px; font-size: 22px; }
-.feature-arrow svg { width: 7px; height: 10px; display: block; }
+.koops-bento-section { padding-block: 120px; background: white; }
+.koops-bento-header { display: flex; flex-direction: column; gap: 32px; margin-bottom: 80px; }
+.koops-bento-header h2, .tt-section-header h2, .story-headline h2, .jobs-header h2, .contact-heading h2 { font-size: 48px; line-height: .92; letter-spacing: -.04em; }
+.koops-bento-header h2 { max-width: 640px; }
+.koops-bento-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: 304px 304px; gap: 16px; }
+.koops-bento-card { position: relative; min-width: 0; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 24px; padding: 32px; background: var(--color-bone-canvas); border-radius: var(--radius-card); }
+.koops-bento-card-content { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 16px; }
+.koops-bento-card-content p { max-width: 310px; }
+.koops-bento-card h3 { font-size: 48px; line-height: .92; letter-spacing: -.04em; }
+.koops-bento-media { height: 304px; overflow: hidden; display: block; background: var(--color-bone-canvas); border-radius: var(--radius-card); }
+.koops-bento-media img { width: 100%; height: 100%; object-fit: cover; }
+.koops-bento-media-tall { grid-row: span 2; height: 624px; }
+.koops-bento-card-accent { grid-column: span 2; background: var(--color-honey-pollen); }
+.koops-bento-card-accent > .section-label { position: relative; z-index: 1; }
+.koops-bento-actions { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 12px 24px; }
+.koops-bento-link { display: inline-flex; align-items: center; gap: 8px; padding-bottom: 3px; border-bottom: 1px solid currentColor; font-size: 15px; font-weight: 500; }
+.koops-bento-circle { position: absolute; width: 400px; height: 400px; right: -122px; bottom: -172px; border: 1px dashed var(--color-moss-veil); border-radius: 50%; pointer-events: none; }
 
 .tt-locations { padding-block: 120px; background: var(--color-midnight-moss); color: white; }
 .location-headline { max-width: 980px; margin-bottom: 80px; display: flex; flex-wrap: wrap; align-items: center; gap: 0 16px; font-family: var(--font-field-sans); font-size: 72px; line-height: .944; letter-spacing: -.04em; }
@@ -276,10 +277,10 @@ h1, h2, h3 { font-family: var(--font-field-sans); font-weight: 400; }
   .tt-hero-top h1 { max-width: 760px; font-size: 72px; }
   .hero-headline-line { width: 220px; }
   .hero-orbit-large { width: 550px; height: 550px; top: -144px; left: -173px; }
-  .tt-features, .tt-news, .tt-contact { padding-block: 64px; }
-  .tt-features .dashed-divider { margin-bottom: 48px; }
-  .tt-features-layout { grid-template-columns: 1fr; }
-  .tt-features-intro { margin-bottom: 16px; }
+  .koops-bento-section, .tt-news, .tt-contact { padding-block: 64px; }
+  .koops-bento-header { margin-bottom: 48px; }
+  .koops-bento-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: 304px 304px; grid-auto-rows: 304px; }
+  .koops-bento-card-accent { grid-column: span 2; }
   .tt-locations, .tt-story { padding-block: 80px; }
   .location-headline { margin-bottom: 48px; font-size: 64px; }
   .location-image { height: 374px; }
@@ -304,8 +305,7 @@ h1, h2, h3 { font-family: var(--font-field-sans); font-weight: 400; }
   .nav-cta { display: none; }
   .tt-hero-top h1 { font-size: 64px; }
   .tt-hero-overlay { background: linear-gradient(180deg, rgba(10,13,7,.3) 0%, rgba(10,13,7,.72) 72%, rgba(10,13,7,.82) 100%); }
-  .tt-features-intro h2, .tt-section-header h2, .story-headline h2, .jobs-header h2, .contact-heading h2 { font-size: 40px; }
-  .tt-feature-grid { grid-template-columns: 1fr; gap: 24px; }
+  .koops-bento-header h2, .koops-bento-card h3, .tt-section-header h2, .story-headline h2, .jobs-header h2, .contact-heading h2 { font-size: 40px; }
   .location-headline { font-size: 56px; }
   .location-grid { grid-template-columns: 1fr; gap: 48px; }
   .location-image { height: 480px; }
@@ -343,8 +343,15 @@ h1, h2, h3 { font-family: var(--font-field-sans); font-weight: 400; }
   .hero-update-copy { padding-inline: 4px; }
   .hero-update-copy strong { font-size: 14px; }
   .hero-update-more { font-size: 11px; }
-  .tt-features, .tt-news, .tt-contact { padding-block: 48px; }
-  .tt-feature-card { min-height: 250px; padding: 24px; }
+  .koops-bento-section { padding-block: 80px; }
+  .tt-news, .tt-contact { padding-block: 48px; }
+  .koops-bento-header { gap: 24px; margin-bottom: 32px; }
+  .koops-bento-header h2, .koops-bento-card h3 { font-size: 36px; }
+  .koops-bento-grid { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-rows: auto; }
+  .koops-bento-card { min-height: 280px; padding: 24px; }
+  .koops-bento-media, .koops-bento-media-tall { height: 300px; grid-row: auto; }
+  .koops-bento-card-accent { grid-column: auto; min-height: 300px; }
+  .koops-bento-circle { width: 156px; height: 156px; right: -66px; bottom: -59px; }
   .tt-locations, .tt-story { padding-block: 64px; }
   .location-headline { font-size: 13vw; gap: 0 10px; }
   .location-headline i { width: 80px; }

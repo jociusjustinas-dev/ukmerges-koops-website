@@ -1,14 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { AvenirButtonArrow, ByqChevron, ByqJobIcon, ByqQuickIcon } from "./byq-icons";
-
-const quickLinks = [
-  { number: "01", title: "Parduotuvės", text: "Adresai, darbo laikas ir kelio nuorodos.", href: "#parduotuves" },
-  { number: "02", title: "Restoranas „Vilkmergė“", text: "Šventėms, renginiams ir susitikimams.", href: "#restoranas" },
-  { number: "03", title: "Darbo pasiūlymai", text: "Galimybės Ukmergėje ir rajone.", href: "#karjera" },
-  { number: "04", title: "Tapkite tiekėju", text: "Pasiūlykite savo produkciją KOOPS.", href: "#tiekejams" },
-];
+import { KoopsBentoSection } from "../components/sections/KoopsBentoSection";
+import { AvenirButtonArrow, ByqChevron, ByqJobIcon } from "./byq-icons";
 
 const stores = [
   {
@@ -198,30 +192,7 @@ export default function Home() {
           </aside>
         </section>
 
-        {/* BYQ: terra-tory-tiles-2 */}
-        <section className="tt-features" aria-labelledby="greitos-nuorodos" data-byq-component="terra-tory-tiles-2">
-          <div className="tt-container">
-            <div className="dashed-divider" />
-            <div className="tt-features-layout">
-              <div className="tt-features-intro">
-                <p className="section-label">GREITOS NUORODOS</p>
-                <h2 id="greitos-nuorodos">Ko ieškote šiandien?</h2>
-              </div>
-              <div className="tt-feature-grid">
-                {quickLinks.map((item, index) => (
-                  <a className="tt-feature-card" href={item.href} key={item.title}>
-                    <span className="feature-icon" aria-hidden="true"><ByqQuickIcon index={index} /></span>
-                    <div>
-                      <h3>{item.title}</h3>
-                      <p>{item.text}</p>
-                    </div>
-                    <span className="feature-arrow" aria-hidden="true"><ByqChevron /></span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        <KoopsBentoSection />
 
         {/* BYQ: terra-tory-team-1 adapted to location cards */}
         <section className="tt-locations" id="parduotuves" aria-labelledby="parduotuviu-antraste" data-byq-component="terra-tory-team-1">
