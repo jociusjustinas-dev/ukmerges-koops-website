@@ -61,6 +61,13 @@ const heroUpdates = [
   },
 ];
 
+const restaurantSlides = [
+  { src: "/vilkmerge.jpg", alt: "Restorano „Vilkmergė“ lauko erdvė" },
+  { src: "/vilkmerge-hall.jpg", alt: "Šventei paruošta restorano „Vilkmergė“ pokylių salė" },
+  { src: "/vilkmerge-table.jpg", alt: "Šventiškai serviruotas restorano stalas" },
+  { src: "/vilkmerge-menu.jpg", alt: "Restorano „Vilkmergė“ ruošiami užkandžiai" },
+];
+
 function RollingLabel({ children }: { children: React.ReactNode }) {
   return (
     <span className="avenir-button-inner">
@@ -76,6 +83,7 @@ export default function Home() {
   const [heroUpdateIndex, setHeroUpdateIndex] = React.useState(0);
   const [heroUpdatesPaused, setHeroUpdatesPaused] = React.useState(false);
   const [jobSlide, setJobSlide] = React.useState(0);
+  const [restaurantSlide, setRestaurantSlide] = React.useState(0);
   const pageRef = React.useRef<HTMLDivElement>(null);
   const heroLineRef = React.useRef<HTMLElement>(null);
 
@@ -288,7 +296,7 @@ export default function Home() {
 
           if (isDesktop) {
             const parallaxImages = root.querySelectorAll<HTMLElement>(
-              ".koops-bento-media img, .news-card-large > img, .story-image img, .about-image img, .contact-image img",
+              ".koops-bento-media img, .news-card-large > img, .about-image img, .contact-image img",
             );
 
             gsap.set(parallaxImages, { willChange: "transform" });
@@ -504,7 +512,44 @@ export default function Home() {
               <h2 id="restorano-antraste">Vieta jūsų šventėms, renginiams ir jaukiems susitikimams.</h2>
             </div>
             <div className="story-grid">
-              <div className="story-image"><img src="/vilkmerge.jpg" alt="Restorano „Vilkmergė“ lauko erdvė" /></div>
+              <div className="story-image" role="region" aria-roledescription="karuselė" aria-label="Restorano „Vilkmergė“ nuotraukų galerija">
+                <img
+                  key={restaurantSlides[restaurantSlide].src}
+                  src={restaurantSlides[restaurantSlide].src}
+                  alt={restaurantSlides[restaurantSlide].alt}
+                />
+                <div className="story-gallery-controls">
+                  <div className="story-gallery-dots" aria-label="Pasirinkti galerijos nuotrauką">
+                    {restaurantSlides.map((slide, index) => (
+                      <button
+                        type="button"
+                        className={index === restaurantSlide ? "is-active" : ""}
+                        onClick={() => setRestaurantSlide(index)}
+                        aria-label={`Rodyti ${index + 1} nuotrauką: ${slide.alt}`}
+                        aria-pressed={index === restaurantSlide}
+                        key={slide.src}
+                      />
+                    ))}
+                  </div>
+                  <div className="story-gallery-arrows">
+                    <button
+                      type="button"
+                      onClick={() => setRestaurantSlide((slide) => (slide - 1 + restaurantSlides.length) % restaurantSlides.length)}
+                      aria-label="Ankstesnė restorano nuotrauka"
+                    >
+                      <span className="control-arrow is-left"><ByqChevron /></span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setRestaurantSlide((slide) => (slide + 1) % restaurantSlides.length)}
+                      aria-label="Kita restorano nuotrauka"
+                    >
+                      <span className="control-arrow"><ByqChevron /></span>
+                    </button>
+                  </div>
+                </div>
+                <p className="sr-only" aria-live="polite">Nuotrauka {restaurantSlide + 1} iš {restaurantSlides.length}</p>
+              </div>
               <div className="story-copy">
                 <p>Pačiame Ukmergės centre įsikūręs restoranas tinka jubiliejams, vestuvėms, krikštynoms, oficialiems renginiams ir vakarienėms.</p>
                 <dl><div><dt>Pokylių salės</dt><dd>3 salės</dd></div><div><dt>Talpa</dt><dd>Iki 154 svečių</dd></div></dl>
