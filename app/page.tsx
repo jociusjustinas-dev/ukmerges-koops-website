@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { ByqChevron, ByqJobIcon, ByqQuickIcon, ByqStar } from "./byq-icons";
 
 const quickLinks = [
   { number: "01", title: "Parduotuvės", text: "Adresai, darbo laikas ir kelio nuorodos.", href: "#parduotuves" },
@@ -46,14 +47,16 @@ const jobs = [
 ];
 
 function Arrow() {
-  return <span aria-hidden="true">›</span>;
+  return <span className="byq-chevron" aria-hidden="true"><ByqChevron /></span>;
 }
 
 function RollingLabel({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rolling-label" aria-hidden="true">
-      <span>{children}<Arrow /></span>
-      <span>{children}<Arrow /></span>
+    <span className="rolling-mask" aria-hidden="true">
+      <span className="rolling-track">
+        <span>{children}<Arrow /></span>
+        <span>{children}<Arrow /></span>
+      </span>
     </span>
   );
 }
@@ -70,21 +73,24 @@ export default function Home() {
 
       <header className="floating-nav" data-byq-adaptation="terra-tory-design-system-navigation">
         <div className="nav-shell">
-          <a className="brand" href="#pradzia" aria-label="KOOPS – į pradžią">
-            <img src="/koops-logo.jpg" alt="KOOPS prekybos sistema" />
-          </a>
-          <nav className="desktop-nav" aria-label="Pagrindinė navigacija">
-            <a href="#parduotuves">Parduotuvės</a>
-            <a href="#naujienos">Naujienos</a>
-            <a href="#restoranas">Restoranas</a>
-            <a href="#karjera">Karjera</a>
-            <a href="#apie">Apie mus</a>
-          </nav>
+          <div className="nav-left">
+            <a className="brand" href="#pradzia" aria-label="KOOPS – į pradžią">
+              <img src="/koops-logo.jpg" alt="KOOPS prekybos sistema" />
+            </a>
+            <span className="nav-divider" aria-hidden="true" />
+            <nav className="desktop-nav" aria-label="Pagrindinė navigacija">
+              <a href="#parduotuves"><span>Parduotuvės</span></a>
+              <a href="#naujienos"><span>Naujienos</span></a>
+              <a href="#restoranas"><span>Restoranas</span></a>
+              <a href="#karjera"><span>Karjera</span></a>
+              <a href="#apie"><span>Apie mus</span></a>
+            </nav>
+          </div>
           <a className="pill-button dark nav-cta" href="#parduotuves" aria-label="Rasti parduotuvę">
             <RollingLabel>Rasti parduotuvę</RollingLabel>
           </a>
           <details className="mobile-menu">
-            <summary>Meniu <span aria-hidden="true">＋</span></summary>
+            <summary aria-label="Atverti pagrindinį meniu"><span className="menu-hamburger" aria-hidden="true"><i /><i /></span></summary>
             <nav aria-label="Mobilioji navigacija">
               <a href="#parduotuves">Parduotuvės</a>
               <a href="#naujienos">Naujienos ir akcijos</a>
@@ -115,7 +121,7 @@ export default function Home() {
                   </a>
                 </div>
                 <div className={`hero-badge ${heroVisible ? "is-visible" : ""}`}>
-                  <span className="badge-dot" aria-hidden="true">●</span>
+                  <span className="badge-dot" aria-hidden="true"><ByqStar /></span>
                   <span>Arti miesto ir rajono žmonių kasdien</span>
                 </div>
               </div>
@@ -133,14 +139,14 @@ export default function Home() {
                 <h2 id="greitos-nuorodos">Ko ieškote šiandien?</h2>
               </div>
               <div className="tt-feature-grid">
-                {quickLinks.map((item) => (
+                {quickLinks.map((item, index) => (
                   <a className="tt-feature-card" href={item.href} key={item.title}>
-                    <span className="feature-number">{item.number}</span>
+                    <span className="feature-icon" aria-hidden="true"><ByqQuickIcon index={index} /></span>
                     <div>
                       <h3>{item.title}</h3>
                       <p>{item.text}</p>
                     </div>
-                    <span className="feature-arrow" aria-hidden="true">↗</span>
+                    <span className="feature-arrow" aria-hidden="true"><ByqChevron /></span>
                   </a>
                 ))}
               </div>
@@ -224,15 +230,15 @@ export default function Home() {
             <div className="jobs-header">
               <div><p className="section-label light-label">KARJERA</p><h2 id="karjeros-antraste">Darbas arti namų</h2></div>
               <div className="slider-controls">
-                <button type="button" onClick={() => setJobSlide((s) => Math.max(0, s - 1))} disabled={jobSlide === 0} aria-label="Ankstesnis darbo pasiūlymas">‹</button>
-                <button type="button" onClick={() => setJobSlide((s) => Math.min(jobs.length - 1, s + 1))} disabled={jobSlide === jobs.length - 1} aria-label="Kitas darbo pasiūlymas">›</button>
+                <button type="button" onClick={() => setJobSlide((s) => Math.max(0, s - 1))} disabled={jobSlide === 0} aria-label="Ankstesnis darbo pasiūlymas"><span className="control-arrow is-left"><ByqChevron /></span></button>
+                <button type="button" onClick={() => setJobSlide((s) => Math.min(jobs.length - 1, s + 1))} disabled={jobSlide === jobs.length - 1} aria-label="Kitas darbo pasiūlymas"><span className="control-arrow"><ByqChevron /></span></button>
               </div>
             </div>
             <div className="jobs-mask">
               <div className="jobs-track" style={{ "--slide": jobSlide } as React.CSSProperties}>
                 {jobs.map((job) => (
                   <a className="job-card" href="https://ukmergeskoops.lt/skelbimai/" key={job.title}>
-                    <div><span className="job-number">{job.number}</span><p className="section-label light-label">{job.type}</p><h3>{job.title}</h3></div>
+                    <div><span className="job-icon" aria-hidden="true"><ByqJobIcon index={Number(job.number) - 1} /></span><p className="section-label light-label">{job.type}</p><h3>{job.title}</h3></div>
                     <div><p>{job.location}</p><span className="light-link">Plačiau <Arrow /></span></div>
                   </a>
                 ))}
