@@ -109,9 +109,10 @@ export default function Home() {
             isMobile: boolean;
             reduceMotion: boolean;
           };
+          const titlePushLines = root.querySelectorAll<HTMLElement>(".title-push-line");
 
           if (reduceMotion) {
-            line.style.removeProperty("width");
+            titlePushLines.forEach((pushLine) => pushLine.style.removeProperty("width"));
             return;
           }
 
@@ -177,7 +178,8 @@ export default function Home() {
             },
             {
               trigger: ".tt-locations",
-              headings: ".location-headline > *",
+              headings: ".location-headline > :not(.title-push-line)",
+              pushLine: ".location-headline > .title-push-line",
               items: ".location-grid > *, .section-cta",
             },
             {
@@ -218,12 +220,21 @@ export default function Home() {
             },
           ];
 
-          revealSections.forEach(({ trigger, divider, headings, items }) => {
+          revealSections.forEach(({ trigger, divider, headings, pushLine, items }) => {
             const section = root.querySelector<HTMLElement>(trigger);
             if (!section) return;
 
             const dividerElements = divider ? section.querySelectorAll<HTMLElement>(divider) : [];
             const headingElements = section.querySelectorAll<HTMLElement>(headings);
+            const pushLineElements = pushLine
+              ? Array.from(section.querySelectorAll<HTMLElement>(pushLine))
+              : [];
+            const pushLineTargets = pushLineElements.map((pushLineElement) => {
+              pushLineElement.style.removeProperty("width");
+              const width = pushLineElement.getBoundingClientRect().width;
+              pushLineElement.style.width = "0px";
+              return { element: pushLineElement, width };
+            });
             const itemElements = items ? section.querySelectorAll<HTMLElement>(items) : [];
             const timeline = gsap.timeline({
               scrollTrigger: {
@@ -252,12 +263,25 @@ export default function Home() {
               );
             }
 
+            pushLineTargets.forEach(({ element, width }) => {
+              timeline.to(
+                element,
+                {
+                  width,
+                  duration: 0.82,
+                  ease: "power3.inOut",
+                  clearProps: "width",
+                },
+                0.55,
+              );
+            });
+
             if (itemElements.length) {
               timeline.fromTo(
                 itemElements,
                 { y: isMobile ? 24 : 40, scale: 0.985, autoAlpha: 0 },
                 { y: 0, scale: 1, autoAlpha: 1, duration: 0.88, stagger: 0.1 },
-                headingElements.length ? 0.34 : 0,
+                pushLineTargets.length ? 0.58 : headingElements.length ? 0.34 : 0,
               );
             }
           });
@@ -368,7 +392,7 @@ export default function Home() {
                   <span>KOOPS</span>
                   <span>parduotuvės</span>
                   <span className="hero-title-break" aria-hidden="true" />
-                  <i ref={heroLineRef} className="hero-headline-line" style={{ width: 0 }} aria-hidden="true" />
+                  <i ref={heroLineRef} className="hero-headline-line title-push-line" style={{ width: 0 }} aria-hidden="true" />
                   <span>arčiau</span>
                   <span>jūsų.</span>
                 </h1>
@@ -422,7 +446,7 @@ export default function Home() {
         <section className="tt-locations" id="parduotuves" aria-labelledby="parduotuviu-antraste" data-byq-component="terra-tory-team-1">
           <div className="tt-container">
             <div className="location-headline" id="parduotuviu-antraste">
-              <span>Raskite</span><span>artimiausią</span><i aria-hidden="true" /><span>KOOPS</span><span>parduotuvę</span>
+              <span>Raskite</span><span>artimiausią</span><i className="title-push-line" style={{ width: 0 }} aria-hidden="true" /><span>KOOPS</span><span>parduotuvę</span>
             </div>
             <div className="location-grid">
               {stores.map((store) => (
