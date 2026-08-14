@@ -568,12 +568,10 @@ export default function Home() {
                   <span className="text-link">Skaityti <span aria-hidden="true">→</span></span>
                 </div>
               </a>
-              <a className="news-card news-card-visual news-card-accent" href="https://ukmergeskoops.lt/naujienos/">
-                <img loading="lazy" src="/ukmerge-fields-4.jpg" alt="Ukmergės rajono laukai" />
+              <a className="news-card news-card-accent" href="https://ukmergeskoops.lt/naujienos/">
                 <div className="news-card-copy"><h3>Naujausi pasiūlymai kasdieniam krepšeliui</h3><span className="text-link">Peržiūrėti <span aria-hidden="true">→</span></span></div>
               </a>
-              <a className="news-card news-card-visual news-card-muted" href="https://ukmergeskoops.lt/naujienos/">
-                <img loading="lazy" src="/local-produce-shopper.jpg" alt="Pirkėja renkasi šviežias daržoves" />
+              <a className="news-card news-card-muted" href="https://ukmergeskoops.lt/naujienos/">
                 <div className="news-card-copy"><h3>Kas naujo KOOPS parduotuvėse?</h3><span className="text-link">Sužinoti <span aria-hidden="true">→</span></span></div>
               </a>
               <a className="news-card news-card-wide" href="https://ukmergeskoops.lt/naujienos/">
