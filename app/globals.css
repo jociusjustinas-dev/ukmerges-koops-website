@@ -320,6 +320,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .footer-socials { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
 .footer-social-link { min-height: 44px; display: inline-flex; align-items: center; gap: 10px; padding-right: 16px; border: 1px solid var(--color-moss-edge); border-radius: 999px; font-size: 14px; font-weight: 600; transition: color .25s ease, background-color .25s ease, border-color .25s ease, transform .3s cubic-bezier(.22,1,.36,1); }
 .footer-social-mark { width: 42px; height: 42px; display: grid; flex: 0 0 auto; place-items: center; color: white; background: var(--color-midnight-moss); border-radius: 50%; font-size: 13px; font-weight: 700; line-height: 1; text-transform: uppercase; transition: color .25s ease, background-color .25s ease, transform .3s cubic-bezier(.22,1,.36,1); }
+.footer-social-mark svg { width: 18px; height: 18px; display: block; }
 .footer-social-link:focus-visible { outline: 3px solid var(--color-sprout-green); outline-offset: 3px; }
 .footer-social-link:focus-visible .footer-social-mark { color: var(--color-midnight-moss); background: var(--color-honey-pollen); transform: rotate(-6deg); }
 @media (hover: hover) and (pointer: fine) {

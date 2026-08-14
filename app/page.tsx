@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { FaFacebookF, FaInstagram } from "react-icons/fa6";
 import { KoopsBentoSection } from "../components/sections/KoopsBentoSection";
 import { KoopsValueFeaturesSection } from "../components/sections/KoopsValueFeaturesSection";
 import { AvenirButtonArrow, ByqChevron } from "./byq-icons";
@@ -70,9 +71,9 @@ const restaurantSlides = [
 ];
 
 const socialLinks = [
-  { label: "Facebook", mark: "f", href: "https://www.facebook.com/ukmergeskoops" },
+  { label: "Facebook", icon: FaFacebookF, href: "https://www.facebook.com/ukmergeskoops" },
   // Pakeisti, jei klientas pateiks kitą oficialų „Instagram“ paskyros adresą.
-  { label: "Instagram", mark: "ig", href: "https://www.instagram.com/ukmergeskoops/" },
+  { label: "Instagram", icon: FaInstagram, href: "https://www.instagram.com/ukmergeskoops/" },
 ];
 
 type SupplierField = "vardas" | "el_pastas" | "pasiulymas" | "privatumas";
@@ -804,19 +805,22 @@ export default function Home() {
                 <img src="/koops-logo.png" alt="KOOPS prekybos sistema" />
                 <p>Arti miesto ir rajono žmonių kasdien.</p>
                 <div className="footer-socials" aria-label="KOOPS socialiniai tinklai">
-                  {socialLinks.map((social) => (
-                    <a
-                      className="footer-social-link"
-                      href={social.href}
-                      key={social.label}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`${social.label} – atidaroma naujame lange`}
-                    >
-                      <span className="footer-social-mark" aria-hidden="true">{social.mark}</span>
-                      <span>{social.label}</span>
-                    </a>
-                  ))}
+                  {socialLinks.map((social) => {
+                    const SocialIcon = social.icon;
+                    return (
+                      <a
+                        className="footer-social-link"
+                        href={social.href}
+                        key={social.label}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`${social.label} – atidaroma naujame lange`}
+                      >
+                        <span className="footer-social-mark" aria-hidden="true"><SocialIcon /></span>
+                        <span>{social.label}</span>
+                      </a>
+                    );
+                  })}
                 </div>
               </div>
               <nav aria-label="Poraštės navigacija">
