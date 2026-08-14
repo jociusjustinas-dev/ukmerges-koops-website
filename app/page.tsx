@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ByqChevron, ByqJobIcon, ByqQuickIcon, ByqStar } from "./byq-icons";
+import { ByqChevron, ByqJobIcon, ByqQuickIcon } from "./byq-icons";
 
 const quickLinks = [
   { number: "01", title: "Parduotuvės", text: "Adresai, darbo laikas ir kelio nuorodos.", href: "#parduotuves" },
@@ -46,6 +46,27 @@ const jobs = [
   { number: "03", type: "LOGISTIKOJE", title: "Vairuotojas–sandėlininkas (-ė)", location: "Ukmergė" },
 ];
 
+const heroUpdates = [
+  {
+    label: "NAUJIENOS",
+    title: "Vietos skoniai – arčiau jūsų",
+    image: "/koops-community.jpg",
+    href: "#naujienos",
+  },
+  {
+    label: "RESTORANAS",
+    title: "Planuojate šventę „Vilkmergėje“?",
+    image: "/vilkmerge.jpg",
+    href: "#restoranas",
+  },
+  {
+    label: "KARJERA",
+    title: "Nauji darbo pasiūlymai Ukmergėje",
+    image: "/store-papartis.jpeg",
+    href: "#karjera",
+  },
+];
+
 function Arrow() {
   return <span className="byq-chevron" aria-hidden="true"><ByqChevron /></span>;
 }
@@ -62,10 +83,21 @@ function RollingLabel({ children }: { children: React.ReactNode }) {
 }
 
 export default function Home() {
-  const [heroVisible, setHeroVisible] = React.useState(false);
+  const [heroUpdateIndex, setHeroUpdateIndex] = React.useState(0);
+  const [heroUpdatesPaused, setHeroUpdatesPaused] = React.useState(false);
   const [jobSlide, setJobSlide] = React.useState(0);
 
-  React.useEffect(() => setHeroVisible(true), []);
+  React.useEffect(() => {
+    if (heroUpdatesPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const timer = window.setInterval(() => {
+      setHeroUpdateIndex((current) => (current + 1) % heroUpdates.length);
+    }, 6500);
+
+    return () => window.clearInterval(timer);
+  }, [heroUpdatesPaused]);
+
+  const activeHeroUpdate = heroUpdates[heroUpdateIndex];
 
   return (
     <>
@@ -104,29 +136,66 @@ export default function Home() {
       </header>
 
       <main id="turinys">
-        {/* BYQ: terra-tory-hero-2 */}
-        <section className="tt-hero" id="pradzia" data-byq-component="terra-tory-hero-2">
-          <div className="tt-hero-grid">
-            <div className="tt-hero-media">
-              <img src="/koops-hero.jpg" alt="KOOPS parduotuvė Ukmergės rajone" />
-            </div>
-            <div className="tt-hero-panel">
-              <div className="tt-hero-content">
-                <div className="tt-hero-top">
-                  <p className="section-label">UKMERGĖJE IR RAJONE</p>
-                  <h1>Raskite artimiausią KOOPS parduotuvę</h1>
-                  <p className="body-large">Adresai, darbo laikas, telefonai ir kelio nuorodos – vienoje vietoje.</p>
-                  <a className="pill-button accent" href="#parduotuves" aria-label="Rasti artimiausią parduotuvę">
-                    <RollingLabel>Rasti parduotuvę</RollingLabel>
-                  </a>
-                </div>
-                <div className={`hero-badge ${heroVisible ? "is-visible" : ""}`}>
-                  <span className="badge-dot" aria-hidden="true"><ByqStar /></span>
-                  <span>Arti miesto ir rajono žmonių kasdien</span>
-                </div>
+        {/* BYQ: terra-tory-hero-1 adapted to KOOPS */}
+        <section className="tt-hero" id="pradzia" data-byq-component="terra-tory-hero-1">
+          <div className="tt-hero-background" aria-hidden="true">
+            <img src="/koops-hero.jpg" alt="" />
+          </div>
+          <div className="tt-hero-overlay" aria-hidden="true" />
+          <div className="hero-orbit hero-orbit-large" aria-hidden="true" />
+          <div className="hero-orbit hero-orbit-small" aria-hidden="true" />
+
+          <div className="tt-container tt-hero-stage">
+            <div className="tt-hero-content">
+              <div className="tt-hero-top">
+                <p className="section-label light-label">UKMERGĖJE IR RAJONE</p>
+                <h1>
+                  <span>KOOPS</span>
+                  <span>parduotuvės</span>
+                  <i className="hero-headline-line" aria-hidden="true" />
+                  <span>arčiau</span>
+                  <span>jūsų.</span>
+                </h1>
+                <p className="body-large">Raskite artimiausią parduotuvę, jos darbo laiką ir maršrutą.</p>
+                <a className="pill-button accent" href="#parduotuves" aria-label="Rasti artimiausią parduotuvę">
+                  <RollingLabel>Rasti parduotuvę</RollingLabel>
+                </a>
               </div>
             </div>
           </div>
+
+          <aside
+            className="hero-update-card"
+            aria-label="Aktualios KOOPS naujienos"
+            onMouseEnter={() => setHeroUpdatesPaused(true)}
+            onMouseLeave={() => setHeroUpdatesPaused(false)}
+            onFocusCapture={() => setHeroUpdatesPaused(true)}
+            onBlurCapture={() => setHeroUpdatesPaused(false)}
+          >
+            <a className="hero-update-link" href={activeHeroUpdate.href} key={activeHeroUpdate.title}>
+              <span className="hero-update-media">
+                <img src={activeHeroUpdate.image} alt="" />
+                <span className="hero-update-kicker">Aktualu</span>
+              </span>
+              <span className="hero-update-copy">
+                <span className="section-label light-label">{activeHeroUpdate.label}</span>
+                <strong>{activeHeroUpdate.title}</strong>
+                <span className="hero-update-more">Plačiau <Arrow /></span>
+              </span>
+            </a>
+            <div className="hero-update-dots" aria-label="Pasirinkti aktualiją">
+              {heroUpdates.map((item, index) => (
+                <button
+                  type="button"
+                  className={index === heroUpdateIndex ? "is-active" : ""}
+                  onClick={() => setHeroUpdateIndex(index)}
+                  aria-label={`Rodyti: ${item.title}`}
+                  aria-pressed={index === heroUpdateIndex}
+                  key={item.title}
+                />
+              ))}
+            </div>
+          </aside>
         </section>
 
         {/* BYQ: terra-tory-tiles-2 */}
