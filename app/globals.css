@@ -172,7 +172,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .section-cta { margin-top: 48px; }
 
 .tt-news { padding-block: 80px; background: white; }
-.tt-section-header { display: flex; flex-direction: column; gap: 32px; margin-bottom: 96px; }
+.tt-section-header { display: flex; flex-direction: column; gap: 32px; margin-bottom: 64px; }
 .tt-section-header h2 { max-width: 640px; }
 .news-bento { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: minmax(280px, auto) minmax(280px, auto); gap: 16px; }
 .news-card { min-height: 280px; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 32px; padding: 32px; border-radius: var(--radius-card); }
