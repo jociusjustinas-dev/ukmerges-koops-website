@@ -43,18 +43,6 @@ export function KoopsBentoSection() {
 
           <a
             className="koops-bento-media"
-            href="#restoranas"
-            aria-label="Sužinoti apie restoraną „Vilkmergė“"
-          >
-            <img
-              src="/vilkmerge.jpg"
-              alt="Restorano „Vilkmergė“ salė"
-              loading="lazy"
-            />
-          </a>
-
-          <a
-            className="koops-bento-media"
             href="#tiekejams"
             aria-label="Tapti KOOPS tiekėju"
           >
@@ -65,14 +53,26 @@ export function KoopsBentoSection() {
             />
           </a>
 
+          <a
+            className="koops-bento-media"
+            href="#restoranas"
+            aria-label="Sužinoti apie restoraną „Vilkmergė“"
+          >
+            <img
+              src="/vilkmerge.jpg"
+              alt="Restorano „Vilkmergė“ salė"
+              loading="lazy"
+            />
+          </a>
+
           <div className="koops-bento-card koops-bento-card-accent">
-            <p className="section-label">KARJERA</p>
+            <p className="section-label">RESTORANAS</p>
             <div className="koops-bento-card-content">
-              <h3>Darbo pasiūlymai</h3>
-              <p>Galimybės Ukmergėje ir rajone.</p>
+              <h3>Restoranas „Vilkmergė“</h3>
+              <p>Šventėms, renginiams ir susitikimams.</p>
             </div>
             <div className="koops-bento-actions">
-              <a className="koops-bento-link" href="#karjera">Peržiūrėti pasiūlymus <span aria-hidden="true">→</span></a>
+              <a className="koops-bento-link" href="#restoranas">Sužinoti daugiau <span aria-hidden="true">→</span></a>
             </div>
             <span className="koops-bento-circle" aria-hidden="true" />
           </div>
