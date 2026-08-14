@@ -116,7 +116,7 @@ export default function Home() {
           }
 
           const heroLabel = root.querySelector<HTMLElement>(".tt-hero-top > .section-label");
-          const heroWords = root.querySelectorAll<HTMLElement>(".tt-hero-top h1 > span");
+          const heroWords = root.querySelectorAll<HTMLElement>(".tt-hero-top h1 > span:not(.hero-title-break)");
           const heroBody = root.querySelector<HTMLElement>(".tt-hero-top > .body-large");
           const heroCta = root.querySelector<HTMLElement>(".tt-hero-top > .pill-button");
           const heroCard = root.querySelector<HTMLElement>(".hero-update-card");
@@ -144,7 +144,7 @@ export default function Home() {
             line,
             {
               width: targetWidth,
-              duration: 1.05,
+              duration: 0.82,
               ease: "power3.inOut",
               clearProps: "width",
             },
@@ -367,6 +367,7 @@ export default function Home() {
                 <h1>
                   <span>KOOPS</span>
                   <span>parduotuvės</span>
+                  <span className="hero-title-break" aria-hidden="true" />
                   <i ref={heroLineRef} className="hero-headline-line" style={{ width: 0 }} aria-hidden="true" />
                   <span>arčiau</span>
                   <span>jūsų.</span>
