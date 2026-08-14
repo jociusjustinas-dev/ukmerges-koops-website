@@ -188,7 +188,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 
 .tt-story { padding-block: 120px; background: var(--color-midnight-moss); color: white; }
 .story-headline { max-width: 760px; display: flex; flex-direction: column; gap: 28px; margin-bottom: 80px; }
-.story-headline h2 { font-size: clamp(60px, 6vw, 88px); line-height: .94; }
+.story-headline h2 { font-size: clamp(52px, 5vw, 72px); line-height: .96; }
 .story-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; }
 .story-image { height: 562px; overflow: hidden; border-radius: var(--radius-card); }
 .story-image img { width: 100%; height: 100%; object-fit: cover; }
