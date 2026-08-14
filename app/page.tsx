@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ByqChevron, ByqJobIcon, ByqQuickIcon } from "./byq-icons";
+import { AvenirButtonArrow, ByqChevron, ByqJobIcon, ByqQuickIcon } from "./byq-icons";
 
 const quickLinks = [
   { number: "01", title: "Parduotuvės", text: "Adresai, darbo laikas ir kelio nuorodos.", href: "#parduotuves" },
@@ -73,11 +73,11 @@ function Arrow() {
 
 function RollingLabel({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rolling-mask" aria-hidden="true">
-      <span className="rolling-track">
-        <span>{children}<Arrow /></span>
-        <span>{children}<Arrow /></span>
+    <span className="avenir-button-inner">
+      <span className="avenir-icon-wrap" aria-hidden="true">
+        <span className="avenir-button-icon"><AvenirButtonArrow /></span>
       </span>
+      <span className="avenir-button-text">{children}</span>
     </span>
   );
 }
@@ -350,7 +350,7 @@ export default function Home() {
                   <label><span>EL. PAŠTAS</span><input name="el_pastas" type="email" autoComplete="email" required /></label>
                 </div>
                 <label><span>PASIŪLYMAS</span><textarea name="pasiulymas" rows={5} required /></label>
-                <button className="pill-button dark" type="submit"><span>Siųsti pasiūlymą <Arrow /></span></button>
+                <button className="pill-button dark" type="submit"><RollingLabel>Siųsti pasiūlymą</RollingLabel></button>
                 <p className="form-note">Paspaudus bus atverta jūsų el. pašto programa.</p>
               </form>
             </div>
