@@ -286,9 +286,10 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .supplier-form-alert.is-error { color: #702019; background: #fff4f1; border-color: rgba(163,50,39,.34); }
 .supplier-form-alert.is-success { color: #163d26; background: #edf8ef; border-color: rgba(40,105,62,.34); }
 .supplier-form-alert:focus-visible { outline: 3px solid #8c271f; outline-offset: 3px; }
-.privacy-field { width: 100%; display: grid; grid-template-columns: 18px minmax(0, 1fr); align-items: start; gap: 10px; padding: 0; border: 1px solid transparent; border-radius: 12px; }
-.privacy-field.has-error { padding: 12px 14px; background: #fff8f6; border-color: rgba(163,50,39,.34); }
-.privacy-checkbox { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--color-midnight-moss); cursor: pointer; }
+.privacy-field { width: 100%; display: grid; grid-template-columns: 18px minmax(0, 1fr); align-items: center; gap: 10px; padding: 0; border: 1px solid transparent; border-radius: 12px; }
+.privacy-field.has-error { align-items: start; padding: 12px 14px; background: #fff8f6; border-color: rgba(163,50,39,.34); }
+.privacy-checkbox { width: 18px; height: 18px; margin: 0; accent-color: var(--color-midnight-moss); cursor: pointer; }
+.privacy-field.has-error .privacy-checkbox { margin-top: 1px; }
 .privacy-checkbox:focus-visible { outline: 3px solid #2f6e46; outline-offset: 3px; }
 .privacy-consent-copy { font-size: 13px; font-weight: 500; line-height: 1.45; }
 .privacy-consent-copy label { cursor: pointer; }
