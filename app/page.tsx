@@ -765,8 +765,7 @@ export default function Home() {
               </form>
             </div>
             <div className="contact-image">
-              <img className="contact-image-main" loading="lazy" src="/local-produce-customer.jpg" alt="Pirkėja su vietos gamintojų produkcija" />
-              <img className="contact-image-inset" loading="lazy" src="/ukmerge-fields-2.jpg" alt="Ukmergės rajono ūkiai ir laukai" />
+              <img className="contact-image-main" loading="lazy" src="/ukmerge-fields-2.jpg" alt="Lietuvos laukai ir kaimo sodybos" />
             </div>
           </div>
         </section>
