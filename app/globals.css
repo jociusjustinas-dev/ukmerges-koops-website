@@ -329,6 +329,15 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
 .footer-brand img { width: 132px; height: auto; object-fit: contain; mix-blend-mode: multiply; }
 .footer-brand p { max-width: 320px; margin-top: 20px; color: var(--color-moss-veil); }
+.footer-socials { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.footer-social-link { min-height: 44px; display: inline-flex; align-items: center; gap: 10px; padding-right: 16px; border: 1px solid var(--color-moss-edge); border-radius: 999px; font-size: 14px; font-weight: 600; transition: color .25s ease, background-color .25s ease, border-color .25s ease, transform .3s cubic-bezier(.22,1,.36,1); }
+.footer-social-mark { width: 42px; height: 42px; display: grid; flex: 0 0 auto; place-items: center; color: white; background: var(--color-midnight-moss); border-radius: 50%; font-size: 13px; font-weight: 700; line-height: 1; text-transform: uppercase; transition: color .25s ease, background-color .25s ease, transform .3s cubic-bezier(.22,1,.36,1); }
+.footer-social-link:focus-visible { outline: 3px solid var(--color-sprout-green); outline-offset: 3px; }
+.footer-social-link:focus-visible .footer-social-mark { color: var(--color-midnight-moss); background: var(--color-honey-pollen); transform: rotate(-6deg); }
+@media (hover: hover) and (pointer: fine) {
+  .footer-social-link:hover { background: var(--color-bone-canvas); border-color: var(--color-moss-veil); transform: translateY(-2px); }
+  .footer-social-link:hover .footer-social-mark { color: var(--color-midnight-moss); background: var(--color-honey-pollen); transform: rotate(-6deg); }
+}
 .footer-grid nav { display: flex; justify-content: space-between; gap: 64px; }
 .footer-grid nav > div { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
 .footer-grid nav .section-label { margin-bottom: 10px; color: var(--color-moss-veil); }

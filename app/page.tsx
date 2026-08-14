@@ -69,6 +69,12 @@ const restaurantSlides = [
   { src: "/vilkmerge-menu.jpg", alt: "Restorano „Vilkmergė“ ruošiami užkandžiai" },
 ];
 
+const socialLinks = [
+  { label: "Facebook", mark: "f", href: "https://www.facebook.com/ukmergeskoops" },
+  // Pakeisti, jei klientas pateiks kitą oficialų „Instagram“ paskyros adresą.
+  { label: "Instagram", mark: "ig", href: "https://www.instagram.com/ukmergeskoops/" },
+];
+
 type SupplierField = "vardas" | "el_pastas" | "pasiulymas" | "privatumas";
 type SupplierFormErrors = Partial<Record<SupplierField, string>>;
 
@@ -779,7 +785,25 @@ export default function Home() {
         <div className="footer-reveal">
           <div className="tt-container footer-content">
             <div className="footer-grid">
-              <div className="footer-brand"><img src="/koops-logo.png" alt="KOOPS prekybos sistema" /><p>Arti miesto ir rajono žmonių kasdien.</p></div>
+              <div className="footer-brand">
+                <img src="/koops-logo.png" alt="KOOPS prekybos sistema" />
+                <p>Arti miesto ir rajono žmonių kasdien.</p>
+                <div className="footer-socials" aria-label="KOOPS socialiniai tinklai">
+                  {socialLinks.map((social) => (
+                    <a
+                      className="footer-social-link"
+                      href={social.href}
+                      key={social.label}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${social.label} – atidaroma naujame lange`}
+                    >
+                      <span className="footer-social-mark" aria-hidden="true">{social.mark}</span>
+                      <span>{social.label}</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
               <nav aria-label="Poraštės navigacija">
                 <div><p className="section-label">PAGRINDINIAI</p><a href="#parduotuves">Parduotuvės</a><a href="#naujienos">Naujienos</a><a href="#restoranas">Restoranas</a><a href="#karjera">Karjera</a></div>
                 <div><p className="section-label">KOOPERATYVAS</p><a href="#apie">Apie KOOPS</a><a href="#tiekejams">Tiekėjams</a><a href="https://ukmergeskoops.lt/kontaktai/">Kontaktai</a></div>
