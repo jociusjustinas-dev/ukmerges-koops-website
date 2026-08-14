@@ -86,7 +86,7 @@ h1, h2, h3 { font-family: var(--font-field-sans); font-weight: 400; }
 .brand img { width: 100%; height: 100%; object-fit: contain; }
 .nav-divider { width: 1px; height: 16px; flex: 0 0 auto; background: var(--color-moss-edge); }
 .desktop-nav { display: flex; align-items: center; gap: 4px; }
-.desktop-nav a { padding: 4px 8px; border-radius: 16px; font-size: 14px; font-weight: 500; transition: background-color .2s ease; }
+.desktop-nav a { padding: 4px 8px; border-radius: 16px; font-size: 15px; font-weight: 500; transition: background-color .2s ease; }
 .desktop-nav a:hover { background: var(--color-bone-canvas); }
 .mobile-menu { display: none; }
 
@@ -267,7 +267,7 @@ h1, h2, h3 { font-family: var(--font-field-sans); font-weight: 400; }
   .mobile-menu[open] .menu-hamburger i:first-child { top: 7px; transform: rotate(45deg); }
   .mobile-menu[open] .menu-hamburger i:last-child { top: 7px; transform: rotate(-45deg); }
   .mobile-menu nav { position: absolute; top: calc(100% + 12px); right: 0; width: min(320px, calc(100vw - 32px)); display: grid; padding: 10px; background: white; border: 1px solid var(--color-moss-edge); border-radius: var(--radius-card); box-shadow: 0 15px 20px rgba(2,1,32,.08); }
-  .mobile-menu nav a { min-height: 48px; display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--color-moss-edge); font-weight: 500; }
+  .mobile-menu nav a { min-height: 48px; display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--color-moss-edge); font-size: 15px; font-weight: 500; }
   .mobile-menu nav a:last-child { border: 0; }
 }
 
