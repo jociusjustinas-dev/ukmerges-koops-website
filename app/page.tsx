@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { KoopsBentoSection } from "../components/sections/KoopsBentoSection";
+import { KoopsValueFeaturesSection } from "../components/sections/KoopsValueFeaturesSection";
 import { AvenirButtonArrow, ByqChevron } from "./byq-icons";
 
 const stores = [
@@ -207,8 +208,8 @@ export default function Home() {
             },
             {
               trigger: ".tt-about",
-              headings: ".about-statement",
-              items: ".about-split > *",
+              headings: ".about-marquee-header > *",
+              items: ".about-marquee",
             },
             {
               trigger: ".tt-contact",
@@ -295,7 +296,7 @@ export default function Home() {
 
           if (isDesktop) {
             const parallaxImages = root.querySelectorAll<HTMLElement>(
-              ".koops-bento-media img, .news-card-large > img, .about-image img, .contact-image img",
+              ".koops-bento-media img, .news-card-large > img, .contact-image img",
             );
 
             gsap.set(parallaxImages, { willChange: "transform" });
@@ -592,24 +593,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* BYQ: terra-tory-combo-4 */}
-        <section className="tt-about" id="apie" aria-labelledby="apie-antraste" data-byq-component="terra-tory-combo-4">
-          <div className="tt-container">
-            <h2 className="about-statement" id="apie-antraste">Vietos žmonėms. Vietos verslui.</h2>
-            <div className="about-split">
-              <div className="about-panel">
-                <div><p className="section-label">APIE KOOPS</p><h3>Kasdien šalia Ukmergės krašto žmonių</h3><p className="body-large">Ukmergės rajono vartotojų kooperatyvas vienija prekybos ir maitinimo veiklas mieste bei rajone.</p></div>
-                <ul>
-                  <li><span>01</span>Parduotuvės mieste ir rajone</li>
-                  <li><span>02</span>Restoranas renginiams</li>
-                  <li><span>03</span>Darbo vietos vietos žmonėms</li>
-                  <li><span>04</span>Galimybės vietos tiekėjams</li>
-                </ul>
-              </div>
-              <div className="about-image"><img src="/koops-hero.jpg" alt="KOOPS parduotuvė Ukmergės rajone" /></div>
-            </div>
-          </div>
-        </section>
+        <KoopsValueFeaturesSection />
 
         {/* BYQ: terra-tory-contact-1 */}
         <section className="tt-contact" id="tiekejams" aria-labelledby="tiekeju-antraste" data-byq-component="terra-tory-contact-1">

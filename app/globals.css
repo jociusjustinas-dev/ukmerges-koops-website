@@ -246,17 +246,23 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .jobs-intro { position: sticky; top: 118px; }
 }
 
-.tt-about { padding: 80px 0 120px; background: white; }
-.about-statement { max-width: 900px; margin: 0 auto 80px; text-align: center; font-size: 72px; line-height: .944; letter-spacing: -.04em; }
-.about-split { min-height: 640px; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; border-radius: var(--radius-card); }
-.about-panel { display: flex; flex-direction: column; justify-content: space-between; gap: 32px; padding: 64px; background: var(--color-bone-canvas); }
-.about-panel > div { display: grid; gap: 24px; }
-.about-panel h3 { max-width: 10ch; font-size: 48px; line-height: .92; letter-spacing: -.04em; }
-.about-panel ul { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 0; padding: 0; list-style: none; }
-.about-panel li { min-height: 72px; display: flex; align-items: center; gap: 20px; font-size: 18px; }
-.about-panel li span { width: 28px; height: 28px; display: grid; flex: 0 0 auto; place-items: center; border: 1px solid var(--color-moss-edge); border-radius: 50%; font-size: 10px; }
-.about-image { min-height: 640px; }
-.about-image img { width: 100%; height: 100%; object-fit: cover; }
+.tt-about { padding-block: 120px; overflow: hidden; background: white; }
+.about-marquee-header { max-width: 864px; display: flex; flex-direction: column; align-items: center; gap: 32px; margin: 0 auto 64px; text-align: center; }
+.about-marquee-header h2 { font-size: clamp(72px, 7.5vw, 112px); line-height: .933; letter-spacing: -.04em; }
+.about-marquee-toggle { min-height: 44px; padding: 9px 18px; color: var(--color-midnight-moss); background: transparent; border: 1px solid var(--color-moss-edge); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: color .25s ease, background-color .25s ease; }
+.about-marquee-toggle:focus-visible { color: white; background: var(--color-midnight-moss); }
+@media (hover: hover) and (pointer: fine) {
+  .about-marquee-toggle:hover { color: white; background: var(--color-midnight-moss); }
+}
+.about-marquee { width: 100%; overflow: hidden; }
+.about-marquee-track { width: max-content; display: flex; will-change: transform; animation: about-marquee-move 44s linear infinite; }
+.about-marquee-track.is-paused { animation-play-state: paused; }
+.about-marquee-set { display: flex; flex: 0 0 auto; gap: 24px; padding-right: 24px; }
+.about-feature-card { width: 421px; min-height: 488px; display: flex; flex: 0 0 auto; flex-direction: column; gap: 40px; padding: 40px; background: var(--color-bone-canvas); border-radius: var(--radius-card); }
+.about-feature-card h3 { font-size: 32px; line-height: 1; letter-spacing: -.03em; }
+.about-feature-card img { width: 100%; height: 180px; object-fit: contain; }
+.about-feature-card p { margin-top: auto; font-size: 16px; line-height: 1.5; }
+@keyframes about-marquee-move { from { transform: translateX(0); } to { transform: translateX(calc(-100% / 3)); } }
 
 .tt-contact { padding-block: 80px; background: white; }
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -331,10 +337,10 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .tt-jobs { padding-block: 64px; }
   .jobs-layout { grid-template-columns: 1fr; gap: 48px; }
   .jobs-intro { max-width: 680px; }
-  .about-statement { margin-bottom: 48px; font-size: 64px; }
-  .about-split { grid-template-columns: 1fr; }
-  .about-panel { min-height: 620px; padding: 64px 48px; }
-  .about-image { min-height: 400px; height: 400px; }
+  .tt-about { padding-block: 64px; }
+  .about-marquee-header { margin-bottom: 48px; }
+  .about-marquee-header h2 { font-size: 72px; }
+  .about-feature-card { min-height: 440px; }
   .contact-grid { grid-template-columns: 1fr; }
   .contact-image { justify-self: stretch; width: 100%; height: 500px; }
   .footer-grid { grid-template-columns: 1fr; }
@@ -355,8 +361,9 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .news-card-large { min-height: 440px; }
   .news-card-large h3 { font-size: 40px; }
   .story-image { height: 300px; }
-  .about-statement, .footer-cta h2 { font-size: 56px; }
-  .about-panel h3 { font-size: 40px; }
+  .about-marquee-header h2 { font-size: 64px; }
+  .about-feature-card { width: 350px; }
+  .footer-cta h2 { font-size: 56px; }
   .footer-grid nav { flex-wrap: wrap; justify-content: flex-start; }
 }
 
@@ -402,11 +409,15 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .job-row { min-height: 124px; gap: 20px; padding-block: 24px; }
   .job-row h3 { font-size: 26px; }
   .job-row-arrow { width: 44px; height: 44px; }
-  .about-statement, .footer-cta h2 { font-size: 13vw; }
-  .about-panel { min-height: auto; padding: 32px 24px; }
-  .about-panel h3 { font-size: 36px; }
-  .about-panel ul { grid-template-columns: 1fr; }
-  .about-image { height: 280px; min-height: 280px; }
+  .tt-about { padding-block: 80px; }
+  .about-marquee-header { gap: 24px; margin-bottom: 32px; }
+  .about-marquee-header h2 { font-size: 14vw; }
+  .about-marquee-set { gap: 16px; padding-right: 16px; }
+  .about-feature-card { width: 250px; min-height: 360px; gap: 24px; padding: 24px; }
+  .about-feature-card h3 { font-size: 24px; }
+  .about-feature-card img { height: 130px; }
+  .about-feature-card p { font-size: 14px; }
+  .footer-cta h2 { font-size: 13vw; }
   .contact-content { gap: 48px; padding-top: 0; }
   .contact-heading h2 { font-size: 13vw; }
   .contact-details, .form-halves { grid-template-columns: 1fr; }
@@ -421,4 +432,5 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .tt-hero-background img, .hero-update-link { animation: none !important; }
+  .about-marquee-track { animation: none !important; transform: none !important; }
 }
