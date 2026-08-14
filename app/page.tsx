@@ -45,7 +45,7 @@ const heroUpdates = [
   {
     label: "NAUJIENOS",
     title: "Vietos skoniai – arčiau jūsų",
-    image: "/koops-community.jpg",
+    image: "/local-produce-tomatoes.jpg",
     href: "#naujienos",
   },
   {
@@ -57,7 +57,7 @@ const heroUpdates = [
   {
     label: "KARJERA",
     title: "Nauji darbo pasiūlymai Ukmergėje",
-    image: "/store-papartis.jpeg",
+    image: "/local-produce-customer.jpg",
     href: "#karjera",
   },
 ];
