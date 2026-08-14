@@ -60,12 +60,12 @@ export function KoopsBentoSection() {
 
           <a
             className="koops-bento-media"
-            href="#restoranas"
-            aria-label="Sužinoti apie restoraną „Vilkmergė“"
+            href="#parduotuves"
+            aria-label="Rasti artimiausią KOOPS parduotuvę"
           >
             <img
-              src="/vilkmerge-table.jpg"
-              alt="Šventiškai serviruotas restorano „Vilkmergė“ stalas"
+              src="/koops-bento-local-shopping.jpg"
+              alt="Pirkėja KOOPS parduotuvėje renkasi vietos produktus"
               loading="lazy"
             />
           </a>
