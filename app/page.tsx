@@ -785,7 +785,13 @@ export default function Home() {
               <div><p className="section-label">KONTAKTAI</p><a href="tel:+37034053235">0 340 53235</a><a href="mailto:direktore@urvk.lt">direktore@urvk.lt</a><a href="https://ukmergeskoops.lt/privatumo-politika/">Privatumo politika</a></div>
             </nav>
           </div>
-          <div className="footer-bottom"><p>© {new Date().getFullYear()} Ukmergės rajono vartotojų kooperatyvas</p><a href="#pradzia">Į puslapio viršų ↑</a></div>
+          <div className="footer-bottom">
+            <p>© {new Date().getFullYear()} Ukmergės rajono vartotojų kooperatyvas</p>
+            <a className="footer-back-to-top" href="#pradzia" aria-label="Grįžti į puslapio viršų">
+              <span>Į puslapio viršų</span>
+              <span className="footer-back-to-top-icon" aria-hidden="true">↑</span>
+            </a>
+          </div>
         </div>
       </footer>
     </div>

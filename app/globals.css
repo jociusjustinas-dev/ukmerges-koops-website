@@ -334,6 +334,12 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .footer-grid nav a { font-size: 14px; }
 .footer-grid nav a:hover { text-decoration: underline; }
 .footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 96px; padding-block: 32px; border-top: 1px solid var(--color-moss-edge); border-bottom: 1px solid var(--color-moss-edge); font-size: 14px; }
+.footer-back-to-top { min-height: 52px; display: inline-flex; align-items: center; gap: 14px; font-size: 15px; font-weight: 500; }
+.footer-back-to-top-icon { width: 52px; height: 52px; display: grid; flex: 0 0 auto; place-items: center; color: var(--color-midnight-moss); background: var(--color-honey-pollen); border-radius: 50%; font-size: 24px; line-height: 1; transition: transform .3s cubic-bezier(.22,1,.36,1), background-color .25s ease; }
+.footer-back-to-top:focus-visible .footer-back-to-top-icon { background: var(--color-sprout-green); transform: translateY(-4px); }
+@media (hover: hover) and (pointer: fine) {
+  .footer-back-to-top:hover .footer-back-to-top-icon { background: var(--color-sprout-green); transform: translateY(-4px); }
+}
 
 @media (max-width: 1100px) {
   .desktop-nav { display: none; }
@@ -463,6 +469,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .footer-content { padding-top: 48px; padding-bottom: 24px; }
   .footer-grid nav { flex-direction: column; gap: 40px; }
   .footer-bottom { align-items: flex-start; flex-direction: column-reverse; margin-top: 64px; }
+  .footer-back-to-top { width: 100%; justify-content: space-between; }
 }
 
 @media (prefers-reduced-motion: reduce) {
