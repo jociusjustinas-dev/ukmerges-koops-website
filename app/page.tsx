@@ -69,6 +69,32 @@ const restaurantSlides = [
   { src: "/vilkmerge-menu.jpg", alt: "Restorano „Vilkmergė“ ruošiami užkandžiai" },
 ];
 
+type SupplierField = "vardas" | "el_pastas" | "pasiulymas" | "privatumas";
+type SupplierFormErrors = Partial<Record<SupplierField, string>>;
+
+const supplierFieldOrder: SupplierField[] = ["vardas", "el_pastas", "pasiulymas", "privatumas"];
+
+function validateSupplierForm(form: HTMLFormElement): SupplierFormErrors {
+  const data = new FormData(form);
+  const name = String(data.get("vardas") ?? "").trim();
+  const email = String(data.get("el_pastas") ?? "").trim();
+  const proposal = String(data.get("pasiulymas") ?? "").trim();
+  const errors: SupplierFormErrors = {};
+
+  if (name.length < 2) errors.vardas = "Įrašykite savo vardą.";
+  if (!email) {
+    errors.el_pastas = "Įrašykite el. pašto adresą.";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errors.el_pastas = "Patikrinkite el. pašto adreso formatą.";
+  }
+  if (proposal.length < 10) errors.pasiulymas = "Trumpai aprašykite savo pasiūlymą.";
+  if (data.get("privatumas") !== "patvirtinta") {
+    errors.privatumas = "Patvirtinkite, kad susipažinote su privatumo politika.";
+  }
+
+  return errors;
+}
+
 function RollingLabel({ children }: { children: React.ReactNode }) {
   return (
     <span className="avenir-button-inner">
@@ -84,8 +110,47 @@ export default function Home() {
   const [heroUpdateIndex, setHeroUpdateIndex] = React.useState(0);
   const [heroUpdatesPaused, setHeroUpdatesPaused] = React.useState(false);
   const [restaurantSlide, setRestaurantSlide] = React.useState(0);
+  const [supplierFormErrors, setSupplierFormErrors] = React.useState<SupplierFormErrors>({});
+  const [supplierFormStatus, setSupplierFormStatus] = React.useState<"idle" | "error" | "ready">("idle");
   const pageRef = React.useRef<HTMLDivElement>(null);
   const heroLineRef = React.useRef<HTMLElement>(null);
+  const supplierErrorSummaryRef = React.useRef<HTMLDivElement>(null);
+
+  const clearSupplierError = (field: SupplierField) => {
+    setSupplierFormErrors((current) => {
+      if (!current[field]) return current;
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
+    if (supplierFormStatus === "ready") setSupplierFormStatus("idle");
+  };
+
+  const handleSupplierSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const errors = validateSupplierForm(form);
+
+    setSupplierFormErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      setSupplierFormStatus("error");
+      window.requestAnimationFrame(() => supplierErrorSummaryRef.current?.focus());
+      return;
+    }
+
+    const data = new FormData(form);
+    const name = String(data.get("vardas") ?? "").trim();
+    const email = String(data.get("el_pastas") ?? "").trim();
+    const proposal = String(data.get("pasiulymas") ?? "").trim();
+    const subject = encodeURIComponent(`Naujo tiekėjo pasiūlymas – ${name}`);
+    const body = encodeURIComponent(`Vardas: ${name}\nEl. paštas: ${email}\n\nPasiūlymas:\n${proposal}`);
+
+    setSupplierFormStatus("ready");
+    window.setTimeout(() => {
+      window.location.href = `mailto:direktore@urvk.lt?subject=${subject}&body=${body}`;
+    }, 120);
+  };
 
   React.useEffect(() => {
     const root = pageRef.current;
@@ -613,14 +678,85 @@ export default function Home() {
                 <div><strong>Adresas</strong><p>Vasario 16-osios g. 30<br />LT-20130 Ukmergė</p></div>
                 <div><strong>El. paštas</strong><p><a href="mailto:direktore@urvk.lt">direktore@urvk.lt</a></p></div>
               </div>
-              <form className="supplier-form" action="mailto:direktore@urvk.lt" method="post" encType="text/plain">
+              <form className="supplier-form" onSubmit={handleSupplierSubmit} noValidate aria-label="Tiekėjo pasiūlymo forma">
+                {supplierFormStatus === "error" && Object.keys(supplierFormErrors).length > 0 ? (
+                  <div className="supplier-form-alert is-error" role="alert" tabIndex={-1} ref={supplierErrorSummaryRef}>
+                    <strong>Patikrinkite pažymėtus laukus</strong>
+                    <ul>
+                      {supplierFieldOrder.flatMap((field) => supplierFormErrors[field] ? [<li key={field}>{supplierFormErrors[field]}</li>] : [])}
+                    </ul>
+                  </div>
+                ) : null}
+                {supplierFormStatus === "ready" ? (
+                  <div className="supplier-form-alert is-success" role="status">
+                    <strong>Pasiūlymas paruoštas siųsti</strong>
+                    <p>Patikrinkite paruoštą laišką ir patvirtinkite jo siuntimą.</p>
+                  </div>
+                ) : null}
                 <div className="form-halves">
-                  <label><span>JŪSŲ VARDAS</span><input name="vardas" type="text" autoComplete="name" required /></label>
-                  <label><span>EL. PAŠTAS</span><input name="el_pastas" type="email" autoComplete="email" required /></label>
+                  <label className={`form-field${supplierFormErrors.vardas ? " has-error" : ""}`} htmlFor="supplier-name">
+                    <span>JŪSŲ VARDAS</span>
+                    <input
+                      id="supplier-name"
+                      name="vardas"
+                      type="text"
+                      autoComplete="name"
+                      aria-invalid={Boolean(supplierFormErrors.vardas)}
+                      aria-describedby={supplierFormErrors.vardas ? "supplier-name-error" : undefined}
+                      onChange={() => clearSupplierError("vardas")}
+                      required
+                    />
+                    {supplierFormErrors.vardas ? <small className="field-error" id="supplier-name-error">{supplierFormErrors.vardas}</small> : null}
+                  </label>
+                  <label className={`form-field${supplierFormErrors.el_pastas ? " has-error" : ""}`} htmlFor="supplier-email">
+                    <span>EL. PAŠTAS</span>
+                    <input
+                      id="supplier-email"
+                      name="el_pastas"
+                      type="email"
+                      inputMode="email"
+                      autoComplete="email"
+                      aria-invalid={Boolean(supplierFormErrors.el_pastas)}
+                      aria-describedby={supplierFormErrors.el_pastas ? "supplier-email-error" : undefined}
+                      onChange={() => clearSupplierError("el_pastas")}
+                      required
+                    />
+                    {supplierFormErrors.el_pastas ? <small className="field-error" id="supplier-email-error">{supplierFormErrors.el_pastas}</small> : null}
+                  </label>
                 </div>
-                <label><span>PASIŪLYMAS</span><textarea name="pasiulymas" rows={5} required /></label>
+                <label className={`form-field${supplierFormErrors.pasiulymas ? " has-error" : ""}`} htmlFor="supplier-proposal">
+                  <span>PASIŪLYMAS</span>
+                  <textarea
+                    id="supplier-proposal"
+                    name="pasiulymas"
+                    rows={5}
+                    aria-invalid={Boolean(supplierFormErrors.pasiulymas)}
+                    aria-describedby={supplierFormErrors.pasiulymas ? "supplier-proposal-error" : "supplier-proposal-help"}
+                    onChange={() => clearSupplierError("pasiulymas")}
+                    required
+                  />
+                  <small className="field-help" id="supplier-proposal-help">Nurodykite produktą, jo kilmę ir kaip galėtume su jumis susisiekti.</small>
+                  {supplierFormErrors.pasiulymas ? <small className="field-error" id="supplier-proposal-error">{supplierFormErrors.pasiulymas}</small> : null}
+                </label>
+                <div className={`privacy-field${supplierFormErrors.privatumas ? " has-error" : ""}`}>
+                  <label className="privacy-check" htmlFor="supplier-privacy">
+                    <input
+                      id="supplier-privacy"
+                      name="privatumas"
+                      type="checkbox"
+                      value="patvirtinta"
+                      aria-invalid={Boolean(supplierFormErrors.privatumas)}
+                      aria-describedby={supplierFormErrors.privatumas ? "supplier-privacy-error" : "supplier-privacy-note"}
+                      onChange={() => clearSupplierError("privatumas")}
+                      required
+                    />
+                    <span>Patvirtinu, kad susipažinau su privatumo politika.</span>
+                  </label>
+                  <a className="privacy-link" href="https://ukmergeskoops.lt/privatumo-politika/">Skaityti privatumo politiką</a>
+                  <p className="privacy-note" id="supplier-privacy-note">Pateiktus duomenis naudosime tik jūsų pasiūlymui įvertinti ir atsakyti.</p>
+                  {supplierFormErrors.privatumas ? <small className="field-error" id="supplier-privacy-error">{supplierFormErrors.privatumas}</small> : null}
+                </div>
                 <button className="pill-button dark" type="submit"><RollingLabel>Siųsti pasiūlymą</RollingLabel></button>
-                <p className="form-note">Paspaudus bus atverta jūsų el. pašto programa.</p>
               </form>
             </div>
             <div className="contact-image">
