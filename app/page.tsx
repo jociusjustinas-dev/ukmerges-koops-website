@@ -197,11 +197,20 @@ export default function Home() {
             const footerReveal = root.querySelector<HTMLElement>(".footer-reveal");
 
             if (footer && footerCta && footerReveal) {
+              const showFooterReveal = () => footerReveal.classList.add("is-revealed");
+              const hideFooterReveal = () => footerReveal.classList.remove("is-revealed");
+
               ScrollTrigger.create({
                 trigger: footerCta,
                 start: "bottom bottom",
                 end: "max",
-                toggleClass: { targets: footerReveal, className: "is-revealed" },
+                onEnter: showFooterReveal,
+                onEnterBack: showFooterReveal,
+                onLeave: showFooterReveal,
+                onLeaveBack: hideFooterReveal,
+                onRefresh: (self) => {
+                  footerReveal.classList.toggle("is-revealed", window.scrollY >= self.start);
+                },
               });
             }
           }
