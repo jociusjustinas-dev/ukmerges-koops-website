@@ -33,14 +33,6 @@ export function KoopsBentoSection() {
             />
           </a>
 
-          <a className="koops-bento-card" href="#tiekejams">
-            <p className="section-label">TIEKĖJAMS</p>
-            <div className="koops-bento-card-content">
-              <h3>Tapkite tiekėju</h3>
-              <p>Pasiūlykite savo produkciją KOOPS.</p>
-            </div>
-          </a>
-
           <a
             className="koops-bento-media"
             href="#tiekejams"
@@ -51,6 +43,14 @@ export function KoopsBentoSection() {
               alt="Vietos gamintojų produkcija KOOPS parduotuvėje"
               loading="lazy"
             />
+          </a>
+
+          <a className="koops-bento-card" href="#tiekejams">
+            <p className="section-label">TIEKĖJAMS</p>
+            <div className="koops-bento-card-content">
+              <h3>Tapkite tiekėju</h3>
+              <p>Pasiūlykite savo produkciją KOOPS.</p>
+            </div>
           </a>
 
           <a
