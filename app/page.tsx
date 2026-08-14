@@ -465,7 +465,9 @@ export default function Home() {
                 </article>
               ))}
             </div>
-            <a className="text-link section-cta" href="https://ukmergeskoops.lt/parduotuves/">Visos parduotuvės <span aria-hidden="true">→</span></a>
+            <a className="pill-button accent section-cta" href="https://ukmergeskoops.lt/parduotuves/">
+              <RollingLabel>Visos parduotuvės</RollingLabel>
+            </a>
           </div>
         </section>
 
