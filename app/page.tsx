@@ -795,7 +795,7 @@ export default function Home() {
         <section className="footer-cta" aria-labelledby="footer-cta-title">
           <div className="orbit footer-orbit-one" aria-hidden="true" /><div className="orbit footer-orbit-two" aria-hidden="true" />
           <p className="section-label light-label">KOOPS</p>
-          <h2 id="footer-cta-title">Parduotuvė gali būti arčiau, nei manote</h2>
+          <h2 id="footer-cta-title">Parduotuvė gali būti<br />arčiau, nei manote</h2>
           <a className="pill-button accent" href="#parduotuves" aria-label="Rasti KOOPS parduotuvę"><RollingLabel>Rasti parduotuvę</RollingLabel></a>
         </section>
         <div className="footer-reveal">
