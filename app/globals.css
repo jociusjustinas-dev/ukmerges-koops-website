@@ -196,6 +196,10 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .story-copy dt { color: var(--color-morning-mist); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
 .story-copy dd { margin-top: 4px; font-size: 20px; }
 
+@media (min-width: 992px) {
+  .story-copy { position: sticky; top: 118px; align-self: start; }
+}
+
 .tt-jobs { position: relative; overflow: hidden; padding-block: 96px; background: var(--color-midnight-moss); color: white; }
 .jobs-inner { overflow: hidden; }
 .orbit { position: absolute; border: 1px dashed var(--color-morning-mist); border-radius: 50%; pointer-events: none; }
