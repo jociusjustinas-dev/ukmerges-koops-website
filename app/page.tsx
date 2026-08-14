@@ -480,7 +480,12 @@ export default function Home() {
             <div className="news-bento">
               <a className="news-card news-card-large" href="https://ukmergeskoops.lt/naujienos/">
                 <img src="/koops-community.jpg" alt="Vietos gamintojų produktai" />
-                <div><span className="section-label light-label">NAUJIENOS</span><h3>Vietos skoniai – arčiau jūsų</h3><span className="text-link">Skaityti <span aria-hidden="true">→</span></span></div>
+                <div>
+                  <span className="section-label light-label">NAUJIENOS</span>
+                  <h3>Vietos skoniai – arčiau jūsų</h3>
+                  <p>Atraskite Ukmergės krašto gamintojų produkciją mūsų parduotuvėse.</p>
+                  <span className="text-link">Skaityti <span aria-hidden="true">→</span></span>
+                </div>
               </a>
               <a className="news-card news-card-accent" href="https://ukmergeskoops.lt/naujienos/"><h3>Naujausi pasiūlymai kasdieniam krepšeliui</h3><span className="text-link">Peržiūrėti <span aria-hidden="true">→</span></span></a>
               <a className="news-card news-card-muted" href="https://ukmergeskoops.lt/naujienos/"><h3>Kas naujo KOOPS parduotuvėse?</h3><span className="text-link">Sužinoti <span aria-hidden="true">→</span></span></a>
