@@ -103,7 +103,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .tt-hero-stage { min-height: var(--tt-hero-height); }
 .tt-hero-content { min-height: var(--tt-hero-height); display: flex; align-items: flex-end; padding: 152px 350px 80px 0; }
 .tt-hero-top { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; }
-.tt-hero-top h1 { max-width: 1020px; display: flex; flex-wrap: wrap; align-items: center; gap: 0 24px; font-size: clamp(72px, 7.5vw, 112px); line-height: .933; letter-spacing: -.04em; }
+.tt-hero-top h1 { max-width: 1020px; display: flex; flex-wrap: wrap; align-items: center; gap: 0 24px; font-size: clamp(72px, 7.5vw, 112px); line-height: 1; letter-spacing: -.04em; }
 .tt-hero-top .body-large { max-width: 560px; color: rgba(255,255,255,.82); }
 .hero-title-break { display: none; }
 .hero-headline-line { width: clamp(96px, 14vw, 220px); height: 4px; margin-top: .16em; background: var(--color-morning-mist); }
