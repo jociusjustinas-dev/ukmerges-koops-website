@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { KoopsBentoSection } from "../components/sections/KoopsBentoSection";
-import { AvenirButtonArrow, ByqChevron, ByqJobIcon } from "./byq-icons";
+import { AvenirButtonArrow, ByqChevron } from "./byq-icons";
 
 const stores = [
   {
@@ -82,7 +82,6 @@ function RollingLabel({ children }: { children: React.ReactNode }) {
 export default function Home() {
   const [heroUpdateIndex, setHeroUpdateIndex] = React.useState(0);
   const [heroUpdatesPaused, setHeroUpdatesPaused] = React.useState(false);
-  const [jobSlide, setJobSlide] = React.useState(0);
   const [restaurantSlide, setRestaurantSlide] = React.useState(0);
   const pageRef = React.useRef<HTMLDivElement>(null);
   const heroLineRef = React.useRef<HTMLElement>(null);
@@ -203,8 +202,8 @@ export default function Home() {
             },
             {
               trigger: ".tt-jobs",
-              headings: ".jobs-header > *",
-              items: ".job-card",
+              headings: ".jobs-intro > *",
+              items: ".job-row",
             },
             {
               trigger: ".tt-about",
@@ -566,27 +565,29 @@ export default function Home() {
           </div>
         </section>
 
-        {/* BYQ: terra-tory-tiles-1 adapted to job listings */}
-        <section className="tt-jobs" id="karjera" aria-labelledby="karjeros-antraste" data-byq-component="terra-tory-tiles-1">
-          <div className="orbit orbit-large" aria-hidden="true" />
-          <div className="orbit orbit-small" aria-hidden="true" />
-          <div className="tt-container jobs-inner">
-            <div className="jobs-header">
-              <div><p className="section-label light-label">KARJERA</p><h2 id="karjeros-antraste">Darbas arti namų</h2></div>
-              <div className="slider-controls">
-                <button type="button" onClick={() => setJobSlide((s) => Math.max(0, s - 1))} disabled={jobSlide === 0} aria-label="Ankstesnis darbo pasiūlymas"><span className="control-arrow is-left"><ByqChevron /></span></button>
-                <button type="button" onClick={() => setJobSlide((s) => Math.min(jobs.length - 1, s + 1))} disabled={jobSlide === jobs.length - 1} aria-label="Kitas darbo pasiūlymas"><span className="control-arrow"><ByqChevron /></span></button>
-              </div>
+        {/* BYQ Supply: structured-data-2 careers list, adapted to KOOPS */}
+        <section className="tt-jobs" id="karjera" aria-labelledby="karjeros-antraste" data-byq-component="structured-data-2-careers">
+          <div className="tt-container jobs-layout">
+            <div className="jobs-intro">
+              <p className="section-label light-label">KARJERA</p>
+              <h2 id="karjeros-antraste">Darbas arti namų</h2>
+              <p>Prisijunkite prie KOOPS komandos Ukmergėje ir rajone. Susipažinkite su šiuo metu siūlomomis darbo vietomis.</p>
+              <a className="pill-button accent" href="https://ukmergeskoops.lt/skelbimai/">
+                <RollingLabel>Visi darbo pasiūlymai</RollingLabel>
+              </a>
             </div>
-            <div className="jobs-mask">
-              <div className="jobs-track" style={{ "--slide": jobSlide } as React.CSSProperties}>
-                {jobs.map((job) => (
-                  <a className="job-card" href="https://ukmergeskoops.lt/skelbimai/" key={job.title}>
-                    <div><span className="job-icon" aria-hidden="true"><ByqJobIcon index={Number(job.number) - 1} /></span><p className="section-label light-label">{job.type}</p><h3>{job.title}</h3></div>
-                    <div><p>{job.location}</p><span className="text-link">Plačiau <span aria-hidden="true">→</span></span></div>
-                  </a>
-                ))}
-              </div>
+            <div className="jobs-list" aria-label="Naujausi darbo pasiūlymai">
+              {jobs.map((job) => (
+                <a className="job-row" href="https://ukmergeskoops.lt/skelbimai/" key={job.title}>
+                  <div className="job-row-copy">
+                    <h3>{job.title}</h3>
+                    <div className="job-row-meta">
+                      <span>{job.type}</span><span aria-hidden="true">•</span><span>{job.location}</span>
+                    </div>
+                  </div>
+                  <span className="job-row-arrow" aria-hidden="true"><AvenirButtonArrow /></span>
+                </a>
+              ))}
             </div>
           </div>
         </section>
