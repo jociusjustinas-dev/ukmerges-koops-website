@@ -506,8 +506,14 @@ export default function Home() {
               <div className="story-copy">
                 <p>Pačiame Ukmergės centre įsikūręs restoranas tinka jubiliejams, vestuvėms, krikštynoms, oficialiems renginiams ir vakarienėms.</p>
                 <dl><div><dt>Pokylių salės</dt><dd>3 salės</dd></div><div><dt>Talpa</dt><dd>Iki 154 svečių</dd></div></dl>
-                <a className="text-link" href="https://ukmergeskoops.lt/restoranas-vilkmerge/">Apie restoraną <span aria-hidden="true">→</span></a>
-                <a className="text-link" href="tel:+37034053235">Skambinti 0 340 53235 <span aria-hidden="true">→</span></a>
+                <div className="story-actions">
+                  <a className="pill-button accent" href="https://ukmergeskoops.lt/restoranas-vilkmerge/">
+                    <RollingLabel>Apie restoraną</RollingLabel>
+                  </a>
+                  <a className="pill-button outline-light" href="tel:+37034053235" aria-label="Skambinti restoranui telefonu 0 340 53235">
+                    <RollingLabel>Skambinti 0 340 53235</RollingLabel>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
