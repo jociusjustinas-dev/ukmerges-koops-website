@@ -33,11 +33,11 @@ export function KoopsBentoSection() {
             />
           </a>
 
-          <a className="koops-bento-card" href="#restoranas">
-            <p className="section-label">RESTORANAS</p>
+          <a className="koops-bento-card" href="#tiekejams">
+            <p className="section-label">TIEKĖJAMS</p>
             <div className="koops-bento-card-content">
-              <h3>3 salės</h3>
-              <p>Šventėms, renginiams ir jaukiems susitikimams.</p>
+              <h3>Tapkite tiekėju</h3>
+              <p>Pasiūlykite savo produkciją KOOPS.</p>
             </div>
           </a>
 
@@ -66,14 +66,13 @@ export function KoopsBentoSection() {
           </a>
 
           <div className="koops-bento-card koops-bento-card-accent">
-            <p className="section-label">KARJERA IR TIEKĖJAMS</p>
+            <p className="section-label">KARJERA</p>
             <div className="koops-bento-card-content">
-              <h3>Auginkime kartu</h3>
-              <p>Darbo galimybės vietos žmonėms ir partnerystė gamintojams.</p>
+              <h3>Darbo pasiūlymai</h3>
+              <p>Galimybės Ukmergėje ir rajone.</p>
             </div>
             <div className="koops-bento-actions">
-              <a className="koops-bento-link" href="#karjera">Darbo pasiūlymai <span aria-hidden="true">→</span></a>
-              <a className="koops-bento-link" href="#tiekejams">Tapti tiekėju <span aria-hidden="true">→</span></a>
+              <a className="koops-bento-link" href="#karjera">Peržiūrėti pasiūlymus <span aria-hidden="true">→</span></a>
             </div>
             <span className="koops-bento-circle" aria-hidden="true" />
           </div>
