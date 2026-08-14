@@ -299,15 +299,14 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .supplier-form-alert.is-error { color: #702019; background: #fff4f1; border-color: rgba(163,50,39,.34); }
 .supplier-form-alert.is-success { color: #163d26; background: #edf8ef; border-color: rgba(40,105,62,.34); }
 .supplier-form-alert:focus-visible { outline: 3px solid #8c271f; outline-offset: 3px; }
-.privacy-field { width: 100%; display: grid; gap: 8px; padding: 18px; background: var(--color-bone-canvas); border: 1px solid transparent; border-radius: 16px; }
-.privacy-field.has-error { background: #fff8f6; border-color: rgba(163,50,39,.34); }
-.privacy-check { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
-.privacy-check input { width: 20px; height: 20px; flex: 0 0 auto; margin: 1px 0 0; accent-color: var(--color-midnight-moss); cursor: pointer; }
-.privacy-check input:focus-visible { outline: 3px solid #2f6e46; outline-offset: 3px; }
-.privacy-check span { font-size: 14px; font-weight: 500; line-height: 1.4; }
-.privacy-link { width: fit-content; margin-left: 32px; font-size: 13px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
-.privacy-note { margin-left: 32px; color: var(--color-moss-veil); font-size: 12px; line-height: 1.45; }
-.privacy-field > .field-error { margin-left: 32px; }
+.privacy-field { width: 100%; display: grid; grid-template-columns: 18px minmax(0, 1fr); align-items: start; gap: 10px; padding: 0; border: 1px solid transparent; border-radius: 12px; }
+.privacy-field.has-error { padding: 12px 14px; background: #fff8f6; border-color: rgba(163,50,39,.34); }
+.privacy-checkbox { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--color-midnight-moss); cursor: pointer; }
+.privacy-checkbox:focus-visible { outline: 3px solid #2f6e46; outline-offset: 3px; }
+.privacy-consent-copy { font-size: 13px; font-weight: 500; line-height: 1.45; }
+.privacy-consent-copy label { cursor: pointer; }
+.privacy-link { font-size: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.privacy-consent-copy .field-error { margin-top: 6px; }
 .supplier-form .pill-button:active { transform: translateY(1px); }
 .supplier-form .pill-button:disabled { color: var(--color-moss-veil); background: var(--color-bone-canvas); cursor: not-allowed; }
 .contact-image { position: relative; justify-self: end; width: min(100%, 620px); height: 848px; overflow: hidden; background: var(--color-bone-canvas); border-radius: var(--radius-card); }

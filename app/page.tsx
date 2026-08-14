@@ -744,22 +744,22 @@ export default function Home() {
                   {supplierFormErrors.pasiulymas ? <small className="field-error" id="supplier-proposal-error">{supplierFormErrors.pasiulymas}</small> : null}
                 </label>
                 <div className={`privacy-field${supplierFormErrors.privatumas ? " has-error" : ""}`}>
-                  <label className="privacy-check" htmlFor="supplier-privacy">
-                    <input
-                      id="supplier-privacy"
-                      name="privatumas"
-                      type="checkbox"
-                      value="patvirtinta"
-                      aria-invalid={Boolean(supplierFormErrors.privatumas)}
-                      aria-describedby={supplierFormErrors.privatumas ? "supplier-privacy-error" : "supplier-privacy-note"}
-                      onChange={() => clearSupplierError("privatumas")}
-                      required
-                    />
-                    <span>Patvirtinu, kad susipažinau su privatumo politika.</span>
-                  </label>
-                  <a className="privacy-link" href="https://ukmergeskoops.lt/privatumo-politika/">Skaityti privatumo politiką</a>
-                  <p className="privacy-note" id="supplier-privacy-note">Pateiktus duomenis naudosime tik jūsų pasiūlymui įvertinti ir atsakyti.</p>
-                  {supplierFormErrors.privatumas ? <small className="field-error" id="supplier-privacy-error">{supplierFormErrors.privatumas}</small> : null}
+                  <input
+                    className="privacy-checkbox"
+                    id="supplier-privacy"
+                    name="privatumas"
+                    type="checkbox"
+                    value="patvirtinta"
+                    aria-invalid={Boolean(supplierFormErrors.privatumas)}
+                    aria-describedby={supplierFormErrors.privatumas ? "supplier-privacy-error" : undefined}
+                    onChange={() => clearSupplierError("privatumas")}
+                    required
+                  />
+                  <div className="privacy-consent-copy">
+                    <label htmlFor="supplier-privacy">Patvirtinu, kad susipažinau su </label>
+                    <a className="privacy-link" href="https://ukmergeskoops.lt/privatumo-politika/">privatumo politika</a>.
+                    {supplierFormErrors.privatumas ? <small className="field-error" id="supplier-privacy-error">{supplierFormErrors.privatumas}</small> : null}
+                  </div>
                 </div>
                 <button className="pill-button dark" type="submit"><RollingLabel>Siųsti pasiūlymą</RollingLabel></button>
               </form>
