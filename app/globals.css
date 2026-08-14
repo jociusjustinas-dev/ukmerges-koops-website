@@ -257,20 +257,14 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .tt-about { padding-block: 120px; overflow: hidden; background: white; }
 .about-marquee-header { max-width: 864px; display: flex; flex-direction: column; align-items: center; gap: 32px; margin: 0 auto 64px; text-align: center; }
 .about-marquee-header h2 { font-size: clamp(72px, 7.5vw, 112px); line-height: .933; letter-spacing: -.04em; }
-.about-marquee-toggle { min-height: 44px; padding: 9px 18px; color: var(--color-midnight-moss); background: transparent; border: 1px solid var(--color-moss-edge); border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: color .25s ease, background-color .25s ease; }
-.about-marquee-toggle:focus-visible { color: white; background: var(--color-midnight-moss); }
-@media (hover: hover) and (pointer: fine) {
-  .about-marquee-toggle:hover { color: white; background: var(--color-midnight-moss); }
-}
-.about-marquee { width: 100%; overflow: hidden; }
-.about-marquee-track { width: max-content; display: flex; will-change: transform; animation: about-marquee-move 44s linear infinite; }
-.about-marquee-track.is-paused { animation-play-state: paused; }
+.about-marquee { width: 100%; overflow: hidden; cursor: grab; touch-action: pan-y; user-select: none; }
+.about-marquee.is-dragging { cursor: grabbing; }
+.about-marquee-track { width: max-content; display: flex; will-change: transform; }
 .about-marquee-set { display: flex; flex: 0 0 auto; gap: 24px; padding-right: 24px; }
 .about-feature-card { width: 421px; min-height: 488px; display: flex; flex: 0 0 auto; flex-direction: column; gap: 40px; padding: 40px; background: var(--color-bone-canvas); border-radius: var(--radius-card); }
 .about-feature-card h3 { font-size: 32px; line-height: 1; letter-spacing: -.03em; }
-.about-feature-card img { width: 100%; height: 180px; object-fit: contain; }
+.about-feature-card img { width: 100%; height: 180px; object-fit: contain; pointer-events: none; }
 .about-feature-card p { margin-top: auto; font-size: 16px; line-height: 1.5; }
-@keyframes about-marquee-move { from { transform: translateX(0); } to { transform: translateX(calc(-100% / 3)); } }
 
 .tt-contact { padding-block: 80px; background: white; }
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
