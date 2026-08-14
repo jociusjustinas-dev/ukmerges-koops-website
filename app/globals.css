@@ -75,9 +75,12 @@ h1, h2, h3 { font-family: var(--font-field-sans); font-weight: 400; }
   .pill-button.accent:hover { background: var(--color-sprout-green); }
   .pill-button.light:hover { background: var(--color-bone-canvas); }
 }
-.byq-chevron { width: 7px; height: 10px; display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; }
-.byq-chevron svg { width: 7px; height: 10px; display: block; }
-.light-link { display: inline-flex; align-items: center; gap: 8px; width: fit-content; padding-bottom: 3px; border-bottom: 1px solid currentColor; }
+.text-link { display: inline-flex; align-items: center; gap: 8px; width: fit-content; font-size: 15px; font-weight: 500; line-height: 24px; }
+.text-link > span[aria-hidden] { display: inline-block; transition: transform .2s ease; }
+a.text-link:focus-visible > span[aria-hidden], a:focus-visible .text-link > span[aria-hidden] { transform: translateX(4px); }
+@media (hover: hover) and (pointer: fine) {
+  a.text-link:hover > span[aria-hidden], a:hover .text-link > span[aria-hidden] { transform: translateX(4px); }
+}
 
 .floating-nav { position: fixed; z-index: 100; top: 16px; left: 0; width: 100%; padding-inline: 32px; }
 .nav-shell { width: 100%; max-width: 1800px; height: 70px; margin-inline: auto; display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 0 32px; background: white; border: 1px solid var(--color-moss-edge); border-radius: 40px; }
@@ -113,7 +116,7 @@ h1, h2, h3 { font-family: var(--font-field-sans); font-weight: 400; }
 .hero-update-kicker { position: absolute; z-index: 1; left: 12px; bottom: 10px; padding: 4px 8px; color: var(--color-midnight-moss); background: var(--color-honey-pollen); border-radius: 16px; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
 .hero-update-copy { display: grid; gap: 5px; padding: 2px 8px 0; }
 .hero-update-copy strong { max-width: 240px; font-size: 18px; font-weight: 400; line-height: 1.2; }
-.hero-update-more { display: inline-flex; align-items: center; gap: 8px; width: fit-content; margin-top: 3px; font-size: 13px; }
+.hero-update-more { margin-top: 3px; }
 .hero-update-dots { display: flex; gap: 2px; padding: 4px 4px 0; }
 .hero-update-dots button { width: 24px; height: 24px; display: grid; place-items: center; padding: 0; border: 0; background: transparent; cursor: pointer; }
 .hero-update-dots button::before { content: ""; width: 6px; height: 6px; background: rgba(255,255,255,.45); border-radius: 50%; transition: width .2s ease, background-color .2s ease; }
@@ -141,12 +144,6 @@ h1, h2, h3 { font-family: var(--font-field-sans); font-weight: 400; }
 .koops-bento-card-accent { grid-column: span 2; background: var(--color-honey-pollen); }
 .koops-bento-card-accent > .section-label { position: relative; z-index: 1; }
 .koops-bento-actions { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 12px 24px; }
-.koops-bento-link { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
-.koops-bento-link > span[aria-hidden] { display: inline-block; transition: transform .2s ease; }
-.koops-bento-card[href]:focus-visible .koops-bento-link > span[aria-hidden], .koops-bento-link:focus-visible > span[aria-hidden] { transform: translateX(4px); }
-@media (hover: hover) and (pointer: fine) {
-  .koops-bento-card[href]:hover .koops-bento-link > span[aria-hidden], .koops-bento-link:hover > span[aria-hidden] { transform: translateX(4px); }
-}
 .koops-bento-circle { position: absolute; width: 400px; height: 400px; right: -122px; bottom: -172px; border: 1px dashed var(--color-moss-veil); border-radius: 50%; pointer-events: none; }
 
 .tt-locations { padding-block: 120px; background: var(--color-midnight-moss); color: white; }
@@ -350,7 +347,6 @@ h1, h2, h3 { font-family: var(--font-field-sans); font-weight: 400; }
   .hero-update-kicker { left: 8px; bottom: 7px; padding: 3px 6px; font-size: 8px; }
   .hero-update-copy { padding-inline: 4px; }
   .hero-update-copy strong { font-size: 14px; }
-  .hero-update-more { font-size: 11px; }
   .koops-bento-section { padding-block: 80px; }
   .tt-news, .tt-contact { padding-block: 48px; }
   .koops-bento-header { gap: 24px; margin-bottom: 32px; }

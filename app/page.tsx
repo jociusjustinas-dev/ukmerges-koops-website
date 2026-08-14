@@ -61,10 +61,6 @@ const heroUpdates = [
   },
 ];
 
-function Arrow() {
-  return <span className="byq-chevron" aria-hidden="true"><ByqChevron /></span>;
-}
-
 function RollingLabel({ children }: { children: React.ReactNode }) {
   return (
     <span className="avenir-button-inner">
@@ -174,7 +170,7 @@ export default function Home() {
               <span className="hero-update-copy">
                 <span className="section-label light-label">{activeHeroUpdate.label}</span>
                 <strong>{activeHeroUpdate.title}</strong>
-                <span className="hero-update-more">Plačiau <Arrow /></span>
+                <span className="hero-update-more text-link">Plačiau <span aria-hidden="true">→</span></span>
               </span>
             </a>
             <div className="hero-update-dots" aria-label="Pasirinkti aktualiją">
@@ -212,14 +208,12 @@ export default function Home() {
                       <div><dt>Darbo laikas</dt><dd>{store.hours}</dd></div>
                       <div><dt>Telefonas</dt><dd><a href={`tel:${store.phoneHref}`}>{store.phone}</a></dd></div>
                     </dl>
-                    <a className="light-link" href={store.map} target="_blank" rel="noreferrer">Rodyti žemėlapyje <Arrow /></a>
+                    <a className="text-link" href={store.map} target="_blank" rel="noreferrer">Rodyti žemėlapyje <span aria-hidden="true">→</span></a>
                   </div>
                 </article>
               ))}
             </div>
-            <a className="pill-button light section-cta" href="https://ukmergeskoops.lt/parduotuves/" aria-label="Peržiūrėti visas parduotuves">
-              <RollingLabel>Visos parduotuvės</RollingLabel>
-            </a>
+            <a className="text-link section-cta" href="https://ukmergeskoops.lt/parduotuves/">Visos parduotuvės <span aria-hidden="true">→</span></a>
           </div>
         </section>
 
@@ -234,11 +228,11 @@ export default function Home() {
             <div className="news-bento">
               <a className="news-card news-card-large" href="https://ukmergeskoops.lt/naujienos/">
                 <img src="/koops-community.jpg" alt="Vietos gamintojų produktai" />
-                <div><span className="section-label light-label">NAUJIENOS</span><h3>Vietos skoniai – arčiau jūsų</h3><span className="pill-button light"><RollingLabel>Skaityti</RollingLabel></span></div>
+                <div><span className="section-label light-label">NAUJIENOS</span><h3>Vietos skoniai – arčiau jūsų</h3><span className="text-link">Skaityti <span aria-hidden="true">→</span></span></div>
               </a>
-              <a className="news-card news-card-accent" href="https://ukmergeskoops.lt/naujienos/"><h3>Naujausi pasiūlymai kasdieniam krepšeliui</h3><span className="pill-button light"><RollingLabel>Peržiūrėti</RollingLabel></span></a>
-              <a className="news-card news-card-muted" href="https://ukmergeskoops.lt/naujienos/"><h3>Kas naujo KOOPS parduotuvėse?</h3><span className="pill-button light"><RollingLabel>Sužinoti</RollingLabel></span></a>
-              <a className="news-card news-card-wide" href="https://ukmergeskoops.lt/naujienos/"><h3>Naujienos iš Ukmergės krašto</h3><span className="pill-button light"><RollingLabel>Skaityti</RollingLabel></span></a>
+              <a className="news-card news-card-accent" href="https://ukmergeskoops.lt/naujienos/"><h3>Naujausi pasiūlymai kasdieniam krepšeliui</h3><span className="text-link">Peržiūrėti <span aria-hidden="true">→</span></span></a>
+              <a className="news-card news-card-muted" href="https://ukmergeskoops.lt/naujienos/"><h3>Kas naujo KOOPS parduotuvėse?</h3><span className="text-link">Sužinoti <span aria-hidden="true">→</span></span></a>
+              <a className="news-card news-card-wide" href="https://ukmergeskoops.lt/naujienos/"><h3>Naujienos iš Ukmergės krašto</h3><span className="text-link">Skaityti <span aria-hidden="true">→</span></span></a>
             </div>
           </div>
         </section>
@@ -255,8 +249,8 @@ export default function Home() {
               <div className="story-copy">
                 <p>Pačiame Ukmergės centre įsikūręs restoranas tinka jubiliejams, vestuvėms, krikštynoms, oficialiems renginiams ir vakarienėms.</p>
                 <dl><div><dt>Pokylių salės</dt><dd>3 salės</dd></div><div><dt>Talpa</dt><dd>Iki 154 svečių</dd></div></dl>
-                <a className="pill-button accent" href="https://ukmergeskoops.lt/restoranas-vilkmerge/" aria-label="Sužinoti apie restoraną Vilkmergė"><RollingLabel>Apie restoraną</RollingLabel></a>
-                <a className="light-link" href="tel:+37034053235">Skambinti 0 340 53235</a>
+                <a className="text-link" href="https://ukmergeskoops.lt/restoranas-vilkmerge/">Apie restoraną <span aria-hidden="true">→</span></a>
+                <a className="text-link" href="tel:+37034053235">Skambinti 0 340 53235 <span aria-hidden="true">→</span></a>
               </div>
             </div>
           </div>
@@ -279,7 +273,7 @@ export default function Home() {
                 {jobs.map((job) => (
                   <a className="job-card" href="https://ukmergeskoops.lt/skelbimai/" key={job.title}>
                     <div><span className="job-icon" aria-hidden="true"><ByqJobIcon index={Number(job.number) - 1} /></span><p className="section-label light-label">{job.type}</p><h3>{job.title}</h3></div>
-                    <div><p>{job.location}</p><span className="light-link">Plačiau <Arrow /></span></div>
+                    <div><p>{job.location}</p><span className="text-link">Plačiau <span aria-hidden="true">→</span></span></div>
                   </a>
                 ))}
               </div>

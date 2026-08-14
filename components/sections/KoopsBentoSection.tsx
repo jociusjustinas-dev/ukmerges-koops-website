@@ -20,7 +20,7 @@ export function KoopsBentoSection() {
                 <h3>Raskite</h3>
                 <p>Adresai, darbo laikas ir kelio nuorodos.</p>
               </div>
-              <span className="koops-bento-link">Rasti parduotuvę <span aria-hidden="true">→</span></span>
+              <span className="text-link">Rasti parduotuvę <span aria-hidden="true">→</span></span>
             </div>
           </a>
 
@@ -43,7 +43,7 @@ export function KoopsBentoSection() {
                 <h3>Darbo pasiūlymai</h3>
                 <p>Galimybės Ukmergėje ir rajone.</p>
               </div>
-              <span className="koops-bento-link">Peržiūrėti pasiūlymus <span aria-hidden="true">→</span></span>
+              <span className="text-link">Peržiūrėti pasiūlymus <span aria-hidden="true">→</span></span>
             </div>
           </a>
 
@@ -54,7 +54,7 @@ export function KoopsBentoSection() {
                 <h3>Tapkite tiekėju</h3>
                 <p>Pasiūlykite savo produkciją KOOPS.</p>
               </div>
-              <span className="koops-bento-link">Tapti tiekėju <span aria-hidden="true">→</span></span>
+              <span className="text-link">Tapti tiekėju <span aria-hidden="true">→</span></span>
             </div>
           </a>
 
@@ -77,7 +77,7 @@ export function KoopsBentoSection() {
               <p>Šventėms, renginiams ir susitikimams.</p>
             </div>
             <div className="koops-bento-actions">
-              <a className="koops-bento-link" href="#restoranas">Sužinoti daugiau <span aria-hidden="true">→</span></a>
+              <a className="text-link" href="#restoranas">Sužinoti daugiau <span aria-hidden="true">→</span></a>
             </div>
             <span className="koops-bento-circle" aria-hidden="true" />
           </div>
