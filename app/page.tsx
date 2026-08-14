@@ -258,20 +258,6 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="koops-marquee" aria-label="KOOPS – vietos skoniai arčiau jūsų">
-          <p className="sr-only">Vietos skoniai. Arčiau jūsų. Ukmergėje ir rajone.</p>
-          <div className="koops-marquee-track" aria-hidden="true">
-            {[0, 1].map((group) => (
-              <div className={`koops-marquee-group${group === 1 ? " is-duplicate" : ""}`} key={group}>
-                <span>Vietos skoniai</span><i />
-                <span>Arčiau jūsų</span><i />
-                <span>Ukmergėje ir rajone</span><i />
-              </div>
-            ))}
-          </div>
-          <p className="koops-marquee-static" aria-hidden="true">Vietos skoniai · Arčiau jūsų · Ukmergėje ir rajone</p>
-        </section>
-
         {/* BYQ: terra-tory-blog-grid-1 */}
         <section className="tt-news" id="naujienos" aria-labelledby="naujienu-antraste" data-byq-component="terra-tory-blog-grid-1">
           <div className="tt-container">
