@@ -286,9 +286,10 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .supplier-form-alert.is-error { color: #702019; background: #fff4f1; border-color: rgba(163,50,39,.34); }
 .supplier-form-alert.is-success { color: #163d26; background: #edf8ef; border-color: rgba(40,105,62,.34); }
 .supplier-form-alert:focus-visible { outline: 3px solid #8c271f; outline-offset: 3px; }
-.privacy-field { width: 100%; display: grid; grid-template-columns: 16px minmax(0, 1fr); align-items: start; gap: 6px; padding: 0; border: 1px solid transparent; border-radius: 12px; }
+.privacy-field { width: 100%; display: grid; grid-template-columns: 16px minmax(0, 1fr); align-items: center; gap: 6px; padding: 0; border: 1px solid transparent; border-radius: 12px; }
 .privacy-field.has-error { align-items: start; padding: 12px 14px; background: #fff8f6; border-color: rgba(163,50,39,.34); }
-.privacy-checkbox-control { position: relative; width: 16px; height: 19px; display: grid; place-items: center; }
+.privacy-checkbox-control { position: relative; width: 16px; height: 16px; display: grid; place-items: center; }
+.privacy-field.has-error .privacy-checkbox-control { margin-top: 1px; }
 .privacy-checkbox-input { position: absolute; left: 50%; top: 50%; width: 24px; height: 24px; margin: 0; opacity: 0; cursor: pointer; transform: translate(-50%, -50%); }
 .privacy-checkbox-mark { position: relative; width: 16px; height: 16px; border: 1px solid rgba(21,25,13,.56); border-radius: 4px; background: white; pointer-events: none; transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease; }
 .privacy-checkbox-mark::after { content: ""; position: absolute; left: 5px; top: 2px; width: 4px; height: 8px; border: solid white; border-width: 0 2px 2px 0; opacity: 0; transform: rotate(45deg) scale(.7); transition: opacity .16s ease, transform .16s ease; }
