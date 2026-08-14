@@ -190,6 +190,21 @@ export default function Home() {
           };
           const titlePushLines = root.querySelectorAll<HTMLElement>(".title-push-line");
 
+          if (isDesktop) {
+            const footer = root.querySelector<HTMLElement>(".tt-footer");
+            const footerCta = root.querySelector<HTMLElement>(".footer-cta");
+            const footerReveal = root.querySelector<HTMLElement>(".footer-reveal");
+
+            if (footer && footerCta && footerReveal) {
+              ScrollTrigger.create({
+                trigger: footerCta,
+                start: "bottom bottom",
+                end: "max",
+                toggleClass: { targets: footerReveal, className: "is-revealed" },
+              });
+            }
+          }
+
           if (reduceMotion) {
             titlePushLines.forEach((pushLine) => pushLine.style.removeProperty("width"));
             return;
