@@ -76,6 +76,45 @@ export default function Home() {
   const [heroUpdateIndex, setHeroUpdateIndex] = React.useState(0);
   const [heroUpdatesPaused, setHeroUpdatesPaused] = React.useState(false);
   const [jobSlide, setJobSlide] = React.useState(0);
+  const heroLineRef = React.useRef<HTMLElement>(null);
+
+  React.useEffect(() => {
+    const line = heroLineRef.current;
+    if (!line) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      line.style.removeProperty("width");
+      return;
+    }
+
+    let cancelled = false;
+    let revertAnimation = () => {};
+
+    void import("gsap").then(({ gsap }) => {
+      if (cancelled) return;
+
+      line.style.removeProperty("width");
+      const targetWidth = line.getBoundingClientRect().width;
+      line.style.width = "0px";
+
+      const context = gsap.context(() => {
+        gsap.to(line, {
+          width: targetWidth,
+          delay: 0.7,
+          duration: 1.05,
+          ease: "power3.inOut",
+          clearProps: "width",
+        });
+      }, line);
+
+      revertAnimation = () => context.revert();
+    });
+
+    return () => {
+      cancelled = true;
+      revertAnimation();
+    };
+  }, []);
 
   React.useEffect(() => {
     if (heroUpdatesPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -139,7 +178,7 @@ export default function Home() {
                 <h1>
                   <span>KOOPS</span>
                   <span>parduotuvės</span>
-                  <i className="hero-headline-line" aria-hidden="true" />
+                  <i ref={heroLineRef} className="hero-headline-line" style={{ width: 0 }} aria-hidden="true" />
                   <span>arčiau</span>
                   <span>jūsų.</span>
                 </h1>
