@@ -771,10 +771,9 @@ export default function Home() {
         </section>
       </main>
 
-      {/* BYQ: terra-tory-footer-1 */}
+        {/* BYQ: terra-tory-footer-1 */}
       <footer className="tt-footer" id="kontaktai" data-byq-component="terra-tory-footer-1">
         <section className="footer-cta" aria-labelledby="footer-cta-title">
-          <img className="footer-cta-image" loading="lazy" src="/ukmerge-fields-1.jpg" alt="" aria-hidden="true" />
           <div className="orbit footer-orbit-one" aria-hidden="true" /><div className="orbit footer-orbit-two" aria-hidden="true" />
           <p className="section-label light-label">KOOPS</p>
           <h2 id="footer-cta-title">Parduotuvė gali būti arčiau, nei manote</h2>
