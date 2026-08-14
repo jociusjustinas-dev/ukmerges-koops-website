@@ -185,6 +185,8 @@ export default function Home() {
           </aside>
         </section>
 
+        <div className="tt-hero-spacer" aria-hidden="true" />
+
         <KoopsBentoSection />
 
         {/* BYQ: terra-tory-team-1 adapted to location cards */}
