@@ -141,7 +141,12 @@ h1, h2, h3 { font-family: var(--font-field-sans); font-weight: 400; }
 .koops-bento-card-accent { grid-column: span 2; background: var(--color-honey-pollen); }
 .koops-bento-card-accent > .section-label { position: relative; z-index: 1; }
 .koops-bento-actions { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 12px 24px; }
-.koops-bento-link { display: inline-flex; align-items: center; gap: 8px; padding-bottom: 3px; border-bottom: 1px solid currentColor; font-size: 15px; font-weight: 500; }
+.koops-bento-link { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
+.koops-bento-link > span[aria-hidden] { display: inline-block; transition: transform .2s ease; }
+.koops-bento-card[href]:focus-visible .koops-bento-link > span[aria-hidden], .koops-bento-link:focus-visible > span[aria-hidden] { transform: translateX(4px); }
+@media (hover: hover) and (pointer: fine) {
+  .koops-bento-card[href]:hover .koops-bento-link > span[aria-hidden], .koops-bento-link:hover > span[aria-hidden] { transform: translateX(4px); }
+}
 .koops-bento-circle { position: absolute; width: 400px; height: 400px; right: -122px; bottom: -172px; border: 1px dashed var(--color-moss-veil); border-radius: 50%; pointer-events: none; }
 
 .tt-locations { padding-block: 120px; background: var(--color-midnight-moss); color: white; }
