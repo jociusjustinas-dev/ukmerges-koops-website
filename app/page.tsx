@@ -144,6 +144,7 @@ export default function Home() {
               <a href="#naujienos"><span>Naujienos</span></a>
               <a href="#restoranas"><span>Restoranas</span></a>
               <a href="#karjera"><span>Karjera</span></a>
+              <a href="#tiekejams"><span>Tiekėjams</span></a>
               <a href="#apie"><span>Apie mus</span></a>
             </nav>
           </div>
