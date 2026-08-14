@@ -54,7 +54,7 @@ h1, h2, h3 { font-family: var(--font-field-sans); font-weight: 400; }
 .body-large { font-size: 20px; line-height: 1.4; }
 .dashed-divider { width: 100%; border-bottom: 1px dashed var(--color-moss-edge); }
 
-.pill-button { min-height: 40px; display: inline-flex; align-items: center; justify-content: center; width: fit-content; padding: 8px 16px; border: 0; border-radius: var(--radius-button); overflow: hidden; cursor: pointer; font-size: 16px; line-height: 24px; transition: background-color .2s ease, color .2s ease; }
+.pill-button { min-height: 40px; display: inline-flex; align-items: center; justify-content: center; width: fit-content; padding: 8px 16px; border: 0; border-radius: var(--radius-button); overflow: hidden; cursor: pointer; font-size: 16px; font-weight: 500; line-height: 24px; transition: background-color .2s ease, color .2s ease; }
 .pill-button.dark { background: var(--color-midnight-moss); color: white; }
 .pill-button.accent { background: var(--color-honey-pollen); color: var(--color-midnight-moss); }
 .pill-button.light { background: white; color: var(--color-midnight-moss); }
