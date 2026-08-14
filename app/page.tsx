@@ -489,7 +489,7 @@ export default function Home() {
             </div>
             <div className="news-bento">
               <a className="news-card news-card-large" href="https://ukmergeskoops.lt/naujienos/">
-                <img src="/koops-community.jpg" alt="Vietos gamintojų produktai" />
+                <img loading="lazy" src="/local-produce-couple.jpg" alt="Pirkėjai su vietos gamintojų produkcija" />
                 <div>
                   <span className="section-label light-label">NAUJIENOS</span>
                   <h3>Vietos skoniai – arčiau jūsų</h3>
@@ -497,9 +497,18 @@ export default function Home() {
                   <span className="text-link">Skaityti <span aria-hidden="true">→</span></span>
                 </div>
               </a>
-              <a className="news-card news-card-accent" href="https://ukmergeskoops.lt/naujienos/"><h3>Naujausi pasiūlymai kasdieniam krepšeliui</h3><span className="text-link">Peržiūrėti <span aria-hidden="true">→</span></span></a>
-              <a className="news-card news-card-muted" href="https://ukmergeskoops.lt/naujienos/"><h3>Kas naujo KOOPS parduotuvėse?</h3><span className="text-link">Sužinoti <span aria-hidden="true">→</span></span></a>
-              <a className="news-card news-card-wide" href="https://ukmergeskoops.lt/naujienos/"><h3>Naujienos iš Ukmergės krašto</h3><span className="text-link">Skaityti <span aria-hidden="true">→</span></span></a>
+              <a className="news-card news-card-visual news-card-accent" href="https://ukmergeskoops.lt/naujienos/">
+                <img loading="lazy" src="/ukmerge-fields-4.jpg" alt="Ukmergės rajono laukai" />
+                <div className="news-card-copy"><h3>Naujausi pasiūlymai kasdieniam krepšeliui</h3><span className="text-link">Peržiūrėti <span aria-hidden="true">→</span></span></div>
+              </a>
+              <a className="news-card news-card-visual news-card-muted" href="https://ukmergeskoops.lt/naujienos/">
+                <img loading="lazy" src="/local-produce-shopper.jpg" alt="Pirkėja renkasi šviežias daržoves" />
+                <div className="news-card-copy"><h3>Kas naujo KOOPS parduotuvėse?</h3><span className="text-link">Sužinoti <span aria-hidden="true">→</span></span></div>
+              </a>
+              <a className="news-card news-card-visual news-card-wide" href="https://ukmergeskoops.lt/naujienos/">
+                <img loading="lazy" src="/ukmerge-fields-5.jpg" alt="Ukmergės krašto upė ir laukai" />
+                <div className="news-card-copy"><h3>Naujienos iš Ukmergės krašto</h3><span className="text-link">Skaityti <span aria-hidden="true">→</span></span></div>
+              </a>
             </div>
           </div>
         </section>
@@ -614,7 +623,10 @@ export default function Home() {
                 <p className="form-note">Paspaudus bus atverta jūsų el. pašto programa.</p>
               </form>
             </div>
-            <div className="contact-image"><img src="/koops-community.jpg" alt="Vietos gamintojų produkcija" /></div>
+            <div className="contact-image">
+              <img className="contact-image-main" loading="lazy" src="/local-produce-customer.jpg" alt="Pirkėja su vietos gamintojų produkcija" />
+              <img className="contact-image-inset" loading="lazy" src="/ukmerge-fields-2.jpg" alt="Ukmergės rajono ūkiai ir laukai" />
+            </div>
           </div>
         </section>
       </main>
@@ -622,6 +634,7 @@ export default function Home() {
       {/* BYQ: terra-tory-footer-1 */}
       <footer className="tt-footer" id="kontaktai" data-byq-component="terra-tory-footer-1">
         <section className="footer-cta" aria-labelledby="footer-cta-title">
+          <img className="footer-cta-image" loading="lazy" src="/ukmerge-fields-1.jpg" alt="" aria-hidden="true" />
           <div className="orbit footer-orbit-one" aria-hidden="true" /><div className="orbit footer-orbit-two" aria-hidden="true" />
           <p className="section-label light-label">KOOPS</p>
           <h2 id="footer-cta-title">Parduotuvė gali būti arčiau, nei manote</h2>
