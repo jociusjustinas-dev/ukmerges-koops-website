@@ -76,38 +76,224 @@ export default function Home() {
   const [heroUpdateIndex, setHeroUpdateIndex] = React.useState(0);
   const [heroUpdatesPaused, setHeroUpdatesPaused] = React.useState(false);
   const [jobSlide, setJobSlide] = React.useState(0);
+  const pageRef = React.useRef<HTMLDivElement>(null);
   const heroLineRef = React.useRef<HTMLElement>(null);
 
   React.useEffect(() => {
+    const root = pageRef.current;
     const line = heroLineRef.current;
-    if (!line) return;
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      line.style.removeProperty("width");
-      return;
-    }
+    if (!root || !line) return;
 
     let cancelled = false;
     let revertAnimation = () => {};
 
-    void import("gsap").then(({ gsap }) => {
+    void Promise.all([
+      import("gsap"),
+      import("gsap/ScrollTrigger"),
+    ]).then(([{ gsap }, { ScrollTrigger }]) => {
       if (cancelled) return;
 
-      line.style.removeProperty("width");
-      const targetWidth = line.getBoundingClientRect().width;
-      line.style.width = "0px";
+      gsap.registerPlugin(ScrollTrigger);
 
-      const context = gsap.context(() => {
-        gsap.to(line, {
-          width: targetWidth,
-          delay: 0.7,
-          duration: 1.05,
-          ease: "power3.inOut",
-          clearProps: "width",
-        });
-      }, line);
+      const media = gsap.matchMedia();
 
-      revertAnimation = () => context.revert();
+      media.add(
+        {
+          isDesktop: "(min-width: 768px)",
+          isMobile: "(max-width: 767px)",
+          reduceMotion: "(prefers-reduced-motion: reduce)",
+        },
+        (context) => {
+          const { isDesktop, isMobile, reduceMotion } = context.conditions as {
+            isDesktop: boolean;
+            isMobile: boolean;
+            reduceMotion: boolean;
+          };
+
+          if (reduceMotion) {
+            line.style.removeProperty("width");
+            return;
+          }
+
+          const heroLabel = root.querySelector<HTMLElement>(".tt-hero-top > .section-label");
+          const heroWords = root.querySelectorAll<HTMLElement>(".tt-hero-top h1 > span");
+          const heroBody = root.querySelector<HTMLElement>(".tt-hero-top > .body-large");
+          const heroCta = root.querySelector<HTMLElement>(".tt-hero-top > .pill-button");
+          const heroCard = root.querySelector<HTMLElement>(".hero-update-card");
+
+          line.style.removeProperty("width");
+          const targetWidth = line.getBoundingClientRect().width;
+          line.style.width = "0px";
+
+          const heroTimeline = gsap.timeline({
+            defaults: { duration: 0.8, ease: "power3.out" },
+          });
+
+          if (heroLabel) {
+            heroTimeline.fromTo(heroLabel, { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.08);
+          }
+
+          heroTimeline.fromTo(
+            heroWords,
+            { y: isMobile ? 24 : 42, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, stagger: 0.07 },
+            0.16,
+          );
+
+          heroTimeline.to(
+            line,
+            {
+              width: targetWidth,
+              duration: 1.05,
+              ease: "power3.inOut",
+              clearProps: "width",
+            },
+            0.68,
+          );
+
+          if (heroBody) {
+            heroTimeline.fromTo(heroBody, { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.5);
+          }
+
+          if (heroCta) {
+            heroTimeline.fromTo(heroCta, { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.6);
+          }
+
+          if (heroCard) {
+            heroTimeline.fromTo(
+              heroCard,
+              { x: isDesktop ? 28 : 0, y: isMobile ? 18 : 0, autoAlpha: 0 },
+              { x: 0, y: 0, autoAlpha: 1 },
+              0.72,
+            );
+          }
+
+          const revealSections = [
+            {
+              trigger: ".koops-bento-section",
+              divider: ".koops-bento-header > .dashed-divider",
+              headings: ".koops-bento-header > :not(.dashed-divider)",
+              items: ".koops-bento-grid > *",
+            },
+            {
+              trigger: ".tt-locations",
+              headings: ".location-headline > *",
+              items: ".location-grid > *, .section-cta",
+            },
+            {
+              trigger: ".tt-news",
+              divider: ".tt-section-header > .dashed-divider",
+              headings: ".tt-section-header > :not(.dashed-divider)",
+              items: ".news-bento > *",
+            },
+            {
+              trigger: ".tt-story",
+              headings: ".story-headline > *",
+              items: ".story-grid > *",
+            },
+            {
+              trigger: ".tt-jobs",
+              headings: ".jobs-header > *",
+              items: ".job-card",
+            },
+            {
+              trigger: ".tt-about",
+              headings: ".about-statement",
+              items: ".about-split > *",
+            },
+            {
+              trigger: ".tt-contact",
+              headings: ".contact-heading > *",
+              items: ".contact-details, .supplier-form, .contact-image",
+            },
+            {
+              trigger: ".footer-cta",
+              headings: ".footer-cta > :not(.orbit)",
+              items: "",
+            },
+            {
+              trigger: ".footer-content",
+              headings: ".footer-grid > *",
+              items: ".footer-bottom",
+            },
+          ];
+
+          revealSections.forEach(({ trigger, divider, headings, items }) => {
+            const section = root.querySelector<HTMLElement>(trigger);
+            if (!section) return;
+
+            const dividerElements = divider ? section.querySelectorAll<HTMLElement>(divider) : [];
+            const headingElements = section.querySelectorAll<HTMLElement>(headings);
+            const itemElements = items ? section.querySelectorAll<HTMLElement>(items) : [];
+            const timeline = gsap.timeline({
+              scrollTrigger: {
+                trigger: section,
+                start: isMobile ? "top 88%" : "top 82%",
+                once: true,
+              },
+              defaults: { ease: "power3.out" },
+            });
+
+            if (dividerElements.length) {
+              timeline.fromTo(
+                dividerElements,
+                { scaleX: 0, transformOrigin: "left center" },
+                { scaleX: 1, duration: 0.72, ease: "power3.inOut" },
+                0,
+              );
+            }
+
+            if (headingElements.length) {
+              timeline.fromTo(
+                headingElements,
+                { y: isMobile ? 20 : 28, autoAlpha: 0 },
+                { y: 0, autoAlpha: 1, duration: 0.72, stagger: 0.08 },
+                dividerElements.length ? 0.18 : 0,
+              );
+            }
+
+            if (itemElements.length) {
+              timeline.fromTo(
+                itemElements,
+                { y: isMobile ? 24 : 40, scale: 0.985, autoAlpha: 0 },
+                { y: 0, scale: 1, autoAlpha: 1, duration: 0.88, stagger: 0.1 },
+                headingElements.length ? 0.34 : 0,
+              );
+            }
+          });
+
+          if (isDesktop) {
+            const parallaxImages = root.querySelectorAll<HTMLElement>(
+              ".koops-bento-media img, .news-card-large > img, .story-image img, .about-image img, .contact-image img",
+            );
+
+            gsap.set(parallaxImages, { willChange: "transform" });
+
+            parallaxImages.forEach((image) => {
+              gsap.fromTo(
+                image,
+                { yPercent: -4, scale: 1.07 },
+                {
+                  yPercent: 4,
+                  scale: 1.07,
+                  ease: "none",
+                  scrollTrigger: {
+                    trigger: image.parentElement,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 1,
+                  },
+                },
+              );
+            });
+          }
+
+          window.requestAnimationFrame(() => ScrollTrigger.refresh());
+        },
+        root,
+      );
+
+      revertAnimation = () => media.revert();
     });
 
     return () => {
@@ -129,7 +315,7 @@ export default function Home() {
   const activeHeroUpdate = heroUpdates[heroUpdateIndex];
 
   return (
-    <>
+    <div className="site-shell" ref={pageRef}>
       <a className="skip-link" href="#turinys">Pereiti prie turinio</a>
 
       <header className="floating-nav" data-byq-adaptation="terra-tory-design-system-navigation">
@@ -385,6 +571,6 @@ export default function Home() {
           <div className="footer-bottom"><p>© {new Date().getFullYear()} Ukmergės rajono vartotojų kooperatyvas</p><a href="#pradzia">Į puslapio viršų ↑</a></div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
