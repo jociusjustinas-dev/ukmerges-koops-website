@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   title: "KOOPS | Parduotuvės Ukmergėje ir rajone",
   description: "Raskite KOOPS parduotuves, darbo laiką, naujienas, restorano „Vilkmergė“ informaciją ir darbo pasiūlymus.",
   icons: {
-    icon: "/koops-logo.jpg",
-    shortcut: "/koops-logo.jpg",
+    icon: "/koops-logo.png",
+    shortcut: "/koops-logo.png",
   },
 };
 

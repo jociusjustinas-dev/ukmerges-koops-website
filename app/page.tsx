@@ -107,7 +107,7 @@ export default function Home() {
         <div className="nav-shell">
           <div className="nav-left">
             <a className="brand" href="#pradzia" aria-label="KOOPS – į pradžią">
-              <img src="/koops-logo.jpg" alt="KOOPS prekybos sistema" />
+              <img src="/koops-logo.png" alt="KOOPS prekybos sistema" />
             </a>
             <span className="nav-divider" aria-hidden="true" />
             <nav className="desktop-nav" aria-label="Pagrindinė navigacija">
@@ -369,7 +369,7 @@ export default function Home() {
         </section>
         <div className="tt-container footer-content">
           <div className="footer-grid">
-            <div className="footer-brand"><img src="/koops-logo.jpg" alt="KOOPS prekybos sistema" /><p>Arti miesto ir rajono žmonių kasdien.</p></div>
+            <div className="footer-brand"><img src="/koops-logo.png" alt="KOOPS prekybos sistema" /><p>Arti miesto ir rajono žmonių kasdien.</p></div>
             <nav aria-label="Poraštės navigacija">
               <div><p className="section-label">PAGRINDINIAI</p><a href="#parduotuves">Parduotuvės</a><a href="#naujienos">Naujienos</a><a href="#restoranas">Restoranas</a><a href="#karjera">Karjera</a></div>
               <div><p className="section-label">KOOPERATYVAS</p><a href="#apie">Apie KOOPS</a><a href="#tiekejams">Tiekėjams</a><a href="https://ukmergeskoops.lt/kontaktai/">Kontaktai</a></div>
