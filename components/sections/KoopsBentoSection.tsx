@@ -33,16 +33,12 @@ export function KoopsBentoSection() {
             />
           </a>
 
-          <a
-            className="koops-bento-media"
-            href="#tiekejams"
-            aria-label="Tapti KOOPS tiekėju"
-          >
-            <img
-              src="/koops-community.jpg"
-              alt="Vietos gamintojų produkcija KOOPS parduotuvėje"
-              loading="lazy"
-            />
+          <a className="koops-bento-card koops-bento-card-career" href="#karjera">
+            <p className="section-label">KARJERA</p>
+            <div className="koops-bento-card-content">
+              <h3>Darbo pasiūlymai</h3>
+              <p>Galimybės Ukmergėje ir rajone.</p>
+            </div>
           </a>
 
           <a className="koops-bento-card" href="#tiekejams">

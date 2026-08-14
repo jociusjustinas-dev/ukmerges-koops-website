@@ -135,6 +135,7 @@ h1, h2, h3 { font-family: var(--font-field-sans); font-weight: 400; }
 .koops-bento-media { height: 304px; overflow: hidden; display: block; background: var(--color-bone-canvas); border-radius: var(--radius-card); }
 .koops-bento-media img { width: 100%; height: 100%; object-fit: cover; }
 .koops-bento-media-tall { grid-row: span 2; height: 624px; }
+.koops-bento-card-career { background: var(--color-sprout-green); }
 .koops-bento-card-accent { grid-column: span 2; background: var(--color-honey-pollen); }
 .koops-bento-card-accent > .section-label { position: relative; z-index: 1; }
 .koops-bento-actions { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 12px 24px; }
