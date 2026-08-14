@@ -776,21 +776,23 @@ export default function Home() {
           <h2 id="footer-cta-title">Parduotuvė gali būti arčiau, nei manote</h2>
           <a className="pill-button accent" href="#parduotuves" aria-label="Rasti KOOPS parduotuvę"><RollingLabel>Rasti parduotuvę</RollingLabel></a>
         </section>
-        <div className="tt-container footer-content">
-          <div className="footer-grid">
-            <div className="footer-brand"><img src="/koops-logo.png" alt="KOOPS prekybos sistema" /><p>Arti miesto ir rajono žmonių kasdien.</p></div>
-            <nav aria-label="Poraštės navigacija">
-              <div><p className="section-label">PAGRINDINIAI</p><a href="#parduotuves">Parduotuvės</a><a href="#naujienos">Naujienos</a><a href="#restoranas">Restoranas</a><a href="#karjera">Karjera</a></div>
-              <div><p className="section-label">KOOPERATYVAS</p><a href="#apie">Apie KOOPS</a><a href="#tiekejams">Tiekėjams</a><a href="https://ukmergeskoops.lt/kontaktai/">Kontaktai</a></div>
-              <div><p className="section-label">KONTAKTAI</p><a href="tel:+37034053235">0 340 53235</a><a href="mailto:direktore@urvk.lt">direktore@urvk.lt</a><a href="https://ukmergeskoops.lt/privatumo-politika/">Privatumo politika</a></div>
-            </nav>
-          </div>
-          <div className="footer-bottom">
-            <p>© {new Date().getFullYear()} Ukmergės rajono vartotojų kooperatyvas</p>
-            <a className="footer-back-to-top" href="#pradzia" aria-label="Grįžti į puslapio viršų">
-              <span>Į puslapio viršų</span>
-              <span className="footer-back-to-top-icon" aria-hidden="true">↑</span>
-            </a>
+        <div className="footer-reveal">
+          <div className="tt-container footer-content">
+            <div className="footer-grid">
+              <div className="footer-brand"><img src="/koops-logo.png" alt="KOOPS prekybos sistema" /><p>Arti miesto ir rajono žmonių kasdien.</p></div>
+              <nav aria-label="Poraštės navigacija">
+                <div><p className="section-label">PAGRINDINIAI</p><a href="#parduotuves">Parduotuvės</a><a href="#naujienos">Naujienos</a><a href="#restoranas">Restoranas</a><a href="#karjera">Karjera</a></div>
+                <div><p className="section-label">KOOPERATYVAS</p><a href="#apie">Apie KOOPS</a><a href="#tiekejams">Tiekėjams</a><a href="https://ukmergeskoops.lt/kontaktai/">Kontaktai</a></div>
+                <div><p className="section-label">KONTAKTAI</p><a href="tel:+37034053235">0 340 53235</a><a href="mailto:direktore@urvk.lt">direktore@urvk.lt</a><a href="https://ukmergeskoops.lt/privatumo-politika/">Privatumo politika</a></div>
+              </nav>
+            </div>
+            <div className="footer-bottom">
+              <p>© {new Date().getFullYear()} Ukmergės rajono vartotojų kooperatyvas</p>
+              <a className="footer-back-to-top" href="#pradzia" aria-label="Grįžti į puslapio viršų">
+                <span>Į puslapio viršų</span>
+                <span className="footer-back-to-top-icon" aria-hidden="true">↑</span>
+              </a>
+            </div>
           </div>
         </div>
       </footer>
