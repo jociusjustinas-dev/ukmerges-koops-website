@@ -744,17 +744,20 @@ export default function Home() {
                   {supplierFormErrors.pasiulymas ? <small className="field-error" id="supplier-proposal-error">{supplierFormErrors.pasiulymas}</small> : null}
                 </label>
                 <div className={`privacy-field${supplierFormErrors.privatumas ? " has-error" : ""}`}>
-                  <input
-                    className="privacy-checkbox"
-                    id="supplier-privacy"
-                    name="privatumas"
-                    type="checkbox"
-                    value="patvirtinta"
-                    aria-invalid={Boolean(supplierFormErrors.privatumas)}
-                    aria-describedby={supplierFormErrors.privatumas ? "supplier-privacy-error" : undefined}
-                    onChange={() => clearSupplierError("privatumas")}
-                    required
-                  />
+                  <span className="privacy-checkbox-control">
+                    <input
+                      className="privacy-checkbox-input"
+                      id="supplier-privacy"
+                      name="privatumas"
+                      type="checkbox"
+                      value="patvirtinta"
+                      aria-invalid={Boolean(supplierFormErrors.privatumas)}
+                      aria-describedby={supplierFormErrors.privatumas ? "supplier-privacy-error" : undefined}
+                      onChange={() => clearSupplierError("privatumas")}
+                      required
+                    />
+                    <span className="privacy-checkbox-mark" aria-hidden="true" />
+                  </span>
                   <div className="privacy-consent-copy">
                     <label htmlFor="supplier-privacy">Patvirtinu, kad susipažinau su </label>
                     <a className="privacy-link" href="https://ukmergeskoops.lt/privatumo-politika/">privatumo politika</a>.
