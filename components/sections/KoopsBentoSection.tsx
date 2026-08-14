@@ -15,9 +15,12 @@ export function KoopsBentoSection() {
         <div className="koops-bento-grid">
           <a className="koops-bento-card" href="#parduotuves">
             <p className="section-label">PARDUOTUVĖS</p>
-            <div className="koops-bento-card-content">
-              <h3>Raskite</h3>
-              <p>Adresai, darbo laikas ir kelio nuorodos.</p>
+            <div className="koops-bento-card-bottom">
+              <div className="koops-bento-card-content">
+                <h3>Raskite</h3>
+                <p>Adresai, darbo laikas ir kelio nuorodos.</p>
+              </div>
+              <span className="koops-bento-link">Rasti parduotuvę <span aria-hidden="true">→</span></span>
             </div>
           </a>
 
@@ -35,17 +38,23 @@ export function KoopsBentoSection() {
 
           <a className="koops-bento-card koops-bento-card-career" href="#karjera">
             <p className="section-label">KARJERA</p>
-            <div className="koops-bento-card-content">
-              <h3>Darbo pasiūlymai</h3>
-              <p>Galimybės Ukmergėje ir rajone.</p>
+            <div className="koops-bento-card-bottom">
+              <div className="koops-bento-card-content">
+                <h3>Darbo pasiūlymai</h3>
+                <p>Galimybės Ukmergėje ir rajone.</p>
+              </div>
+              <span className="koops-bento-link">Peržiūrėti pasiūlymus <span aria-hidden="true">→</span></span>
             </div>
           </a>
 
           <a className="koops-bento-card" href="#tiekejams">
             <p className="section-label">TIEKĖJAMS</p>
-            <div className="koops-bento-card-content">
-              <h3>Tapkite tiekėju</h3>
-              <p>Pasiūlykite savo produkciją KOOPS.</p>
+            <div className="koops-bento-card-bottom">
+              <div className="koops-bento-card-content">
+                <h3>Tapkite tiekėju</h3>
+                <p>Pasiūlykite savo produkciją KOOPS.</p>
+              </div>
+              <span className="koops-bento-link">Tapti tiekėju <span aria-hidden="true">→</span></span>
             </div>
           </a>
 
