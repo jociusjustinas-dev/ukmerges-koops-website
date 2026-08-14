@@ -146,6 +146,7 @@ export default function Home() {
               <a href="#karjera"><span>Karjera</span></a>
               <a href="#tiekejams"><span>Tiekėjams</span></a>
               <a href="#apie"><span>Apie mus</span></a>
+              <a href="#kontaktai"><span>Kontaktai</span></a>
             </nav>
           </div>
           <a className="pill-button dark nav-cta" href="#parduotuves" aria-label="Rasti parduotuvę">
@@ -160,6 +161,7 @@ export default function Home() {
               <a href="#karjera">Karjera</a>
               <a href="#apie">Apie KOOPS</a>
               <a href="#tiekejams">Tiekėjams</a>
+              <a href="#kontaktai">Kontaktai</a>
             </nav>
           </details>
         </div>
@@ -364,7 +366,7 @@ export default function Home() {
       </main>
 
       {/* BYQ: terra-tory-footer-1 */}
-      <footer className="tt-footer" data-byq-component="terra-tory-footer-1">
+      <footer className="tt-footer" id="kontaktai" data-byq-component="terra-tory-footer-1">
         <section className="footer-cta" aria-labelledby="footer-cta-title">
           <div className="orbit footer-orbit-one" aria-hidden="true" /><div className="orbit footer-orbit-two" aria-hidden="true" />
           <p className="section-label light-label">KOOPS</p>
