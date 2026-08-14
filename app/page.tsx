@@ -705,6 +705,7 @@ export default function Home() {
                       id="supplier-name"
                       name="vardas"
                       type="text"
+                      placeholder="Pvz., Antanas"
                       autoComplete="name"
                       aria-invalid={Boolean(supplierFormErrors.vardas)}
                       aria-describedby={supplierFormErrors.vardas ? "supplier-name-error" : undefined}
@@ -720,6 +721,7 @@ export default function Home() {
                       name="el_pastas"
                       type="email"
                       inputMode="email"
+                      placeholder="Pvz., antanas@ukis.lt"
                       autoComplete="email"
                       aria-invalid={Boolean(supplierFormErrors.el_pastas)}
                       aria-describedby={supplierFormErrors.el_pastas ? "supplier-email-error" : undefined}
@@ -735,12 +737,12 @@ export default function Home() {
                     id="supplier-proposal"
                     name="pasiulymas"
                     rows={5}
+                    placeholder="Nurodykite produktą, jo kilmę ir kaip galėtume su jumis susisiekti…"
                     aria-invalid={Boolean(supplierFormErrors.pasiulymas)}
-                    aria-describedby={supplierFormErrors.pasiulymas ? "supplier-proposal-error" : "supplier-proposal-help"}
+                    aria-describedby={supplierFormErrors.pasiulymas ? "supplier-proposal-error" : undefined}
                     onChange={() => clearSupplierError("pasiulymas")}
                     required
                   />
-                  <small className="field-help" id="supplier-proposal-help">Nurodykite produktą, jo kilmę ir kaip galėtume su jumis susisiekti.</small>
                   {supplierFormErrors.pasiulymas ? <small className="field-error" id="supplier-proposal-error">{supplierFormErrors.pasiulymas}</small> : null}
                 </label>
                 <div className={`privacy-field${supplierFormErrors.privatumas ? " has-error" : ""}`}>

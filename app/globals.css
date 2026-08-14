@@ -284,14 +284,14 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .form-field { width: 100%; display: grid; gap: 10px; }
 .form-field > span { font-size: 12px; font-weight: 600; letter-spacing: .08em; }
 .supplier-form input:not([type="checkbox"]), .supplier-form textarea { width: 100%; padding: 12px 18px; color: var(--color-midnight-moss); background: #f7f8f3; border: 1px solid rgba(21,25,13,.24); border-radius: 24px; transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease; }
+.supplier-form input::placeholder, .supplier-form textarea::placeholder { color: var(--color-moss-veil); opacity: .78; }
 .supplier-form input:not([type="checkbox"]) { height: 52px; }
 .supplier-form textarea { min-height: 150px; resize: vertical; }
 .supplier-form input:not([type="checkbox"]):hover, .supplier-form textarea:hover { border-color: rgba(21,25,13,.52); }
 .supplier-form input:not([type="checkbox"]):focus-visible, .supplier-form textarea:focus-visible { outline: 0; border-color: var(--color-midnight-moss); background: white; box-shadow: 0 0 0 4px rgba(174,220,185,.7); }
 .supplier-form input[aria-invalid="true"], .supplier-form textarea[aria-invalid="true"] { border-color: #a33227; background: #fff8f6; }
 .supplier-form input[aria-invalid="true"]:focus-visible, .supplier-form textarea[aria-invalid="true"]:focus-visible { box-shadow: 0 0 0 4px rgba(163,50,39,.16); }
-.field-help, .field-error { display: block; font-size: 12px; line-height: 1.4; }
-.field-help { color: var(--color-moss-veil); }
+.field-error { display: block; font-size: 12px; line-height: 1.4; }
 .field-error { color: #8c271f; font-weight: 600; }
 .supplier-form-alert { width: 100%; display: grid; gap: 8px; padding: 16px 18px; border: 1px solid; border-radius: 16px; font-size: 14px; line-height: 1.45; }
 .supplier-form-alert strong { font-size: 15px; }
