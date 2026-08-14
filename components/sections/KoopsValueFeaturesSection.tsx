@@ -5,44 +5,32 @@ import * as React from "react";
 const valueFeatures = [
   {
     title: "Parduotuvės",
-    image: "/local-produce-tomatoes.jpg",
-    imageAlt: "Pirkėja renkasi vietoje užaugintus pomidorus",
-    variant: "photo",
+    icon: "https://byqsupply-components.netlify.app/Terra-Tory/images/ServiceIcon.svg",
     body: "Kasdienės prekės ir vietos gamintojų produkcija Ukmergės mieste bei rajone.",
   },
   {
     title: "Restoranas",
-    image: "/ukmerge-fields-3.jpg",
-    imageAlt: "Ukmergės krašto laukai vakaro šviesoje",
-    variant: "light",
+    icon: "https://byqsupply-components.netlify.app/Terra-Tory/images/ServiceIcon-1.svg",
     body: "„Vilkmergė“ – erdvė šventėms, renginiams ir jaukiems susitikimams.",
   },
   {
     title: "Darbo vietos",
-    image: "/local-produce-couple.jpg",
-    imageAlt: "Pirkėjai renkasi vietos gamintojų produkciją",
-    variant: "photo",
+    icon: "https://byqsupply-components.netlify.app/Terra-Tory/images/Service-Icon-2.svg",
     body: "Galimybės dirbti arti namų parduotuvėse, restorane ir logistikoje.",
   },
   {
     title: "Vietos tiekėjai",
-    image: "/ukmerge-fields-4.jpg",
-    imageAlt: "Dirbami laukai ir sodybos Ukmergės rajone",
-    variant: "light",
+    icon: "https://byqsupply-components.netlify.app/Terra-Tory/images/ServiceIcon-3.svg",
     body: "Bendradarbiaujame su gamintojais, norinčiais pasiekti KOOPS pirkėjus.",
   },
   {
     title: "Bendruomenė",
-    image: "/ukmerge-fields-6.jpg",
-    imageAlt: "Rytinis Ukmergės krašto peizažas",
-    variant: "photo",
+    icon: "https://byqsupply-components.netlify.app/Terra-Tory/images/ServiceIcon.svg",
     body: "Esame šalia vietos žmonių, jų kasdienybės ir svarbiausių progų.",
   },
   {
     title: "Kasdienės paslaugos",
-    image: "/local-produce-customer.jpg",
-    imageAlt: "Pirkėja kraunasi kasdienius produktus į daugkartinį krepšį",
-    variant: "light",
+    icon: "https://byqsupply-components.netlify.app/Terra-Tory/images/Service-Icon-2.svg",
     body: "Patogios paslaugos ir pažįstamas aptarnavimas ten, kur gyvenate.",
   },
 ];
@@ -80,9 +68,9 @@ export function KoopsValueFeaturesSection() {
           {[0, 1, 2].map((copyIndex) => (
             <div className="about-marquee-set" aria-hidden={copyIndex === 0 ? undefined : true} key={copyIndex}>
               {valueFeatures.map((feature) => (
-                <article className={`about-feature-card is-${feature.variant}`} key={`${copyIndex}-${feature.title}`}>
+                <article className="about-feature-card" key={`${copyIndex}-${feature.title}`}>
                   <h3>{feature.title}</h3>
-                  <img loading="lazy" src={feature.image} alt={feature.imageAlt} />
+                  <img loading="lazy" src={feature.icon} alt="" />
                   <p>{feature.body}</p>
                 </article>
               ))}

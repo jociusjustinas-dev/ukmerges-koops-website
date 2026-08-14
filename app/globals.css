@@ -266,14 +266,10 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .about-marquee-track { width: max-content; display: flex; will-change: transform; animation: about-marquee-move 44s linear infinite; }
 .about-marquee-track.is-paused { animation-play-state: paused; }
 .about-marquee-set { display: flex; flex: 0 0 auto; gap: 24px; padding-right: 24px; }
-.about-feature-card { position: relative; isolation: isolate; width: 421px; min-height: 488px; overflow: hidden; display: flex; flex: 0 0 auto; flex-direction: column; gap: 32px; padding: 40px; background: var(--color-bone-canvas); border-radius: var(--radius-card); }
-.about-feature-card h3, .about-feature-card p { position: relative; z-index: 1; }
+.about-feature-card { width: 421px; min-height: 488px; display: flex; flex: 0 0 auto; flex-direction: column; gap: 40px; padding: 40px; background: var(--color-bone-canvas); border-radius: var(--radius-card); }
 .about-feature-card h3 { font-size: 32px; line-height: 1; letter-spacing: -.03em; }
-.about-feature-card img { width: 100%; height: 210px; object-fit: cover; border-radius: 12px; }
+.about-feature-card img { width: 100%; height: 180px; object-fit: contain; }
 .about-feature-card p { margin-top: auto; font-size: 16px; line-height: 1.5; }
-.about-feature-card.is-photo { color: white; background: var(--color-midnight-moss); }
-.about-feature-card.is-photo::after { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgba(10,13,7,.22) 8%, rgba(10,13,7,.84) 100%); }
-.about-feature-card.is-photo img { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; border-radius: 0; }
 @keyframes about-marquee-move { from { transform: translateX(0); } to { transform: translateX(calc(-100% / 3)); } }
 
 .tt-contact { padding-block: 80px; background: white; }
@@ -477,7 +473,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .about-marquee-set { gap: 16px; padding-right: 16px; }
   .about-feature-card { width: 250px; min-height: 360px; gap: 24px; padding: 24px; }
   .about-feature-card h3 { font-size: 24px; }
-  .about-feature-card:not(.is-photo) img { height: 130px; }
+  .about-feature-card img { height: 130px; }
   .about-feature-card p { font-size: 14px; }
   .footer-cta h2 { font-size: 13vw; }
   .contact-content { gap: 48px; padding-top: 0; }
