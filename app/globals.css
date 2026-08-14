@@ -94,6 +94,7 @@ a.text-link:focus-visible > span[aria-hidden], a:focus-visible .text-link > span
 .desktop-nav a:hover { background: var(--color-bone-canvas); }
 .mobile-menu { display: none; }
 
+main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .tt-hero { position: sticky; z-index: 0; top: 0; isolation: isolate; height: var(--tt-hero-height); min-height: var(--tt-hero-height); margin-bottom: calc(0px - var(--tt-hero-height)); overflow: hidden; background: var(--color-midnight-moss); color: white; }
 .tt-hero-background, .tt-hero-overlay { position: absolute; inset: 0; }
 .tt-hero-background { z-index: -4; overflow: hidden; }
