@@ -186,6 +186,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .news-card-accent { background: var(--color-honey-pollen); }
 .news-card-muted, .news-card-wide { background: var(--color-bone-canvas); }
 .news-card-wide { grid-column: span 2; }
+.news-card-wide .news-card-copy { height: 100%; justify-content: space-between; }
 .news-card-visual { position: relative; isolation: isolate; overflow: hidden; justify-content: flex-end; color: white; }
 .news-card-visual::after { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgba(10,13,7,.1) 20%, rgba(10,13,7,.82) 100%); }
 .news-card-visual > img { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }

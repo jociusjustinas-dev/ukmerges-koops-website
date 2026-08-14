@@ -576,8 +576,7 @@ export default function Home() {
                 <img loading="lazy" src="/local-produce-shopper.jpg" alt="Pirkėja renkasi šviežias daržoves" />
                 <div className="news-card-copy"><h3>Kas naujo KOOPS parduotuvėse?</h3><span className="text-link">Sužinoti <span aria-hidden="true">→</span></span></div>
               </a>
-              <a className="news-card news-card-visual news-card-wide" href="https://ukmergeskoops.lt/naujienos/">
-                <img loading="lazy" src="/ukmerge-fields-5.jpg" alt="Ukmergės krašto upė ir laukai" />
+              <a className="news-card news-card-wide" href="https://ukmergeskoops.lt/naujienos/">
                 <div className="news-card-copy"><h3>Naujienos iš Ukmergės krašto</h3><span className="text-link">Skaityti <span aria-hidden="true">→</span></span></div>
               </a>
             </div>
