@@ -221,16 +221,9 @@ export default function Home() {
                 start: "bottom bottom",
                 end: "max",
                 onEnter: showFooterReveal,
-                onEnterBack: hideFooterReveal,
+                onEnterBack: showFooterReveal,
                 onLeave: showFooterReveal,
                 onLeaveBack: hideFooterReveal,
-                onUpdate: (self) => {
-                  if (self.direction < 0) {
-                    hideFooterReveal();
-                  } else if (window.scrollY >= self.start) {
-                    showFooterReveal();
-                  }
-                },
                 onRefresh: (self) => {
                   footerReveal.classList.toggle("is-revealed", window.scrollY >= self.start);
                 },
