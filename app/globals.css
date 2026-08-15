@@ -308,7 +308,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .contact-image { position: relative; justify-self: end; width: min(100%, 620px); height: 848px; overflow: hidden; background: var(--color-bone-canvas); border-radius: var(--radius-card); }
 .contact-image-main { width: 100%; height: 100%; object-fit: cover; }
 
-.tt-footer { padding: 8px 8px 0; background: white; }
+.tt-footer { display: flow-root; padding: 8px 8px 0; background: white; }
 .footer-cta { position: relative; isolation: isolate; overflow: hidden; min-height: 620px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px; padding: 120px 32px; text-align: center; background: var(--color-midnight-moss); color: white; border-radius: var(--radius-card); }
 .footer-cta h2 { max-width: 900px; font-size: 72px; line-height: .944; letter-spacing: -.04em; }
 .footer-orbit-one { z-index: -1; width: 820px; height: 820px; left: -350px; bottom: -560px; }
