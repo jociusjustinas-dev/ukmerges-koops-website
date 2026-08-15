@@ -88,14 +88,19 @@ a.text-link:focus-visible > span[aria-hidden], a:focus-visible .text-link > span
 }
 
 .floating-nav { position: fixed; z-index: 100; top: 16px; left: 0; width: 100%; padding-inline: 32px; }
-.nav-shell { width: 100%; max-width: 1800px; height: 70px; margin-inline: auto; display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 0 32px; background: white; border: 1px solid var(--color-moss-edge); border-radius: 40px; }
+.nav-shell { width: 100%; max-width: 1800px; height: 70px; margin-inline: auto; display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 0 32px; color: white; background: transparent; border: 1px solid transparent; border-radius: 40px; box-shadow: 0 14px 36px rgba(10,13,7,0); transition: color .35s ease, background-color .45s ease, border-color .45s ease, box-shadow .45s ease; }
+.floating-nav.is-scrolled .nav-shell { color: var(--color-midnight-moss); background: white; border-color: var(--color-moss-edge); box-shadow: 0 14px 36px rgba(10,13,7,.08); }
 .nav-left { min-width: 0; display: flex; align-items: center; gap: 24px; }
 .brand { width: 62px; height: 54px; display: flex; flex: 0 0 auto; align-items: center; overflow: hidden; }
-.brand img { width: 100%; height: 100%; object-fit: contain; }
+.brand img { width: 100%; height: 100%; object-fit: contain; filter: brightness(0) invert(1); transition: filter .35s ease; }
+.floating-nav.is-scrolled .brand img { filter: none; }
 .nav-divider { width: 1px; height: 16px; flex: 0 0 auto; background: var(--color-moss-edge); }
+.floating-nav:not(.is-scrolled) .nav-divider { background: rgba(255,255,255,.42); }
 .desktop-nav { display: flex; align-items: center; gap: 8px; }
 .desktop-nav a { padding: 4px 8px; border-radius: 16px; font-size: 15px; font-weight: 500; transition: background-color .2s ease; }
 .desktop-nav a:hover { background: var(--color-bone-canvas); }
+.floating-nav:not(.is-scrolled) .desktop-nav a:hover { background: rgba(255,255,255,.14); }
+.floating-nav:not(.is-scrolled) .nav-cta { color: var(--color-midnight-moss); background: var(--color-honey-pollen); }
 .mobile-menu { display: none; }
 
 main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
@@ -358,6 +363,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .mobile-menu { display: block; position: relative; }
   .mobile-menu summary { width: 40px; height: 40px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%; background: transparent; list-style: none; cursor: pointer; transition: background-color .2s ease; }
   .mobile-menu summary:hover { background: var(--color-bone-canvas); }
+  .floating-nav:not(.is-scrolled) .mobile-menu summary:hover { background: rgba(255,255,255,.14); }
   .mobile-menu summary::-webkit-details-marker { display: none; }
   .menu-hamburger { position: relative; width: 20px; height: 14px; display: block; }
   .menu-hamburger i { position: absolute; left: 0; width: 20px; height: 1px; background: currentColor; transition: top .2s ease, transform .2s ease; }
@@ -365,7 +371,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .menu-hamburger i:last-child { top: 10px; }
   .mobile-menu[open] .menu-hamburger i:first-child { top: 7px; transform: rotate(45deg); }
   .mobile-menu[open] .menu-hamburger i:last-child { top: 7px; transform: rotate(-45deg); }
-  .mobile-menu nav { position: absolute; top: calc(100% + 12px); right: 0; width: min(320px, calc(100vw - 32px)); display: grid; padding: 10px; background: white; border: 1px solid var(--color-moss-edge); border-radius: var(--radius-card); box-shadow: 0 15px 20px rgba(2,1,32,.08); }
+  .mobile-menu nav { position: absolute; top: calc(100% + 12px); right: 0; width: min(320px, calc(100vw - 32px)); display: grid; padding: 10px; color: var(--color-midnight-moss); background: white; border: 1px solid var(--color-moss-edge); border-radius: var(--radius-card); box-shadow: 0 15px 20px rgba(2,1,32,.08); }
   .mobile-menu nav a { min-height: 48px; display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--color-moss-edge); font-size: 15px; font-weight: 500; }
   .mobile-menu nav a:last-child { border: 0; }
 }

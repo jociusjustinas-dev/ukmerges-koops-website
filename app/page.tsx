@@ -190,6 +190,22 @@ export default function Home() {
             reduceMotion: boolean;
           };
           const titlePushLines = root.querySelectorAll<HTMLElement>(".title-push-line");
+          const floatingNav = root.querySelector<HTMLElement>(".floating-nav");
+
+          if (floatingNav) {
+            const showNavFill = () => floatingNav.classList.add("is-scrolled");
+            const hideNavFill = () => floatingNav.classList.remove("is-scrolled");
+
+            ScrollTrigger.create({
+              start: 32,
+              end: "max",
+              onEnter: showNavFill,
+              onEnterBack: showNavFill,
+              onLeave: showNavFill,
+              onLeaveBack: hideNavFill,
+              onRefresh: () => floatingNav.classList.toggle("is-scrolled", window.scrollY > 32),
+            });
+          }
 
           if (isDesktop) {
             const footer = root.querySelector<HTMLElement>(".tt-footer");
