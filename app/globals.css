@@ -490,6 +490,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .story-image { height: 300px; }
   .about-marquee-header h2 { font-size: 64px; }
   .about-feature-card { width: 350px; }
+  .footer-cta { min-height: 420px; gap: 24px; padding: 72px 20px; }
   .footer-cta h2 { font-size: 40px; }
   .footer-cta h2 { max-width: 13ch; }
   .footer-orbit-two { display: none; }
@@ -569,7 +570,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .form-halves { grid-template-columns: 1fr; }
   .contact-image { display: none; }
   .contact-image { height: 300px; }
-  .footer-cta { min-height: 520px; padding: 100px 20px; }
+  .footer-cta { min-height: 360px; gap: 20px; padding: 56px 20px; }
   .footer-content { padding-top: 48px; padding-bottom: 24px; }
   .footer-grid nav { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 8px; }
   .footer-bottom { align-items: flex-start; flex-direction: column-reverse; margin-top: 64px; }
