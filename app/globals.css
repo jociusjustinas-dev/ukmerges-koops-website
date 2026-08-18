@@ -359,6 +359,8 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 }
 
 @media (max-width: 1100px) {
+  .floating-nav:not(.is-scrolled) .brand,
+  .mobile-nav-brand.brand { width: 82px; height: 72px; }
   .desktop-nav { display: none; }
   .nav-divider { display: none; }
   .mobile-menu { display: block; position: relative; }
@@ -473,7 +475,8 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .mobile-menu nav { padding: 20px 16px 24px; }
   .mobile-nav-head { margin-bottom: 24px; }
   .brand { width: 54px; height: 48px; }
-  .floating-nav:not(.is-scrolled) .brand { width: 64px; height: 56px; }
+  .floating-nav:not(.is-scrolled) .brand,
+  .mobile-nav-brand.brand { width: 82px; height: 72px; }
   .tt-hero-content { padding: 132px 0 286px; }
   .tt-hero-top h1 { font-size: clamp(44px, 13vw, 60px); }
   .tt-hero-top { gap: 18px; }
