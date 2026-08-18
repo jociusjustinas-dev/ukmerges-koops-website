@@ -485,6 +485,8 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .about-marquee-header h2 { font-size: 64px; }
   .about-feature-card { width: 350px; }
   .footer-cta h2 { font-size: 56px; }
+  .footer-cta h2 { max-width: 13ch; }
+  .footer-orbit-two { display: none; }
   .footer-grid nav { flex-wrap: wrap; justify-content: flex-start; }
 }
 
@@ -545,7 +547,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .about-feature-card h3 { font-size: 24px; }
   .about-feature-card img { height: 130px; }
   .about-feature-card p { font-size: 14px; }
-  .footer-cta h2 { font-size: 13vw; }
+  .footer-cta h2 { font-size: 13vw; max-width: 13ch; }
   .contact-content { gap: 48px; padding-top: 0; }
   .contact-heading h2 { font-size: 40px; }
   .contact-details { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
