@@ -163,8 +163,10 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .tt-locations { padding-block: 120px; background: var(--color-midnight-moss); color: white; }
 .location-headline { max-width: 980px; margin-bottom: 80px; display: flex; flex-wrap: wrap; align-items: center; gap: 0 16px; font-family: var(--font-field-sans); font-size: 72px; line-height: .944; letter-spacing: -.04em; }
 .location-headline i { width: 142px; height: 4px; background: var(--color-morning-mist); }
-.location-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-.location-card { min-width: 0; }
+.location-carousel { overflow: hidden; }
+.location-grid { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; overscroll-behavior-x: contain; }
+.location-grid::-webkit-scrollbar { display: none; }
+.location-card { min-width: 0; flex: 0 0 min(560px, 38vw); scroll-snap-align: start; }
 .location-image { display: block; height: 493px; overflow: hidden; background: var(--color-bone-canvas); border-radius: var(--radius-card); }
 .location-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
 .location-card:hover .location-image img { transform: scale(1.025); }
@@ -175,6 +177,17 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .location-info dl > div { display: grid; grid-template-columns: 110px 1fr; gap: 12px; }
 .location-info dt { color: var(--color-morning-mist); font-size: 13px; }
 .location-info dd { font-size: 14px; }
+.location-carousel-controls { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 28px; }
+.location-carousel-dots, .location-carousel-arrows { display: flex; align-items: center; gap: 8px; }
+.location-carousel-dots button { width: 28px; height: 28px; display: grid; place-items: center; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.location-carousel-dots button::before { content: ""; width: 7px; height: 7px; background: rgba(255,255,255,.48); border-radius: 999px; transition: width .25s ease, background-color .25s ease; }
+.location-carousel-dots button.is-active::before { width: 22px; background: var(--color-honey-pollen); }
+.location-carousel-arrows button { width: 48px; height: 48px; display: grid; place-items: center; padding: 0; color: white; background: transparent; border: 1px solid rgba(255,255,255,.45); border-radius: 50%; cursor: pointer; transition: color .2s ease, background-color .2s ease, border-color .2s ease; }
+.location-carousel-arrows button:disabled { opacity: .32; cursor: not-allowed; }
+.location-carousel-arrows button:not(:disabled):focus-visible { color: var(--color-midnight-moss); background: var(--color-honey-pollen); border-color: var(--color-honey-pollen); }
+@media (hover: hover) and (pointer: fine) {
+  .location-carousel-arrows button:not(:disabled):hover { color: var(--color-midnight-moss); background: var(--color-honey-pollen); border-color: var(--color-honey-pollen); }
+}
 .section-cta { margin-top: 48px; }
 
 .tt-news { padding-block: 80px; background: white; }
@@ -457,7 +470,8 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .koops-bento-section { border-radius: 24px 24px 0 0; }
   .koops-bento-header h2, .koops-bento-card h3, .tt-section-header h2, .story-headline h2, .jobs-intro h2, .contact-heading h2 { font-size: 40px; }
   .location-headline { font-size: 56px; }
-  .location-grid { grid-template-columns: 1fr; gap: 48px; }
+  .location-grid { gap: 16px; }
+  .location-card { flex-basis: min(82vw, 420px); }
   .location-info dl > div { grid-template-columns: minmax(90px, .7fr) minmax(0, 1fr); }
   .location-image { height: 480px; }
   .news-bento { grid-template-columns: 1fr; grid-template-rows: auto; gap: 16px; }

@@ -117,11 +117,30 @@ export default function Home() {
   const [heroUpdateIndex, setHeroUpdateIndex] = React.useState(0);
   const [heroUpdatesPaused, setHeroUpdatesPaused] = React.useState(false);
   const [restaurantSlide, setRestaurantSlide] = React.useState(0);
+  const [locationSlide, setLocationSlide] = React.useState(0);
   const [supplierFormErrors, setSupplierFormErrors] = React.useState<SupplierFormErrors>({});
   const [supplierFormStatus, setSupplierFormStatus] = React.useState<"idle" | "error" | "ready">("idle");
   const pageRef = React.useRef<HTMLDivElement>(null);
   const heroLineRef = React.useRef<HTMLElement>(null);
+  const locationCarouselRef = React.useRef<HTMLDivElement>(null);
   const supplierErrorSummaryRef = React.useRef<HTMLDivElement>(null);
+
+  const showLocationSlide = (index: number) => {
+    const track = locationCarouselRef.current;
+    if (!track) return;
+    const card = track.querySelector<HTMLElement>(`[data-location-index="${index}"]`);
+    card?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+    setLocationSlide(index);
+  };
+
+  const handleLocationScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const track = event.currentTarget;
+    const cards = Array.from(track.querySelectorAll<HTMLElement>("[data-location-index]"));
+    const nearest = cards.reduce((closest, card, index) => (
+      Math.abs(card.offsetLeft - track.scrollLeft) < Math.abs(cards[closest].offsetLeft - track.scrollLeft) ? index : closest
+    ), 0);
+    setLocationSlide(nearest);
+  };
 
   const clearSupplierError = (field: SupplierField) => {
     setSupplierFormErrors((current) => {
@@ -584,9 +603,10 @@ export default function Home() {
             <div className="location-headline" id="parduotuviu-antraste">
               <span>Raskite</span><span>artimiausią</span><i className="title-push-line" style={{ width: 0 }} aria-hidden="true" /><span>KOOPS</span><span>parduotuvę</span>
             </div>
-            <div className="location-grid">
+            <div className="location-carousel" role="region" aria-roledescription="karuselė" aria-label="KOOPS parduotuvės">
+              <div className="location-grid" ref={locationCarouselRef} onScroll={handleLocationScroll}>
               {stores.map((store) => (
-                <article className="location-card" key={store.name}>
+                <article className="location-card" data-location-index={stores.indexOf(store)} key={store.name}>
                   <a className="location-image" href={store.map} target="_blank" rel="noreferrer" aria-label={`Parduotuvė „${store.name}“ – atverti žemėlapyje`}>
                     <img src={store.image} alt={`Parduotuvė „${store.name}“`} />
                   </a>
@@ -600,6 +620,30 @@ export default function Home() {
                   </div>
                 </article>
               ))}
+              </div>
+              <div className="location-carousel-controls">
+                <div className="location-carousel-dots" aria-label="Pasirinkti parduotuvę">
+                  {stores.map((store, index) => (
+                    <button
+                      type="button"
+                      className={index === locationSlide ? "is-active" : ""}
+                      onClick={() => showLocationSlide(index)}
+                      aria-label={`Rodyti parduotuvę „${store.name}“`}
+                      aria-pressed={index === locationSlide}
+                      key={store.name}
+                    />
+                  ))}
+                </div>
+                <div className="location-carousel-arrows">
+                  <button type="button" onClick={() => showLocationSlide(locationSlide - 1)} disabled={locationSlide === 0} aria-label="Ankstesnė parduotuvė">
+                    <span className="control-arrow is-left"><ByqChevron /></span>
+                  </button>
+                  <button type="button" onClick={() => showLocationSlide(locationSlide + 1)} disabled={locationSlide === stores.length - 1} aria-label="Kita parduotuvė">
+                    <span className="control-arrow"><ByqChevron /></span>
+                  </button>
+                </div>
+              </div>
+              <p className="sr-only" aria-live="polite">Parduotuvė {locationSlide + 1} iš {stores.length}</p>
             </div>
             <a className="pill-button accent section-cta" href="https://ukmergeskoops.lt/parduotuves/">
               <RollingLabel>Visos parduotuvės</RollingLabel>
