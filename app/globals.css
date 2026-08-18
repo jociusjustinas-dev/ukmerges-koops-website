@@ -455,7 +455,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .nav-shell { gap: 16px; }
   .nav-left { gap: 16px; }
   .floating-nav.is-scrolled .nav-shell { height: 70px; }
-  .floating-nav.is-scrolled > .nav-shell .brand { width: 62px; height: 54px; }
+  .floating-nav.is-scrolled > .nav-shell .brand { width: 72px; height: 62px; }
   .nav-cta { display: none; }
   .tt-hero-content { align-items: flex-start; padding: clamp(140px, 20svh, 178px) 0 clamp(184px, 28svh, 244px); }
   .tt-hero-top { gap: clamp(12px, 2svh, 18px); }
@@ -494,7 +494,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .floating-nav { top: 8px; padding-inline: 16px; }
   .nav-shell { height: 64px; padding-inline: 0; }
   .floating-nav.is-scrolled .nav-shell { height: 64px; }
-  .floating-nav.is-scrolled > .nav-shell .brand { width: 54px; height: 48px; }
+  .floating-nav.is-scrolled > .nav-shell .brand { width: 66px; height: 56px; }
   .mobile-menu nav { padding: 8px 16px 24px; }
   .mobile-nav-head { margin-bottom: 24px; }
   .mobile-nav-brand { width: 120px !important; height: 104px !important; }
