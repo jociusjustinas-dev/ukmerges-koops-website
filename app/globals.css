@@ -550,6 +550,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .contact-heading h2 { font-size: 40px; }
   .contact-details { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .form-halves { grid-template-columns: 1fr; }
+  .contact-image { display: none; }
   .contact-image { height: 300px; }
   .footer-cta { min-height: 520px; padding: 100px 20px; }
   .footer-content { padding-top: 48px; padding-bottom: 24px; }
