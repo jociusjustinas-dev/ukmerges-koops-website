@@ -520,13 +520,33 @@ export default function Home() {
                   <span>Uždaryti</span>
                 </button>
               </div>
-              <a href="#parduotuves">Parduotuvės</a>
-              <a href="#naujienos">Naujienos ir akcijos</a>
-              <a href="#restoranas">Restoranas</a>
-              <a href="#karjera">Karjera</a>
-              <a href="#apie">Apie KOOPS</a>
-              <a href="#tiekejams">Tiekėjams</a>
-              <a href="#kontaktai">Kontaktai</a>
+              <div className="mobile-nav-links">
+                <a href="#parduotuves">Parduotuvės</a>
+                <a href="#naujienos">Naujienos ir akcijos</a>
+                <a href="#restoranas">Restoranas</a>
+                <a href="#karjera">Karjera</a>
+                <a href="#apie">Apie KOOPS</a>
+                <a href="#tiekejams">Tiekėjams</a>
+                <a href="#kontaktai">Kontaktai</a>
+              </div>
+              <div className="mobile-nav-footer">
+                <p className="section-label">SUSISIEKIME</p>
+                <div className="mobile-nav-contact">
+                  <a href="tel:+37034053235">0 340 53235</a>
+                  <a href="mailto:direktore@urvk.lt">direktore@urvk.lt</a>
+                </div>
+                <div className="mobile-nav-socials" aria-label="KOOPS socialiniai tinklai">
+                  {socialLinks.map((social) => {
+                    const SocialIcon = social.icon;
+                    return (
+                      <a href={social.href} key={social.label} target="_blank" rel="noreferrer" aria-label={social.label}>
+                        <SocialIcon aria-hidden="true" />
+                        <span>{social.label}</span>
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
             </nav>
           </details>
         </div>
