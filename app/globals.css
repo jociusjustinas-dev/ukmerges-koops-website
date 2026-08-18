@@ -469,15 +469,15 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .nav-cta { display: none; }
   .tt-hero-content { align-items: flex-start; padding: clamp(140px, 20svh, 178px) 0 clamp(184px, 28svh, 244px); }
   .tt-hero-top { gap: clamp(12px, 2svh, 18px); }
-  .tt-hero-top h1 { max-width: 100%; font-size: clamp(44px, 11vw, 64px); line-height: .94; }
+  .tt-hero-top h1 { max-width: 100%; font-size: clamp(44px, 11vw, 64px); line-height: 1.02; }
   .tt-hero-top .body-large { max-width: 300px; }
   .tt-hero-overlay { background: linear-gradient(180deg, rgba(10,13,7,.3) 0%, rgba(10,13,7,.72) 72%, rgba(10,13,7,.82) 100%); }
-  .hero-update-card { right: 20px; bottom: max(12px, env(safe-area-inset-bottom)); left: auto; width: min(240px, calc(100vw - 40px)); padding: 6px; }
-  .hero-update-link { gap: 7px; }
-  .hero-update-media { height: clamp(70px, 13svh, 104px); }
-  .hero-update-copy { gap: 3px; padding-top: 0; }
-  .hero-update-copy strong { font-size: 15px; }
-  .hero-update-dots { padding-top: 0; }
+  .hero-update-card { right: 20px; bottom: max(12px, env(safe-area-inset-bottom)); left: 20px; width: auto; padding: 8px; }
+  .hero-update-link { grid-template-columns: 120px minmax(0, 1fr); align-items: center; gap: 12px; }
+  .hero-update-media { height: 96px; }
+  .hero-update-copy { gap: 3px; padding: 2px 48px 18px 0; }
+  .hero-update-copy strong { max-width: none; font-size: 15px; }
+  .hero-update-dots { position: absolute; right: 12px; bottom: 8px; padding: 0; }
   .koops-bento-section { border-radius: 24px 24px 0 0; }
   .koops-bento-header h2, .koops-bento-card h3, .tt-section-header h2, .story-headline h2, .jobs-intro h2, .contact-heading h2 { font-size: 40px; }
   .koops-bento-header h2, .tt-section-header h2, .story-headline h2, .jobs-intro h2, .contact-heading h2, .footer-cta h2 { line-height: 1.02; }
@@ -524,14 +524,15 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .floating-nav:not(.is-scrolled) .brand,
   .mobile-nav-brand.brand { width: 82px; height: 72px; }
   .tt-hero-content { padding: max(124px, 19svh) 0 max(164px, 25svh); }
-  .tt-hero-top h1 { font-size: clamp(40px, 11vw, 52px); }
+  .tt-hero-top h1 { font-size: clamp(40px, 11vw, 52px); line-height: 1.02; }
   .tt-hero-top { gap: 12px; }
   .tt-hero-top .body-large { max-width: 260px; }
   .hero-headline-line { width: 80px; height: 3px; }
-  .hero-update-card { right: 16px; bottom: max(10px, env(safe-area-inset-bottom)); left: auto; width: min(210px, calc(100vw - 32px)); }
-  .hero-update-media { height: 64px; }
+  .hero-update-card { right: 16px; bottom: max(10px, env(safe-area-inset-bottom)); left: 16px; width: auto; }
+  .hero-update-link { grid-template-columns: 104px minmax(0, 1fr); gap: 10px; }
+  .hero-update-media { height: 88px; }
   .hero-update-kicker { left: 8px; bottom: 7px; padding: 3px 6px; font-size: 8px; }
-  .hero-update-copy { padding-inline: 4px; }
+  .hero-update-copy { padding: 2px 48px 18px 0; }
   .hero-update-copy strong { font-size: 14px; }
   .koops-bento-section { padding-block: 80px; }
   .tt-news, .tt-contact { padding-block: 48px; }
