@@ -93,6 +93,7 @@ a.text-link:focus-visible > span[aria-hidden], a:focus-visible .text-link > span
 .nav-left { min-width: 0; display: flex; align-items: center; gap: 24px; }
 .brand { width: 62px; height: 54px; display: flex; flex: 0 0 auto; align-items: center; overflow: hidden; }
 .brand img { width: 100%; height: 100%; object-fit: contain; filter: brightness(0) invert(1); transition: filter .35s ease; }
+.floating-nav:not(.is-scrolled) .brand { width: 96px; height: 84px; }
 .floating-nav.is-scrolled .brand img { filter: none; }
 .nav-divider { width: 1px; height: 16px; flex: 0 0 auto; background: var(--color-moss-edge); }
 .floating-nav:not(.is-scrolled) .nav-divider { background: rgba(255,255,255,.42); }
@@ -435,6 +436,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .floating-nav { top: 8px; padding-inline: 8px; }
   .nav-shell { height: 64px; padding: 0 16px; }
   .brand { width: 54px; height: 48px; }
+  .floating-nav:not(.is-scrolled) .brand { width: 72px; height: 62px; }
   .tt-hero-content { padding: 112px 0 150px; }
   .tt-hero-top h1 { font-size: 14vw; }
   .tt-hero-top { gap: 18px; }
