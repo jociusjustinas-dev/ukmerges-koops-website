@@ -461,6 +461,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .tt-container { padding-inline: 20px; }
   .floating-nav { top: 0; padding-inline: 0; }
   .nav-shell { height: 76px; gap: 12px; padding-inline: 20px; border-radius: 0; }
+  .floating-nav:not(.is-scrolled) .nav-shell { height: 86px; }
   .nav-left { gap: 12px; }
   .floating-nav.is-scrolled .nav-shell { height: 72px; padding-inline: 20px; border-inline: 0; border-radius: 0; }
   .floating-nav.is-scrolled > .nav-shell .brand { width: 68px; height: 58px; }
@@ -514,6 +515,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .body-large { font-size: 16px; }
   .floating-nav { top: 0; padding-inline: 0; }
   .nav-shell { height: 72px; padding-inline: 16px; }
+  .floating-nav:not(.is-scrolled) .nav-shell { height: 82px; }
   .floating-nav.is-scrolled .nav-shell { height: 68px; padding-inline: 16px; }
   .floating-nav.is-scrolled > .nav-shell .brand { width: 60px; height: 52px; }
   .mobile-menu nav { padding: 8px 16px 24px; }
