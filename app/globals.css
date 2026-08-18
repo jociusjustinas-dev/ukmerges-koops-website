@@ -459,14 +459,13 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 @media (max-width: 767px) {
   :root { --tt-hero-height: 100svh; }
   .tt-container { padding-inline: 20px; }
-  .floating-nav { padding-inline: 20px; }
-  .nav-shell { padding-inline: 0; }
-  .nav-shell { gap: 16px; }
-  .nav-left { gap: 16px; }
-  .floating-nav { top: 20px; }
-  .floating-nav.is-scrolled .nav-shell { height: 68px; padding-inline: 16px; }
+  .floating-nav { top: 0; padding-inline: 0; }
+  .nav-shell { height: 76px; gap: 12px; padding-inline: 20px; border-radius: 0; }
+  .nav-left { gap: 12px; }
+  .floating-nav.is-scrolled .nav-shell { height: 72px; padding-inline: 20px; border-inline: 0; border-radius: 0; }
   .floating-nav.is-scrolled > .nav-shell .brand { width: 68px; height: 58px; }
-  .nav-cta { display: none; }
+  .nav-cta { min-height: 40px; display: inline-flex; margin-left: auto; font-size: 14px; }
+  .nav-cta .avenir-button-inner { min-height: 40px; padding: 8px 12px; }
   .tt-hero-content { align-items: flex-start; padding: clamp(140px, 20svh, 178px) 0 clamp(184px, 28svh, 244px); }
   .tt-hero-top { gap: clamp(12px, 2svh, 18px); }
   .tt-hero-top h1 { max-width: 100%; font-size: clamp(44px, 11vw, 64px); line-height: 1.02; }
@@ -513,9 +512,9 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .tt-container { padding-inline: 16px; }
   .section-label { font-size: 10px; line-height: 12px; }
   .body-large { font-size: 16px; }
-  .floating-nav { top: 12px; padding-inline: 16px; }
-  .nav-shell { height: 64px; padding-inline: 0; }
-  .floating-nav.is-scrolled .nav-shell { height: 62px; padding-inline: 16px; }
+  .floating-nav { top: 0; padding-inline: 0; }
+  .nav-shell { height: 72px; padding-inline: 16px; }
+  .floating-nav.is-scrolled .nav-shell { height: 68px; padding-inline: 16px; }
   .floating-nav.is-scrolled > .nav-shell .brand { width: 60px; height: 52px; }
   .mobile-menu nav { padding: 8px 16px 24px; }
   .mobile-nav-head { margin-bottom: 24px; }
