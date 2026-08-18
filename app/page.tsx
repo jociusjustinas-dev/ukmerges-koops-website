@@ -261,16 +261,20 @@ export default function Home() {
             0.16,
           );
 
-          heroTimeline.to(
-            line,
-            {
-              width: targetWidth,
-              duration: 0.82,
-              ease: "power3.inOut",
-              clearProps: "width",
-            },
-            0.68,
-          );
+          if (isDesktop && window.innerWidth > 1100) {
+            heroTimeline.to(
+              line,
+              {
+                width: targetWidth,
+                duration: 0.82,
+                ease: "power3.inOut",
+                clearProps: "width",
+              },
+              0.68,
+            );
+          } else {
+            line.style.removeProperty("width");
+          }
 
           if (heroBody) {
             heroTimeline.fromTo(heroBody, { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.5);
