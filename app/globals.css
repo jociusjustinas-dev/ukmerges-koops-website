@@ -477,7 +477,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .story-headline h2 { max-width: none; }
   .story-title-desktop, .footer-title-desktop { display: none; }
   .story-title-mobile, .footer-title-mobile { display: block; }
-  .story-title-mobile > span, .footer-title-mobile > span { display: block; white-space: nowrap; }
+  .story-title-mobile > span, .footer-title-mobile > span { display: block; }
   .location-headline { font-size: 56px; }
   .location-grid { gap: 16px; }
   .location-card { flex-basis: min(82vw, 420px); }
@@ -560,7 +560,9 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .about-feature-card p { font-size: 14px; }
   .footer-cta h2 { font-size: 36px; max-width: none; }
   .footer-title-mobile, .story-title-mobile { width: 100%; }
-  .footer-title-mobile > span, .story-title-mobile > span { white-space: nowrap; }
+  .footer-title-mobile > span { white-space: nowrap; }
+  .story-title-mobile > span { white-space: normal; overflow-wrap: break-word; }
+  .story-headline h2 { max-width: 100%; overflow-wrap: break-word; }
   .contact-content { gap: 48px; padding-top: 0; }
   .contact-heading h2 { font-size: 40px; }
   .contact-details { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
