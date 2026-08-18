@@ -488,6 +488,9 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .footer-cta h2 { max-width: 13ch; }
   .footer-orbit-two { display: none; }
   .footer-grid nav { flex-wrap: wrap; justify-content: flex-start; }
+  .footer-grid nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 12px; align-items: start; }
+  .footer-grid nav > div { gap: 8px; }
+  .footer-grid nav > div:last-child a { overflow-wrap: anywhere; }
 }
 
 @media (max-width: 479px) {
@@ -556,7 +559,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .contact-image { height: 300px; }
   .footer-cta { min-height: 520px; padding: 100px 20px; }
   .footer-content { padding-top: 48px; padding-bottom: 24px; }
-  .footer-grid nav { flex-direction: column; gap: 40px; }
+  .footer-grid nav { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 8px; }
   .footer-bottom { align-items: flex-start; flex-direction: column-reverse; margin-top: 64px; }
   .footer-back-to-top { width: 100%; justify-content: space-between; }
 }
