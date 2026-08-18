@@ -38,7 +38,7 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 96px; }
-body { margin: 0; background: var(--color-bone-canvas); color: var(--color-midnight-moss); font-family: var(--font-field-sans); font-size: 16px; line-height: 1.5; letter-spacing: -.01em; -webkit-font-smoothing: antialiased; }
+body { margin: 0; overflow-x: clip; background: var(--color-bone-canvas); color: var(--color-midnight-moss); font-family: var(--font-field-sans); font-size: 16px; line-height: 1.5; letter-spacing: -.01em; -webkit-font-smoothing: antialiased; }
 img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 button, input, textarea { font: inherit; }
@@ -408,6 +408,8 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 
 @media (max-width: 767px) {
   .tt-container { padding-inline: 20px; }
+  .nav-shell { gap: 16px; }
+  .nav-left { gap: 16px; }
   .nav-cta { display: none; }
   .tt-hero-top h1 { font-size: 64px; }
   .tt-hero-overlay { background: linear-gradient(180deg, rgba(10,13,7,.3) 0%, rgba(10,13,7,.72) 72%, rgba(10,13,7,.82) 100%); }
@@ -415,6 +417,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .koops-bento-header h2, .koops-bento-card h3, .tt-section-header h2, .story-headline h2, .jobs-intro h2, .contact-heading h2 { font-size: 40px; }
   .location-headline { font-size: 56px; }
   .location-grid { grid-template-columns: 1fr; gap: 48px; }
+  .location-info dl > div { grid-template-columns: minmax(90px, .7fr) minmax(0, 1fr); }
   .location-image { height: 480px; }
   .news-bento { grid-template-columns: 1fr; grid-template-rows: auto; gap: 16px; }
   .news-card-large, .news-card-wide { grid-column: span 1; }
