@@ -389,7 +389,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .menu-hamburger i:last-child { top: 10px; }
   .mobile-menu[open] .menu-hamburger i:first-child { top: 7px; transform: rotate(45deg); }
   .mobile-menu[open] .menu-hamburger i:last-child { top: 7px; transform: rotate(-45deg); }
-  .mobile-menu nav { position: fixed; z-index: 90; inset: 0; width: 100%; max-height: 100svh; display: grid; grid-template-rows: auto auto minmax(0, 1fr); align-content: start; overflow-y: auto; padding: 16px 20px 32px; color: var(--color-midnight-moss); background: var(--color-linen-white); border: 0; border-radius: 0 0 28px 28px; box-shadow: 0 20px 48px rgba(10,13,7,.16); transform-origin: top center; animation: mobile-menu-in .5s cubic-bezier(.22,1,.36,1) both; overscroll-behavior: contain; }
+  .mobile-menu nav { position: fixed; z-index: 90; top: 70px; right: 0; bottom: 0; left: 0; width: 100%; max-height: none; display: grid; grid-template-rows: auto minmax(0, 1fr); align-content: start; overflow-y: auto; padding: 24px 20px 32px; color: var(--color-midnight-moss); background: var(--color-linen-white); border-top: 1px solid var(--color-moss-edge); border-radius: 0; box-shadow: 0 20px 48px rgba(10,13,7,.1); transform-origin: top center; animation: mobile-menu-in .42s cubic-bezier(.22,1,.36,1) both; overscroll-behavior: contain; }
   .mobile-nav-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 104px; margin-bottom: 32px; }
   .mobile-nav-brand { width: 120px !important; height: 104px !important; display: block; }
   .mobile-nav-brand img { filter: none !important; }
@@ -407,6 +407,8 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .mobile-menu nav a:nth-of-type(2) { border-top: 1px solid var(--color-moss-edge); }
   .mobile-menu nav a:last-child { border: 0; }
   .mobile-menu nav a:hover, .mobile-menu nav a:focus-visible { background: var(--color-bone-canvas); }
+  .floating-nav:has(.mobile-menu[open]) .nav-shell { color: var(--color-midnight-moss); background: white; border-color: var(--color-moss-edge); box-shadow: 0 14px 36px rgba(10,13,7,.08); }
+  .floating-nav:has(.mobile-menu[open]) .brand img { filter: none; }
   .mobile-nav-links { display: grid; }
   .mobile-nav-footer { align-self: end; display: grid; gap: 16px; margin-top: 28px; padding: 24px 16px 4px; border-top: 1px solid var(--color-moss-edge); opacity: 0; transform: translateY(10px); animation: mobile-menu-item-in .42s .34s cubic-bezier(.22,1,.36,1) forwards; }
   .mobile-nav-contact { display: flex; flex-wrap: wrap; gap: 8px 20px; }
@@ -416,7 +418,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .mobile-nav-socials svg { width: 16px; height: 16px; }
 }
 
-@keyframes mobile-menu-in { from { opacity: .85; transform: translateY(-100%); } to { opacity: 1; transform: translateY(0); } }
+@keyframes mobile-menu-in { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes mobile-menu-item-in { to { opacity: 1; transform: translateY(0); } }
 
 @media (min-width: 768px) and (max-width: 1100px) {
@@ -464,6 +466,8 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .floating-nav:not(.is-scrolled) .nav-shell { height: 86px; }
   .nav-left { gap: 12px; }
   .floating-nav.is-scrolled .nav-shell { height: 72px; padding-inline: 20px; border-inline: 0; border-radius: 0; }
+  .mobile-menu nav { top: 86px; }
+  .floating-nav.is-scrolled .mobile-menu nav { top: 72px; }
   .floating-nav.is-scrolled > .nav-shell .brand { width: 68px; height: 58px; }
   .nav-cta { min-height: 40px; display: inline-flex; margin-left: auto; font-size: 14px; }
   .nav-cta .avenir-button-inner { min-height: 40px; padding: 8px 12px; }
@@ -517,6 +521,8 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .nav-shell { height: 72px; padding-inline: 16px; }
   .floating-nav:not(.is-scrolled) .nav-shell { height: 82px; }
   .floating-nav.is-scrolled .nav-shell { height: 68px; padding-inline: 16px; }
+  .mobile-menu nav { top: 82px; padding: 20px 16px 24px; }
+  .floating-nav.is-scrolled .mobile-menu nav { top: 68px; }
   .floating-nav.is-scrolled > .nav-shell .brand { width: 60px; height: 52px; }
   .mobile-menu nav { padding: 8px 16px 24px; }
   .mobile-nav-head { margin-bottom: 24px; }
