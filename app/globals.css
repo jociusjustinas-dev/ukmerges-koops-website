@@ -490,7 +490,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .story-image { height: 300px; }
   .about-marquee-header h2 { font-size: 64px; }
   .about-feature-card { width: 350px; }
-  .footer-cta h2 { font-size: 56px; }
+  .footer-cta h2 { font-size: 40px; }
   .footer-cta h2 { max-width: 13ch; }
   .footer-orbit-two { display: none; }
   .footer-orbit-one { width: 360px; height: 360px; left: auto; right: -190px; bottom: -220px; }
@@ -558,7 +558,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .about-feature-card h3 { font-size: 24px; }
   .about-feature-card img { height: 130px; }
   .about-feature-card p { font-size: 14px; }
-  .footer-cta h2 { font-size: 13vw; max-width: none; }
+  .footer-cta h2 { font-size: 36px; max-width: none; }
   .footer-title-mobile, .story-title-mobile { width: 100%; }
   .footer-title-mobile > span, .story-title-mobile > span { white-space: nowrap; }
   .contact-content { gap: 48px; padding-top: 0; }
