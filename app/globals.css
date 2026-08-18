@@ -435,6 +435,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 }
 
 @media (max-width: 767px) {
+  :root { --tt-hero-height: 100svh; }
   .tt-container { padding-inline: 20px; }
   .floating-nav { padding-inline: 20px; }
   .nav-shell { padding-inline: 0; }
@@ -443,12 +444,16 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .floating-nav.is-scrolled .nav-shell { height: 70px; }
   .floating-nav.is-scrolled > .nav-shell .brand { width: 62px; height: 54px; }
   .nav-cta { display: none; }
-  .tt-hero-content { align-items: flex-start; padding: 156px 0 350px; }
-  .tt-hero-top h1 { max-width: 100%; font-size: clamp(48px, 12vw, 72px); line-height: .94; }
+  .tt-hero-content { align-items: flex-start; padding: clamp(116px, 17svh, 156px) 0 clamp(184px, 28svh, 244px); }
+  .tt-hero-top { gap: clamp(12px, 2svh, 18px); }
+  .tt-hero-top h1 { max-width: 100%; font-size: clamp(44px, 11vw, 64px); line-height: .94; }
   .tt-hero-overlay { background: linear-gradient(180deg, rgba(10,13,7,.3) 0%, rgba(10,13,7,.72) 72%, rgba(10,13,7,.82) 100%); }
-  .hero-update-card { right: 20px; bottom: 20px; left: auto; width: min(260px, calc(100vw - 40px)); }
-  .hero-update-media { height: 112px; }
-  .hero-update-copy strong { font-size: 16px; }
+  .hero-update-card { right: 20px; bottom: max(12px, env(safe-area-inset-bottom)); left: auto; width: min(240px, calc(100vw - 40px)); padding: 6px; }
+  .hero-update-link { gap: 7px; }
+  .hero-update-media { height: clamp(70px, 13svh, 104px); }
+  .hero-update-copy { gap: 3px; padding-top: 0; }
+  .hero-update-copy strong { font-size: 15px; }
+  .hero-update-dots { padding-top: 0; }
   .koops-bento-section { border-radius: 24px 24px 0 0; }
   .koops-bento-header h2, .koops-bento-card h3, .tt-section-header h2, .story-headline h2, .jobs-intro h2, .contact-heading h2 { font-size: 40px; }
   .location-headline { font-size: 56px; }
@@ -467,7 +472,6 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 }
 
 @media (max-width: 479px) {
-  :root { --tt-hero-height: max(760px, 100svh); }
   body { font-size: 14px; }
   .tt-container { padding-inline: 16px; }
   .section-label { font-size: 10px; line-height: 12px; }
@@ -482,12 +486,12 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .brand { width: 54px; height: 48px; }
   .floating-nav:not(.is-scrolled) .brand,
   .mobile-nav-brand.brand { width: 82px; height: 72px; }
-  .tt-hero-content { padding: 132px 0 286px; }
-  .tt-hero-top h1 { font-size: clamp(44px, 13vw, 60px); }
-  .tt-hero-top { gap: 18px; }
+  .tt-hero-content { padding: max(104px, 16svh) 0 max(164px, 25svh); }
+  .tt-hero-top h1 { font-size: clamp(40px, 11vw, 52px); }
+  .tt-hero-top { gap: 12px; }
   .hero-headline-line { width: 80px; height: 3px; }
-  .hero-update-card { right: 16px; bottom: 16px; left: auto; width: min(220px, calc(100vw - 32px)); }
-  .hero-update-media { height: 80px; }
+  .hero-update-card { right: 16px; bottom: max(10px, env(safe-area-inset-bottom)); left: auto; width: min(210px, calc(100vw - 32px)); }
+  .hero-update-media { height: 64px; }
   .hero-update-kicker { left: 8px; bottom: 7px; padding: 3px 6px; font-size: 8px; }
   .hero-update-copy { padding-inline: 4px; }
   .hero-update-copy strong { font-size: 14px; }
