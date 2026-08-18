@@ -687,7 +687,7 @@ export default function Home() {
           <div className="tt-container">
             <div className="story-headline">
               <p className="section-label light-label">RESTORANAS „VILKMERGĖ“ · NUO 1965 METŲ</p>
-              <h2 id="restorano-antraste">Vieta jūsų šventėms, renginiams ir jaukiems susitikimams.</h2>
+              <h2 id="restorano-antraste"><span className="story-title-desktop">Vieta jūsų šventėms, renginiams ir jaukiems susitikimams.</span><span className="story-title-mobile">Vieta jūsų šventėms<br />renginiams ir jaukiems<br />susitikimams.</span></h2>
             </div>
             <div className="story-grid">
               <div className="story-image" role="region" aria-roledescription="karuselė" aria-label="Restorano „Vilkmergė“ nuotraukų galerija">
@@ -880,7 +880,7 @@ export default function Home() {
         <section className="footer-cta" aria-labelledby="footer-cta-title">
           <div className="orbit footer-orbit-one" aria-hidden="true" /><div className="orbit footer-orbit-two" aria-hidden="true" />
           <p className="section-label light-label">KOOPS</p>
-          <h2 id="footer-cta-title">Parduotuvė gali būti<br />arčiau, nei manote</h2>
+          <h2 id="footer-cta-title"><span className="footer-title-desktop">Parduotuvė gali būti<br />arčiau, nei manote</span><span className="footer-title-mobile">Parduotuvė gali<br />būti arčiau,<br />nei manote</span></h2>
           <a className="pill-button accent" href="#parduotuves" aria-label="Rasti KOOPS parduotuvę"><RollingLabel>Rasti parduotuvę</RollingLabel></a>
         </section>
         <div className="footer-reveal">
