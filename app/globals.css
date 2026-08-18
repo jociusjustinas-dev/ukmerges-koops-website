@@ -426,6 +426,8 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 
 @media (max-width: 767px) {
   .tt-container { padding-inline: 20px; }
+  .floating-nav { padding-inline: 20px; }
+  .nav-shell { padding-inline: 0; }
   .nav-shell { gap: 16px; }
   .nav-left { gap: 16px; }
   .nav-cta { display: none; }
@@ -457,8 +459,8 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .tt-container { padding-inline: 16px; }
   .section-label { font-size: 10px; line-height: 12px; }
   .body-large { font-size: 16px; }
-  .floating-nav { top: 8px; padding-inline: 8px; }
-  .nav-shell { height: 64px; padding: 0 16px; }
+  .floating-nav { top: 8px; padding-inline: 16px; }
+  .nav-shell { height: 64px; padding-inline: 0; }
   .mobile-menu nav { padding: 20px 16px 24px; }
   .mobile-nav-head { margin-bottom: 24px; }
   .mobile-nav-brand { width: 88px; height: 66px; }
