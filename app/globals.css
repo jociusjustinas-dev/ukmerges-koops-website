@@ -477,7 +477,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .story-headline h2 { max-width: none; }
   .story-title-desktop, .footer-title-desktop { display: none; }
   .story-title-mobile, .footer-title-mobile { display: block; }
-  .story-title-mobile > span, .footer-title-mobile > span { display: block; }
+  .story-title-mobile > span, .footer-title-mobile > span { display: block; white-space: nowrap; }
   .location-headline { font-size: 56px; }
   .location-grid { gap: 16px; }
   .location-card { flex-basis: min(82vw, 420px); }
@@ -493,6 +493,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .footer-cta h2 { font-size: 56px; }
   .footer-cta h2 { max-width: 13ch; }
   .footer-orbit-two { display: none; }
+  .footer-orbit-one { width: 360px; height: 360px; left: auto; right: -190px; bottom: -220px; }
   .footer-grid nav { flex-wrap: wrap; justify-content: flex-start; }
   .footer-grid nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 12px; align-items: start; }
   .footer-grid nav > div { gap: 8px; }
@@ -558,6 +559,8 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .about-feature-card img { height: 130px; }
   .about-feature-card p { font-size: 14px; }
   .footer-cta h2 { font-size: 13vw; max-width: none; }
+  .footer-title-mobile, .story-title-mobile { width: 100%; }
+  .footer-title-mobile > span, .story-title-mobile > span { white-space: nowrap; }
   .contact-content { gap: 48px; padding-top: 0; }
   .contact-heading h2 { font-size: 40px; }
   .contact-details { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
