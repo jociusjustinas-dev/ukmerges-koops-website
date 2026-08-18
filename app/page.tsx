@@ -490,7 +490,7 @@ export default function Home() {
             <summary aria-label="Atverti pagrindinį meniu"><span className="menu-hamburger" aria-hidden="true"><i /><i /></span></summary>
             <nav aria-label="Mobilioji navigacija">
               <div className="mobile-nav-head">
-                <a className="mobile-nav-brand" href="#pradzia" aria-label="KOOPS – į pradžią">
+                <a className="brand mobile-nav-brand" href="#pradzia" aria-label="KOOPS – į pradžią">
                   <img src="/koops-logo.png" alt="KOOPS" />
                 </a>
                 <button className="mobile-nav-close" type="button" aria-label="Uždaryti meniu" onClick={(event) => {
