@@ -142,23 +142,6 @@ export default function StrategyPage() {
         </div>
       </section>
 
-      <section className="strategy-section strategy-measurement">
-        <div className="strategy-wrap">
-          <div className="strategy-measurement-top">
-            <p className="strategy-kicker">GROWTH SISTEMA</p>
-            <h2>Nelaikome nuomonės rezultatu.</h2>
-            <p>Kiekvienas svarbus sprendimas turi hipotezę, matavimą ir sėkmės ribą.</p>
-          </div>
-          <div className="strategy-metric-grid">
-            <article><span>HIPOTEZĖ</span><strong>Aiškesnė „Rasti parduotuvę“ CTA padidins paspaudimus.</strong></article>
-            <article><span>KPI</span><strong>CTA CTR, žemėlapio paspaudimai, skambučiai.</strong></article>
-            <article><span>TESTAS</span><strong>A/B copy, CTA vieta, kortelių hierarchija.</strong></article>
-            <article><span>SĖKMĖ</span><strong>Mažiausiai +10 % santykinis pagerėjimas.</strong></article>
-          </div>
-          <p className="strategy-measurement-note">Kadangi GA4 ir Search Console šiame etape neturėsime, pirmąją iteraciją vertinsime pagal priėmimo kriterijus, veikiančias nuorodas, formos užbaigimą ir kliento / komandos peržiūrą. Analitika gali būti prijungta vėliau.</p>
-        </div>
-      </section>
-
       <section className="strategy-section strategy-roadmap">
         <div className="strategy-wrap">
           <div className="strategy-heading-row"><p className="strategy-kicker dark">DARBO EIGA</p><span>Nuo sprendimo iki mokymosi</span></div>
