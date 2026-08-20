@@ -19,17 +19,6 @@ const audiences = [
   { label: "TIEKĖJAS", title: "Nori pasiūlyti produkciją", text: "Ką pateikti, kam rašyti ir ko tikėtis toliau." },
 ];
 
-const phases = [
-  ["01", "UX / UI", "Struktūra, vartotojo kelias ir sąsajos hierarchija."],
-  ["02", "CRO", "CTA, įrodymai ir mažesnė trintis iki veiksmo."],
-  ["03", "SEO", "Paieškos intencija, puslapiai ir techninis indeksavimas."],
-  ["04", "AEO", "Aiškūs atsakymai AI paieškoms ir struktūruoti duomenys."],
-  ["05", "Prieinamumas", "WCAG 2.2: kontrastas, klaviatūra, semantika."],
-  ["06", "Copywriting", "Trumpi, konkretūs tekstai, vedantys į veiksmą."],
-  ["07", "Eksperimentai", "Hipotezės, A/B testai ir prioritetai."],
-  ["08", "Duomenų peržiūra", "KPI analizė ir kita iteracija."],
-];
-
 export default function StrategyPage() {
   return (
     <main className="strategy-page">
@@ -139,17 +128,6 @@ export default function StrategyPage() {
             <article><span>06</span><h3>Tiekėjams</h3><p>Pasiūlymo forma · kontaktas · privatumas</p></article>
             <article><span>07</span><h3>Apie KOOPS</h3><p>Žmonės · vieta · kooperatyvo istorija</p></article>
           </div>
-        </div>
-      </section>
-
-      <section className="strategy-section strategy-roadmap">
-        <div className="strategy-wrap">
-          <div className="strategy-heading-row"><p className="strategy-kicker dark">DARBO EIGA</p><span>Nuo sprendimo iki mokymosi</span></div>
-          <ol className="strategy-roadmap-list">
-            {phases.map(([number, title, text]) => (
-              <li key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></li>
-            ))}
-          </ol>
         </div>
       </section>
 
