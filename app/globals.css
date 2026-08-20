@@ -492,7 +492,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .location-headline { font-size: 56px; }
   .location-carousel { margin-right: -20px; overflow: visible; }
   .location-grid { gap: 16px; padding-right: 20px; }
-  .location-card { flex-basis: min(82vw, 420px); }
+  .location-card { flex-basis: calc(100vw - 20px); }
   .location-info dl > div { grid-template-columns: minmax(90px, .7fr) minmax(0, 1fr); }
   .location-image { height: 480px; }
   .news-bento { grid-template-columns: 1fr; grid-template-rows: auto; gap: 16px; }
