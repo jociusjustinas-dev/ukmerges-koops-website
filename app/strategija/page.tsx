@@ -123,6 +123,36 @@ export default function StrategyPage() {
         </div>
       </section>
 
+      <section className="strategy-section strategy-architecture">
+        <div className="strategy-wrap">
+          <div className="strategy-heading-row"><p className="strategy-kicker dark">INFORMACINĖ ARCHITEKTŪRA</p><span>5 pagrindiniai keliai</span></div>
+          <div className="strategy-architecture-intro">
+            <h2>Vienas pagrindinis puslapis.<br />Aiški struktūra po juo.</h2>
+            <p>Navigacija turi atspindėti realius lankytojo tikslus, o ne vidinę organizacijos struktūrą.</p>
+          </div>
+          <div className="strategy-sitemap">
+            <article className="strategy-sitemap-home"><span>01</span><h3>Pradinis puslapis</h3><p>Orientuoja, kas yra KOOPS ir kur eiti toliau.</p></article>
+            <article><span>02</span><h3>Parduotuvės</h3><p>Adresai · darbo laikas · maršrutas</p></article>
+            <article><span>03</span><h3>Naujienos</h3><p>Akcijos · vietos skoniai · krašto istorijos</p></article>
+            <article><span>04</span><h3>Restoranas</h3><p>Salės · talpa · užklausa · skambutis</p></article>
+            <article><span>05</span><h3>Karjera</h3><p>Darbo pasiūlymai · kandidatavimas</p></article>
+            <article><span>06</span><h3>Tiekėjams</h3><p>Pasiūlymo forma · kontaktas · privatumas</p></article>
+            <article><span>07</span><h3>Apie KOOPS</h3><p>Žmonės · vieta · kooperatyvo istorija</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section className="strategy-section strategy-scope">
+        <div className="strategy-wrap">
+          <div className="strategy-heading-row"><p className="strategy-kicker">PROJEKTO SCOPE</p><span>Kas daroma dabar ir vėliau</span></div>
+          <div className="strategy-scope-grid">
+            <article><p className="strategy-kicker">DABAR</p><h3>Struktūra ir patirtis</h3><ul><li>UX/UI sistema ir responsive sprendimai</li><li>Pagrindinių puslapių hierarchija</li><li>CTA ir vartotojo keliai</li><li>SEO / AEO / accessibility pagrindas</li></ul></article>
+            <article><p className="strategy-kicker">VĖLIAU</p><h3>Turinio suvedimas</h3><ul><li>Patvirtintas parduotuvių sąrašas</li><li>Galutiniai kontaktai ir darbo pasiūlymai</li><li>Restorano informacija bei nuotraukos</li><li>Seno turinio migracija ir redirect’ai</li></ul></article>
+          </div>
+          <p className="strategy-scope-note">Šie du etapai sąmoningai atskirti: struktūra neturi laukti, kol bus surinktas visas galutinis turinys.</p>
+        </div>
+      </section>
+
       <section className="strategy-section strategy-measurement">
         <div className="strategy-wrap">
           <div className="strategy-measurement-top">
@@ -136,6 +166,7 @@ export default function StrategyPage() {
             <article><span>TESTAS</span><strong>A/B copy, CTA vieta, kortelių hierarchija.</strong></article>
             <article><span>SĖKMĖ</span><strong>Mažiausiai +10 % santykinis pagerėjimas.</strong></article>
           </div>
+          <p className="strategy-measurement-note">Kadangi GA4 ir Search Console šiame etape neturėsime, pirmąją iteraciją vertinsime pagal priėmimo kriterijus, veikiančias nuorodas, formos užbaigimą ir kliento / komandos peržiūrą. Analitika gali būti prijungta vėliau.</p>
         </div>
       </section>
 
