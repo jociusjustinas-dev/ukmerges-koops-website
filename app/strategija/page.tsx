@@ -142,17 +142,6 @@ export default function StrategyPage() {
         </div>
       </section>
 
-      <section className="strategy-section strategy-scope">
-        <div className="strategy-wrap">
-          <div className="strategy-heading-row"><p className="strategy-kicker">PROJEKTO SCOPE</p><span>Kas daroma dabar ir vėliau</span></div>
-          <div className="strategy-scope-grid">
-            <article><p className="strategy-kicker">DABAR</p><h3>Struktūra ir patirtis</h3><ul><li>UX/UI sistema ir responsive sprendimai</li><li>Pagrindinių puslapių hierarchija</li><li>CTA ir vartotojo keliai</li><li>SEO / AEO / accessibility pagrindas</li></ul></article>
-            <article><p className="strategy-kicker">VĖLIAU</p><h3>Turinio suvedimas</h3><ul><li>Patvirtintas parduotuvių sąrašas</li><li>Galutiniai kontaktai ir darbo pasiūlymai</li><li>Restorano informacija bei nuotraukos</li><li>Seno turinio migracija ir redirect’ai</li></ul></article>
-          </div>
-          <p className="strategy-scope-note">Šie du etapai sąmoningai atskirti: struktūra neturi laukti, kol bus surinktas visas galutinis turinys.</p>
-        </div>
-      </section>
-
       <section className="strategy-section strategy-measurement">
         <div className="strategy-wrap">
           <div className="strategy-measurement-top">
