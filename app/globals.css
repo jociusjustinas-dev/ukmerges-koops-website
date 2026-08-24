@@ -163,7 +163,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .tt-locations { padding-block: 120px; background: var(--color-midnight-moss); color: white; }
 .location-headline { max-width: 980px; margin-bottom: 80px; display: flex; flex-wrap: wrap; align-items: center; gap: 0 16px; font-family: var(--font-field-sans); font-size: 72px; line-height: .944; letter-spacing: -.04em; }
 .location-headline i { width: 142px; height: 4px; background: var(--color-morning-mist); }
-.location-carousel { overflow: hidden; }
+.location-carousel { width: calc(100% + 32px); margin-right: -32px; overflow: hidden; }
 .location-grid { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; overscroll-behavior-x: contain; }
 .location-grid::-webkit-scrollbar { display: none; }
 .location-card { min-width: 0; flex: 0 0 min(560px, 38vw); scroll-snap-align: start; }
