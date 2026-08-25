@@ -4,62 +4,30 @@ import * as React from "react";
 import { FaFacebookF, FaInstagram } from "react-icons/fa6";
 import { KoopsBentoSection } from "../components/sections/KoopsBentoSection";
 import { KoopsValueFeaturesSection } from "../components/sections/KoopsValueFeaturesSection";
+import { featuredStores } from "../lib/stores";
+import { featuredNews, newsHref } from "../lib/news";
+import { jobs } from "../lib/jobs";
 import { AvenirButtonArrow, ByqChevron } from "./byq-icons";
-
-const stores = [
-  {
-    name: "Papartis",
-    address: "Vasario 16-osios g. 30, Ukmergė",
-    hours: "I–VI 7:00–20:00 · VII 7:00–16:00",
-    phone: "0 340 53562",
-    phoneHref: "+37034053562",
-    image: "/store-papartis.jpeg",
-    map: "https://maps.app.goo.gl/igZB8hHG6RGBJqfZ8",
-  },
-  {
-    name: "Šermukšnėlė",
-    address: "A. Smetonos g. 43, Ukmergė",
-    hours: "Kasdien 8:00–20:00",
-    phone: "0 340 51447",
-    phoneHref: "+37034051447",
-    image: "/store-sermuksne.jpeg",
-    map: "https://maps.app.goo.gl/tcv1vqRoE8HBueLp6",
-  },
-  {
-    name: "Uosis",
-    address: "Putinų g. 40, Ukmergė",
-    hours: "Kasdien 8:00–20:00",
-    phone: "0 340 64551",
-    phoneHref: "+37034064551",
-    image: "/store-uosis.jpeg",
-    map: "https://www.google.com/maps/search/?api=1&query=Putinų+g.+40+Ukmergė",
-  },
-];
-
-const jobs = [
-  { number: "01", type: "PARDUOTUVĖSE", title: "Pardavėjas (-a)", location: "Ukmergė ir rajonas" },
-  { number: "02", type: "RESTORANE", title: "Virėjas (-a)", location: "Restoranas „Vilkmergė“" },
-  { number: "03", type: "LOGISTIKOJE", title: "Vairuotojas–sandėlininkas (-ė)", location: "Ukmergė" },
-];
+import { SupplierForm } from "../components/SupplierForm";
 
 const heroUpdates = [
   {
     label: "NAUJIENOS",
-    title: "Vietos skoniai – arčiau jūsų",
+    title: "Švieži vietos pomidorai – sezono pradžia",
     image: "/local-produce-tomatoes.jpg",
-    href: "#naujienos",
+    href: "/naujienos/vietos-pomidorai",
   },
   {
     label: "RESTORANAS",
     title: "Planuojate šventę „Vilkmergėje“?",
     image: "/vilkmerge.jpg",
-    href: "#restoranas",
+    href: "/restoranas",
   },
   {
     label: "KARJERA",
     title: "Nauji darbo pasiūlymai Ukmergėje",
     image: "/local-produce-customer.jpg",
-    href: "#karjera",
+    href: "/karjera",
   },
 ];
 
@@ -75,32 +43,6 @@ const socialLinks = [
   // Pakeisti, jei klientas pateiks kitą oficialų „Instagram“ paskyros adresą.
   { label: "Instagram", icon: FaInstagram, href: "https://www.instagram.com/ukmergeskoops/" },
 ];
-
-type SupplierField = "vardas" | "el_pastas" | "pasiulymas" | "privatumas";
-type SupplierFormErrors = Partial<Record<SupplierField, string>>;
-
-const supplierFieldOrder: SupplierField[] = ["vardas", "el_pastas", "pasiulymas", "privatumas"];
-
-function validateSupplierForm(form: HTMLFormElement): SupplierFormErrors {
-  const data = new FormData(form);
-  const name = String(data.get("vardas") ?? "").trim();
-  const email = String(data.get("el_pastas") ?? "").trim();
-  const proposal = String(data.get("pasiulymas") ?? "").trim();
-  const errors: SupplierFormErrors = {};
-
-  if (name.length < 2) errors.vardas = "Įrašykite savo vardą.";
-  if (!email) {
-    errors.el_pastas = "Įrašykite el. pašto adresą.";
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    errors.el_pastas = "Patikrinkite el. pašto adreso formatą.";
-  }
-  if (proposal.length < 10) errors.pasiulymas = "Trumpai aprašykite savo pasiūlymą.";
-  if (data.get("privatumas") !== "patvirtinta") {
-    errors.privatumas = "Patvirtinkite, kad susipažinote su privatumo politika.";
-  }
-
-  return errors;
-}
 
 function RollingLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -118,64 +60,29 @@ export default function Home() {
   const [heroUpdatesPaused, setHeroUpdatesPaused] = React.useState(false);
   const [restaurantSlide, setRestaurantSlide] = React.useState(0);
   const [locationSlide, setLocationSlide] = React.useState(0);
-  const [supplierFormErrors, setSupplierFormErrors] = React.useState<SupplierFormErrors>({});
-  const [supplierFormStatus, setSupplierFormStatus] = React.useState<"idle" | "error" | "ready">("idle");
   const pageRef = React.useRef<HTMLDivElement>(null);
   const heroLineRef = React.useRef<HTMLElement>(null);
   const locationCarouselRef = React.useRef<HTMLDivElement>(null);
-  const supplierErrorSummaryRef = React.useRef<HTMLDivElement>(null);
 
   const showLocationSlide = (index: number) => {
     const track = locationCarouselRef.current;
     if (!track) return;
     const card = track.querySelector<HTMLElement>(`[data-location-index="${index}"]`);
-    card?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+    if (!card) return;
+    const left = card.getBoundingClientRect().left - track.getBoundingClientRect().left + track.scrollLeft;
+    track.scrollTo({ left, behavior: "smooth" });
     setLocationSlide(index);
   };
 
   const handleLocationScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const track = event.currentTarget;
     const cards = Array.from(track.querySelectorAll<HTMLElement>("[data-location-index]"));
-    const nearest = cards.reduce((closest, card, index) => (
-      Math.abs(card.offsetLeft - track.scrollLeft) < Math.abs(cards[closest].offsetLeft - track.scrollLeft) ? index : closest
-    ), 0);
+    const nearest = cards.reduce((closest, card, index) => {
+      const left = card.getBoundingClientRect().left - track.getBoundingClientRect().left;
+      const closestLeft = cards[closest].getBoundingClientRect().left - track.getBoundingClientRect().left;
+      return Math.abs(left) < Math.abs(closestLeft) ? index : closest;
+    }, 0);
     setLocationSlide(nearest);
-  };
-
-  const clearSupplierError = (field: SupplierField) => {
-    setSupplierFormErrors((current) => {
-      if (!current[field]) return current;
-      const next = { ...current };
-      delete next[field];
-      return next;
-    });
-    if (supplierFormStatus === "ready") setSupplierFormStatus("idle");
-  };
-
-  const handleSupplierSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const errors = validateSupplierForm(form);
-
-    setSupplierFormErrors(errors);
-
-    if (Object.keys(errors).length > 0) {
-      setSupplierFormStatus("error");
-      window.requestAnimationFrame(() => supplierErrorSummaryRef.current?.focus());
-      return;
-    }
-
-    const data = new FormData(form);
-    const name = String(data.get("vardas") ?? "").trim();
-    const email = String(data.get("el_pastas") ?? "").trim();
-    const proposal = String(data.get("pasiulymas") ?? "").trim();
-    const subject = encodeURIComponent(`Naujo tiekėjo pasiūlymas – ${name}`);
-    const body = encodeURIComponent(`Vardas: ${name}\nEl. paštas: ${email}\n\nPasiūlymas:\n${proposal}`);
-
-    setSupplierFormStatus("ready");
-    window.setTimeout(() => {
-      window.location.href = `mailto:direktore@urvk.lt?subject=${subject}&body=${body}`;
-    }, 120);
   };
 
   React.useEffect(() => {
@@ -420,10 +327,17 @@ export default function Home() {
             });
 
             if (itemElements.length) {
+              const isLocationItems = trigger === ".tt-locations";
               timeline.fromTo(
                 itemElements,
-                { y: isMobile ? 24 : 40, scale: 0.985, autoAlpha: 0 },
-                { y: 0, scale: 1, autoAlpha: 1, duration: 0.88, stagger: 0.1 },
+                { y: isMobile ? 24 : 40, autoAlpha: 0, ...(isLocationItems ? {} : { scale: 0.985 }) },
+                {
+                  y: 0,
+                  autoAlpha: 1,
+                  duration: 0.88,
+                  stagger: 0.1,
+                  ...(isLocationItems ? { clearProps: "transform" } : { scale: 1 }),
+                },
                 pushLineTargets.length ? 0.58 : headingElements.length ? 0.34 : 0,
               );
             }
@@ -493,28 +407,28 @@ export default function Home() {
             </a>
             <span className="nav-divider" aria-hidden="true" />
             <nav className="desktop-nav" aria-label="Pagrindinė navigacija">
-              <a href="#parduotuves"><span>Parduotuvės</span></a>
-              <a href="#naujienos"><span>Naujienos</span></a>
+              <a href="/parduotuves"><span>Parduotuvės</span></a>
+              <a href="/naujienos"><span>Naujienos</span></a>
               <a href="#restoranas"><span>Restoranas</span></a>
-              <a href="#karjera"><span>Karjera</span></a>
-              <a href="#tiekejams"><span>Tiekėjams</span></a>
-              <a href="#apie"><span>Apie mus</span></a>
+              <a href="/karjera"><span>Karjera</span></a>
+              <a href="/tiekejams"><span>Tiekėjams</span></a>
+              <a href="/apie"><span>Apie mus</span></a>
               <a href="#kontaktai"><span>Kontaktai</span></a>
             </nav>
           </div>
-          <a className="pill-button dark nav-cta" href="#parduotuves" aria-label="Rasti parduotuvę">
+          <a className="pill-button dark nav-cta" href="/parduotuves" aria-label="Rasti parduotuvę">
             <RollingLabel>Rasti parduotuvę</RollingLabel>
           </a>
           <details className="mobile-menu">
             <summary aria-label="Atverti pagrindinį meniu"><span className="menu-hamburger" aria-hidden="true"><i /><i /></span></summary>
             <nav aria-label="Mobilioji navigacija">
               <div className="mobile-nav-links">
-                <a href="#parduotuves">Parduotuvės</a>
-                <a href="#naujienos">Naujienos ir akcijos</a>
+                <a href="/parduotuves">Parduotuvės</a>
+                <a href="/naujienos">Naujienos ir akcijos</a>
                 <a href="#restoranas">Restoranas</a>
-                <a href="#karjera">Karjera</a>
-                <a href="#apie">Apie KOOPS</a>
-                <a href="#tiekejams">Tiekėjams</a>
+                <a href="/karjera">Karjera</a>
+                <a href="/apie">Apie KOOPS</a>
+                <a href="/tiekejams">Tiekėjams</a>
                 <a href="#kontaktai">Kontaktai</a>
               </div>
               <div className="mobile-nav-footer">
@@ -560,7 +474,7 @@ export default function Home() {
                   <span>jūsų.</span>
                 </h1>
                 <p className="body-large">Raskite artimiausią parduotuvę, jos darbo laiką ir maršrutą.</p>
-                <a className="pill-button accent" href="#parduotuves" aria-label="Rasti artimiausią parduotuvę">
+                <a className="pill-button accent" href="/parduotuves" aria-label="Rasti artimiausią parduotuvę">
                   <RollingLabel>Rasti parduotuvę</RollingLabel>
                 </a>
               </div>
@@ -613,32 +527,53 @@ export default function Home() {
             </div>
             <div className="location-carousel" role="region" aria-roledescription="karuselė" aria-label="KOOPS parduotuvės">
               <div className="location-grid" ref={locationCarouselRef} onScroll={handleLocationScroll}>
-              {stores.map((store) => (
-                <article className="location-card" data-location-index={stores.indexOf(store)} key={store.name}>
-                  <a className="location-image" href={store.map} target="_blank" rel="noreferrer" aria-label={`Parduotuvė „${store.name}“ – atverti žemėlapyje`}>
-                    <img src={store.image} alt={`Parduotuvė „${store.name}“`} />
+              {featuredStores.map((store, index) => (
+                <article className="location-card" data-location-index={index} key={store.slug}>
+                  <a
+                    className={`location-image${store.image ? "" : " is-placeholder"}`}
+                    href={`/parduotuves/${store.slug}`}
+                    aria-label={`Parduotuvė „${store.name}“ – atverti puslapį`}
+                  >
+                    {store.image ? (
+                      <img src={store.image} alt={`Parduotuvė „${store.name}“`} />
+                    ) : (
+                      <img className="store-cover-logo" src="/koops-logo.png" alt="" />
+                    )}
                   </a>
                   <div className="location-info">
                     <div><h3>{store.name}</h3><p>{store.address}</p></div>
                     <dl>
                       <div><dt>Darbo laikas</dt><dd>{store.hours}</dd></div>
-                      <div><dt>Telefonas</dt><dd><a href={`tel:${store.phoneHref}`}>{store.phone}</a></dd></div>
+                      <div>
+                        <dt>Telefonas</dt>
+                        <dd>
+                          <a href={`tel:${store.phoneHref}`}>{store.phone}</a>
+                          {store.extraPhone && store.extraPhoneHref ? (
+                            <>
+                              {" · "}
+                              <a href={`tel:${store.extraPhoneHref}`}>{store.extraPhone}</a>
+                            </>
+                          ) : null}
+                        </dd>
+                      </div>
                     </dl>
-                    <a className="text-link" href={store.map} target="_blank" rel="noreferrer">Rodyti žemėlapyje <span aria-hidden="true">→</span></a>
+                    <a className="text-link" href={store.map} target="_blank" rel="noreferrer">
+                      Rodyti žemėlapyje <span aria-hidden="true">→</span>
+                    </a>
                   </div>
                 </article>
               ))}
               </div>
               <div className="location-carousel-controls">
                 <div className="location-carousel-dots" aria-label="Pasirinkti parduotuvę">
-                  {stores.map((store, index) => (
+                  {featuredStores.map((store, index) => (
                     <button
                       type="button"
                       className={index === locationSlide ? "is-active" : ""}
                       onClick={() => showLocationSlide(index)}
                       aria-label={`Rodyti parduotuvę „${store.name}“`}
                       aria-pressed={index === locationSlide}
-                      key={store.name}
+                      key={store.slug}
                     />
                   ))}
                 </div>
@@ -646,14 +581,14 @@ export default function Home() {
                   <button type="button" onClick={() => showLocationSlide(locationSlide - 1)} disabled={locationSlide === 0} aria-label="Ankstesnė parduotuvė">
                     <span className="control-arrow is-left"><ByqChevron /></span>
                   </button>
-                  <button type="button" onClick={() => showLocationSlide(locationSlide + 1)} disabled={locationSlide === stores.length - 1} aria-label="Kita parduotuvė">
+                  <button type="button" onClick={() => showLocationSlide(locationSlide + 1)} disabled={locationSlide === featuredStores.length - 1} aria-label="Kita parduotuvė">
                     <span className="control-arrow"><ByqChevron /></span>
                   </button>
                 </div>
               </div>
-              <p className="sr-only" aria-live="polite">Parduotuvė {locationSlide + 1} iš {stores.length}</p>
+              <p className="sr-only" aria-live="polite">Parduotuvė {locationSlide + 1} iš {featuredStores.length}</p>
             </div>
-            <a className="pill-button accent section-cta" href="https://ukmergeskoops.lt/parduotuves/">
+            <a className="pill-button accent section-cta" href="/parduotuves">
               <RollingLabel>Visos parduotuvės</RollingLabel>
             </a>
           </div>
@@ -668,25 +603,42 @@ export default function Home() {
               <h2 id="naujienu-antraste">Naujienos ir akcijos</h2>
             </div>
             <div className="news-bento">
-              <a className="news-card news-card-large" href="https://ukmergeskoops.lt/naujienos/">
-                <img loading="lazy" src="/local-produce-couple.jpg" alt="Pirkėjai su vietos gamintojų produkcija" />
-                <div>
-                  <span className="section-label light-label">NAUJIENOS</span>
-                  <h3>Vietos skoniai – arčiau jūsų</h3>
-                  <p>Atraskite Ukmergės krašto gamintojų produkciją mūsų parduotuvėse.</p>
-                  <span className="text-link">Skaityti <span aria-hidden="true">→</span></span>
-                </div>
-              </a>
-              <a className="news-card news-card-accent" href="https://ukmergeskoops.lt/naujienos/">
-                <div className="news-card-copy"><h3>Naujausi pasiūlymai kasdieniam krepšeliui</h3><span className="text-link">Peržiūrėti <span aria-hidden="true">→</span></span></div>
-              </a>
-              <a className="news-card news-card-muted" href="https://ukmergeskoops.lt/naujienos/">
-                <div className="news-card-copy"><h3>Kas naujo KOOPS parduotuvėse?</h3><span className="text-link">Sužinoti <span aria-hidden="true">→</span></span></div>
-              </a>
-              <a className="news-card news-card-wide" href="https://ukmergeskoops.lt/naujienos/">
-                <div className="news-card-copy"><h3>Naujienos iš Ukmergės krašto</h3><span className="text-link">Skaityti <span aria-hidden="true">→</span></span></div>
-              </a>
+              {featuredNews.map((item) => {
+                if (item.tone === "featured") {
+                  return (
+                    <a className="news-card news-card-large" href={newsHref(item.slug)} key={item.slug}>
+                      {item.image ? <img loading="lazy" src={item.image} alt="" /> : null}
+                      <div>
+                        <span className="section-label light-label">{item.category.toUpperCase()}</span>
+                        <h3>{item.title}</h3>
+                        {item.excerpt ? <p>{item.excerpt}</p> : null}
+                        <span className="text-link">Skaityti <span aria-hidden="true">→</span></span>
+                      </div>
+                    </a>
+                  );
+                }
+
+                const cardClass =
+                  item.tone === "accent"
+                    ? "news-card news-card-accent"
+                    : item.tone === "wide"
+                      ? "news-card news-card-wide"
+                      : "news-card news-card-muted";
+                const cta = item.tone === "accent" ? "Peržiūrėti" : item.tone === "muted" && item.slug === "kas-naujo-parduotuvese" ? "Sužinoti" : "Skaityti";
+
+                return (
+                  <a className={cardClass} href={newsHref(item.slug)} key={item.slug}>
+                    <div className="news-card-copy">
+                      <h3>{item.title}</h3>
+                      <span className="text-link">{cta} <span aria-hidden="true">→</span></span>
+                    </div>
+                  </a>
+                );
+              })}
             </div>
+            <a className="pill-button dark section-cta" href="/naujienos">
+              <RollingLabel>Visos naujienos</RollingLabel>
+            </a>
           </div>
         </section>
 
@@ -740,7 +692,7 @@ export default function Home() {
                 <p>Pačiame Ukmergės centre įsikūręs restoranas tinka jubiliejams, vestuvėms, krikštynoms, oficialiems renginiams ir vakarienėms.</p>
                 <dl><div><dt>Pokylių salės</dt><dd>3 salės</dd></div><div><dt>Talpa</dt><dd>Iki 154 svečių</dd></div></dl>
                 <div className="story-actions">
-                  <a className="pill-button accent" href="https://ukmergeskoops.lt/restoranas-vilkmerge/">
+                  <a className="pill-button accent" href="/restoranas">
                     <RollingLabel>Apie restoraną</RollingLabel>
                   </a>
                   <a className="pill-button outline-light" href="tel:+37034053235" aria-label="Skambinti restoranui telefonu 0 340 53235">
@@ -759,13 +711,20 @@ export default function Home() {
               <p className="section-label light-label">KARJERA</p>
               <h2 id="karjeros-antraste">Darbas arti namų</h2>
               <p>Prisijunkite prie KOOPS komandos Ukmergėje ir rajone. Susipažinkite su šiuo metu siūlomomis darbo vietomis.</p>
-              <a className="pill-button accent" href="https://ukmergeskoops.lt/skelbimai/">
+              <a className="pill-button accent" href="/karjera">
                 <RollingLabel>Visi darbo pasiūlymai</RollingLabel>
               </a>
             </div>
             <div className="jobs-list" aria-label="Naujausi darbo pasiūlymai">
-              {jobs.map((job) => (
-                <a className="job-row" href="https://ukmergeskoops.lt/skelbimai/" key={job.title}>
+              {jobs.slice(0, 3).map((job) => (
+                <a
+                  className="job-row"
+                  href={job.applyUrl}
+                  key={job.title}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`${job.title} — kandidatuoti naujame lange`}
+                >
                   <div className="job-row-copy">
                     <h3>{job.title}</h3>
                     <div className="job-row-meta">
@@ -790,91 +749,7 @@ export default function Home() {
                 <div><strong>Adresas</strong><p>Vasario 16-osios g. 30<br />LT-20130 Ukmergė</p></div>
                 <div><strong>El. paštas</strong><p><a href="mailto:direktore@urvk.lt">direktore@urvk.lt</a></p></div>
               </div>
-              <form className="supplier-form" onSubmit={handleSupplierSubmit} noValidate aria-label="Tiekėjo pasiūlymo forma">
-                {supplierFormStatus === "error" && Object.keys(supplierFormErrors).length > 0 ? (
-                  <div className="supplier-form-alert is-error" role="alert" tabIndex={-1} ref={supplierErrorSummaryRef}>
-                    <strong>Patikrinkite pažymėtus laukus</strong>
-                    <ul>
-                      {supplierFieldOrder.flatMap((field) => supplierFormErrors[field] ? [<li key={field}>{supplierFormErrors[field]}</li>] : [])}
-                    </ul>
-                  </div>
-                ) : null}
-                {supplierFormStatus === "ready" ? (
-                  <div className="supplier-form-alert is-success" role="status">
-                    <strong>Pasiūlymas paruoštas siųsti</strong>
-                    <p>Patikrinkite paruoštą laišką ir patvirtinkite jo siuntimą.</p>
-                  </div>
-                ) : null}
-                <div className="form-halves">
-                  <label className={`form-field${supplierFormErrors.vardas ? " has-error" : ""}`} htmlFor="supplier-name">
-                    <span>JŪSŲ VARDAS</span>
-                    <input
-                      id="supplier-name"
-                      name="vardas"
-                      type="text"
-                      placeholder="Pvz., Antanas"
-                      autoComplete="name"
-                      aria-invalid={Boolean(supplierFormErrors.vardas)}
-                      aria-describedby={supplierFormErrors.vardas ? "supplier-name-error" : undefined}
-                      onChange={() => clearSupplierError("vardas")}
-                      required
-                    />
-                    {supplierFormErrors.vardas ? <small className="field-error" id="supplier-name-error">{supplierFormErrors.vardas}</small> : null}
-                  </label>
-                  <label className={`form-field${supplierFormErrors.el_pastas ? " has-error" : ""}`} htmlFor="supplier-email">
-                    <span>EL. PAŠTAS</span>
-                    <input
-                      id="supplier-email"
-                      name="el_pastas"
-                      type="email"
-                      inputMode="email"
-                      placeholder="Pvz., antanas@ukis.lt"
-                      autoComplete="email"
-                      aria-invalid={Boolean(supplierFormErrors.el_pastas)}
-                      aria-describedby={supplierFormErrors.el_pastas ? "supplier-email-error" : undefined}
-                      onChange={() => clearSupplierError("el_pastas")}
-                      required
-                    />
-                    {supplierFormErrors.el_pastas ? <small className="field-error" id="supplier-email-error">{supplierFormErrors.el_pastas}</small> : null}
-                  </label>
-                </div>
-                <label className={`form-field${supplierFormErrors.pasiulymas ? " has-error" : ""}`} htmlFor="supplier-proposal">
-                  <span>PASIŪLYMAS</span>
-                  <textarea
-                    id="supplier-proposal"
-                    name="pasiulymas"
-                    rows={5}
-                    placeholder="Nurodykite produktą, jo kilmę ir kaip galėtume su jumis susisiekti…"
-                    aria-invalid={Boolean(supplierFormErrors.pasiulymas)}
-                    aria-describedby={supplierFormErrors.pasiulymas ? "supplier-proposal-error" : undefined}
-                    onChange={() => clearSupplierError("pasiulymas")}
-                    required
-                  />
-                  {supplierFormErrors.pasiulymas ? <small className="field-error" id="supplier-proposal-error">{supplierFormErrors.pasiulymas}</small> : null}
-                </label>
-                <div className={`privacy-field${supplierFormErrors.privatumas ? " has-error" : ""}`}>
-                  <span className="privacy-checkbox-control">
-                    <input
-                      className="privacy-checkbox-input"
-                      id="supplier-privacy"
-                      name="privatumas"
-                      type="checkbox"
-                      value="patvirtinta"
-                      aria-invalid={Boolean(supplierFormErrors.privatumas)}
-                      aria-describedby={supplierFormErrors.privatumas ? "supplier-privacy-error" : undefined}
-                      onChange={() => clearSupplierError("privatumas")}
-                      required
-                    />
-                    <span className="privacy-checkbox-mark" aria-hidden="true" />
-                  </span>
-                  <div className="privacy-consent-copy">
-                    <label htmlFor="supplier-privacy">Patvirtinu, kad susipažinau su </label>
-                    <a className="privacy-link" href="https://ukmergeskoops.lt/privatumo-politika/">privatumo politika</a>.
-                    {supplierFormErrors.privatumas ? <small className="field-error" id="supplier-privacy-error">{supplierFormErrors.privatumas}</small> : null}
-                  </div>
-                </div>
-                <button className="pill-button dark" type="submit"><RollingLabel>Siųsti pasiūlymą</RollingLabel></button>
-              </form>
+              <SupplierForm />
             </div>
             <div className="contact-image">
               <img className="contact-image-main" loading="lazy" src="/ukmerge-fields-2.jpg" alt="Lietuvos laukai ir kaimo sodybos" />
@@ -889,7 +764,7 @@ export default function Home() {
           <div className="orbit footer-orbit-one" aria-hidden="true" /><div className="orbit footer-orbit-two" aria-hidden="true" />
           <p className="section-label light-label">KOOPS</p>
           <h2 id="footer-cta-title"><span className="footer-title-desktop"><span>Parduotuvė gali būti</span><span>arčiau, nei manote</span></span><span className="footer-title-mobile"><span>Parduotuvė gali</span><span>būti arčiau,</span><span>nei manote</span></span></h2>
-          <a className="pill-button accent" href="#parduotuves" aria-label="Rasti KOOPS parduotuvę"><RollingLabel>Rasti parduotuvę</RollingLabel></a>
+          <a className="pill-button accent" href="/parduotuves" aria-label="Rasti KOOPS parduotuvę"><RollingLabel>Rasti parduotuvę</RollingLabel></a>
         </section>
         <div className="footer-reveal">
           <div className="tt-container footer-content">
@@ -917,8 +792,8 @@ export default function Home() {
                 </div>
               </div>
               <nav aria-label="Poraštės navigacija">
-                <div><p className="section-label">PAGRINDINIAI</p><a href="#parduotuves">Parduotuvės</a><a href="#naujienos">Naujienos</a><a href="#restoranas">Restoranas</a><a href="#karjera">Karjera</a></div>
-                <div><p className="section-label">KOOPERATYVAS</p><a href="#apie">Apie KOOPS</a><a href="#tiekejams">Tiekėjams</a><a href="https://ukmergeskoops.lt/kontaktai/">Kontaktai</a></div>
+                <div><p className="section-label">PAGRINDINIAI</p><a href="/parduotuves">Parduotuvės</a><a href="/naujienos">Naujienos</a><a href="/restoranas">Restoranas</a><a href="/karjera">Karjera</a></div>
+                <div><p className="section-label">KOOPERATYVAS</p><a href="/apie">Apie KOOPS</a><a href="/tiekejams">Tiekėjams</a><a href="https://ukmergeskoops.lt/kontaktai/">Kontaktai</a></div>
                 <div><p className="section-label">KONTAKTAI</p><a href="tel:+37034053235">0 340 53235</a><a href="mailto:direktore@urvk.lt">direktore@urvk.lt</a><a href="https://ukmergeskoops.lt/privatumo-politika/">Privatumo politika</a></div>
               </nav>
             </div>
