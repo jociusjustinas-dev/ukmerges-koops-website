@@ -1,11 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
+import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
 
 export function StoresPageMotion() {
   useEffect(() => {
     const root = document.querySelector<HTMLElement>(".stores-page");
     if (!root) return;
+
+    const directory = root.querySelector<HTMLElement>(".stores-directory");
+    const clearFallback = directory ? withIntroFallback(directory) : () => {};
 
     let cancelled = false;
     let revert = () => {};
@@ -34,11 +38,12 @@ export function StoresPageMotion() {
 
           if (reduceMotion) {
             pushLines.forEach((line) => line.style.removeProperty("width"));
+            if (directory) revealIntroImmediately(directory);
             return;
           }
 
-          const directory = root.querySelector<HTMLElement>(".stores-directory");
           if (directory) {
+            clearFallback();
             const label = directory.querySelector<HTMLElement>(".section-label");
             const words = directory.querySelectorAll<HTMLElement>(".location-headline > span");
             const pushLine = directory.querySelector<HTMLElement>(".title-push-line");
@@ -161,6 +166,7 @@ export function StoresPageMotion() {
 
     return () => {
       cancelled = true;
+      clearFallback();
       revert();
     };
   }, []);

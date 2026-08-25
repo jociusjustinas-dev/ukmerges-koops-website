@@ -1,77 +1,76 @@
 "use client";
 
 import * as React from "react";
-import { RollingLabel } from "./RollingLabel";
+import gsap from "gsap";
 import { aboutHeroGallery } from "../lib/about";
+import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
+import { RollingLabel } from "./RollingLabel";
 
 /** BYQ: terra-tory-hero-6 — about hero */
 export function AboutHero() {
   const rootRef = React.useRef<HTMLElement>(null);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
 
-    let cancelled = false;
-    let revert = () => {};
+    const clearFallback = withIntroFallback(root);
+    const media = gsap.matchMedia();
+    media.add(
+      {
+        reduceMotion: "(prefers-reduced-motion: reduce)",
+        canAnimate: "(prefers-reduced-motion: no-preference)",
+      },
+      (context) => {
+        const { reduceMotion } = context.conditions as { reduceMotion: boolean };
+        if (reduceMotion) {
+          revealIntroImmediately(root);
+          return;
+        }
 
-    void import("gsap").then(({ gsap }) => {
-      if (cancelled || !root) return;
+        clearFallback();
 
-      const media = gsap.matchMedia();
-      media.add(
-        {
-          reduceMotion: "(prefers-reduced-motion: reduce)",
-          canAnimate: "(prefers-reduced-motion: no-preference)",
-        },
-        (context) => {
-          const { reduceMotion } = context.conditions as { reduceMotion: boolean };
-          if (reduceMotion) return;
+        const label = root.querySelector<HTMLElement>(".about-hero-label");
+        const title = root.querySelector<HTMLElement>(".about-hero-title");
+        const pushLine = root.querySelector<HTMLElement>(".about-hero-title-rule");
+        const lead = root.querySelector<HTMLElement>(".about-hero-lead");
+        const actions = root.querySelector<HTMLElement>(".about-hero-actions");
+        const frames = root.querySelectorAll<HTMLElement>(".about-hero-frame");
 
-          const label = root.querySelector<HTMLElement>(".about-hero-label");
-          const title = root.querySelector<HTMLElement>(".about-hero-title");
-          const pushLine = root.querySelector<HTMLElement>(".about-hero-title-rule");
-          const lead = root.querySelector<HTMLElement>(".about-hero-lead");
-          const actions = root.querySelector<HTMLElement>(".about-hero-actions");
-          const frames = root.querySelectorAll<HTMLElement>(".about-hero-frame");
+        const targets = [label, title, lead, actions, ...Array.from(frames)].filter(
+          Boolean,
+        ) as HTMLElement[];
+        gsap.set(targets, { autoAlpha: 0 });
 
-          const targets = [label, title, lead, actions, ...Array.from(frames)].filter(
-            Boolean,
-          ) as HTMLElement[];
-          gsap.set(targets, { autoAlpha: 0 });
+        let pushWidth = 0;
+        if (pushLine) {
+          pushLine.style.removeProperty("width");
+          pushWidth = pushLine.getBoundingClientRect().width;
+          pushLine.style.width = "0px";
+        }
 
-          let pushWidth = 0;
-          if (pushLine) {
-            pushLine.style.removeProperty("width");
-            pushWidth = pushLine.getBoundingClientRect().width;
-            pushLine.style.width = "0px";
-          }
-
-          const intro = gsap.timeline({ defaults: { duration: 0.75, ease: "power3.out" } });
-          if (label) intro.fromTo(label, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.05);
-          if (title) intro.fromTo(title, { y: 28, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.12);
-          if (pushLine && pushWidth) {
-            intro.to(pushLine, { width: pushWidth, duration: 0.7, ease: "power2.out" }, 0.28);
-          }
-          if (lead) intro.fromTo(lead, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.32);
-          if (actions) intro.fromTo(actions, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.4);
-          if (frames.length) {
-            intro.fromTo(
-              frames,
-              { y: 24, autoAlpha: 0 },
-              { y: 0, autoAlpha: 1, stagger: 0.08 },
-              0.48,
-            );
-          }
-        },
-      );
-
-      revert = () => media.revert();
-    });
+        const intro = gsap.timeline({ defaults: { duration: 0.75, ease: "power3.out" } });
+        if (label) intro.fromTo(label, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.05);
+        if (title) intro.fromTo(title, { y: 28, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.12);
+        if (pushLine && pushWidth) {
+          intro.to(pushLine, { width: pushWidth, duration: 0.7, ease: "power2.out" }, 0.28);
+        }
+        if (lead) intro.fromTo(lead, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.32);
+        if (actions) intro.fromTo(actions, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.4);
+        if (frames.length) {
+          intro.fromTo(
+            frames,
+            { y: 24, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, stagger: 0.08 },
+            0.48,
+          );
+        }
+      },
+    );
 
     return () => {
-      cancelled = true;
-      revert();
+      clearFallback();
+      media.revert();
     };
   }, []);
 

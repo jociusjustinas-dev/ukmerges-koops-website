@@ -9,6 +9,7 @@ import { featuredNews, newsHref } from "../lib/news";
 import { jobs } from "../lib/jobs";
 import { AvenirButtonArrow, ByqChevron } from "./byq-icons";
 import { SupplierForm } from "../components/SupplierForm";
+import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
 
 const heroUpdates = [
   {
@@ -159,18 +160,27 @@ export default function Home() {
 
           if (reduceMotion) {
             titlePushLines.forEach((pushLine) => pushLine.style.removeProperty("width"));
+            const hero = root.querySelector<HTMLElement>(".tt-hero");
+            if (hero) revealIntroImmediately(hero);
             return;
           }
+
+          const hero = root.querySelector<HTMLElement>(".tt-hero");
+          const clearHeroFallback = hero ? withIntroFallback(hero) : () => {};
+          clearHeroFallback();
 
           const heroLabel = root.querySelector<HTMLElement>(".tt-hero-top > .section-label");
           const heroWords = root.querySelectorAll<HTMLElement>(".tt-hero-top h1 > span:not(.hero-title-break)");
           const heroBody = root.querySelector<HTMLElement>(".tt-hero-top > .body-large");
           const heroCta = root.querySelector<HTMLElement>(".tt-hero-top > .pill-button");
           const heroCard = root.querySelector<HTMLElement>(".hero-update-card");
+          const line = heroLineRef.current;
 
-          line.style.removeProperty("width");
-          const targetWidth = line.getBoundingClientRect().width;
-          line.style.width = "0px";
+          if (line) {
+            line.style.removeProperty("width");
+          }
+          const targetWidth = line?.getBoundingClientRect().width ?? 0;
+          if (line) line.style.width = "0px";
 
           const heroTimeline = gsap.timeline({
             defaults: { duration: 0.8, ease: "power3.out" },
@@ -187,7 +197,7 @@ export default function Home() {
             0.16,
           );
 
-          if (isDesktop && window.innerWidth > 1100) {
+          if (line && isDesktop && window.innerWidth > 1100 && targetWidth) {
             heroTimeline.to(
               line,
               {
@@ -198,7 +208,7 @@ export default function Home() {
               },
               0.68,
             );
-          } else {
+          } else if (line) {
             line.style.removeProperty("width");
           }
 
@@ -413,7 +423,7 @@ export default function Home() {
               <a href="/karjera"><span>Karjera</span></a>
               <a href="/tiekejams"><span>Tiekėjams</span></a>
               <a href="/apie"><span>Apie mus</span></a>
-              <a href="#kontaktai"><span>Kontaktai</span></a>
+              <a href="/kontaktai"><span>Kontaktai</span></a>
             </nav>
           </div>
           <a className="pill-button dark nav-cta" href="/parduotuves" aria-label="Rasti parduotuvę">
@@ -429,7 +439,7 @@ export default function Home() {
                 <a href="/karjera">Karjera</a>
                 <a href="/apie">Apie KOOPS</a>
                 <a href="/tiekejams">Tiekėjams</a>
-                <a href="#kontaktai">Kontaktai</a>
+                <a href="/kontaktai">Kontaktai</a>
               </div>
               <div className="mobile-nav-footer">
                 <p className="section-label">SUSISIEKIME</p>
@@ -793,7 +803,7 @@ export default function Home() {
               </div>
               <nav aria-label="Poraštės navigacija">
                 <div><p className="section-label">PAGRINDINIAI</p><a href="/parduotuves">Parduotuvės</a><a href="/naujienos">Naujienos</a><a href="/restoranas">Restoranas</a><a href="/karjera">Karjera</a></div>
-                <div><p className="section-label">KOOPERATYVAS</p><a href="/apie">Apie KOOPS</a><a href="/tiekejams">Tiekėjams</a><a href="https://ukmergeskoops.lt/kontaktai/">Kontaktai</a></div>
+                <div><p className="section-label">KOOPERATYVAS</p><a href="/apie">Apie KOOPS</a><a href="/tiekejams">Tiekėjams</a><a href="/kontaktai">Kontaktai</a></div>
                 <div><p className="section-label">KONTAKTAI</p><a href="tel:+37034053235">0 340 53235</a><a href="mailto:direktore@urvk.lt">direktore@urvk.lt</a><a href="https://ukmergeskoops.lt/privatumo-politika/">Privatumo politika</a></div>
               </nav>
             </div>

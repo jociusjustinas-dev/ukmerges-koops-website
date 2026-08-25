@@ -355,7 +355,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .privacy-field {
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   padding: 0;
   border: 1px solid transparent;
@@ -736,7 +736,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .story-headline h2 { max-width: 100%; overflow-wrap: break-word; }
   .contact-content { gap: 48px; padding-top: 0; }
   .contact-heading h2 { font-size: 40px; }
-  .contact-details { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .contact-details { grid-template-columns: 1fr; gap: 20px; }
   .form-halves { grid-template-columns: 1fr; }
   .contact-image { display: none; }
   .contact-image { height: 300px; }
@@ -817,19 +817,6 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 
 .news-page-main { padding-top: 140px; }
 .news-page-header { gap: 24px; margin-bottom: 48px; }
-.news-page-header h1 {
-  max-width: 16ch;
-  font-size: clamp(40px, 5vw, 56px);
-  line-height: .92;
-  letter-spacing: -.04em;
-}
-.news-page-lead {
-  max-width: 48ch;
-  margin: 0;
-  color: var(--color-moss-veil);
-  font-size: 18px;
-  line-height: 1.45;
-}
 .news-card h2 {
   margin: 0;
   font-size: 32px;
@@ -1966,12 +1953,46 @@ html.store-drawer-open { overflow: hidden; }
 }
 @media (max-width: 767px) {
   .news-page-main { padding-top: 110px; }
-  .news-page-header h1 { max-width: none; font-size: 40px; line-height: 1.08; }
-  .news-page-lead { font-size: 17px; }
+  .news-page-header { margin-bottom: 32px; gap: 16px; }
   .news-card-large h2 { font-size: 40px; }
   .news-list-grid { grid-template-columns: 1fr; }
   .news-list-media { height: 220px; }
-  .news-list-copy h2 { font-size: 22px; }
+  .news-list-copy h2 { font-size: 22px; line-height: 1.2; }
+  .news-listing-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 28px;
+    min-width: 0;
+  }
+  .news-listing-toolbar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding-block: 2px;
+    /* Tik dešinysis bleed — kairė lieka su tt-container */
+    margin-right: calc(-1 * var(--page-pad));
+    padding-right: var(--page-pad);
+  }
+  .news-listing-toolbar::-webkit-scrollbar { display: none; }
+  .news-listing-toolbar button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+  .news-listing-count {
+    margin-left: 0;
+    align-self: flex-end;
+  }
+  .news-listing {
+    min-width: 0;
+    max-width: 100%;
+  }
   .news-detail-page .news-article-hero { padding-top: 110px; padding-bottom: 28px; }
   .news-article-hero-copy h1 { max-width: none; font-size: 36px; line-height: 1.08; }
   .news-article-lead { font-size: 17px; }
@@ -2712,6 +2733,70 @@ html.store-drawer-open { overflow: hidden; }
   .restaurant-enquiry-intro h2 { line-height: 1.08; }
 }
 
+/* ——— Intro FOUC: slepiama kol GSAP paleidžia animaciją ——— */
+@media (prefers-reduced-motion: no-preference) {
+  .careers-hero:not(.is-intro-fallback) .careers-hero-label,
+  .careers-hero:not(.is-intro-fallback) .about-hero-label,
+  .careers-hero:not(.is-intro-fallback) .suppliers-hero-label,
+  .careers-hero:not(.is-intro-fallback) .careers-hero-title,
+  .careers-hero:not(.is-intro-fallback) .careers-hero-lead,
+  .careers-hero:not(.is-intro-fallback) .about-hero-lead,
+  .careers-hero:not(.is-intro-fallback) .suppliers-hero-lead,
+  .careers-hero:not(.is-intro-fallback) .careers-hero-actions,
+  .careers-hero:not(.is-intro-fallback) .careers-hero-frame {
+    opacity: 0;
+  }
+
+  .contacts-heading:not(.is-intro-fallback) .contacts-heading-label,
+  .contacts-heading:not(.is-intro-fallback) .contacts-heading-title,
+  .contacts-heading:not(.is-intro-fallback) .contacts-heading-lead {
+    opacity: 0;
+  }
+
+  .contacts-form-section:not(.is-intro-fallback) .contact-details,
+  .contacts-form-section:not(.is-intro-fallback) .supplier-form,
+  .contacts-form-section:not(.is-intro-fallback) .contact-image {
+    opacity: 0;
+  }
+
+  .contacts-channels:not(.is-intro-fallback) .jobs-intro > *,
+  .contacts-channels:not(.is-intro-fallback) .job-row {
+    opacity: 0;
+  }
+
+  .news-heading:not(.is-intro-fallback) .news-heading-title {
+    opacity: 0;
+  }
+
+  .news-listing:not(.is-intro-fallback) .news-listing-bar,
+  .news-listing:not(.is-intro-fallback) .news-list-card,
+  .news-listing:not(.is-intro-fallback) .news-listing-empty {
+    opacity: 0;
+  }
+
+  .restaurant-hero:not(.is-intro-fallback) .restaurant-hero-label,
+  .restaurant-hero:not(.is-intro-fallback) .restaurant-hero-title-line,
+  .restaurant-hero:not(.is-intro-fallback) .restaurant-hero-title-word,
+  .restaurant-hero:not(.is-intro-fallback) .restaurant-hero-actions {
+    opacity: 0;
+  }
+
+  .tt-hero:not(.is-intro-fallback) .tt-hero-top > .section-label,
+  .tt-hero:not(.is-intro-fallback) .tt-hero-top h1 > span:not(.hero-title-break),
+  .tt-hero:not(.is-intro-fallback) .tt-hero-top > .body-large,
+  .tt-hero:not(.is-intro-fallback) .tt-hero-top > .pill-button,
+  .tt-hero:not(.is-intro-fallback) .hero-update-card {
+    opacity: 0;
+  }
+
+  .stores-directory:not(.is-intro-fallback) > .tt-container > .section-label,
+  .stores-directory:not(.is-intro-fallback) .location-headline > span,
+  .stores-directory:not(.is-intro-fallback) .stores-directory-lead,
+  .stores-directory:not(.is-intro-fallback) .stores-finder {
+    opacity: 0;
+  }
+}
+
 /* ——— Karjera / careers (terra-tory-hero-6) ——— */
 .careers-hero {
   padding: 140px 0 80px;
@@ -2865,6 +2950,87 @@ html.store-drawer-open { overflow: hidden; }
   gap: 24px;
 }
 
+.contacts-page {
+  background: var(--color-linen-white);
+}
+.contacts-form-section {
+  position: relative;
+  z-index: 1;
+  margin-top: 0;
+  padding: 140px 0 80px;
+  background: white;
+  border-radius: 32px 32px 0 0;
+  overflow: clip;
+}
+.contacts-form-section .contacts-heading-title {
+  max-width: none;
+  font-size: clamp(40px, 5.5vw, 64px);
+}
+.contacts-heading-lead {
+  margin: 0;
+  max-width: 42ch;
+  color: var(--color-moss-veil);
+  font-size: 16px;
+  line-height: 1.5;
+}
+.contacts-social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 0;
+}
+.contacts-social-links a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.contacts-channels .jobs-intro h2 {
+  max-width: 10ch;
+}
+.contacts-form-section .contact-details {
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 991px) {
+  .contacts-form-section {
+    padding: 120px 0 64px;
+    border-radius: 24px 24px 0 0;
+  }
+  .contacts-form-section .contacts-heading-title {
+    font-size: clamp(40px, 6vw, 56px);
+    line-height: 1.02;
+  }
+  .contact-image { height: 420px; }
+}
+
+@media (max-width: 767px) {
+  .contacts-form-section .contacts-heading-title {
+    line-height: 1.08;
+  }
+  .contacts-form-section .contact-details {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .contacts-channels .job-row h3 {
+    line-height: 1.12;
+  }
+  .contacts-channels .jobs-intro h2 {
+    line-height: 1.08;
+  }
+}
+
+@media (max-width: 479px) {
+  .contacts-form-section {
+    padding: 108px 0 48px;
+  }
+  .contacts-form-section .contacts-heading-title {
+    font-size: clamp(36px, 10vw, 44px);
+    line-height: 1.08;
+  }
+  .contacts-heading-lead {
+    font-size: 15px;
+  }
+}
+
 @media (max-width: 991px) {
   .about-pillars-grid {
     grid-template-columns: 1fr;
@@ -2888,10 +3054,20 @@ html.store-drawer-open { overflow: hidden; }
   .careers-hero-frame { height: 240px; }
 }
 
+@media (max-width: 767px) {
+  .careers-hero-title {
+    font-size: clamp(40px, 8vw, 56px);
+    line-height: 1.08;
+    gap: 6px;
+  }
+  .careers-hero-title-row { gap: 12px; }
+  .careers-hero-title-rule { width: 88px; height: 3px; }
+}
+
 @media (max-width: 479px) {
   .careers-hero { padding: 100px 0 48px; }
-  .careers-hero-title { font-size: clamp(40px, 12vw, 52px); }
-  .careers-hero-title-rule { width: 72px; height: 3px; }
+  .careers-hero-title { font-size: clamp(36px, 11vw, 48px); line-height: 1.08; }
+  .careers-hero-title-rule { width: 64px; height: 3px; }
   .careers-hero-lead { font-size: 15px; line-height: 1.5; }
   .careers-hero-gallery { grid-template-columns: 1fr; }
   .careers-hero-frame { height: 220px; }

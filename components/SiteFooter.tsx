@@ -149,7 +149,7 @@ export function SiteFooter({
                 <p className="section-label">KOOPERATYVAS</p>
                 <a href="/apie">Apie KOOPS</a>
                 <a href="/tiekejams">Tiekėjams</a>
-                <a href="/#kontaktai">Kontaktai</a>
+                <a href="/kontaktai">Kontaktai</a>
               </div>
               <div>
                 <p className="section-label">KONTAKTAI</p>

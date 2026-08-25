@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
+import gsap from "gsap";
 import { restaurant } from "../lib/restaurant";
+import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
 import { RestaurantGalleryMarquee } from "./RestaurantGalleryMarquee";
 import { RollingLabel } from "./RollingLabel";
 
@@ -14,15 +16,17 @@ export function RestaurantHero() {
   const mediaRef = React.useRef<HTMLDivElement>(null);
   const [mediaVisible, setMediaVisible] = React.useState(false);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
 
+    const clearFallback = withIntroFallback(root);
     let cancelled = false;
     let revert = () => {};
 
-    void import("gsap").then(({ gsap }) => {
+    void import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
       if (cancelled || !root) return;
+      gsap.registerPlugin(ScrollTrigger);
 
       const media = gsap.matchMedia();
 
@@ -52,8 +56,11 @@ export function RestaurantHero() {
 
           if (reduceMotion) {
             pushLine?.style.removeProperty("width");
+            revealIntroImmediately(root);
             return;
           }
+
+          clearFallback();
 
           const introTargets = [
             label,
@@ -138,11 +145,12 @@ export function RestaurantHero() {
       revert = () => media.revert();
     });
 
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) {
+    const reduceMotionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reduceMotionMq.matches) {
       setMediaVisible(true);
       return () => {
         cancelled = true;
+        clearFallback();
         revert();
       };
     }
@@ -161,6 +169,7 @@ export function RestaurantHero() {
       obs.observe(mediaEl);
       return () => {
         cancelled = true;
+        clearFallback();
         revert();
         obs.disconnect();
       };
@@ -168,6 +177,7 @@ export function RestaurantHero() {
 
     return () => {
       cancelled = true;
+      clearFallback();
       revert();
     };
   }, []);

@@ -12,5 +12,5 @@ export const primaryNav = [
   { href: "/karjera", label: "Karjera" },
   { href: "/tiekejams", label: "Tiekėjams" },
   { href: "/apie", label: "Apie mus" },
-  { href: "/#kontaktai", label: "Kontaktai" },
+  { href: "/kontaktai", label: "Kontaktai" },
 ];
