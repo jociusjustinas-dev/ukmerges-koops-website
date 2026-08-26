@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { RollingLabel } from "../../components/RollingLabel";
 
 export const metadata: Metadata = {
-  title: "KOOPS | Svetainės strategija",
-  description: "Ukmergės rajono vartotojų kooperatyvo svetainės strategija.",
+  title: "KOOPS | Svetainės atnaujinimo strategija",
+  description: "Ukmergės rajono vartotojų kooperatyvo svetainės atnaujinimo strategija.",
 };
 
 const goals = [
@@ -26,7 +27,9 @@ export default function StrategyPage() {
         <a href="/" className="strategy-brand" aria-label="Grįžti į KOOPS koncepciją">
           <img src="/koops-logo.png" alt="KOOPS prekybos sistema" />
         </a>
-        <a className="strategy-back" href="/">← Į koncepciją</a>
+        <a className="pill-button dark strategy-back" href="/" aria-label="Grįžti į KOOPS koncepciją">
+          <RollingLabel>Į koncepciją</RollingLabel>
+        </a>
       </header>
 
       <section className="strategy-hero">
@@ -35,7 +38,7 @@ export default function StrategyPage() {
         <div className="strategy-wrap strategy-hero-grid">
           <div>
             <p className="strategy-kicker">UKMERGĖS RAJONO VARTOTOJŲ KOOPERATYVAS</p>
-            <h1>Skaitmeninė<br />KOOPS strategija</h1>
+            <h1>KOOPS svetainės<br />atnaujinimo strategija</h1>
           </div>
           <div className="strategy-hero-note">
             <p>Atnaujinta svetainė turi tapti ne informacijos sandėliu, o kasdieniu keliu į artimiausią parduotuvę, restoraną, darbą ir partnerystę.</p>
@@ -48,8 +51,8 @@ export default function StrategyPage() {
         <div className="strategy-wrap">
           <p className="strategy-kicker dark">STRATEGINĖ KRYPTIS</p>
           <div className="strategy-intro-grid">
-            <h2>Vienas aiškus principas:<br />lankytojas turi rasti atsakymą greičiau nei spėja suabejoti.</h2>
-            <p>Prioritetas nėra „daugiau turinio“. Prioritetas — trumpesnis kelias iki konkretaus veiksmo ir sistema, kuri leidžia matuoti, kas jį realiai pagerina.</p>
+            <h2>Vienas aiškus principas:<br />lankytojas turi rasti atsakymą<br />greičiau nei spėja suabejoti.</h2>
+            <p>Prioritetas nėra „daugiau turinio“. Prioritetas — trumpesnis kelias iki konkretaus veiksmo.</p>
           </div>
         </div>
       </section>
@@ -135,7 +138,9 @@ export default function StrategyPage() {
         <div className="strategy-wrap">
           <p className="strategy-kicker">KITAS ŽINGSNIS</p>
           <h2>Patvirtinti strateginę kryptį ir pereiti prie turinio bei puslapių struktūros.</h2>
-          <a href="/" className="strategy-footer-link">Atidaryti pradinio puslapio koncepciją <span>→</span></a>
+          <a href="/" className="pill-button accent strategy-footer-cta" aria-label="Atidaryti pradinio puslapio koncepciją">
+            <RollingLabel>Atidaryti koncepciją</RollingLabel>
+          </a>
         </div>
       </footer>
     </main>
