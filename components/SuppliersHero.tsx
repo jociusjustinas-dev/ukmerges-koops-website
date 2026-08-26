@@ -137,7 +137,7 @@ export function SuppliersHero() {
           {gallery.map((item, index) => (
             <figure
               key={item.src}
-              className={`careers-hero-frame suppliers-hero-frame${index > 0 ? " careers-hero-frame-desktop" : ""}`}
+              className="careers-hero-frame suppliers-hero-frame"
             >
               <img src={item.src} alt={item.alt} loading={index === 0 ? "eager" : "lazy"} />
             </figure>
