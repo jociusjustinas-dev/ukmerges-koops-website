@@ -640,7 +640,15 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .floating-nav.is-scrolled .nav-shell { height: 72px; padding-inline: 20px; border-inline: 0; border-radius: 0; }
   .mobile-menu nav { top: 86px; }
   .floating-nav.is-scrolled .mobile-menu nav { top: 72px; }
-  .floating-nav.is-scrolled > .nav-shell .brand { width: 68px; height: 58px; }
+  /* Tik logo ~4px žemyn — CTA / hamburger lieka centre (white header). */
+  .floating-nav.is-scrolled > .nav-shell .brand {
+    width: 68px;
+    height: 58px;
+    transform: translateY(4px);
+  }
+  .floating-nav:has(.mobile-menu[open]) > .nav-shell .brand {
+    transform: translateY(4px);
+  }
   .nav-cta { min-height: 40px; display: inline-flex; margin-left: auto; font-size: 14px; }
   .nav-cta .avenir-button-inner { min-height: 40px; padding: 8px 12px; }
   .tt-hero-content { align-items: flex-start; padding: clamp(140px, 20svh, 178px) 0 clamp(184px, 28svh, 244px); }
@@ -698,7 +706,11 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .floating-nav.is-scrolled .nav-shell { height: 68px; padding-inline: 16px; }
   .mobile-menu nav { top: 82px; padding: 20px 16px 24px; }
   .floating-nav.is-scrolled .mobile-menu nav { top: 68px; }
-  .floating-nav.is-scrolled > .nav-shell .brand { width: 60px; height: 52px; }
+  .floating-nav.is-scrolled > .nav-shell .brand {
+    width: 60px;
+    height: 52px;
+    transform: translateY(4px);
+  }
   .mobile-menu nav { padding: 8px 16px 24px; }
   .mobile-nav-head { margin-bottom: 24px; }
   .mobile-nav-brand { width: 120px !important; height: 104px !important; }
