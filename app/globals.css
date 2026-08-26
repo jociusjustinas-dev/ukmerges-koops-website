@@ -756,7 +756,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .story-headline h2 { max-width: 100%; overflow-wrap: break-word; }
   .contact-content { gap: 48px; padding-top: 0; }
   .contact-heading h2 { font-size: 40px; }
-  .contact-details { grid-template-columns: 1fr; gap: 20px; }
+  .contact-details { grid-template-columns: 1fr 1fr; gap: 16px 20px; }
   /* Trumpi formų laukai (vardas / el. paštas ir pan.) lieka 2×2 — mažiau scroll. */
   .form-halves {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -2736,7 +2736,9 @@ html.store-drawer-open { overflow: hidden; }
   }
   .restaurant-hero-top { padding-top: 120px; }
   .restaurant-hero-title {
+    flex: 0 0 auto;
     max-width: none;
+    width: 100%;
     font-size: 34px;
     line-height: 0.98;
   }
@@ -3185,7 +3187,6 @@ html.store-drawer-open { overflow: hidden; }
   .careers-hero-lead { font-size: 15px; line-height: 1.5; }
   .careers-hero-gallery { grid-template-columns: 1fr 1fr; gap: 12px; }
   .careers-hero-frame { height: 180px; }
-  .careers-hero-frame-desktop { display: none; }
   .jobs-title-rule { width: 44px; }
 }
 

@@ -37,7 +37,6 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
   const mapInstance = useRef<LeafletMap | null>(null);
   const markers = useRef<Record<string, Marker>>({});
   const listRef = useRef<HTMLDivElement>(null);
-  const loadMoreRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const lastFocusRef = useRef<HTMLElement | null>(null);
 
@@ -83,22 +82,6 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
     if (!isMobile) return;
     setShownCount(MOBILE_BATCH);
   }, [area, query, isMobile]);
-
-  useEffect(() => {
-    if (!hasMore) return;
-    const node = loadMoreRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry?.isIntersecting) return;
-        setShownCount((current) => Math.min(current + MOBILE_BATCH, visible.length));
-      },
-      { root: null, rootMargin: "120px 0px", threshold: 0 },
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [hasMore, shownCount, visible.length]);
 
   useEffect(() => {
     let cancelled = false;
@@ -400,7 +383,7 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
                 </article>
               ))}
               {hasMore ? (
-                <div className="stores-finder-more" ref={loadMoreRef}>
+                <div className="stores-finder-more">
                   <button
                     type="button"
                     className="pill-button outline-light stores-finder-more-btn"
