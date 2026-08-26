@@ -46,8 +46,6 @@ export function CareersHero() {
           return;
         }
 
-        clearFallback();
-
         const label = root.querySelector<HTMLElement>(".careers-hero-label");
         const title = root.querySelector<HTMLElement>(".careers-hero-title");
         const pushLine = root.querySelector<HTMLElement>(".careers-hero-title-rule");
@@ -67,7 +65,17 @@ export function CareersHero() {
           pushLine.style.width = "0px";
         }
 
-        const intro = gsap.timeline({ defaults: { duration: 0.75, ease: "power3.out" } });
+        const finishIntro = () => {
+          gsap.set(targets, { clearProps: "opacity,visibility,transform" });
+          if (pushLine) gsap.set(pushLine, { clearProps: "width" });
+          root.classList.add("is-intro-fallback");
+          clearFallback();
+        };
+
+        const intro = gsap.timeline({
+          defaults: { duration: 0.75, ease: "power3.out" },
+          onComplete: finishIntro,
+        });
         if (label) intro.fromTo(label, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.05);
         if (title) intro.fromTo(title, { y: 28, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.12);
         if (pushLine && pushWidth) {
@@ -108,7 +116,7 @@ export function CareersHero() {
                 <span className="careers-hero-title-line">Darbas arti</span>
                 <span className="careers-hero-title-row">
                   <i className="careers-hero-title-rule" aria-hidden="true" />
-                  <span>namų</span>
+                  <span> namų</span>
                 </span>
                 <span className="careers-hero-title-line">Ukmergėje</span>
                 <span className="careers-hero-title-line">ir rajone</span>

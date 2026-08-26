@@ -29,7 +29,9 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
   const [previewSlug, setPreviewSlug] = useState<string | null>(null);
   const [mapReady, setMapReady] = useState(false);
   const [portalReady, setPortalReady] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia(MOBILE_MQ).matches : false,
+  );
   const [shownCount, setShownCount] = useState(MOBILE_BATCH);
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<LeafletMap | null>(null);
@@ -101,6 +103,26 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
   useEffect(() => {
     let cancelled = false;
     let resizeObserver: ResizeObserver | null = null;
+    const retryTimers: number[] = [];
+    const invalidateRetries = [0, 50, 150, 400, 800];
+
+    const scheduleInvalidate = (map: LeafletMap) => {
+      const run = () => {
+        if (cancelled || mapInstance.current !== map) return;
+        map.invalidateSize();
+      };
+      requestAnimationFrame(() => {
+        run();
+        requestAnimationFrame(run);
+      });
+      invalidateRetries.forEach((ms) => {
+        retryTimers.push(window.setTimeout(run, ms));
+      });
+    };
+
+    const onViewportChange = () => {
+      mapInstance.current?.invalidateSize();
+    };
 
     void import("leaflet").then((leaflet) => {
       if (cancelled || !mapRef.current || mapInstance.current) return;
@@ -158,10 +180,16 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
         });
         resizeObserver.observe(container);
       }
-      requestAnimationFrame(() => map.invalidateSize());
+
+      window.addEventListener("resize", onViewportChange);
+      window.addEventListener("orientationchange", onViewportChange);
+      scheduleInvalidate(map);
       setMapReady(true);
 
       if (cancelled) {
+        window.removeEventListener("resize", onViewportChange);
+        window.removeEventListener("orientationchange", onViewportChange);
+        retryTimers.forEach((timer) => window.clearTimeout(timer));
         resizeObserver?.disconnect();
         resizeObserver = null;
         map.remove();
@@ -172,6 +200,9 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
 
     return () => {
       cancelled = true;
+      window.removeEventListener("resize", onViewportChange);
+      window.removeEventListener("orientationchange", onViewportChange);
+      retryTimers.forEach((timer) => window.clearTimeout(timer));
       resizeObserver?.disconnect();
       resizeObserver = null;
       const map = mapInstance.current;
