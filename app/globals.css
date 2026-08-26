@@ -295,6 +295,25 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .jobs-layout { display: grid; grid-template-columns: minmax(280px, .8fr) minmax(0, 1.2fr); align-items: start; gap: clamp(64px, 8vw, 144px); }
 .jobs-intro { max-width: 520px; display: flex; flex-direction: column; align-items: flex-start; gap: 24px; }
 .jobs-intro h2 { max-width: 8ch; font-size: clamp(52px, 5vw, 72px); line-height: .94; letter-spacing: -.04em; }
+.jobs-intro h2.jobs-title-with-rule {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 14px;
+  max-width: none;
+}
+.jobs-title-rule {
+  display: inline-block;
+  width: 72px;
+  height: 4px;
+  background: currentColor;
+  opacity: .72;
+  flex: 0 0 auto;
+}
+.jobs-title-with-rule > span {
+  white-space: nowrap;
+}
+.nowrap { white-space: nowrap; }
 .jobs-intro > p:not(.section-label) { max-width: 38ch; color: var(--color-morning-mist); font-size: 18px; line-height: 1.45; }
 .jobs-list { display: flex; flex-direction: column; border-top: 1px dashed rgba(255,255,255,.24); }
 .job-row { min-height: 150px; display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 28px 0; border-bottom: 1px dashed rgba(255,255,255,.24); transition: padding .3s ease, background-color .3s ease; }
@@ -333,7 +352,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .contact-details { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .contact-details > div { display: grid; gap: 8px; padding-left: 16px; border-left: 1px solid var(--color-moss-edge); }
 .supplier-form { display: flex; flex-direction: column; align-items: flex-start; gap: 28px; }
-.form-halves { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.form-halves { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
 .form-field { width: 100%; display: grid; gap: 10px; }
 .form-field-span-full { grid-column: 1 / -1; }
 .form-field > span { font-size: 12px; font-weight: 600; letter-spacing: .08em; }
@@ -739,7 +758,10 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .contact-heading h2 { font-size: 40px; }
   .contact-details { grid-template-columns: 1fr; gap: 20px; }
   /* Trumpi formų laukai (vardas / el. paštas ir pan.) lieka 2×2 — mažiau scroll. */
-  .form-halves { gap: 16px; }
+  .form-halves {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+  }
   .contact-image { display: none; }
   .contact-image { height: 300px; }
   .footer-cta { min-height: 360px; gap: 20px; padding: 56px 20px; }
@@ -2363,7 +2385,7 @@ html.store-drawer-open { overflow: hidden; }
 .restaurant-form-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 24px;
 }
 .restaurant-form input:not([type="checkbox"]):not([type="file"]),
@@ -2747,7 +2769,10 @@ html.store-drawer-open { overflow: hidden; }
   .restaurant-features,
   .restaurant-enquiry { padding-block: 48px; }
   /* Trumpi laukai lieka 2 stulpeliais (telefonas | el. paštas ir pan.). */
-  .restaurant-form-grid { gap: 16px; }
+  .restaurant-form-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+  }
   .restaurant-enquiry-intro h2 { line-height: 1.08; }
 }
 
@@ -2815,11 +2840,54 @@ html.store-drawer-open { overflow: hidden; }
   }
 }
 
+/* Fallback / post-intro: beat stuck GSAP inline opacity/visibility */
+.is-intro-fallback .careers-hero-label,
+.is-intro-fallback .about-hero-label,
+.is-intro-fallback .suppliers-hero-label,
+.is-intro-fallback .careers-hero-title,
+.is-intro-fallback .careers-hero-lead,
+.is-intro-fallback .about-hero-lead,
+.is-intro-fallback .suppliers-hero-lead,
+.is-intro-fallback .careers-hero-actions,
+.is-intro-fallback .careers-hero-frame,
+.is-intro-fallback .contacts-heading-label,
+.is-intro-fallback .contacts-heading-title,
+.is-intro-fallback .contacts-heading-lead,
+.is-intro-fallback .contact-details,
+.is-intro-fallback .supplier-form,
+.is-intro-fallback .contact-image,
+.is-intro-fallback .jobs-intro > *,
+.is-intro-fallback .job-row,
+.is-intro-fallback .news-heading-title,
+.is-intro-fallback .news-listing-bar,
+.is-intro-fallback .news-list-card,
+.is-intro-fallback .news-listing-empty,
+.is-intro-fallback .restaurant-hero-label,
+.is-intro-fallback .restaurant-hero-title-line,
+.is-intro-fallback .restaurant-hero-title-word,
+.is-intro-fallback .restaurant-hero-actions,
+.is-intro-fallback .tt-hero-top > .section-label,
+.is-intro-fallback .tt-hero-top h1 > span:not(.hero-title-break),
+.is-intro-fallback .tt-hero-top > .body-large,
+.is-intro-fallback .tt-hero-top > .pill-button,
+.is-intro-fallback .hero-update-card,
+.is-intro-fallback > .tt-container > .section-label,
+.is-intro-fallback .location-headline > span,
+.is-intro-fallback .stores-directory-lead,
+.is-intro-fallback .stores-finder {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 /* ——— Karjera / careers (terra-tory-hero-6) ——— */
+.careers-page {
+  overflow-x: clip;
+}
 .careers-hero {
   padding: 140px 0 80px;
   background: var(--color-linen-white);
   color: var(--color-midnight-moss);
+  overflow-x: clip;
 }
 .careers-hero-top {
   display: flex;
@@ -3068,11 +3136,11 @@ html.store-drawer-open { overflow: hidden; }
 
 @media (max-width: 991px) {
   .careers-hero { padding: 112px 0 56px; }
-  .careers-hero-top { margin-bottom: 32px; gap: 20px; }
+  .careers-hero-top { margin-bottom: 24px; gap: 16px; }
   .careers-hero-main {
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
+    gap: 16px;
   }
   /* Column layout: flex-basis must not act as height (was ~22–36rem empty space). */
   .careers-hero-heading {
@@ -3080,7 +3148,7 @@ html.store-drawer-open { overflow: hidden; }
     width: 100%;
     min-width: 0;
     max-width: none;
-    gap: 20px;
+    gap: 16px;
   }
   .careers-hero-lead {
     flex: 0 0 auto;
@@ -3094,27 +3162,31 @@ html.store-drawer-open { overflow: hidden; }
 }
 
 @media (max-width: 767px) {
-  .careers-hero { padding: 96px 0 48px; }
-  .careers-hero-top { margin-bottom: 28px; gap: 16px; }
-  .careers-hero-heading { gap: 16px; }
+  .careers-hero { padding: 96px 0 40px; }
+  .careers-hero-top { margin-bottom: 20px; gap: 12px; }
+  .careers-hero-heading { gap: 12px; }
   .careers-hero-title {
     font-size: clamp(40px, 8vw, 56px);
     line-height: 1.08;
-    gap: 6px;
+    gap: 4px;
   }
-  .careers-hero-title-row { gap: 12px; }
+  .careers-hero-title-row { gap: 10px; }
   .careers-hero-title-rule { width: 72px; height: 3px; }
+  .jobs-title-rule { width: 56px; height: 3px; }
+  .jobs-title-with-rule { gap: 0 10px; }
 }
 
 @media (max-width: 479px) {
-  .careers-hero { padding: 88px 0 40px; }
-  .careers-hero-top { margin-bottom: 24px; }
+  .careers-hero { padding: 88px 0 32px; }
+  .careers-hero-top { margin-bottom: 16px; gap: 10px; }
+  .careers-hero-heading { gap: 12px; }
   .careers-hero-title { font-size: clamp(36px, 11vw, 48px); line-height: 1.08; }
-  .careers-hero-title-rule { width: 56px; height: 3px; }
+  .careers-hero-title-rule { width: 48px; height: 3px; }
   .careers-hero-lead { font-size: 15px; line-height: 1.5; }
   .careers-hero-gallery { grid-template-columns: 1fr 1fr; gap: 12px; }
   .careers-hero-frame { height: 180px; }
   .careers-hero-frame-desktop { display: none; }
+  .jobs-title-rule { width: 44px; }
 }
 
 /* Careers open-contact file field — must beat .restaurant-form input width:100% */

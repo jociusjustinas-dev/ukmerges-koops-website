@@ -657,7 +657,7 @@ export default function Home() {
           <div className="tt-container">
             <div className="story-headline">
               <p className="section-label light-label">RESTORANAS „VILKMERGĖ“ · NUO 1965 METŲ</p>
-              <h2 id="restorano-antraste"><span className="story-title-desktop">Vieta jūsų šventėms, renginiams ir jaukiems susitikimams.</span><span className="story-title-mobile"><span>Vieta jūsų šventėms</span><span>renginiams ir jaukiems&nbsp;susitikimams.</span></span></h2>
+              <h2 id="restorano-antraste"><span className="story-title-desktop">Vieta jūsų šventėms, renginiams ir jaukiems susitikimams.</span><span className="story-title-mobile"><span>Vieta jūsų šventėms</span><span>renginiams ir <span className="nowrap">jaukiems&nbsp;susitikimams</span>.</span></span></h2>
             </div>
             <div className="story-grid">
               <div className="story-image" role="region" aria-roledescription="karuselė" aria-label="Restorano „Vilkmergė“ nuotraukų galerija">
@@ -719,7 +719,11 @@ export default function Home() {
           <div className="tt-container jobs-layout">
             <div className="jobs-intro">
               <p className="section-label light-label">KARJERA</p>
-              <h2 id="karjeros-antraste">Darbas arti namų</h2>
+              <h2 id="karjeros-antraste" className="jobs-title-with-rule">
+                Darbas arti
+                <i className="jobs-title-rule" aria-hidden="true" />
+                <span> namų</span>
+              </h2>
               <p>Prisijunkite prie KOOPS komandos Ukmergėje ir rajone. Susipažinkite su šiuo metu siūlomomis darbo vietomis.</p>
               <a className="pill-button accent" href="/karjera">
                 <RollingLabel>Visi darbo pasiūlymai</RollingLabel>

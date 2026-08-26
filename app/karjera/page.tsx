@@ -61,7 +61,11 @@ export default function CareersPage() {
           <div className="tt-container jobs-layout">
             <div className="jobs-intro">
               <p className="section-label light-label">LAISVOS POZICIJOS</p>
-              <h2 id="careers-jobs-title">Darbas arti namų</h2>
+              <h2 id="careers-jobs-title" className="jobs-title-with-rule">
+                Darbas arti
+                <i className="jobs-title-rule" aria-hidden="true" />
+                <span> namų</span>
+              </h2>
               <p>
                 Pasirinkite skelbimą — kandidatuosite išorinėje nuorodoje. Nerandate tinkamos
                 pozicijos? Parašykite forma apačioje. {careersContact.applyNote}

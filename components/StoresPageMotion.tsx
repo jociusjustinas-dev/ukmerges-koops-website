@@ -39,11 +39,11 @@ export function StoresPageMotion() {
           if (reduceMotion) {
             pushLines.forEach((line) => line.style.removeProperty("width"));
             if (directory) revealIntroImmediately(directory);
+            window.dispatchEvent(new Event("resize"));
             return;
           }
 
           if (directory) {
-            clearFallback();
             const label = directory.querySelector<HTMLElement>(".section-label");
             const words = directory.querySelectorAll<HTMLElement>(".location-headline > span");
             const pushLine = directory.querySelector<HTMLElement>(".title-push-line");
@@ -58,8 +58,15 @@ export function StoresPageMotion() {
               pushTarget = { element: pushLine, width };
             }
 
+            const finishIntro = () => {
+              clearFallback();
+              revealIntroImmediately(directory);
+              window.dispatchEvent(new Event("resize"));
+            };
+
             const intro = gsap.timeline({
               defaults: { duration: 0.8, ease: "power3.out" },
+              onComplete: finishIntro,
             });
 
             if (label) {
