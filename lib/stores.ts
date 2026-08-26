@@ -24,7 +24,7 @@ function mapsUrl(address: string) {
 
 const grocery = ["Kasdienės prekės"];
 
-export const stores: Store[] = [
+export const stores = [
   {
     slug: "papartis",
     name: "Papartis",
@@ -510,7 +510,7 @@ export const stores: Store[] = [
     map: mapsUrl("Santarvės g. 22, Valai, Ukmergės rajonas"),
     services: grocery,
   },
-].sort((a, b) => a.name.localeCompare(b.name, "lt"));
+].sort((a, b) => a.name.localeCompare(b.name, "lt")) as Store[];
 
 /** Pradinio puslapio karuselė — 5 pirmos su nuotrauka (abėcėlės tvarka). */
 export const featuredStores = stores.filter((store) => Boolean(store.image)).slice(0, 5);

@@ -108,8 +108,9 @@ export function CareersHero() {
                 <span className="careers-hero-title-line">Darbas arti</span>
                 <span className="careers-hero-title-row">
                   <i className="careers-hero-title-rule" aria-hidden="true" />
-                  <span>namų Ukmergėje</span>
+                  <span>namų</span>
                 </span>
+                <span className="careers-hero-title-line">Ukmergėje</span>
                 <span className="careers-hero-title-line">ir rajone</span>
               </h1>
               <div className="careers-hero-actions">
@@ -129,9 +130,9 @@ export function CareersHero() {
           {gallery.map((item, index) => (
             <figure
               key={item.src}
-              className={`careers-hero-frame${index > 0 ? " careers-hero-frame-desktop" : ""}`}
+              className={`careers-hero-frame${index > 1 ? " careers-hero-frame-desktop" : ""}`}
             >
-              <img src={item.src} alt={item.alt} loading={index === 0 ? "eager" : "lazy"} />
+              <img src={item.src} alt={item.alt} loading={index < 2 ? "eager" : "lazy"} />
             </figure>
           ))}
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { createPortal } from "react-dom";
 import type { Map as LeafletMap, Marker } from "leaflet";
 import type { Store, StoreArea } from "../lib/stores";
@@ -8,6 +8,9 @@ import { RollingLabel } from "./RollingLabel";
 import "leaflet/dist/leaflet.css";
 
 type AreaFilter = "visos" | StoreArea;
+
+const MOBILE_BATCH = 10;
+const MOBILE_MQ = "(max-width: 767px)";
 
 function matchesQuery(store: Store, query: string) {
   if (!query) return true;
@@ -26,10 +29,13 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
   const [previewSlug, setPreviewSlug] = useState<string | null>(null);
   const [mapReady, setMapReady] = useState(false);
   const [portalReady, setPortalReady] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [shownCount, setShownCount] = useState(MOBILE_BATCH);
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<LeafletMap | null>(null);
   const markers = useRef<Record<string, Marker>>({});
   const listRef = useRef<HTMLDivElement>(null);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const lastFocusRef = useRef<HTMLElement | null>(null);
 
@@ -37,6 +43,12 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
     () => stores.filter((store) => (area === "visos" || store.area === area) && matchesQuery(store, query)),
     [stores, area, query],
   );
+
+  const displayed = isMobile ? visible.slice(0, shownCount) : visible;
+  const hasMore = isMobile && shownCount < visible.length;
+  const revealMore = () => {
+    setShownCount((current) => Math.min(current + MOBILE_BATCH, visible.length));
+  };
 
   const previewStore = previewSlug ? stores.find((store) => store.slug === previewSlug) ?? null : null;
 
@@ -57,8 +69,38 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
     setPortalReady(true);
   }, []);
 
+  useLayoutEffect(() => {
+    const mq = window.matchMedia(MOBILE_MQ);
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    setShownCount(MOBILE_BATCH);
+  }, [area, query, isMobile]);
+
+  useEffect(() => {
+    if (!hasMore) return;
+    const node = loadMoreRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setShownCount((current) => Math.min(current + MOBILE_BATCH, visible.length));
+      },
+      { root: null, rootMargin: "120px 0px", threshold: 0 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [hasMore, shownCount, visible.length]);
+
   useEffect(() => {
     let cancelled = false;
+    let resizeObserver: ResizeObserver | null = null;
 
     void import("leaflet").then((leaflet) => {
       if (cancelled || !mapRef.current || mapInstance.current) return;
@@ -108,12 +150,36 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
 
       const bounds = L.latLngBounds(stores.map((store) => [store.lat, store.lng]));
       map.fitBounds(bounds, { padding: [32, 32], maxZoom: 12 });
+
+      const container = mapRef.current;
+      if (typeof ResizeObserver !== "undefined" && container) {
+        resizeObserver = new ResizeObserver(() => {
+          map.invalidateSize();
+        });
+        resizeObserver.observe(container);
+      }
       requestAnimationFrame(() => map.invalidateSize());
       setMapReady(true);
+
+      if (cancelled) {
+        resizeObserver?.disconnect();
+        resizeObserver = null;
+        map.remove();
+        mapInstance.current = null;
+        markers.current = {};
+      }
     });
 
     return () => {
       cancelled = true;
+      resizeObserver?.disconnect();
+      resizeObserver = null;
+      const map = mapInstance.current;
+      if (map) {
+        map.remove();
+        mapInstance.current = null;
+      }
+      markers.current = {};
     };
   }, [stores]);
 
@@ -225,78 +291,96 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
             </button>
           ))}
         </div>
-        <p className="stores-finder-count">{visible.length} iš {stores.length}</p>
+        <p className="stores-finder-count" aria-live="polite">
+          {isMobile && visible.length > 0
+            ? `Rodoma ${displayed.length} iš ${visible.length}`
+            : `${visible.length} iš ${stores.length}`}
+        </p>
       </div>
 
       <div className="stores-finder-split">
-        <div className="stores-finder-list" ref={listRef}>
+        <div className="stores-finder-list" ref={listRef} id="stores-finder-list-items">
           {visible.length === 0 ? (
             <p className="stores-finder-empty">Tokios parduotuvės neradome. Pabandykite kitą vietovę.</p>
           ) : (
-            visible.map((store) => (
-              <article
-                className={`stores-finder-card${activeSlug === store.slug ? " is-active" : ""}`}
-                key={store.slug}
-                data-store={store.slug}
-              >
-                <a
-                  className={`stores-finder-image${store.image ? "" : " is-placeholder"}`}
-                  href={`/parduotuves/${store.slug}`}
-                  aria-label={`Parduotuvė „${store.name}“ – greita peržiūra`}
-                  onClick={(event) => handleStoreLinkClick(event, store.slug)}
+            <>
+              {displayed.map((store) => (
+                <article
+                  className={`stores-finder-card${activeSlug === store.slug ? " is-active" : ""}`}
+                  key={store.slug}
+                  data-store={store.slug}
                 >
-                  {store.image ? (
-                    <img src={store.image} alt={`Parduotuvė „${store.name}“`} />
-                  ) : (
-                    <img className="store-cover-logo" src="/koops-logo.png" alt="" />
-                  )}
-                </a>
-                <div className="stores-finder-info">
-                  <div className="stores-finder-title-row">
-                    <h2>
+                  <a
+                    className={`stores-finder-image${store.image ? "" : " is-placeholder"}`}
+                    href={`/parduotuves/${store.slug}`}
+                    aria-label={`Parduotuvė „${store.name}“ – greita peržiūra`}
+                    onClick={(event) => handleStoreLinkClick(event, store.slug)}
+                  >
+                    {store.image ? (
+                      <img src={store.image} alt={`Parduotuvė „${store.name}“`} />
+                    ) : (
+                      <img className="store-cover-logo" src="/koops-logo.png" alt="" />
+                    )}
+                  </a>
+                  <div className="stores-finder-info">
+                    <div className="stores-finder-title-row">
+                      <h2>
+                        <a
+                          href={`/parduotuves/${store.slug}`}
+                          onClick={(event) => handleStoreLinkClick(event, store.slug)}
+                        >
+                          {store.name}
+                        </a>
+                      </h2>
+                      <span>{store.city}</span>
+                    </div>
+                    <p className="stores-finder-address">{store.address}</p>
+                    <dl className="stores-finder-facts">
+                      <div>
+                        <dt>Darbo laikas</dt>
+                        <dd>{store.hours}</dd>
+                      </div>
+                      <div>
+                        <dt>Telefonas</dt>
+                        <dd>
+                          <a href={`tel:${store.phoneHref}`}>{store.phone}</a>
+                          {store.extraPhone && store.extraPhoneHref ? (
+                            <>
+                              {" · "}
+                              <a href={`tel:${store.extraPhoneHref}`}>{store.extraPhone}</a>
+                            </>
+                          ) : null}
+                        </dd>
+                      </div>
+                    </dl>
+                    <div className="stores-finder-actions">
                       <a
+                        className="text-link"
                         href={`/parduotuves/${store.slug}`}
                         onClick={(event) => handleStoreLinkClick(event, store.slug)}
                       >
-                        {store.name}
+                        Apie parduotuvę <span aria-hidden="true">→</span>
                       </a>
-                    </h2>
-                    <span>{store.city}</span>
-                  </div>
-                  <p className="stores-finder-address">{store.address}</p>
-                  <dl className="stores-finder-facts">
-                    <div>
-                      <dt>Darbo laikas</dt>
-                      <dd>{store.hours}</dd>
+                      <button type="button" className="text-link" onClick={() => openPreview(store.slug)}>
+                        Rodyti žemėlapyje <span aria-hidden="true">→</span>
+                      </button>
                     </div>
-                    <div>
-                      <dt>Telefonas</dt>
-                      <dd>
-                        <a href={`tel:${store.phoneHref}`}>{store.phone}</a>
-                        {store.extraPhone && store.extraPhoneHref ? (
-                          <>
-                            {" · "}
-                            <a href={`tel:${store.extraPhoneHref}`}>{store.extraPhone}</a>
-                          </>
-                        ) : null}
-                      </dd>
-                    </div>
-                  </dl>
-                  <div className="stores-finder-actions">
-                    <a
-                      className="text-link"
-                      href={`/parduotuves/${store.slug}`}
-                      onClick={(event) => handleStoreLinkClick(event, store.slug)}
-                    >
-                      Apie parduotuvę <span aria-hidden="true">→</span>
-                    </a>
-                    <button type="button" className="text-link" onClick={() => openPreview(store.slug)}>
-                      Rodyti žemėlapyje <span aria-hidden="true">→</span>
-                    </button>
                   </div>
+                </article>
+              ))}
+              {hasMore ? (
+                <div className="stores-finder-more" ref={loadMoreRef}>
+                  <button
+                    type="button"
+                    className="pill-button outline-light stores-finder-more-btn"
+                    onClick={revealMore}
+                    aria-controls="stores-finder-list-items"
+                  >
+                    <RollingLabel>Rodyti daugiau</RollingLabel>
+                  </button>
                 </div>
-              </article>
-            ))
+              ) : null}
+            </>
           )}
         </div>
 

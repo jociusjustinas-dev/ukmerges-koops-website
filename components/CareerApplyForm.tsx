@@ -102,7 +102,10 @@ export function CareerApplyForm() {
   return (
     <form className="restaurant-form" onSubmit={onSubmit} noValidate encType="multipart/form-data">
       <div className="restaurant-form-grid">
-        <label className={`form-field${errors.vardas ? " has-error" : ""}`} htmlFor="career-name">
+        <label
+          className={`form-field form-field-span-full${errors.vardas ? " has-error" : ""}`}
+          htmlFor="career-name"
+        >
           <span>VARDAS</span>
           <input
             id="career-name"
@@ -144,7 +147,10 @@ export function CareerApplyForm() {
           />
           {errors.el_pastas ? <small className="field-error">{errors.el_pastas}</small> : null}
         </label>
-        <label className={`form-field${errors.priedas ? " has-error" : ""}`} htmlFor="career-file">
+        <label
+          className={`form-field form-field-span-full${errors.priedas ? " has-error" : ""}`}
+          htmlFor="career-file"
+        >
           <span>CV / PRIEDAS (NEPRIVALOMAS)</span>
           <input
             ref={fileInputRef}

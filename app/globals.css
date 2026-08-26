@@ -335,6 +335,7 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .supplier-form { display: flex; flex-direction: column; align-items: flex-start; gap: 28px; }
 .form-halves { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .form-field { width: 100%; display: grid; gap: 10px; }
+.form-field-span-full { grid-column: 1 / -1; }
 .form-field > span { font-size: 12px; font-weight: 600; letter-spacing: .08em; }
 .supplier-form input:not([type="checkbox"]), .supplier-form textarea { width: 100%; padding: 12px 18px; color: var(--color-midnight-moss); background: #f7f8f3; border: 1px solid rgba(21,25,13,.24); border-radius: 24px; transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease; }
 .supplier-form input::placeholder, .supplier-form textarea::placeholder { color: var(--color-moss-veil); opacity: .78; }
@@ -737,7 +738,8 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .contact-content { gap: 48px; padding-top: 0; }
   .contact-heading h2 { font-size: 40px; }
   .contact-details { grid-template-columns: 1fr; gap: 20px; }
-  .form-halves { grid-template-columns: 1fr; }
+  /* Trumpi formų laukai (vardas / el. paštas ir pan.) lieka 2×2 — mažiau scroll. */
+  .form-halves { gap: 16px; }
   .contact-image { display: none; }
   .contact-image { height: 300px; }
   .footer-cta { min-height: 360px; gap: 20px; padding: 56px 20px; }
@@ -1401,6 +1403,9 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   font: inherit;
   font-size: 13px;
 }
+.stores-finder-more {
+  display: none;
+}
 .stores-finder-map-col {
   position: sticky;
   top: 96px;
@@ -1898,11 +1903,14 @@ html.store-drawer-open { overflow: hidden; }
 }
 
 @media (max-width: 991px) {
-  .stores-finder-split { display: flex; flex-direction: column-reverse; }
+  /* stretch overrides base align-items:start — otherwise map col shrinks to ~0 width */
+  .stores-finder-split { display: flex; flex-direction: column-reverse; align-items: stretch; }
   .stores-faq-layout { grid-template-columns: 1fr; }
   .stores-finder-map-col {
     position: relative;
     top: 0;
+    align-self: stretch;
+    width: 100%;
     height: 360px;
     min-height: 360px;
   }
@@ -2009,6 +2017,15 @@ html.store-drawer-open { overflow: hidden; }
   .stores-directory { padding: 120px 0 80px; }
   .stores-directory .location-headline, .stores-guide-copy h2, .stores-faq h2, .store-detail h1 { line-height: 1.08; }
   .stores-finder-count { margin-left: 0; width: 100%; }
+  .stores-finder-more {
+    display: grid;
+    grid-column: 1 / -1;
+    justify-items: center;
+    padding: 8px 0 4px;
+  }
+  .stores-finder-more-btn {
+    min-width: min(100%, 220px);
+  }
   .stores-finder-map-col { height: 280px; min-height: 280px; }
   .stores-card-image { height: 240px; }
   .store-detail-media { height: 280px; }
@@ -2349,7 +2366,7 @@ html.store-drawer-open { overflow: hidden; }
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
-.restaurant-form input:not([type="checkbox"]),
+.restaurant-form input:not([type="checkbox"]):not([type="file"]),
 .restaurant-form textarea {
   width: 100%;
   padding: 12px 18px;
@@ -2365,18 +2382,18 @@ html.store-drawer-open { overflow: hidden; }
   color: var(--color-moss-veil);
   opacity: .78;
 }
-.restaurant-form input:not([type="checkbox"]) {
+.restaurant-form input:not([type="checkbox"]):not([type="file"]) {
   height: 52px;
 }
 .restaurant-form textarea {
   min-height: 150px;
   resize: vertical;
 }
-.restaurant-form input:not([type="checkbox"]):hover,
+.restaurant-form input:not([type="checkbox"]):not([type="file"]):hover,
 .restaurant-form textarea:hover {
   border-color: rgba(21, 25, 13, .52);
 }
-.restaurant-form input:not([type="checkbox"]):focus-visible,
+.restaurant-form input:not([type="checkbox"]):not([type="file"]):focus-visible,
 .restaurant-form textarea:focus-visible {
   outline: 0;
   border-color: var(--color-midnight-moss);
@@ -2729,7 +2746,8 @@ html.store-drawer-open { overflow: hidden; }
   .restaurant-features-divider { margin-bottom: 32px; }
   .restaurant-features,
   .restaurant-enquiry { padding-block: 48px; }
-  .restaurant-form-grid { grid-template-columns: 1fr; }
+  /* Trumpi laukai lieka 2 stulpeliais (telefonas | el. paštas ir pan.). */
+  .restaurant-form-grid { gap: 16px; }
   .restaurant-enquiry-intro h2 { line-height: 1.08; }
 }
 
@@ -2847,6 +2865,14 @@ html.store-drawer-open { overflow: hidden; }
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
+}
+/* Keep careers rule glued to „namų“ — wrap was leaving the dash alone after „arti“. */
+#careers-hero-title .careers-hero-title-row {
+  flex-wrap: nowrap;
+  max-width: 100%;
+}
+#careers-hero-title .careers-hero-title-row > span {
+  white-space: nowrap;
 }
 .careers-hero-title-rule {
   display: inline-block;
@@ -3041,41 +3067,62 @@ html.store-drawer-open { overflow: hidden; }
 }
 
 @media (max-width: 991px) {
-  .careers-hero { padding: 120px 0 64px; }
-  .careers-hero-top { margin-bottom: 40px; gap: 24px; }
+  .careers-hero { padding: 112px 0 56px; }
+  .careers-hero-top { margin-bottom: 32px; gap: 20px; }
   .careers-hero-main {
     flex-direction: column;
     align-items: flex-start;
-    gap: 24px;
+    gap: 20px;
   }
-  .careers-hero-heading { max-width: none; }
-  .careers-hero-lead { max-width: none; font-size: 16px; line-height: 1.5; }
+  /* Column layout: flex-basis must not act as height (was ~22–36rem empty space). */
+  .careers-hero-heading {
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    gap: 20px;
+  }
+  .careers-hero-lead {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: none;
+    font-size: 16px;
+    line-height: 1.5;
+  }
   .careers-hero-gallery { grid-template-columns: 1fr 1fr; gap: 16px; }
   .careers-hero-frame { height: 240px; }
 }
 
 @media (max-width: 767px) {
+  .careers-hero { padding: 96px 0 48px; }
+  .careers-hero-top { margin-bottom: 28px; gap: 16px; }
+  .careers-hero-heading { gap: 16px; }
   .careers-hero-title {
     font-size: clamp(40px, 8vw, 56px);
     line-height: 1.08;
     gap: 6px;
   }
   .careers-hero-title-row { gap: 12px; }
-  .careers-hero-title-rule { width: 88px; height: 3px; }
+  .careers-hero-title-rule { width: 72px; height: 3px; }
 }
 
 @media (max-width: 479px) {
-  .careers-hero { padding: 100px 0 48px; }
+  .careers-hero { padding: 88px 0 40px; }
+  .careers-hero-top { margin-bottom: 24px; }
   .careers-hero-title { font-size: clamp(36px, 11vw, 48px); line-height: 1.08; }
-  .careers-hero-title-rule { width: 64px; height: 3px; }
+  .careers-hero-title-rule { width: 56px; height: 3px; }
   .careers-hero-lead { font-size: 15px; line-height: 1.5; }
-  .careers-hero-gallery { grid-template-columns: 1fr; }
-  .careers-hero-frame { height: 220px; }
+  .careers-hero-gallery { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .careers-hero-frame { height: 180px; }
   .careers-hero-frame-desktop { display: none; }
 }
 
-/* Careers open-contact file field */
-.career-file-input {
+/* Careers open-contact file field — must beat .restaurant-form input width:100% */
+.form-field:has(.career-file-input) {
+  position: relative;
+}
+.career-file-input,
+.restaurant-form input.career-file-input[type="file"] {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -3083,8 +3130,11 @@ html.store-drawer-open { overflow: hidden; }
   margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
+  opacity: 0;
+  pointer-events: none;
 }
 .career-file-trigger {
   width: 100%;

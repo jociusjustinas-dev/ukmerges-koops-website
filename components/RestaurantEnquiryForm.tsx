@@ -75,6 +75,10 @@ export function RestaurantEnquiryForm() {
           />
           {errors.vardas ? <small className="field-error">{errors.vardas}</small> : null}
         </label>
+        <label className="form-field" htmlFor="rest-guests">
+          <span>SVEČIŲ SKAIČIUS</span>
+          <input id="rest-guests" name="sveciai" type="number" min={1} max={200} placeholder="Pvz., 60" />
+        </label>
         <label className={`form-field${errors.telefonas ? " has-error" : ""}`} htmlFor="rest-phone">
           <span>TELEFONAS</span>
           <input
@@ -102,10 +106,6 @@ export function RestaurantEnquiryForm() {
             required
           />
           {errors.el_pastas ? <small className="field-error">{errors.el_pastas}</small> : null}
-        </label>
-        <label className="form-field" htmlFor="rest-guests">
-          <span>SVEČIŲ SKAIČIUS</span>
-          <input id="rest-guests" name="sveciai" type="number" min={1} max={200} placeholder="Pvz., 60" />
         </label>
         <div className="form-field">
           <span>DATA</span>

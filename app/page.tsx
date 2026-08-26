@@ -657,7 +657,7 @@ export default function Home() {
           <div className="tt-container">
             <div className="story-headline">
               <p className="section-label light-label">RESTORANAS „VILKMERGĖ“ · NUO 1965 METŲ</p>
-              <h2 id="restorano-antraste"><span className="story-title-desktop">Vieta jūsų šventėms, renginiams ir jaukiems susitikimams.</span><span className="story-title-mobile"><span>Vieta jūsų šventėms</span><span>renginiams ir jaukiems</span><span>susitikimams.</span></span></h2>
+              <h2 id="restorano-antraste"><span className="story-title-desktop">Vieta jūsų šventėms, renginiams ir jaukiems susitikimams.</span><span className="story-title-mobile"><span>Vieta jūsų šventėms</span><span>renginiams ir jaukiems&nbsp;susitikimams.</span></span></h2>
             </div>
             <div className="story-grid">
               <div className="story-image" role="region" aria-roledescription="karuselė" aria-label="Restorano „Vilkmergė“ nuotraukų galerija">
