@@ -2738,7 +2738,7 @@ html.store-drawer-open { overflow: hidden; }
   .restaurant-hero-title {
     max-width: none;
     font-size: 34px;
-    line-height: 1.08;
+    line-height: 0.98;
   }
   .restaurant-hero-title-rule { width: 72px; height: 3px; }
   .restaurant-hero-main {
@@ -3101,8 +3101,8 @@ html.store-drawer-open { overflow: hidden; }
     line-height: 1.08;
   }
   .contacts-form-section .contact-details {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
   }
   .contacts-channels .job-row h3 {
     line-height: 1.12;

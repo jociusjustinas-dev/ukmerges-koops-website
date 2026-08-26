@@ -118,8 +118,7 @@ export function CareersHero() {
                   <i className="careers-hero-title-rule" aria-hidden="true" />
                   <span> namų</span>
                 </span>
-                <span className="careers-hero-title-line">Ukmergėje</span>
-                <span className="careers-hero-title-line">ir rajone</span>
+                <span className="careers-hero-title-line">Ukmergėje ir rajone</span>
               </h1>
               <div className="careers-hero-actions">
                 <a className="pill-button dark" href="#pozicijos" aria-label="Žiūrėti laisvas pozicijas">
