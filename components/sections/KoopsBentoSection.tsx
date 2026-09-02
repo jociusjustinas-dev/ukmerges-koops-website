@@ -13,7 +13,7 @@ export function KoopsBentoSection() {
         </header>
 
         <div className="koops-bento-grid">
-          <a className="koops-bento-card" href="#parduotuves">
+          <a className="koops-bento-card" href="/parduotuves">
             <p className="section-label">PARDUOTUVĖS</p>
             <div className="koops-bento-card-bottom">
               <div className="koops-bento-card-content">
@@ -26,7 +26,7 @@ export function KoopsBentoSection() {
 
           <a
             className="koops-bento-media koops-bento-media-tall"
-            href="#parduotuves"
+            href="/parduotuves"
             aria-label="Rasti artimiausią KOOPS parduotuvę"
           >
             <img
@@ -36,7 +36,7 @@ export function KoopsBentoSection() {
             />
           </a>
 
-          <a className="koops-bento-card koops-bento-card-career" href="#karjera">
+          <a className="koops-bento-card koops-bento-card-career" href="/karjera">
             <p className="section-label">KARJERA</p>
             <div className="koops-bento-card-bottom">
               <div className="koops-bento-card-content">
@@ -47,7 +47,7 @@ export function KoopsBentoSection() {
             </div>
           </a>
 
-          <a className="koops-bento-card" href="#tiekejams">
+          <a className="koops-bento-card" href="/tiekejams">
             <p className="section-label">TIEKĖJAMS</p>
             <div className="koops-bento-card-bottom">
               <div className="koops-bento-card-content">
@@ -60,7 +60,7 @@ export function KoopsBentoSection() {
 
           <a
             className="koops-bento-media"
-            href="#parduotuves"
+            href="/parduotuves"
             aria-label="Rasti artimiausią KOOPS parduotuvę"
           >
             <img
@@ -77,7 +77,7 @@ export function KoopsBentoSection() {
               <p>Šventėms, renginiams ir susitikimams.</p>
             </div>
             <div className="koops-bento-actions">
-              <a className="text-link" href="#restoranas">Sužinoti daugiau <span aria-hidden="true">→</span></a>
+              <a className="text-link" href="/restoranas">Sužinoti daugiau <span aria-hidden="true">→</span></a>
             </div>
             <span className="koops-bento-circle" aria-hidden="true" />
           </div>
