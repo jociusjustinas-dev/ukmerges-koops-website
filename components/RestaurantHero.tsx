@@ -7,8 +7,8 @@ import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
 import { RestaurantGalleryMarquee } from "./RestaurantGalleryMarquee";
 import { RollingLabel } from "./RollingLabel";
 
-const inlineWords = ["renginiams", "ir"] as const;
-const closingWords = ["jaukiems", "susitikimams"] as const;
+const inlineWords = ["vieta,", "kur"] as const;
+const closingWords = ["gyvena", "atsiminimai."] as const;
 
 /** BYQ: terra-tory-hero-5 + terra-tory-gallery-1 marquee as media */
 export function RestaurantHero() {
@@ -193,7 +193,7 @@ export function RestaurantHero() {
 
             <div className="restaurant-hero-main">
               <h1 id="restaurant-hero-title" className="restaurant-hero-title">
-                <span className="restaurant-hero-title-line">Vieta jūsų šventėms</span>
+                <span className="restaurant-hero-title-line">Restoranas „Vilkmergė“ –</span>
                 <span className="restaurant-hero-title-row">
                   <i
                     className="restaurant-hero-title-rule title-push-line"

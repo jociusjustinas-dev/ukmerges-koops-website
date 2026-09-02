@@ -660,7 +660,6 @@ export default function Home() {
             <div className="story-headline">
               <p className="section-label light-label">RESTORANAS „VILKMERGĖ“ · NUO 1965 METŲ</p>
               <h2 id="restorano-antraste"><span className="story-title-desktop">Restoranas „Vilkmergė“ – vieta, kur gyvena atsiminimai.</span><span className="story-title-mobile"><span>Restoranas „Vilkmergė“ –</span><span>vieta, kur gyvena</span><span>atsiminimai.</span></span></h2>
-              <h2 id="restorano-antraste"><span className="story-title-desktop">Restoranas „Vilkmergė“ – vieta, kur gyvena atsiminimai.</span><span className="story-title-mobile"><span>Restoranas „Vilkmergė“ –</span><span>vieta, kur gyvena</span><span>atsiminimai.</span></span></h2>
             </div>
             <div className="story-grid">
               <div className="story-image" role="region" aria-roledescription="karuselė" aria-label="Restorano „Vilkmergė“ nuotraukų galerija">
