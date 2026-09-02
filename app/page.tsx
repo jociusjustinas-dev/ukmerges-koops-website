@@ -710,16 +710,28 @@ export default function Home() {
                   <div><dt>Mažoji salė</dt><dd>Iki 8 svečių</dd></div>
                 </dl>
                 <p className="story-note">Visas erdves suderinsime pagal renginį.</p>
-                <div className="story-reservation">
-                  <strong>Rezervuokite jau dabar</strong>
-                  <p>Užpildykite užklausos formą ar kreipkitės telefonu.</p>
+                <div className="story-reservation story-contact-card">
+                  <dl className="story-contact-list">
+                    <div>
+                      <dt>Telefonas</dt>
+                      <dd><a href="tel:+37061872548">+370 618 72548</a></dd>
+                    </div>
+                    <div>
+                      <dt>El. paštas</dt>
+                      <dd><a href="mailto:restoranas@urvk.lt">restoranas@urvk.lt</a></dd>
+                    </div>
+                    <div>
+                      <dt>Adresas</dt>
+                      <dd><a href="https://maps.google.com/?q=Vilkmerg%C4%97+Ukmerg%C4%97" target="_blank" rel="noreferrer">Kauno g. 7, Ukmergė</a></dd>
+                    </div>
+                  </dl>
                 </div>
                 <div className="story-actions">
                   <a className="pill-button accent" href="/restoranas#uzklausa">
                     <RollingLabel>Siųsti užklausą</RollingLabel>
                   </a>
-                  <a className="pill-button outline-light" href="tel:+37061872548" aria-label="Skambinti restoranui telefonu +370 618 72548">
-                    <RollingLabel>Skambinti +370 618 72548</RollingLabel>
+                  <a className="pill-button outline-light" href="/restoranas">
+                    <RollingLabel>Apie restoraną</RollingLabel>
                   </a>
                 </div>
               </div>

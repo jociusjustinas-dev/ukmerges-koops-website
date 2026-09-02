@@ -286,6 +286,11 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .story-reservation p, .story-reservation a { font-size: 15px; line-height: 1.4; }
 .story-reservation p { color: var(--color-morning-mist); }
 .story-reservation a { color: var(--color-honey-pollen); text-decoration: underline; text-underline-offset: 3px; }
+.story-copy .story-contact-list { width: 100%; display: grid; grid-template-columns: 1fr; gap: 14px; }
+.story-copy .story-contact-list > div { display: grid; gap: 3px; padding-top: 0; border-top: 0; }
+.story-contact-list dt { color: var(--color-morning-mist); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.story-contact-list dd { margin: 0; font-size: 16px; line-height: 1.4; }
+.story-contact-list a { font-size: inherit; }
 .story-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-top: 8px; }
 
 @media (min-width: 992px) {
