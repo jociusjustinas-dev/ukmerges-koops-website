@@ -713,11 +713,10 @@ export default function Home() {
                 <div className="story-reservation">
                   <strong>Rezervuokite jau dabar</strong>
                   <p>Užpildykite užklausos formą ar kreipkitės telefonu.</p>
-                  <a href="mailto:restoranas@urvk.lt">restoranas@urvk.lt</a>
                 </div>
                 <div className="story-actions">
-                  <a className="pill-button accent" href="/restoranas">
-                    <RollingLabel>Apie restoraną</RollingLabel>
+                  <a className="pill-button accent" href="/restoranas#uzklausa">
+                    <RollingLabel>Siųsti užklausą</RollingLabel>
                   </a>
                   <a className="pill-button outline-light" href="tel:+37061872548" aria-label="Skambinti restoranui telefonu +370 618 72548">
                     <RollingLabel>Skambinti +370 618 72548</RollingLabel>
