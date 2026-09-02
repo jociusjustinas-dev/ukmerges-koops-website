@@ -8,13 +8,13 @@ import { AvenirButtonArrow, ByqChevron } from "./byq-icons";
 
 const stores = [
   {
-    name: "Papartis",
-    address: "Vasario 16-osios g. 30, Ukmergė",
-    hours: "I–VI 7:00–20:00 · VII 7:00–16:00",
-    phone: "0 340 53562",
-    phoneHref: "+37034053562",
+    name: "Pušelė",
+    address: "Pašilės g. 8A, Pašilė",
+    hours: "I–V 7:00–20:00 · VI–VII 8:00–20:00",
+    phone: "0 340 66373",
+    phoneHref: "+37034066373",
     image: "/store-papartis.jpeg",
-    map: "https://maps.app.goo.gl/igZB8hHG6RGBJqfZ8",
+    map: "https://www.google.com/maps/search/?api=1&query=Pašilės+g.+8A,+Pašilė",
   },
   {
     name: "Šermukšnėlė",
@@ -559,7 +559,7 @@ export default function Home() {
                   <span>arčiau</span>
                   <span>jūsų.</span>
                 </h1>
-                <p className="body-large">Raskite artimiausią parduotuvę, jos darbo laiką ir maršrutą.</p>
+                <p className="body-large">Raskite artimiausią parduotuvę.</p>
                 <a className="pill-button accent" href="#parduotuves" aria-label="Rasti artimiausią parduotuvę">
                   <RollingLabel>Rasti parduotuvę</RollingLabel>
                 </a>
@@ -695,7 +695,7 @@ export default function Home() {
           <div className="tt-container">
             <div className="story-headline">
               <p className="section-label light-label">RESTORANAS „VILKMERGĖ“ · NUO 1965 METŲ</p>
-              <h2 id="restorano-antraste"><span className="story-title-desktop">Vieta jūsų šventėms, renginiams ir jaukiems susitikimams.</span><span className="story-title-mobile"><span>Vieta jūsų šventėms</span><span>renginiams ir jaukiems</span><span>susitikimams.</span></span></h2>
+              <h2 id="restorano-antraste"><span className="story-title-desktop">Restoranas „Vilkmergė“ – vieta, kur gyvena atsiminimai.</span><span className="story-title-mobile"><span>Restoranas „Vilkmergė“ –</span><span>vieta, kur gyvena</span><span>atsiminimai.</span></span></h2>
             </div>
             <div className="story-grid">
               <div className="story-image" role="region" aria-roledescription="karuselė" aria-label="Restorano „Vilkmergė“ nuotraukų galerija">
@@ -737,14 +737,26 @@ export default function Home() {
                 <p className="sr-only" aria-live="polite">Nuotrauka {restaurantSlide + 1} iš {restaurantSlides.length}</p>
               </div>
               <div className="story-copy">
-                <p>Pačiame Ukmergės centre įsikūręs restoranas tinka jubiliejams, vestuvėms, krikštynoms, oficialiems renginiams ir vakarienėms.</p>
-                <dl><div><dt>Pokylių salės</dt><dd>3 salės</dd></div><div><dt>Talpa</dt><dd>Iki 154 svečių</dd></div></dl>
+                <p>Miesto širdyje įsikūręs restoranas laukia Jūsų.</p>
+                <p className="story-summary">Restorane galime priimti iki 154 svečių. Siūlome 3 skirtingo dydžio sales: Didžiąją, barą ir mažąją.</p>
+                <dl>
+                  <div><dt>Pokylių salės</dt><dd>3 salės</dd></div>
+                  <div><dt>Talpa</dt><dd>Iki 154 svečių</dd></div>
+                  <div><dt>Adresas</dt><dd>Kauno g. 7, Ukmergė</dd></div>
+                  <div><dt>Mažoji salė</dt><dd>Iki 8 svečių</dd></div>
+                </dl>
+                <p className="story-note">Visas erdves suderinsime pagal renginį.</p>
+                <div className="story-reservation">
+                  <strong>Rezervuokite jau dabar</strong>
+                  <p>Užpildykite užklausos formą ar kreipkitės telefonu.</p>
+                  <a href="mailto:restoranas@urvk.lt">restoranas@urvk.lt</a>
+                </div>
                 <div className="story-actions">
                   <a className="pill-button accent" href="https://ukmergeskoops.lt/restoranas-vilkmerge/">
                     <RollingLabel>Apie restoraną</RollingLabel>
                   </a>
-                  <a className="pill-button outline-light" href="tel:+37034053235" aria-label="Skambinti restoranui telefonu 0 340 53235">
-                    <RollingLabel>Skambinti 0 340 53235</RollingLabel>
+                  <a className="pill-button outline-light" href="tel:+37061872548" aria-label="Skambinti restoranui telefonu +370 618 72548">
+                    <RollingLabel>Skambinti +370 618 72548</RollingLabel>
                   </a>
                 </div>
               </div>
