@@ -126,10 +126,11 @@ export default function StrategyPage() {
             <article className="strategy-sitemap-home"><span>01</span><h3>Pradinis puslapis</h3><p>Orientuoja, kas yra KOOPS ir kur eiti toliau.</p></article>
             <article><span>02</span><h3>Parduotuvės</h3><p>Adresai · darbo laikas · maršrutas</p></article>
             <article><span>03</span><h3>Naujienos</h3><p>Akcijos · vietos skoniai · krašto istorijos</p></article>
-            <article><span>04</span><h3>Restoranas</h3><p>Salės · talpa · užklausa · skambutis</p></article>
-            <article><span>05</span><h3>Karjera</h3><p>Darbo pasiūlymai · kandidatavimas</p></article>
-            <article><span>06</span><h3>Tiekėjams</h3><p>Pasiūlymo forma · kontaktas · privatumas</p></article>
-            <article><span>07</span><h3>Apie KOOPS</h3><p>Žmonės · vieta · kooperatyvo istorija</p></article>
+            <article><span>04</span><h3>Skelbimai</h3><p>Patalpų nuoma · turto pasiūlymai · kita informacija</p></article>
+            <article><span>05</span><h3>Restoranas</h3><p>Salės · talpa · užklausa · skambutis</p></article>
+            <article><span>06</span><h3>Karjera</h3><p>Darbo pasiūlymai · kandidatavimas</p></article>
+            <article><span>07</span><h3>Tiekėjams</h3><p>Pasiūlymo forma · kontaktas · privatumas</p></article>
+            <article><span>08</span><h3>Apie KOOPS</h3><p>Žmonės · vieta · kooperatyvo istorija</p></article>
           </div>
         </div>
       </section>

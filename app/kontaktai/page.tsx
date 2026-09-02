@@ -68,23 +68,26 @@ export default function ContactsPage() {
                   </p>
                 </div>
                 <div>
-                  <strong>Telefonas</strong>
+                  <strong>Įmonės vadovas</strong>
                   <p>
                     <a href={contactsOrg.phoneHref}>{contactsOrg.phoneDisplay}</a>
                   </p>
                 </div>
                 <div>
+                  <strong>Administracija</strong>
+                  <p>
+                    <a href={contactsOrg.administrationPhoneHref}>{contactsOrg.administrationPhoneDisplay}</a>
+                  </p>
+                </div>
+                <div>
+                  <strong>Darbo laikas</strong>
+                  <p>{contactsOrg.officeHours}</p>
+                </div>
+                <div>
                   <strong>Socialiniai</strong>
                   <p className="contacts-social-links">
                     {socialLinks.map((item) => (
-                      <a
-                        key={item.href}
-                        href={item.href}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {item.label}
-                      </a>
+                      <a key={item.href} href={item.href} target="_blank" rel="noreferrer">{item.label}</a>
                     ))}
                   </p>
                 </div>

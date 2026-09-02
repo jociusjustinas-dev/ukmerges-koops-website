@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import gsap from "gsap";
-import { contactsOrg } from "../lib/contacts";
 import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
 
 /** H1 su brūkšnio intro animacija — kaip kituose puslapiuose */
@@ -74,7 +73,7 @@ export function ContactsHeading() {
         </span>
       </h1>
       <p className="contacts-heading-lead">
-        Adresas, telefonas ar trumpa žinutė — be spėliojimo. {contactsOrg.note}
+        Adresas, telefonas ar trumpa žinutė — be spėliojimo.
       </p>
     </div>
   );

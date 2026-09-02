@@ -1,16 +1,16 @@
-/** Demonstraciniai restorano duomenys — patvirtinti prieš WordPress. */
-
 export const restaurant = {
   name: "Vilkmergė",
   since: 1965,
   tagline: "Vieta jūsų šventėms, renginiams ir jaukiems susitikimams.",
   lead:
     "Pačiame Ukmergės centre įsikūręs restoranas tinka jubiliejams, vestuvėms, krikštynoms, oficialiems renginiams ir vakarienėms.",
-  phoneDisplay: "0 340 53235",
-  phoneHref: "tel:+37034053235",
-  email: "vilkmerge@ukmergeskoops.lt",
-  address: "Vytauto g. 69, Ukmergė",
-  mapUrl: "https://maps.google.com/?q=Vilkmerg%C4%97+Ukmerg%C4%97",
+  phoneDisplay: "0 340 52079",
+  phoneHref: "tel:+37034052079",
+  mobileDisplay: "+370 618 72548",
+  mobileHref: "tel:+37061872548",
+  email: "restoranas@urvk.lt",
+  address: "Kauno g. 7, Ukmergė",
+  mapUrl: "https://www.google.com/maps/search/?api=1&query=Kauno+g.+7,+Ukmergė",
   hallsCount: 3,
   maxGuests: 154,
   hours: "Pagal užsakymą ir renginį",

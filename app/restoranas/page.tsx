@@ -122,9 +122,11 @@ export default function RestaurantPage() {
               </p>
               <div className="contact-details">
                 <div>
-                  <strong>Telefonas</strong>
+                  <strong>Telefonai</strong>
                   <p>
                     <a href={restaurant.phoneHref}>{restaurant.phoneDisplay}</a>
+                    <br />
+                    <a href={restaurant.mobileHref}>{restaurant.mobileDisplay}</a>
                   </p>
                 </div>
                 <div>

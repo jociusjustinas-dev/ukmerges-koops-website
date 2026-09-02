@@ -8,6 +8,7 @@ export const socialLinks = [
 export const primaryNav = [
   { href: "/parduotuves", label: "Parduotuvės" },
   { href: "/naujienos", label: "Naujienos" },
+  { href: "/skelbimai", label: "Skelbimai" },
   { href: "/restoranas", label: "Restoranas" },
   { href: "/karjera", label: "Karjera" },
   { href: "/tiekejams", label: "Tiekėjams" },

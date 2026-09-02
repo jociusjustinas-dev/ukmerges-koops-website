@@ -419,6 +419,7 @@ export default function Home() {
             <nav className="desktop-nav" aria-label="Pagrindinė navigacija">
               <a href="/parduotuves"><span>Parduotuvės</span></a>
               <a href="/naujienos"><span>Naujienos</span></a>
+              <a href="/skelbimai"><span>Skelbimai</span></a>
               <a href="#restoranas"><span>Restoranas</span></a>
               <a href="/karjera"><span>Karjera</span></a>
               <a href="/tiekejams"><span>Tiekėjams</span></a>
@@ -435,6 +436,7 @@ export default function Home() {
               <div className="mobile-nav-links">
                 <a href="/parduotuves">Parduotuvės</a>
                 <a href="/naujienos">Naujienos ir akcijos</a>
+                <a href="/skelbimai">Skelbimai</a>
                 <a href="#restoranas">Restoranas</a>
                 <a href="/karjera">Karjera</a>
                 <a href="/apie">Apie KOOPS</a>
@@ -819,7 +821,7 @@ export default function Home() {
                 </div>
               </div>
               <nav aria-label="Poraštės navigacija">
-                <div><p className="section-label">PAGRINDINIAI</p><a href="/parduotuves">Parduotuvės</a><a href="/naujienos">Naujienos</a><a href="/restoranas">Restoranas</a><a href="/karjera">Karjera</a></div>
+                <div><p className="section-label">PAGRINDINIAI</p><a href="/parduotuves">Parduotuvės</a><a href="/naujienos">Naujienos</a><a href="/skelbimai">Skelbimai</a><a href="/restoranas">Restoranas</a><a href="/karjera">Karjera</a></div>
                 <div><p className="section-label">KOOPERATYVAS</p><a href="/apie">Apie KOOPS</a><a href="/tiekejams">Tiekėjams</a><a href="/kontaktai">Kontaktai</a></div>
                 <div><p className="section-label">KONTAKTAI</p><a href="tel:+37034053235">0 340 53235</a><a href="mailto:direktore@urvk.lt">direktore@urvk.lt</a><a href="https://ukmergeskoops.lt/privatumo-politika/">Privatumo politika</a></div>
               </nav>

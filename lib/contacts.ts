@@ -8,8 +8,11 @@ export const contactsOrg = {
   email: "direktore@urvk.lt",
   phoneDisplay: "0 340 53235",
   phoneHref: "tel:+37034053235",
+  administrationPhoneDisplay: "0 340 51049",
+  administrationPhoneHref: "tel:+37034051049",
+  officeHours: "I–IV 8:00–16:45 · V 8:00–15:30 · VI–VII nedirbame",
   privacyUrl: "https://ukmergeskoops.lt/privatumo-politika/",
-  note: "Demonstraciniai kontaktai. Galutinius telefonus ir el. paštus patvirtinsime prieš WordPress.",
+  note: "",
 };
 
 export const contactChannels = [

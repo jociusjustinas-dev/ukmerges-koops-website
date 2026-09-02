@@ -221,10 +221,10 @@ export function RestaurantHero() {
                 </a>
                 <a
                   className="pill-button outline-light"
-                  href={restaurant.phoneHref}
-                  aria-label={`Skambinti restoranui telefonu ${restaurant.phoneDisplay}`}
+                  href={restaurant.mobileHref}
+                  aria-label={`Skambinti restoranui telefonu ${restaurant.mobileDisplay}`}
                 >
-                  <RollingLabel>Skambinti {restaurant.phoneDisplay}</RollingLabel>
+                  <RollingLabel>Skambinti {restaurant.mobileDisplay}</RollingLabel>
                 </a>
               </div>
             </div>

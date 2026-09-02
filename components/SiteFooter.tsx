@@ -142,6 +142,7 @@ export function SiteFooter({
                 <p className="section-label">PAGRINDINIAI</p>
                 <a href="/parduotuves">Parduotuvės</a>
                 <a href="/naujienos">Naujienos</a>
+                <a href="/skelbimai">Skelbimai</a>
                 <a href="/restoranas">Restoranas</a>
                 <a href="/karjera">Karjera</a>
               </div>
