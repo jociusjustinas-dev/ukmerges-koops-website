@@ -123,7 +123,7 @@ export function KoopsValueFeaturesSection() {
         </div>
         <div className="about-intro">
           <p>Ukmergės rajono vartotojų kooperatyvas savo istoriją skaičiuoja nuo 1996 metų, kai buvo reorganizuota Ukmergės rajkoopsąjunga. Bendrovė vykdo mažmeninę prekybą, nuomoja nekilnojamąjį turtą ir teikia depozito surinkimo, Perlo, Olifejos, pinigų išgryninimo bei kitas paslaugas.</p>
-          <p>Pagrindinė veikla – mažmeninė prekyba 35 KOOPS tinklo parduotuvėse ir restorane „Vilkmergė“. Ukmergės RVK taip pat yra UAB „Ukmergės duona“ savininkas. Tinklas veikia Ukmergės mieste ir rajone, o jo stiprybės – ilgaamžiškumas, istorinė vertė, atnaujintos parduotuvės ir patogi lokacija.</p>
+          <p>Pagrindinė veikla – mažmeninė prekyba 34 KOOPS tinklo parduotuvėse ir restorane „Vilkmergė“. Ukmergės RVK taip pat yra UAB „Ukmergės duona“ savininkas. Tinklas veikia Ukmergės mieste ir rajone, o jo stiprybės – ilgaamžiškumas, istorinė vertė, atnaujintos parduotuvės ir patogi lokacija.</p>
           <p>Šūkis „Kartu mes jėga“ reiškia dėmesį patenkintam pirkėjui, atsakingam darbuotojui ir bendrystei. Remiame bendruomenių šventes, prisidedame prie darželių ir mokyklų maitinimo ekologiškais produktais bei rūpinamės darbuotojų poilsiu.</p>
           <p>Pirkėjams siūlome akcijas, nuolaidas, žaidimus ir prekes, kurių nėra didžiuosiuose tinkluose. UAB „Ukmergės duona“ nuolat atnaujina asortimentą, o mūsų konditerių kepti baravykai jau tapo vietos skonių vizitine kortele.</p>
           <p className="about-intro-closing">Visi mes esame viena didelė šeima, o Ukmergės KOOPS tinklas – mūsų namai.</p>
