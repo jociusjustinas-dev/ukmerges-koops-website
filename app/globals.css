@@ -2601,7 +2601,7 @@ html.store-drawer-open { overflow: hidden; }
 .restaurant-enquiry-intro > p {
   margin: 0;
   max-width: 40ch;
-  color: var(--color-moss-veil);
+  color: rgba(21, 25, 13, .72);
   font-size: 16px;
   line-height: 1.5;
 }
@@ -2719,8 +2719,7 @@ html.store-drawer-open { overflow: hidden; }
   box-shadow: 0 0 0 4px rgba(174, 220, 185, .7);
 }
 .koops-date-placeholder {
-  color: var(--color-moss-veil);
-  opacity: .78;
+  color: rgba(21, 25, 13, .72);
 }
 .koops-date-value {
   color: var(--color-midnight-moss);
@@ -2880,8 +2879,7 @@ html.store-drawer-open { overflow: hidden; }
   box-shadow: 0 0 0 4px rgba(174, 220, 185, .7);
 }
 .koops-select-placeholder {
-  color: var(--color-moss-veil);
-  opacity: .78;
+  color: rgba(21, 25, 13, .72);
 }
 .koops-select-value {
   color: var(--color-midnight-moss);

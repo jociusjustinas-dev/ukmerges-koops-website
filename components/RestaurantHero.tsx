@@ -179,7 +179,6 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
                 <a
                   className="pill-button outline-light"
                   href={restaurant.mobileHref}
-                  aria-label={`Skambinti restoranui telefonu ${restaurant.mobileDisplay}`}
                 >
                   <RollingLabel>Skambinti {restaurant.mobileDisplay}</RollingLabel>
                 </a>
