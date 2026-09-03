@@ -1641,8 +1641,10 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   border: 1px solid rgba(255,255,255,.1);
 }
 .stores-finder-map { width: 100%; height: 100%; background: #f2efe9; }
-.stores-finder-map .mapboxgl-canvas,
-.stores-finder-map .mapboxgl-control-container { z-index: 1; }
+.stores-finder-map .mapboxgl-canvas { z-index: 0; }
+.stores-finder-map .mapboxgl-marker { z-index: 2; }
+.stores-finder-map .mapboxgl-marker.is-active { z-index: 3; }
+.stores-finder-map .mapboxgl-control-container { z-index: 4; }
 .stores-finder-map .mapboxgl-ctrl-top-right .mapboxgl-ctrl { margin: 16px; }
 .stores-finder-map .mapboxgl-ctrl-group {
   display: grid;
