@@ -978,39 +978,30 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   font-size: 16px;
 }
 
-.classifieds-hero {
+.classifieds-directory {
   position: relative;
   overflow: hidden;
-  padding: 180px 0 112px;
+  min-height: 76vh;
+  padding: 160px 0 120px;
   color: white;
   background: var(--color-midnight-moss);
 }
-.classifieds-orbit { width: 620px; height: 620px; right: -250px; top: -390px; opacity: .52; }
-.classifieds-hero-inner { position: relative; z-index: 1; display: grid; gap: 28px; }
-.classifieds-hero h1 { max-width: 10ch; font-size: clamp(72px, 9vw, 136px); font-weight: 400; line-height: .9; letter-spacing: -.05em; }
-.classifieds-hero-inner > p:last-child { max-width: 52ch; color: rgba(255,255,255,.76); font-size: 20px; line-height: 1.45; }
-.classifieds-archive { padding-block: 112px; background: white; }
-.classifieds-section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: 48px; }
-.classifieds-section-head > div { display: grid; gap: 20px; }
-.classifieds-section-head h2 { font-size: clamp(42px, 5vw, 72px); font-weight: 400; line-height: .94; letter-spacing: -.04em; }
-.classifieds-section-head > p { color: var(--color-moss-veil); }
+.classifieds-directory-inner { display: grid; gap: 24px; }
+.classifieds-directory h1 { max-width: 10ch; font-size: clamp(72px, 9vw, 136px); font-weight: 400; line-height: .9; letter-spacing: -.05em; }
+.classifieds-directory-lead { max-width: 52ch; color: rgba(255,255,255,.76); font-size: 20px; line-height: 1.45; }
+.classifieds-listing { margin-top: 48px; }
 .classifieds-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
-.classified-card { min-height: 420px; display: flex; flex-direction: column; justify-content: space-between; gap: 32px; padding: 32px; border-radius: var(--radius-card); background: var(--color-bone-canvas); }
-.classified-card-top { display: flex; justify-content: space-between; gap: 12px; color: var(--color-moss-veil); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.classified-card { min-height: 420px; display: flex; flex-direction: column; justify-content: space-between; gap: 32px; padding: 32px; border: 1px solid rgba(255,255,255,.14); border-radius: var(--radius-card); background: rgba(255,255,255,.06); }
+.classified-card-top { display: flex; justify-content: space-between; gap: 12px; color: rgba(255,255,255,.62); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
 .classified-card h2 { font-size: 32px; font-weight: 400; line-height: 1; letter-spacing: -.03em; }
-.classified-card p { margin-top: 16px; color: var(--color-moss-veil); line-height: 1.45; }
+.classified-card p { margin-top: 16px; color: rgba(255,255,255,.72); line-height: 1.45; }
 .classified-card dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.classified-card dl > div { padding-top: 14px; border-top: 1px solid var(--color-moss-edge); }
-.classified-card dt { color: var(--color-moss-veil); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+.classified-card dl > div { padding-top: 14px; border-top: 1px solid rgba(255,255,255,.14); }
+.classified-card dt { color: rgba(255,255,255,.56); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
 .classified-card dd { margin-top: 4px; }
-.classifieds-empty { min-height: 420px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 22px; padding: clamp(32px, 5vw, 72px); border-radius: var(--radius-card); background: var(--color-honey-pollen); }
+.classifieds-empty { min-height: 320px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 22px; padding: clamp(32px, 5vw, 64px); border: 1px solid rgba(255,255,255,.14); border-radius: var(--radius-card); background: rgba(255,255,255,.06); }
 .classifieds-empty h2 { max-width: 14ch; font-size: clamp(40px, 5vw, 72px); font-weight: 400; line-height: .94; letter-spacing: -.04em; }
-.classifieds-empty > p:not(.section-label) { max-width: 52ch; font-size: 18px; line-height: 1.45; }
-.classifieds-info-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 24px; }
-.classifieds-info-grid article { min-height: 220px; display: flex; flex-direction: column; gap: 16px; padding: 28px; border: 1px solid var(--color-moss-edge); border-radius: var(--radius-card); }
-.classifieds-info-grid span { color: var(--color-moss-veil); font-size: 12px; font-weight: 600; }
-.classifieds-info-grid h3 { margin-top: auto; font-size: 26px; line-height: 1; letter-spacing: -.03em; }
-.classifieds-info-grid p { color: var(--color-moss-veil); line-height: 1.4; }
+.classifieds-empty > p { max-width: 52ch; color: rgba(255,255,255,.72); font-size: 18px; line-height: 1.45; }
 .news-list-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2112,18 +2103,14 @@ html.store-drawer-open { overflow: hidden; }
     min-width: 0;
     max-width: 100%;
   }
-  .classifieds-hero { padding: 126px 0 72px; }
-  .classifieds-orbit { width: 380px; height: 380px; right: -220px; top: -240px; }
-  .classifieds-hero-inner { gap: 20px; }
-  .classifieds-hero h1 { font-size: 64px; }
-  .classifieds-hero-inner > p:last-child { font-size: 17px; }
-  .classifieds-archive { padding-block: 72px; }
-  .classifieds-section-head { align-items: flex-start; flex-direction: column; gap: 12px; margin-bottom: 32px; }
-  .classifieds-section-head h2 { font-size: 40px; }
-  .classifieds-grid, .classifieds-info-grid { grid-template-columns: 1fr; }
-  .classifieds-empty { min-height: 340px; padding: 28px 24px; }
+  .classifieds-directory { padding: 126px 0 72px; }
+  .classifieds-directory-inner { gap: 20px; }
+  .classifieds-directory h1 { font-size: 64px; }
+  .classifieds-directory-lead { font-size: 17px; }
+  .classifieds-listing { margin-top: 28px; }
+  .classifieds-grid { grid-template-columns: 1fr; }
+  .classifieds-empty { min-height: 300px; padding: 28px 24px; }
   .classifieds-empty h2 { font-size: 40px; }
-  .classifieds-info-grid article { min-height: 190px; }
   .news-detail-page .news-article-hero { padding-top: 110px; padding-bottom: 28px; }
   .news-article-hero-copy h1 { max-width: none; font-size: 36px; line-height: 1.08; }
   .news-article-lead { font-size: 17px; }
