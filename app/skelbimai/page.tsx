@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ClassifiedsPageMotion } from "../../components/ClassifiedsPageMotion";
 import { RollingLabel } from "../../components/RollingLabel";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
@@ -13,6 +14,7 @@ export default function ClassifiedsPage() {
   return (
     <div className="site-shell classifieds-page" id="pradzia">
       <a className="skip-link" href="#turinys">Pereiti prie turinio</a>
+      <ClassifiedsPageMotion />
       <SiteHeader />
 
       <main id="turinys">

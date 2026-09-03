@@ -2928,6 +2928,15 @@ html.store-drawer-open { overflow: hidden; }
   .stores-directory:not(.is-intro-fallback) .stores-finder {
     opacity: 0;
   }
+
+  .classifieds-directory:not(.is-intro-fallback) .section-label,
+  .classifieds-directory:not(.is-intro-fallback) h1,
+  .classifieds-directory:not(.is-intro-fallback) .classifieds-directory-lead,
+  .classifieds-directory:not(.is-intro-fallback) .classified-card,
+  .classifieds-directory:not(.is-intro-fallback) .classifieds-empty,
+  .classifieds-directory:not(.is-intro-fallback) .classifieds-empty > * {
+    opacity: 0;
+  }
 }
 
 /* Fallback / post-intro: beat stuck GSAP inline opacity/visibility */
@@ -2964,7 +2973,13 @@ html.store-drawer-open { overflow: hidden; }
 .is-intro-fallback > .tt-container > .section-label,
 .is-intro-fallback .location-headline > span,
 .is-intro-fallback .stores-directory-lead,
-.is-intro-fallback .stores-finder {
+.is-intro-fallback .stores-finder,
+.classifieds-directory.is-intro-fallback .section-label,
+.classifieds-directory.is-intro-fallback h1,
+.classifieds-directory.is-intro-fallback .classifieds-directory-lead,
+.classifieds-directory.is-intro-fallback .classified-card,
+.classifieds-directory.is-intro-fallback .classifieds-empty,
+.classifieds-directory.is-intro-fallback .classifieds-empty > * {
   opacity: 1 !important;
   visibility: visible !important;
 }
