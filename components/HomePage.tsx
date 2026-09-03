@@ -769,7 +769,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                 <a
                   className="job-row"
                   href={job.applyUrl}
-                  key={job.title}
+                  key={job.id}
                   aria-label={`${job.title} — kandidatuoti`}
                 >
                   <div className="job-row-copy">
