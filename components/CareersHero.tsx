@@ -19,8 +19,8 @@ const gallery = [
     alt: "KOOPS parduotuvė „Pivonija“",
   },
   {
-    src: "/koops-bento-local-shopping.jpg",
-    alt: "Kasdienis darbas šalia pirkėjų",
+    src: "/local-produce-couple.jpg",
+    alt: "KOOPS komanda ir vietos produkcija",
   },
 ] as const;
 
