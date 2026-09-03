@@ -36,6 +36,7 @@ export type CmsPageSection = {
   primaryLabel?: string;
   primaryUrl?: string;
   imageUrl?: string;
+  overrides?: string[];
 };
 
 export type CmsPage = {

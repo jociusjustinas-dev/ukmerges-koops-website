@@ -17,26 +17,33 @@ function setText(target: Element | null, value?: string) {
 }
 
 function applyContent(root: HTMLElement, section: CmsPageSection) {
-  setText(root.querySelector("[data-cms-field='eyebrow'], .section-label"), section.eyebrow);
-  setText(root.querySelector("[data-cms-field='title'], h1, h2, .location-headline"), section.title);
-  setText(
-    root.querySelector(
-      "[data-cms-field='description'], .body-large, .stores-directory-lead, .classifieds-directory-lead, p:not(.section-label)",
-    ),
-    section.description,
-  );
+  const overrides = new Set(section.overrides || []);
+  if (overrides.has("eyebrow")) {
+    setText(root.querySelector("[data-cms-field='eyebrow'], .section-label"), section.eyebrow);
+  }
+  if (overrides.has("title")) {
+    setText(root.querySelector("[data-cms-field='title'], h1, h2, .location-headline"), section.title);
+  }
+  if (overrides.has("description")) {
+    setText(
+      root.querySelector(
+        "[data-cms-field='description'], .body-large, .stores-directory-lead, .classifieds-directory-lead, p:not(.section-label)",
+      ),
+      section.description,
+    );
+  }
 
   const button = root.querySelector<HTMLAnchorElement>(
     "[data-cms-field='primary-link'], a.pill-button, a.text-link",
   );
-  if (button && section.primaryUrl?.trim()) button.href = section.primaryUrl.trim();
-  if (button && section.primaryLabel?.trim()) {
+  if (button && overrides.has("primaryUrl") && section.primaryUrl?.trim()) button.href = section.primaryUrl.trim();
+  if (button && overrides.has("primaryLabel") && section.primaryLabel?.trim()) {
     const label = button.querySelector<HTMLElement>(".avenir-button-text") || button;
     label.textContent = section.primaryLabel.trim();
   }
 
   const image = root.querySelector<HTMLImageElement>("[data-cms-field='image'], img");
-  if (image && section.imageUrl?.trim()) image.src = section.imageUrl.trim();
+  if (image && overrides.has("imageUrl") && section.imageUrl?.trim()) image.src = section.imageUrl.trim();
 }
 
 export function CmsPageController({ page, sections }: Props) {

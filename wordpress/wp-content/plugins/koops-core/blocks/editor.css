@@ -21,11 +21,12 @@
   text-transform: uppercase;
 }
 .koops-section-preview__meta strong { color: #f8dc83; }
-.koops-section-preview img {
+.koops-section-preview__screenshot {
   width: 100%;
-  max-height: 220px;
+  max-height: 320px;
   margin-bottom: 20px;
   object-fit: cover;
+  object-position: center;
   border-radius: 16px;
 }
 .koops-section-preview h3 {

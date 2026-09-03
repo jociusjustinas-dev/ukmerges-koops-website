@@ -58,6 +58,62 @@ function koops_section_catalog_for_page(string $slug): array
     );
 }
 
+function koops_section_content_defaults(): array
+{
+    return [
+        'home-hero' => ['eyebrow' => 'UKMERGĖJE IR RAJONE', 'title' => 'KOOPS parduotuvės arčiau jūsų.', 'description' => 'Raskite artimiausią parduotuvę, jos darbo laiką ir maršrutą.', 'primaryLabel' => 'Rasti parduotuvę', 'primaryUrl' => '/parduotuves', 'imageUrl' => '/koops-hero-market.jpg'],
+        'home-bento' => ['eyebrow' => 'KOOPS KASDIEN', 'title' => 'Viskas, ko reikia — arčiau jūsų', 'description' => 'Parduotuvės, restoranas, darbo pasiūlymai ir tiekėjų informacija vienoje vietoje.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/koops-hero.jpg'],
+        'home-stores' => ['eyebrow' => 'PARDUOTUVĖS', 'title' => 'Raskite artimiausią KOOPS parduotuvę', 'description' => 'Adresai, darbo laikas ir kelio nuorodos.', 'primaryLabel' => 'Visos parduotuvės', 'primaryUrl' => '/parduotuves', 'imageUrl' => ''],
+        'home-news' => ['eyebrow' => 'AKTUALU', 'title' => 'Naujienos ir akcijos', 'description' => '', 'primaryLabel' => 'Visos naujienos', 'primaryUrl' => '/naujienos', 'imageUrl' => '/local-produce-couple.jpg'],
+        'home-restaurant' => ['eyebrow' => 'RESTORANAS „VILKMERGĖ“ · NUO 1965 METŲ', 'title' => 'Restoranas „Vilkmergė“ – vieta, kur gyvena atsiminimai.', 'description' => 'Miesto širdyje įsikūręs restoranas laukia Jūsų.', 'primaryLabel' => 'Siųsti užklausą', 'primaryUrl' => '/restoranas#uzklausa', 'imageUrl' => '/vilkmerge.jpg'],
+        'home-jobs' => ['eyebrow' => 'KARJERA', 'title' => 'Darbas arti namų', 'description' => 'Prisijunkite prie KOOPS komandos Ukmergėje ir rajone. Susipažinkite su šiuo metu siūlomomis darbo vietomis.', 'primaryLabel' => 'Visi darbo pasiūlymai', 'primaryUrl' => '/karjera', 'imageUrl' => ''],
+        'home-values' => ['eyebrow' => 'APIE KOOPS', 'title' => 'Vietos žmonėms. Vietos verslui.', 'description' => 'Ukmergės rajono vartotojų kooperatyvas savo istoriją skaičiuoja nuo 1996 metų, kai buvo reorganizuota Ukmergės rajkoopsąjunga. Bendrovė vykdo mažmeninę prekybą, nuomoja nekilnojamąjį turtą ir teikia depozito surinkimo, Perlo, Olifejos, pinigų išgryninimo bei kitas paslaugas.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+        'home-suppliers' => ['eyebrow' => 'TIEKĖJAMS', 'title' => 'Auginkime vietos pasiūlą kartu', 'description' => 'Ieškome patikimų gamintojų ir tiekėjų, norinčių pasiūlyti savo produkciją KOOPS pirkėjams.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/ukmerge-fields-2.jpg'],
+        'footer-cta' => ['eyebrow' => 'KOOPS', 'title' => 'Parduotuvė gali būti arčiau, nei manote', 'description' => '', 'primaryLabel' => 'Rasti parduotuvę', 'primaryUrl' => '/parduotuves', 'imageUrl' => ''],
+
+        'stores-directory' => ['eyebrow' => 'PARDUOTUVĖS', 'title' => 'Raskite artimiausią KOOPS parduotuvę', 'description' => '34 parduotuvės Ukmergėje ir rajone.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+        'stores-faq' => ['eyebrow' => 'GREITI ATSAKYMAI', 'title' => 'Kur, kada ir kaip — be spėliojimo.', 'description' => 'Atsakymai apie parduotuvių vietas, darbo laiką, maršrutą ir kontaktus.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+        'news-listing' => ['eyebrow' => 'AKTUALU', 'title' => 'Naujienos ir akcijos', 'description' => 'KOOPS naujienos, akcijos ir Ukmergės krašto aktualijos.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/local-produce-couple.jpg'],
+        'classifieds-listing' => ['eyebrow' => 'KOOPS SKELBIMAI', 'title' => 'Skelbimai', 'description' => 'Nuomojamos patalpos, turto pasiūlymai ir kita aktuali KOOPS informacija vienoje vietoje.', 'primaryLabel' => 'Susisiekti', 'primaryUrl' => '/kontaktai', 'imageUrl' => ''],
+
+        'restaurant-hero' => ['eyebrow' => 'RESTORANAS „VILKMERGĖ“ · NUO 1965 METŲ', 'title' => 'Restoranas „Vilkmergė“ – vieta, kur gyvena atsiminimai.', 'description' => 'Vieta šventėms, renginiams ir susitikimams Ukmergės centre.', 'primaryLabel' => 'Siųsti užklausą', 'primaryUrl' => '#uzklausa', 'imageUrl' => '/vilkmerge.jpg'],
+        'restaurant-features' => ['eyebrow' => 'ERDVĖ RENGINIUI', 'title' => 'Trys salės Ukmergės centre — viskas, ko reikia šventei', 'description' => 'Skirtingiems formatams — nuo jaukios vakarienės iki didesnės šventės ar įmonės vakaro.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+        'restaurant-halls' => ['eyebrow' => 'SALĖS', 'title' => 'Salės ir talpa', 'description' => 'Vestuvės, jubiliejai, įmonių vakarai.', 'primaryLabel' => 'Siųsti užklausą', 'primaryUrl' => '#uzklausa', 'imageUrl' => '/vilkmerge-hall.jpg'],
+        'restaurant-enquiry' => ['eyebrow' => 'KONTAKTAI IR UŽKLAUSA', 'title' => 'Susisiekite arba parašykite', 'description' => 'Skambinkite tiesiogiai arba užpildykite trumpą formą — suderinsime salę, datą ir meniu.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+
+        'careers-hero' => ['eyebrow' => 'KARJERA', 'title' => 'Darbas arti namų Ukmergėje ir rajone', 'description' => 'KOOPS ieško žmonių parduotuvėse, restorane „Vilkmergė“ ir logistikoje. Aiškus skelbimas, vieta ir paprastas kandidatavimo kelias — be spėliojimo.', 'primaryLabel' => 'Laisvos pozicijos', 'primaryUrl' => '#pozicijos', 'imageUrl' => '/local-produce-customer.jpg'],
+        'careers-features' => ['eyebrow' => 'KODĖL KOOPS', 'title' => 'Vietos darbas, aiškus kelias ir komanda šalia', 'description' => 'Darbas Ukmergėje ir rajone — be ilgos kelionės į didesnį miestą.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+        'careers-jobs' => ['eyebrow' => 'LAISVOS POZICIJOS', 'title' => 'Darbas arti namų', 'description' => 'Pasirinkite skelbimą — kandidatuosite išorinėje nuorodoje. Nerandate tinkamos pozicijos? Parašykite forma apačioje.', 'primaryLabel' => 'Neradau pozicijos', 'primaryUrl' => '#susisiekti', 'imageUrl' => ''],
+        'careers-enquiry' => ['eyebrow' => 'NERADOTE POZICIJOS?', 'title' => 'Parašykite mums', 'description' => 'Jei sąraše nėra jums tinkamo skelbimo — palikite kontaktus ir trumpą žinutę. Galite prisegti CV. Arba paskambinkite.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+
+        'suppliers-hero' => ['eyebrow' => 'TIEKĖJAMS', 'title' => 'Auginkime vietos pasiūlą kartu', 'description' => 'Ieškome patikimų gamintojų ir tiekėjų. Aišku, ką pateikti, kam rašyti ir kas vyks po užklausos — be spėliojimo.', 'primaryLabel' => 'Siųsti pasiūlymą', 'primaryUrl' => '#forma', 'imageUrl' => '/ukmerge-fields-3.jpg'],
+        'suppliers-looking' => ['eyebrow' => 'KO IEŠKOME', 'title' => 'Produkcija, kuri tinka KOOPS lentynoms', 'description' => 'Sezoninė produkcija iš Ukmergės krašto ir aplinkinių ūkių.', 'primaryLabel' => 'Siųsti pasiūlymą', 'primaryUrl' => '#forma', 'imageUrl' => '/ukmerge-fields-4.jpg'],
+        'suppliers-process' => ['eyebrow' => 'KAIP VEIKIA', 'title' => 'Trys žingsniai iki kontakto', 'description' => 'Aiškus kelias: ką pateikti, ką darome mes ir kas vyks po užklausos — be spėliojimo.', 'primaryLabel' => 'Siųsti pasiūlymą', 'primaryUrl' => '#forma', 'imageUrl' => ''],
+        'suppliers-enquiry' => ['eyebrow' => 'PASIŪLYMO FORMA', 'title' => 'Pasiūlykite savo produkciją', 'description' => 'Užpildykite trumpą formą — paruošime laišką.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/ukmerge-fields-2.jpg'],
+
+        'about-hero' => ['eyebrow' => 'APIE KOOPS', 'title' => 'Vietos žmonėms. Vietos verslui.', 'description' => 'Ukmergės rajono vartotojų kooperatyvas — parduotuvės, restoranas ir partnerystė su vietos žmonėmis kasdien.', 'primaryLabel' => 'Rasti parduotuvę', 'primaryUrl' => '/parduotuves', 'imageUrl' => '/koops-bento-local-shopping.jpg'],
+        'about-story' => ['eyebrow' => 'ŽMONĖS · VIETA · ISTORIJA', 'title' => 'Kooperatyvas, augęs kartu su Ukmergės kraštu', 'description' => 'KOOPS jungia parduotuves, restoraną „Vilkmergė“ ir vietos partnerius. Dirbame tam, kad kasdienės prekės, darbas ir šventės būtų arčiau namų.', 'primaryLabel' => 'Rasti parduotuvę', 'primaryUrl' => '/parduotuves', 'imageUrl' => '/ukmerge-fields-2.jpg'],
+        'about-pillars' => ['eyebrow' => 'KAS ESAME', 'title' => 'Trys atramos, ant kurių stovi KOOPS', 'description' => 'Pirkėjai, komanda ir vietos gamintojai — kooperatyvas gyvas dėl kasdienių santykių Ukmergėje ir rajone.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+        'about-bento' => ['eyebrow' => 'KOOPS KASDIEN', 'title' => 'Viskas, ko reikia — arčiau jūsų', 'description' => 'Parduotuvės, restoranas, darbo pasiūlymai ir tiekėjų informacija vienoje vietoje.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/koops-hero.jpg'],
+
+        'contact-form' => ['eyebrow' => 'KONTAKTAI', 'title' => 'Susisiekite su KOOPS', 'description' => 'Adresas, telefonas ar trumpa žinutė — be spėliojimo.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/ukmerge-fields-1.jpg'],
+        'contact-channels' => ['eyebrow' => 'KONTAKTŲ KELIAI', 'title' => 'Kur kreiptis', 'description' => 'Pasirinkite temą — greičiau rasite adresą, užklausą ar darbo pasiūlymą.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+    ];
+}
+
+function koops_section_default(string $type): array
+{
+    $empty = [
+        'eyebrow' => '',
+        'title' => '',
+        'description' => '',
+        'primaryLabel' => '',
+        'primaryUrl' => '',
+        'imageUrl' => '',
+    ];
+    return array_merge($empty, koops_section_content_defaults()[$type] ?? []);
+}
+
 function koops_register_section_block(): void
 {
     register_block_type(KOOPS_CORE_PATH . 'blocks', [
@@ -66,6 +122,9 @@ function koops_register_section_block(): void
 
     wp_localize_script('koops-section-editor-script', 'koopsSectionEditor', [
         'catalog' => koops_section_catalog(),
+        'defaults' => koops_section_content_defaults(),
+        'previewBase' => KOOPS_CORE_URL . 'assets/previews/',
+        'previewVersion' => KOOPS_CORE_VERSION,
     ]);
 }
 add_action('init', 'koops_register_section_block', 30);
@@ -104,10 +163,67 @@ function koops_default_page_sections(): array
 function koops_serialize_section_blocks(array $types): string
 {
     return implode("\n\n", array_map(static function (string $type): string {
-        $attrs = wp_json_encode(['sectionType' => $type, 'enabled' => true], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $attrs = wp_json_encode(array_merge(
+            ['sectionType' => $type, 'enabled' => true],
+            koops_section_default($type)
+        ), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         return '<!-- wp:koops/section ' . $attrs . ' /-->';
     }, $types));
 }
+
+function koops_backfill_section_content(): void
+{
+    if (get_option('koops_section_content_seed_version') === '2') {
+        return;
+    }
+
+    $legacy_corrupt_titles = [
+        'home-hero' => 'KOOPSnparduotuvėsnarčiaunjūsų.',
+        'footer-cta' => 'Parduotuvė gali būtinarčiau, nei manote',
+        'stores-directory' => 'RaskitenartimiausiąnKOOPSnparduotuvę',
+        'news-listing' => 'Naujienosnir akcijos',
+        'restaurant-hero' => 'Restoranas „Vilkmergė“ –nvieta, kur gyvena atsiminimai.',
+        'careers-hero' => 'Darbas arti namųnUkmergėje ir rajone',
+        'suppliers-hero' => 'Auginkimenvietos pasiūląnkartu',
+        'about-hero' => 'Vietos žmonėms.nVietos verslui.',
+        'contact-form' => 'Susisiekitensu KOOPS',
+    ];
+
+    foreach (array_keys(koops_default_page_sections()) as $slug) {
+        $page = get_page_by_path($slug, OBJECT, 'page');
+        if (!$page) {
+            continue;
+        }
+        $blocks = parse_blocks($page->post_content);
+        $changed = false;
+        foreach ($blocks as &$block) {
+            if (($block['blockName'] ?? '') !== 'koops/section') {
+                continue;
+            }
+            $type = sanitize_key((string) ($block['attrs']['sectionType'] ?? ''));
+            if (!$type) {
+                continue;
+            }
+            $defaults = koops_section_default($type);
+            foreach ($defaults as $key => $value) {
+                $current = (string) ($block['attrs'][$key] ?? '');
+                $is_legacy_corrupt_title = $key === 'title'
+                    && isset($legacy_corrupt_titles[$type])
+                    && $current === $legacy_corrupt_titles[$type];
+                if ($current === '' || $is_legacy_corrupt_title) {
+                    $block['attrs'][$key] = $value;
+                    $changed = true;
+                }
+            }
+        }
+        unset($block);
+        if ($changed) {
+            wp_update_post(['ID' => $page->ID, 'post_content' => serialize_blocks($blocks)]);
+        }
+    }
+    update_option('koops_section_content_seed_version', '2');
+}
+add_action('admin_init', 'koops_backfill_section_content', 30);
 
 function koops_seed_modular_pages(): void
 {
@@ -167,16 +283,25 @@ function koops_normalize_page_sections(WP_Post $page): array
             continue;
         }
 
+        $defaults = koops_section_default($type);
+        $override_fields = [];
+        foreach (array_keys($defaults) as $field) {
+            if (isset($attrs[$field]) && (string) $attrs[$field] !== '' && (string) $attrs[$field] !== (string) $defaults[$field]) {
+                $override_fields[] = $field;
+            }
+        }
+
         $sections[] = [
             'id' => $type . '-' . ($index + 1),
             'type' => $type,
             'enabled' => !array_key_exists('enabled', $attrs) || (bool) $attrs['enabled'],
-            'eyebrow' => sanitize_text_field((string) ($attrs['eyebrow'] ?? '')),
-            'title' => sanitize_textarea_field((string) ($attrs['title'] ?? '')),
-            'description' => sanitize_textarea_field((string) ($attrs['description'] ?? '')),
-            'primaryLabel' => sanitize_text_field((string) ($attrs['primaryLabel'] ?? '')),
-            'primaryUrl' => esc_url_raw((string) ($attrs['primaryUrl'] ?? '')),
-            'imageUrl' => esc_url_raw((string) ($attrs['imageUrl'] ?? '')),
+            'eyebrow' => sanitize_text_field((string) ($attrs['eyebrow'] ?? $defaults['eyebrow'])),
+            'title' => sanitize_textarea_field((string) ($attrs['title'] ?? $defaults['title'])),
+            'description' => sanitize_textarea_field((string) ($attrs['description'] ?? $defaults['description'])),
+            'primaryLabel' => sanitize_text_field((string) ($attrs['primaryLabel'] ?? $defaults['primaryLabel'])),
+            'primaryUrl' => esc_url_raw((string) ($attrs['primaryUrl'] ?? $defaults['primaryUrl'])),
+            'imageUrl' => esc_url_raw((string) ($attrs['imageUrl'] ?? $defaults['imageUrl'])),
+            'overrides' => $override_fields,
         ];
     }
     return $sections;
@@ -283,6 +408,7 @@ function koops_page_builder_card(array $section, string $index, array $catalog):
 {
     $type = $section['sectionType'] ?? '';
     $label = $catalog[$type]['label'] ?? 'Nauja KOOPS sekcija';
+    $preview = $type ? add_query_arg('ver', KOOPS_CORE_VERSION, KOOPS_CORE_URL . 'assets/previews/' . $type . '.jpg') : '';
     ?>
     <details class="koops-builder-card" data-index="<?php echo esc_attr($index); ?>" open>
         <summary>
@@ -291,6 +417,10 @@ function koops_page_builder_card(array $section, string $index, array $catalog):
             <span class="koops-builder-state"><?php echo !empty($section['enabled']) ? 'Rodoma' : 'Išjungta'; ?></span>
         </summary>
         <div class="koops-builder-card__body">
+            <figure class="koops-builder-preview"<?php echo $preview ? '' : ' hidden'; ?>>
+                <img src="<?php echo esc_url($preview); ?>" alt="<?php echo esc_attr($label . ' peržiūra'); ?>" data-section-preview>
+                <figcaption>Dabartinės sekcijos peržiūra</figcaption>
+            </figure>
             <div class="koops-builder-grid">
                 <label class="koops-builder-field koops-builder-field--wide">
                     <span>Sekcijos tipas</span>
@@ -390,7 +520,7 @@ function koops_page_builder_screen(): void
             <div>
                 <a href="<?php echo esc_url(admin_url('admin.php?page=koops-sections')); ?>">← Visi puslapiai</a>
                 <h1><?php echo esc_html(get_the_title($page)); ?> · sekcijos</h1>
-                <p>Tuščias turinio laukas palieka dabartinį svetainės tekstą. Pakeitimai svetainėje atsinaujina automatiškai.</p>
+                <p>Matote dabartinį sekcijos turinį ir jos peržiūrą. Pakeitimai svetainėje atsinaujina automatiškai.</p>
             </div>
             <button class="button button-primary button-hero" type="submit" form="koops-builder-form">Išsaugoti sekcijas</button>
         </div>
@@ -417,19 +547,23 @@ function koops_page_builder_screen(): void
         <?php koops_page_builder_card(['sectionType' => '', 'enabled' => true], '__INDEX__', $catalog); ?>
     </script>
     <style>
-        .koops-builder{max-width:1180px}.koops-builder-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;margin:24px 0 28px}.koops-builder-heading h1{font-size:36px;line-height:1.08;margin:12px 0}.koops-builder-heading p{color:#646970;margin:0}.koops-builder .button-hero{min-height:44px;padding:0 22px}.koops-builder-card{background:#10180d;color:#fff;border:1px solid #4c5946;border-radius:22px;margin:0 0 14px;overflow:hidden}.koops-builder-card summary{display:flex;align-items:center;gap:14px;padding:20px 22px;cursor:pointer;list-style:none}.koops-builder-card summary::-webkit-details-marker{display:none}.koops-builder-card summary strong{font-size:17px;flex:1}.koops-builder-state{color:#ffe08a;font-size:12px;text-transform:uppercase;letter-spacing:.08em}.koops-builder-card__body{border-top:1px solid #3d4938;padding:22px}.koops-builder-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.koops-builder-field{display:flex;flex-direction:column;gap:7px}.koops-builder-field--wide{grid-column:1/-1}.koops-builder-field>span:first-child,.koops-builder-toggle span{font-weight:600;color:#c5cabf}.koops-builder input[type=text],.koops-builder input[type=url],.koops-builder textarea,.koops-builder select{width:100%;max-width:none;border:1px solid #64705f;border-radius:10px;background:#fff;color:#10180d;padding:9px 12px}.koops-builder-toggle{display:flex;align-items:center;gap:9px}.koops-builder-media{display:flex;gap:8px}.koops-builder-actions{display:flex;gap:8px;align-items:center;margin-top:20px}.koops-builder-actions .button-link-delete{margin-left:auto}.koops-builder-add{display:flex;gap:10px;background:#fff;border:1px solid #c3c4c7;border-radius:16px;padding:18px;margin-top:20px}.koops-builder-add select{max-width:460px}.koops-builder-card.is-dragging{opacity:.4}@media(max-width:782px){.koops-builder-heading{align-items:flex-start;flex-direction:column}.koops-builder-grid{grid-template-columns:1fr}.koops-builder-field--wide{grid-column:auto}.koops-builder-add{flex-direction:column}}
+        .koops-builder{max-width:1180px}.koops-builder-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;margin:24px 0 28px}.koops-builder-heading h1{font-size:36px;line-height:1.08;margin:12px 0}.koops-builder-heading p{color:#646970;margin:0}.koops-builder .button-hero{min-height:44px;padding:0 22px}.koops-builder-card{background:#10180d;color:#fff;border:1px solid #4c5946;border-radius:22px;margin:0 0 14px;overflow:hidden}.koops-builder-card summary{display:flex;align-items:center;gap:14px;padding:20px 22px;cursor:pointer;list-style:none}.koops-builder-card summary::-webkit-details-marker{display:none}.koops-builder-card summary strong{font-size:17px;flex:1}.koops-builder-state{color:#ffe08a;font-size:12px;text-transform:uppercase;letter-spacing:.08em}.koops-builder-card__body{border-top:1px solid #3d4938;padding:22px}.koops-builder-preview{display:grid;grid-template-columns:minmax(220px,360px) 1fr;align-items:end;gap:18px;margin:0 0 24px}.koops-builder-preview[hidden]{display:none}.koops-builder-preview img{display:block;width:100%;max-height:260px;object-fit:cover;object-position:center;border:1px solid #5e6a58;border-radius:16px}.koops-builder-preview figcaption{color:#adb3a8;font-size:12px;letter-spacing:.08em;text-transform:uppercase}.koops-builder-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.koops-builder-field{display:flex;flex-direction:column;gap:7px}.koops-builder-field--wide{grid-column:1/-1}.koops-builder-field>span:first-child,.koops-builder-toggle span{font-weight:600;color:#c5cabf}.koops-builder input[type=text],.koops-builder input[type=url],.koops-builder textarea,.koops-builder select{width:100%;max-width:none;border:1px solid #64705f;border-radius:10px;background:#fff;color:#10180d;padding:9px 12px}.koops-builder-toggle{display:flex;align-items:center;gap:9px}.koops-builder-media{display:flex;gap:8px}.koops-builder-actions{display:flex;gap:8px;align-items:center;margin-top:20px}.koops-builder-actions .button-link-delete{margin-left:auto}.koops-builder-add{display:flex;gap:10px;background:#fff;border:1px solid #c3c4c7;border-radius:16px;padding:18px;margin-top:20px}.koops-builder-add select{max-width:460px}.koops-builder-card.is-dragging{opacity:.4}@media(max-width:782px){.koops-builder-heading{align-items:flex-start;flex-direction:column}.koops-builder-grid{grid-template-columns:1fr}.koops-builder-field--wide{grid-column:auto}.koops-builder-preview{grid-template-columns:1fr}.koops-builder-add{flex-direction:column}}
     </style>
     <script>
     (function($){
         var $list=$('#koops-builder-sections'), template=$('#koops-builder-card-template').html(), next=Date.now();
-        function title($card){var label=$card.find('[data-section-type] option:selected').text();$card.find('[data-card-title]').text(label);}
-        $list.on('change','[data-section-type]',function(){title($(this).closest('.koops-builder-card'));});
+        var defaults=<?php echo wp_json_encode(koops_section_content_defaults(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
+        var previewBase=<?php echo wp_json_encode(KOOPS_CORE_URL . 'assets/previews/', JSON_UNESCAPED_SLASHES); ?>;
+        var previewVersion=<?php echo wp_json_encode(KOOPS_CORE_VERSION); ?>;
+        function fillDefaults($card,type){var values=defaults[type]||{};Object.keys(values).forEach(function(key){$card.find('[name$="['+key+']"]').val(values[key]);});}
+        function title($card,fill){var $select=$card.find('[data-section-type]');var type=$select.val();var label=$select.find('option:selected').text();$card.find('[data-card-title]').text(label);var $preview=$card.find('[data-section-preview]');$preview.attr({src:previewBase+type+'.jpg?ver='+encodeURIComponent(previewVersion),alt:label+' peržiūra'}).closest('figure').prop('hidden',!type);if(fill)fillDefaults($card,type);}
+        $list.on('change','[data-section-type]',function(){title($(this).closest('.koops-builder-card'),true);});
         $list.on('change','input[type=checkbox]',function(){var $card=$(this).closest('.koops-builder-card');$card.find('.koops-builder-state').text(this.checked?'Rodoma':'Išjungta');});
         $list.on('click','[data-remove]',function(){$(this).closest('.koops-builder-card').remove();});
         $list.on('click','[data-move-up]',function(){var $card=$(this).closest('.koops-builder-card');$card.prev().before($card);});
         $list.on('click','[data-move-down]',function(){var $card=$(this).closest('.koops-builder-card');$card.next().after($card);});
         $list.on('click','[data-pick-image]',function(){var $input=$(this).siblings('[data-image-url]');var frame=wp.media({title:'Pasirinkite nuotrauką',multiple:false,library:{type:'image'}});frame.on('select',function(){$input.val(frame.state().get('selection').first().toJSON().url);});frame.open();});
-        $('#koops-builder-add').on('click',function(){var type=$('#koops-builder-new-type').val();if($list.find('[data-section-type]').filter(function(){return this.value===type;}).length){alert('Ši sekcija jau yra puslapyje.');return;}var html=template.replaceAll('__INDEX__','new'+(next++));var $card=$(html);$card.find('[data-section-type]').val(type);title($card);$list.append($card);$card[0].scrollIntoView({behavior:'smooth',block:'center'});});
+        $('#koops-builder-add').on('click',function(){var type=$('#koops-builder-new-type').val();if($list.find('[data-section-type]').filter(function(){return this.value===type;}).length){alert('Ši sekcija jau yra puslapyje.');return;}var html=template.replaceAll('__INDEX__','new'+(next++));var $card=$(html);$card.find('[data-section-type]').val(type);title($card,true);$list.append($card);$card[0].scrollIntoView({behavior:'smooth',block:'center'});});
     })(jQuery);
     </script>
     <?php
