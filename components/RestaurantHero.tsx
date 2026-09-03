@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import gsap from "gsap";
-import { restaurant } from "../lib/restaurant";
+import type { restaurant as restaurantDefaults } from "../lib/restaurant";
 import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
 import { RestaurantGalleryMarquee } from "./RestaurantGalleryMarquee";
 import { RollingLabel } from "./RollingLabel";
@@ -11,7 +11,7 @@ const inlineWords = ["vieta,", "kur"] as const;
 const closingWords = ["gyvena", "atsiminimai."] as const;
 
 /** BYQ: terra-tory-hero-5 + terra-tory-gallery-1 marquee as media */
-export function RestaurantHero() {
+export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDefaults }) {
   const rootRef = React.useRef<HTMLDivElement>(null);
   const mediaRef = React.useRef<HTMLDivElement>(null);
   const [mediaVisible, setMediaVisible] = React.useState(false);

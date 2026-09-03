@@ -5,27 +5,27 @@ import { RollingLabel } from "../../../components/RollingLabel";
 import { SiteFooter } from "../../../components/SiteFooter";
 import { SiteHeader } from "../../../components/SiteHeader";
 import {
-  getNews,
   newsDateLabel,
   newsHref,
-  newsItems,
-  relatedNews,
   type NewsBodyBlock,
 } from "../../../lib/news";
+import { getKoopsCmsData } from "../../../lib/wordpress";
 
-const siteOrigin = "https://ukmerges-koops-koncepcija.jociusj.chatgpt.site";
+const siteOrigin = "https://ukmerges-koops-website.vercel.app";
 
 type NewsPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return newsItems.map((item) => ({ slug: item.slug }));
+export async function generateStaticParams() {
+  const { news } = await getKoopsCmsData();
+  return news.map((item) => ({ slug: item.slug }));
 }
 
 export async function generateMetadata({ params }: NewsPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const item = getNews(slug);
+  const { news } = await getKoopsCmsData();
+  const item = news.find((entry) => entry.slug === slug);
   if (!item) return { title: "Naujiena | KOOPS" };
   return {
     title: `${item.title} | KOOPS`,
@@ -76,10 +76,14 @@ function ArticleBlocks({ blocks }: { blocks: NewsBodyBlock[] }) {
 
 export default async function NewsDetailPage({ params }: NewsPageProps) {
   const { slug } = await params;
-  const item = getNews(slug);
+  const { news } = await getKoopsCmsData();
+  const item = news.find((entry) => entry.slug === slug);
   if (!item) notFound();
 
-  const related = relatedNews(item.slug, 3);
+  const related = [
+    ...news.filter((entry) => entry.slug !== item.slug && entry.category === item.category),
+    ...news.filter((entry) => entry.slug !== item.slug && entry.category !== item.category),
+  ].slice(0, 3);
   const shareUrl = `${siteOrigin}${newsHref(item.slug)}`;
 
   const schema = {

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: KOOPS Core
  * Description: KOOPS turinio tipai, valdymo laukai, bendri duomenys ir formos.
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: KOOPS
  * Text Domain: koops
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('KOOPS_CORE_VERSION', '0.1.0');
+define('KOOPS_CORE_VERSION', '0.2.0');
 define('KOOPS_CORE_PATH', plugin_dir_path(__FILE__));
 
 function koops_register_content_types(): void
@@ -267,6 +267,7 @@ function koops_default_options(): array
         'restaurant_since' => '1965',
         'restaurant_halls' => '3',
         'restaurant_capacity' => '154',
+        'frontend_url' => 'https://ukmerges-koops-website.vercel.app',
     ];
 }
 
@@ -319,13 +320,14 @@ function koops_options_page(): void
     $options = wp_parse_args((array) get_option('koops_options', []), koops_default_options());
     $groups = [
         'Organizacija' => ['legal_name', 'address', 'phone', 'administration_phone', 'email', 'office_hours'],
-        'Nuorodos ir formos' => ['facebook_url', 'instagram_url', 'privacy_url', 'form_recipient'],
+        'Nuorodos ir formos' => ['frontend_url', 'facebook_url', 'instagram_url', 'privacy_url', 'form_recipient'],
         'Restoranas „Vilkmergė“' => ['restaurant_phone', 'restaurant_mobile', 'restaurant_email', 'restaurant_address', 'restaurant_since', 'restaurant_halls', 'restaurant_capacity'],
     ];
     $labels = [
         'legal_name' => 'Juridinis pavadinimas', 'address' => 'Adresas', 'phone' => 'Bendras telefonas',
         'administration_phone' => 'Administracijos telefonas', 'email' => 'Bendras el. paštas',
-        'office_hours' => 'Administracijos darbo laikas', 'facebook_url' => 'Facebook nuoroda',
+        'office_hours' => 'Administracijos darbo laikas', 'frontend_url' => 'Viešos svetainės adresas',
+        'facebook_url' => 'Facebook nuoroda',
         'instagram_url' => 'Instagram nuoroda', 'privacy_url' => 'Privatumo politikos nuoroda',
         'form_recipient' => 'Formų gavėjo el. paštas', 'restaurant_phone' => 'Restorano telefonas',
         'restaurant_mobile' => 'Restorano mobilusis', 'restaurant_email' => 'Restorano el. paštas',
@@ -592,6 +594,144 @@ function koops_handle_form_submission(): void
     koops_redirect_form_status($sent ? 'success' : 'error');
 }
 add_action('template_redirect', 'koops_handle_form_submission');
+
+/**
+ * Viešas turinio sluoksnis Next.js svetainei. WordPress lieka vienintelis
+ * redaguojamų įrašų ir bendrų kontaktinių duomenų šaltinis.
+ */
+function koops_rest_image(int $post_id): string
+{
+    $image = get_the_post_thumbnail_url($post_id, 'full');
+    return $image ? esc_url_raw($image) : '';
+}
+
+function koops_rest_terms(int $post_id, string $taxonomy): array
+{
+    $terms = wp_get_post_terms($post_id, $taxonomy);
+    if (is_wp_error($terms)) {
+        return [];
+    }
+    return array_map(static fn(WP_Term $term): array => [
+        'name' => $term->name,
+        'slug' => $term->slug,
+    ], $terms);
+}
+
+function koops_rest_posts(string $post_type): array
+{
+    $query = new WP_Query([
+        'post_type' => $post_type,
+        'post_status' => 'publish',
+        'posts_per_page' => -1,
+        'orderby' => $post_type === 'post' ? 'date' : ['menu_order' => 'ASC', 'date' => 'DESC'],
+        'order' => 'DESC',
+        'no_found_rows' => true,
+    ]);
+
+    return array_map(static function (WP_Post $post) use ($post_type): array {
+        $base = [
+            'id' => (int) $post->ID,
+            'slug' => $post->post_name,
+            'title' => get_the_title($post),
+            'excerpt' => wp_strip_all_tags(get_the_excerpt($post)),
+            'content' => apply_filters('the_content', $post->post_content),
+            'publishedAt' => get_the_date('Y-m-d', $post),
+            'image' => koops_rest_image((int) $post->ID),
+        ];
+
+        if ($post_type === 'koops_store') {
+            $base['city'] = (string) get_post_meta($post->ID, 'koops_city', true);
+            $base['address'] = (string) get_post_meta($post->ID, 'koops_address', true);
+            $base['hours'] = (string) get_post_meta($post->ID, 'koops_hours', true);
+            $base['phone'] = (string) get_post_meta($post->ID, 'koops_phone', true);
+            $base['extraPhone'] = (string) get_post_meta($post->ID, 'koops_phone_2', true);
+            $base['lat'] = (float) get_post_meta($post->ID, 'koops_lat', true);
+            $base['lng'] = (float) get_post_meta($post->ID, 'koops_lng', true);
+            $base['map'] = (string) get_post_meta($post->ID, 'koops_map_url', true);
+            $base['featured'] = (bool) get_post_meta($post->ID, 'koops_featured', true);
+            $base['areas'] = koops_rest_terms((int) $post->ID, 'koops_store_area');
+        } elseif ($post_type === 'koops_classified') {
+            $base['location'] = (string) get_post_meta($post->ID, 'koops_location', true);
+            $base['area'] = (string) get_post_meta($post->ID, 'koops_area_size', true);
+            $base['price'] = (string) get_post_meta($post->ID, 'koops_price', true);
+            $base['status'] = (string) get_post_meta($post->ID, 'koops_status', true);
+            $base['expiresAt'] = (string) get_post_meta($post->ID, 'koops_expires_at', true);
+            $base['contactPhone'] = (string) get_post_meta($post->ID, 'koops_contact_phone', true);
+            $base['contactEmail'] = (string) get_post_meta($post->ID, 'koops_contact_email', true);
+            $base['categories'] = koops_rest_terms((int) $post->ID, 'koops_classified_category');
+        } elseif ($post_type === 'koops_job') {
+            $base['location'] = (string) get_post_meta($post->ID, 'koops_location', true);
+            $base['employment'] = (string) get_post_meta($post->ID, 'koops_employment', true);
+            $base['department'] = (string) get_post_meta($post->ID, 'koops_department', true);
+            $base['applyUrl'] = (string) get_post_meta($post->ID, 'koops_apply_url', true);
+            $base['deadline'] = (string) get_post_meta($post->ID, 'koops_deadline', true);
+        } elseif ($post_type === 'post') {
+            $categories = get_the_category($post->ID);
+            $base['category'] = $categories ? $categories[0]->name : 'Naujienos';
+        }
+
+        return $base;
+    }, $query->posts);
+}
+
+function koops_rest_site_data(): WP_REST_Response
+{
+    $options = wp_parse_args((array) get_option('koops_options', []), koops_default_options());
+    unset($options['form_recipient']);
+
+    $response = new WP_REST_Response([
+        'version' => KOOPS_CORE_VERSION,
+        'updatedAt' => gmdate('c'),
+        'options' => $options,
+        'stores' => koops_rest_posts('koops_store'),
+        'news' => array_values(array_filter(
+            koops_rest_posts('post'),
+            static fn(array $item): bool => $item['slug'] !== 'hello-world'
+        )),
+        'classifieds' => koops_rest_posts('koops_classified'),
+        'jobs' => koops_rest_posts('koops_job'),
+    ]);
+    $response->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    return $response;
+}
+
+function koops_register_rest_routes(): void
+{
+    register_rest_route('koops/v1', '/site', [
+        'methods' => WP_REST_Server::READABLE,
+        'callback' => 'koops_rest_site_data',
+        'permission_callback' => '__return_true',
+    ]);
+}
+add_action('rest_api_init', 'koops_register_rest_routes');
+
+/**
+ * Viešas WordPress adresas nėra antras frontendas. Jis nukreipia į tą pačią
+ * Next.js svetainę, o administracija ir REST API lieka pasiekiami WordPress'e.
+ */
+function koops_redirect_public_frontend(): void
+{
+    if (is_admin() || wp_doing_ajax() || wp_is_json_request() || defined('XMLRPC_REQUEST')) {
+        return;
+    }
+    if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+        return;
+    }
+
+    $frontend = untrailingslashit(koops_get_option('frontend_url'));
+    if (!$frontend) {
+        return;
+    }
+
+    $path = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '/';
+    if (str_starts_with($path, '/wp-admin') || str_starts_with($path, '/wp-login.php') || str_starts_with($path, '/wp-json')) {
+        return;
+    }
+
+    wp_redirect($frontend . $path, 302, 'KOOPS Headless WordPress');
+    exit;
+}
+add_action('template_redirect', 'koops_redirect_public_frontend', 0);
 
 function koops_redirect_form_status(string $status): void
 {

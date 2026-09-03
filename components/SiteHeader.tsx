@@ -4,9 +4,17 @@ import * as React from "react";
 import { usePathname } from "next/navigation";
 import { primaryNav, socialLinks } from "../lib/site";
 import { RollingLabel } from "./RollingLabel";
+import { useCmsOptions } from "./CmsProvider";
+
+function phoneHref(phone: string) {
+  return `tel:${phone.replace(/[^\d+]/g, "").replace(/^0/, "+370")}`;
+}
 
 export function SiteHeader({ variant = "transparent" }: { variant?: "transparent" | "solid" }) {
   const pathname = usePathname();
+  const cms = useCmsOptions();
+  const phone = cms.phone || "0 340 53235";
+  const email = cms.email || "direktore@urvk.lt";
   const [scrolled, setScrolled] = React.useState(variant === "solid");
 
   React.useEffect(() => {
@@ -78,14 +86,20 @@ export function SiteHeader({ variant = "transparent" }: { variant?: "transparent
             <div className="mobile-nav-footer">
               <p className="section-label">SUSISIEKIME</p>
               <div className="mobile-nav-contact">
-                <a href="tel:+37034053235">0 340 53235</a>
-                <a href="mailto:direktore@urvk.lt">direktore@urvk.lt</a>
+                <a href={phoneHref(phone)}>{phone}</a>
+                <a href={`mailto:${email}`}>{email}</a>
               </div>
               <div className="mobile-nav-socials" aria-label="KOOPS socialiniai tinklai">
                 {socialLinks.map((social) => {
                   const SocialIcon = social.icon;
                   return (
-                    <a href={social.href} key={social.label} target="_blank" rel="noreferrer" aria-label={social.label}>
+                    <a
+                      href={social.label === "Facebook" ? cms.facebook_url || social.href : cms.instagram_url || social.href}
+                      key={social.label}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={social.label}
+                    >
                       <SocialIcon aria-hidden="true" />
                       <span>{social.label}</span>
                     </a>

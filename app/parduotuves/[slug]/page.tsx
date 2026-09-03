@@ -3,19 +3,21 @@ import { notFound } from "next/navigation";
 import { SiteFooter } from "../../../components/SiteFooter";
 import { SiteHeader } from "../../../components/SiteHeader";
 import { RollingLabel } from "../../../components/RollingLabel";
-import { getStore, stores } from "../../../lib/stores";
+import { getKoopsCmsData } from "../../../lib/wordpress";
 
 type StorePageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const { stores } = await getKoopsCmsData();
   return stores.map((store) => ({ slug: store.slug }));
 }
 
 export async function generateMetadata({ params }: StorePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const store = getStore(slug);
+  const { stores } = await getKoopsCmsData();
+  const store = stores.find((item) => item.slug === slug);
   if (!store) return { title: "Parduotuvė | KOOPS" };
   return {
     title: `Parduotuvė „${store.name}“ | KOOPS`,
@@ -25,7 +27,8 @@ export async function generateMetadata({ params }: StorePageProps): Promise<Meta
 
 export default async function StoreDetailPage({ params }: StorePageProps) {
   const { slug } = await params;
-  const store = getStore(slug);
+  const { stores } = await getKoopsCmsData();
+  const store = stores.find((item) => item.slug === slug);
   if (!store) notFound();
 
   const schema = {

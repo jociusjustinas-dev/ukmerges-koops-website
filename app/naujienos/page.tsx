@@ -3,13 +3,15 @@ import { NewsListing } from "../../components/NewsListing";
 import { NewsPageHeading } from "../../components/NewsPageHeading";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
+import { getKoopsCmsData } from "../../lib/wordpress";
 
 export const metadata: Metadata = {
   title: "Naujienos ir akcijos | KOOPS",
   description: "KOOPS naujienos, akcijos ir Ukmergės krašto aktualijos — vietos produkcija, parduotuvės ir restoranas „Vilkmergė“.",
 };
 
-export default function NewsArchivePage() {
+export default async function NewsArchivePage() {
+  const { news } = await getKoopsCmsData();
   return (
     <div className="site-shell news-page" id="pradzia">
       <a className="skip-link" href="#turinys">Pereiti prie turinio</a>
@@ -20,7 +22,7 @@ export default function NewsArchivePage() {
         <section className="tt-news news-page-main" aria-labelledby="news-archive-title" data-byq-component="terra-tory-blog-grid-1">
           <div className="tt-container">
             <NewsPageHeading />
-            <NewsListing />
+            <NewsListing items={news} />
           </div>
         </section>
       </main>

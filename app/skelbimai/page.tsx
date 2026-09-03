@@ -3,14 +3,15 @@ import { ClassifiedsPageMotion } from "../../components/ClassifiedsPageMotion";
 import { RollingLabel } from "../../components/RollingLabel";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
-import { classifieds } from "../../lib/classifieds";
+import { getKoopsCmsData } from "../../lib/wordpress";
 
 export const metadata: Metadata = {
   title: "Skelbimai | KOOPS Ukmergė",
   description: "KOOPS skelbimai: nuomojamos patalpos, turto pasiūlymai ir kita aktuali informacija Ukmergėje bei rajone.",
 };
 
-export default function ClassifiedsPage() {
+export default async function ClassifiedsPage() {
+  const { classifieds } = await getKoopsCmsData();
   return (
     <div className="site-shell classifieds-page" id="pradzia">
       <a className="skip-link" href="#turinys">Pereiti prie turinio</a>

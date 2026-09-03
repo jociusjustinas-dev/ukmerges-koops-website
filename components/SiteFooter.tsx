@@ -3,6 +3,11 @@
 import * as React from "react";
 import { socialLinks } from "../lib/site";
 import { RollingLabel } from "./RollingLabel";
+import { useCmsOptions } from "./CmsProvider";
+
+function phoneHref(phone: string) {
+  return `tel:${phone.replace(/[^\d+]/g, "").replace(/^0/, "+370")}`;
+}
 
 type SiteFooterProps = {
   showCta?: boolean;
@@ -22,6 +27,9 @@ export function SiteFooter({
   ctaTitleMobile = ["Parduotuvė gali", "būti arčiau,", "nei manote"],
 }: SiteFooterProps) {
   const footerRef = React.useRef<HTMLElement>(null);
+  const cms = useCmsOptions();
+  const phone = cms.phone || "0 340 53235";
+  const email = cms.email || "direktore@urvk.lt";
 
   React.useEffect(() => {
     const footer = footerRef.current;
@@ -124,7 +132,7 @@ export function SiteFooter({
                   return (
                     <a
                       className="footer-social-link"
-                      href={social.href}
+                      href={social.label === "Facebook" ? cms.facebook_url || social.href : cms.instagram_url || social.href}
                       key={social.label}
                       target="_blank"
                       rel="noreferrer"
@@ -154,14 +162,14 @@ export function SiteFooter({
               </div>
               <div>
                 <p className="section-label">KONTAKTAI</p>
-                <a href="tel:+37034053235">0 340 53235</a>
-                <a href="mailto:direktore@urvk.lt">direktore@urvk.lt</a>
-                <a href="https://ukmergeskoops.lt/privatumo-politika/">Privatumo politika</a>
+                <a href={phoneHref(phone)}>{phone}</a>
+                <a href={`mailto:${email}`}>{email}</a>
+                <a href={cms.privacy_url || "/privatumo-politika"}>Privatumo politika</a>
               </div>
             </nav>
           </div>
           <div className="footer-bottom">
-            <p>© {new Date().getFullYear()} Ukmergės rajono vartotojų kooperatyvas</p>
+            <p>© {new Date().getFullYear()} {cms.legal_name || "Ukmergės rajono vartotojų kooperatyvas"}</p>
             <a className="footer-back-to-top" href="#pradzia" aria-label="Grįžti į puslapio viršų">
               <span>Į puslapio viršų</span>
               <span className="footer-back-to-top-icon" aria-hidden="true">↑</span>

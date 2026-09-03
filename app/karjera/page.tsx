@@ -5,7 +5,8 @@ import { CareersValueFeatures } from "../../components/sections/CareersValueFeat
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
 import { AvenirButtonArrow } from "../byq-icons";
-import { careersContact, jobs } from "../../lib/jobs";
+import { careersContact } from "../../lib/jobs";
+import { getKoopsCmsData } from "../../lib/wordpress";
 import { RollingLabel } from "../../components/RollingLabel";
 
 export const metadata: Metadata = {
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
     "Darbo pasiūlymai KOOPS: parduotuvės, restoranas „Vilkmergė“ ir logistika. Aiški pozicija, vieta ir paprastas kandidatavimas.",
 };
 
-export default function CareersPage() {
+export default async function CareersPage() {
+  const { jobs } = await getKoopsCmsData();
   const jobSchema = {
     "@context": "https://schema.org",
     "@graph": jobs.map((job) => ({

@@ -3,7 +3,7 @@ import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
 import { StoresFinder } from "../../components/StoresFinder";
 import { StoresPageMotion } from "../../components/StoresPageMotion";
-import { stores } from "../../lib/stores";
+import { getKoopsCmsData } from "../../lib/wordpress";
 
 export const metadata: Metadata = {
   title: "Parduotuvės | KOOPS Ukmergėje ir rajone",
@@ -33,7 +33,8 @@ const faqs = [
   },
 ];
 
-export default function StoresPage() {
+export default async function StoresPage() {
+  const { stores } = await getKoopsCmsData();
   return (
     <div className="site-shell stores-page" id="pradzia">
       <a className="skip-link" href="#turinys">Pereiti prie turinio</a>
@@ -51,7 +52,7 @@ export default function StoresPage() {
               <span>KOOPS</span>
               <span>parduotuvę</span>
             </h1>
-            <p className="stores-directory-lead">34 parduotuvės Ukmergėje ir rajone.</p>
+            <p className="stores-directory-lead">{stores.length} parduotuvės Ukmergėje ir rajone.</p>
             <StoresFinder stores={stores} />
           </div>
         </section>

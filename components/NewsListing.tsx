@@ -4,10 +4,8 @@ import * as React from "react";
 import { useMemo, useState } from "react";
 import gsap from "gsap";
 import {
-  newsCategories,
   newsDateLabel,
   newsHref,
-  newsItems,
   type NewsItem,
 } from "../lib/news";
 import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
@@ -38,13 +36,17 @@ function ListCard({ item }: { item: NewsItem }) {
   );
 }
 
-export function NewsListing() {
+export function NewsListing({ items }: { items: NewsItem[] }) {
   const rootRef = React.useRef<HTMLDivElement>(null);
   const [category, setCategory] = useState<CategoryFilter>("visos");
+  const newsCategories = useMemo(
+    () => Array.from(new Set(items.map((item) => item.category))).sort((a, b) => a.localeCompare(b, "lt")),
+    [items],
+  );
 
   const visible = useMemo(
-    () => (category === "visos" ? newsItems : newsItems.filter((item) => item.category === category)),
-    [category],
+    () => (category === "visos" ? items : items.filter((item) => item.category === category)),
+    [category, items],
   );
 
   React.useLayoutEffect(() => {

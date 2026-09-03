@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { contactsOrg } from "../lib/contacts";
 import { RollingLabel } from "./RollingLabel";
+import { useCmsOptions } from "./CmsProvider";
 
 type ContactField = "vardas" | "el_pastas" | "zinute" | "privatumas";
 type ContactFormErrors = Partial<Record<ContactField, string>>;
@@ -37,6 +37,8 @@ type Props = {
 
 /** BYQ: terra-tory-contact-1 form — bendras kontaktas */
 export function ContactEnquiryForm({ idSuffix = "" }: Props) {
+  const cms = useCmsOptions();
+  const recipient = cms.email || "direktore@urvk.lt";
   const [errors, setErrors] = React.useState<ContactFormErrors>({});
   const [status, setStatus] = React.useState<"idle" | "error" | "ready">("idle");
   const errorSummaryRef = React.useRef<HTMLDivElement>(null);
@@ -71,7 +73,7 @@ export function ContactEnquiryForm({ idSuffix = "" }: Props) {
     const subject = encodeURIComponent(`Kontakto užklausa – ${name}`);
     const body = encodeURIComponent(`Vardas: ${name}\nEl. paštas: ${email}\n\nŽinutė:\n${message}`);
     window.setTimeout(() => {
-      window.location.href = `mailto:${contactsOrg.email}?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
     }, 120);
     setStatus("ready");
   };

@@ -1,16 +1,19 @@
 # KOOPS WordPress versija
 
-Šiame kataloge yra gamybinei svetainei skirtas WordPress sprendimas. Dabartinė
-`site-prototype` koncepcija lieka atskirai kaip dizaino ir elgsenos etalonas.
+Šiame kataloge yra KOOPS headless WordPress turinio valdymo sluoksnis. Viešą
+svetainę, dizainą, šriftus, responsive logiką ir GSAP animacijas renderina
+`site-prototype` Next.js aplikacija Vercel platformoje.
 
 ## Sudėtis
 
-- `wp-content/themes/koops` – pasirinktinė KOOPS tema;
+- `wp-content/themes/koops` – ankstesnė PHP temos kopija; ji nebenaudojama kaip
+  viešo dizaino šaltinis;
 - `wp-content/plugins/koops-core` – turinio tipai, valdymo laukai, bendri
   kontaktai, formos ir pradinių duomenų importas.
 
 Sprendimas sąmoningai nepriklauso nuo „Elementor“ ar mokamų įskiepių. Turinys
-valdomas standartiniame WordPress redaktoriuje ir aiškiuose KOOPS laukeliuose.
+valdomas standartiniame WordPress redaktoriuje ir aiškiuose KOOPS laukeliuose,
+o Next.js jį skaito iš `/wp-json/koops/v1/site`.
 Jei vėliau bus ACF Pro licencija, laukus galima perkelti nekeičiant duomenų
 modelio ar temos šablonų.
 
@@ -18,13 +21,14 @@ modelio ar temos šablonų.
 
 1. Įkelti abu katalogus į svetainės `wp-content`.
 2. Įjungti įskiepį **KOOPS Core**.
-3. Įjungti temą **KOOPS**.
+3. Skiltyje **KOOPS → Bendri duomenys** nurodyti viešos Vercel svetainės adresą.
 4. Administracijoje atverti **KOOPS → Pradinis paruošimas** ir vieną kartą
    paspausti **Sukurti puslapius ir importuoti parduotuves**.
 5. Atverti **Nustatymai → Nuolatinės nuorodos** ir paspausti **Išsaugoti**.
 6. Skiltyje **KOOPS → Bendri duomenys** patikrinti kontaktus, socialines
    nuorodas ir formų gavėjo el. paštą.
-7. Skiltyje **Išvaizda → Meniu** priskirti pagrindinį meniu.
+7. Patikrinti, kad `/wp-json/koops/v1/site` grąžina turinį, o viešas WordPress
+   adresas nukreipia į Next.js svetainę.
 
 Importas yra kartotinis saugiai: esami įrašai atnaujinami pagal unikalų slug,
 o ne dubliuojami.
@@ -50,4 +54,3 @@ o ne dubliuojami.
 - paruošti seno puslapio URL → naujo URL 301 peradresavimus;
 - prijungti GA4 / Search Console ir sutikimų režimą;
 - sukurti atsarginių kopijų ir atnaujinimų tvarką.
-

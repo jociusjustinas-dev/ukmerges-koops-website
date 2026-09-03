@@ -5,8 +5,9 @@ import { RestaurantValueFeatures } from "../../components/sections/RestaurantVal
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
 import {
-  restaurant,
+  restaurant as restaurantDefaults,
 } from "../../lib/restaurant";
+import { getKoopsCmsData } from "../../lib/wordpress";
 
 export const metadata: Metadata = {
   title: "Restoranas „Vilkmergė“ | KOOPS",
@@ -14,7 +15,27 @@ export const metadata: Metadata = {
     "Restoranas „Vilkmergė“ Ukmergėje — 3 salės, iki 154 svečių. Užklausa šventei, renginiui ar vakarienei ir tiesioginis skambutis.",
 };
 
-export default function RestaurantPage() {
+function phoneHref(phone: string) {
+  return `tel:${phone.replace(/[^\d+]/g, "").replace(/^0/, "+370")}`;
+}
+
+export default async function RestaurantPage() {
+  const { options } = await getKoopsCmsData();
+  const restaurant = {
+    ...restaurantDefaults,
+    since: Number(options.restaurant_since) || restaurantDefaults.since,
+    phoneDisplay: options.restaurant_phone || restaurantDefaults.phoneDisplay,
+    phoneHref: phoneHref(options.restaurant_phone || restaurantDefaults.phoneDisplay),
+    mobileDisplay: options.restaurant_mobile || restaurantDefaults.mobileDisplay,
+    mobileHref: phoneHref(options.restaurant_mobile || restaurantDefaults.mobileDisplay),
+    email: options.restaurant_email || restaurantDefaults.email,
+    address: options.restaurant_address || restaurantDefaults.address,
+    mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+      options.restaurant_address || restaurantDefaults.address,
+    )}`,
+    hallsCount: Number(options.restaurant_halls) || restaurantDefaults.hallsCount,
+    maxGuests: Number(options.restaurant_capacity) || restaurantDefaults.maxGuests,
+  };
   const schema = {
     "@context": "https://schema.org",
     "@type": "Restaurant",
@@ -39,9 +60,9 @@ export default function RestaurantPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 
       <main id="turinys">
-        <RestaurantHero />
+        <RestaurantHero restaurant={restaurant} />
 
-        <RestaurantValueFeatures />
+        <RestaurantValueFeatures restaurant={restaurant} />
 
         {/* BYQ: terra-tory-bento-1 — halls as bento */}
         <section
@@ -92,7 +113,7 @@ export default function RestaurantPage() {
               <div className="koops-bento-card koops-bento-card-accent">
                 <p className="section-label">MAŽOJI · BENDRA TALPA</p>
                 <div className="koops-bento-card-content">
-                  <h3>Iki 154</h3>
+                  <h3>Iki {restaurant.maxGuests}</h3>
                   <p>Mažoji salė — iki 8 svečių. Visas erdves suderinsime pagal renginį.</p>
                 </div>
                 <div className="koops-bento-actions">

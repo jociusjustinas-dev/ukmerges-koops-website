@@ -127,22 +127,27 @@ Prieš sakant, kad pataisyta, padaryk screenshot arba inspect realias `getBoundi
 
 ## Failų žemėlapis
 
-- `app/page.tsx` – visas pradinis puslapis, state ir UI logika.
+- `app/page.tsx` – serverinis pradinio puslapio duomenų sluoksnis.
+- `components/HomePage.tsx` – pradinio puslapio UI, state ir animacijų logika.
 - `app/globals.css` – didžioji dizaino sistema ir responsive stiliai.
 - `app/strategija/page.tsx` – klientui skirtas strategijos pristatymo puslapis.
 - `components/SmoothScroll.tsx` – Lenis scroll inicializacija.
 - `components/sections/` – išskirtos bento / feature sekcijos.
 - `public/` – logo ir nuotraukos. Hero nekeisti be aiškaus vartotojo prašymo.
 - `.openai/hosting.json` – Sites projekto identifikatorius. Nekeisti ir nekurti naujo Sites projekto.
-- `wordpress/` – gamybinė WordPress realizacija. Joje yra atskira pasirinktinė
-  tema `wp-content/themes/koops` ir nuo temos nepriklausantis turinio įskiepis
-  `wp-content/plugins/koops-core`.
+- `wordpress/` – headless WordPress turinio valdymo sluoksnis. Įskiepis
+  `wp-content/plugins/koops-core` teikia duomenis Next.js svetainei.
 
 ## WordPress architektūra
 
-- Nenaudoti „Elementor“ ar kito vizualinio puslapių konstruktoriaus. Dizaino
-  sistema ir šablonai priklauso `koops` temai, o verslo duomenys – `koops-core`
-  įskiepiui.
+- Vienintelis viešo frontendo, dizaino, responsive elgsenos ir animacijų
+  šaltinis yra Next.js aplikacija, publikuojama Vercel. Nekurti antros dizaino
+  kopijos PHP temoje.
+- WordPress naudojamas headless režimu tik turiniui valdyti. Viešas WordPress
+  adresas peradresuoja į `frontend_url`, o `/wp-admin/` ir `/wp-json/` lieka
+  pasiekiami.
+- Next.js turinį gauna iš `/wp-json/koops/v1/site`; integracijos ir atsarginiai
+  statiniai duomenys yra `lib/wordpress.ts`.
 - `koops_store`, `koops_classified` ir `koops_job` yra atskiri vieši turinio
   tipai su REST API palaikymu. Naujienoms naudojami standartiniai WordPress
   įrašai.
@@ -158,8 +163,6 @@ Prieš sakant, kad pataisyta, padaryk screenshot arba inspect realias `getBoundi
 - Formos siunčiamos per `wp_mail`; prieš gamybinį paleidimą būtina prijungti
   SMTP, patikrinti pristatymą ir privatumo sutikimą.
 - WordPress paketo diegimo bei paleidimo eiga aprašyta `wordpress/README.md`.
-- Dabartinė Sites koncepcija nėra automatiškai WordPress talpinimas. WordPress
-  diegimui reikės atskiros hostingo aplinkos su PHP, duomenų baze ir WP admin.
 
 ## Turinio būsena ir patvirtinti duomenys
 

@@ -1,9 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { restaurant } from "../../lib/restaurant";
+import type { restaurant as restaurantDefaults } from "../../lib/restaurant";
 
-const features = [
+function getFeatures(restaurant: typeof restaurantDefaults) {
+  return [
   {
     title: "Trys salės",
     body: "Skirtingiems formatams — nuo jaukios vakarienės iki didesnės šventės ar įmonės vakaro.",
@@ -44,12 +45,14 @@ const features = [
       </svg>
     ),
   },
-];
+  ];
+}
 
 /** BYQ: terra-tory value features — split label/heading + 2×2 cards */
-export function RestaurantValueFeatures() {
+export function RestaurantValueFeatures({ restaurant }: { restaurant: typeof restaurantDefaults }) {
   const gridRef = React.useRef<HTMLDivElement>(null);
   const [visible, setVisible] = React.useState(false);
+  const features = React.useMemo(() => getFeatures(restaurant), [restaurant]);
 
   React.useEffect(() => {
     const el = gridRef.current;
