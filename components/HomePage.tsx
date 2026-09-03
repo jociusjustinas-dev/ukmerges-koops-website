@@ -730,10 +730,6 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                       <dt>El. paštas</dt>
                       <dd><a href={`mailto:${restaurant.email}`}>{restaurant.email}</a></dd>
                     </div>
-                    <div>
-                      <dt>Adresas</dt>
-                      <dd><a href={restaurant.mapUrl} target="_blank" rel="noreferrer">{restaurant.address}</a></dd>
-                    </div>
                   </dl>
                 </div>
                 <div className="story-actions">
