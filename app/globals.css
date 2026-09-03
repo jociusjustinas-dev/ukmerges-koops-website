@@ -3364,3 +3364,36 @@ html.store-drawer-open { overflow: hidden; }
 .form-field:has(.career-file-input).has-error .career-file-trigger {
   border-color: #b42318;
 }
+
+/* Headless WordPress: the real page is the Gutenberg editing canvas. */
+html.koops-cms-preview,
+body.koops-cms-preview {
+  scroll-behavior: smooth;
+}
+
+body.koops-cms-preview .koops-cms-editable-section {
+  position: relative;
+  cursor: pointer !important;
+  outline: 0 solid transparent;
+  outline-offset: -4px;
+  transition: outline-color .2s ease, outline-width .2s ease, opacity .2s ease;
+}
+
+body.koops-cms-preview .koops-cms-editable-section:hover,
+body.koops-cms-preview .koops-cms-editable-section.is-cms-selected {
+  z-index: 40;
+  outline: 4px solid var(--color-honey-pollen);
+}
+
+body.koops-cms-preview .koops-cms-editable-section.is-cms-disabled {
+  display: block !important;
+  opacity: .42;
+}
+
+body.koops-cms-preview .koops-cms-editable-section a,
+body.koops-cms-preview .koops-cms-editable-section button,
+body.koops-cms-preview .koops-cms-editable-section input,
+body.koops-cms-preview .koops-cms-editable-section textarea,
+body.koops-cms-preview .koops-cms-editable-section select {
+  pointer-events: none !important;
+}

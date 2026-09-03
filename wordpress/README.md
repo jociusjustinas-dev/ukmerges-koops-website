@@ -40,11 +40,10 @@ o ne dubliuojami.
 
 - **Puslapių sekcijos** – galima perrikiuoti, išjungti, pašalinti, vėl pridėti ir
   keisti mažąją antraštę, antraštę, aprašymą, pagrindinį mygtuką bei nuotrauką.
-  Kiekvienas blokas jau užpildytas dabartiniu svetainės turiniu ir Gutenberg
-  drobėje rodo tikrą tos sekcijos vaizdo miniatiūrą. Paspaudus kortelę, po ja
-  atsiveria redaguojami laukai. Viešame puslapyje taikomi tik nuo numatytųjų
-  reikšmių pakeisti laukai, todėl sudėtingas dizaino žymėjimas ir animacijos
-  lieka nepažeisti.
+  Gutenberg drobėje rodoma tikra Vercel puslapio versija, ne ekrano nuotraukos.
+  Paspaudus bet kurią sekciją, jos laukai atsiveria dešinėje redaktoriaus pusėje.
+  Viešame puslapyje taikomi tik nuo numatytųjų reikšmių pakeisti laukai, todėl
+  sudėtingas dizaino žymėjimas ir animacijos lieka nepažeisti.
 
 - **Parduotuvės** – adresas, vietovė, darbo laikas, telefonai, koordinatės,
   žemėlapio nuoroda, nuotrauka ir rodymas pradiniame puslapyje.

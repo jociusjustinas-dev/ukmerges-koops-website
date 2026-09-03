@@ -120,10 +120,15 @@ function koops_register_section_block(): void
         'render_callback' => static fn(): string => '',
     ]);
 
+    $options = get_option('koops_options', []);
+    $frontend_url = is_array($options) && !empty($options['frontend_url'])
+        ? esc_url_raw((string) $options['frontend_url'])
+        : 'https://ukmerges-koops-website.vercel.app';
+
     wp_localize_script('koops-section-editor-script', 'koopsSectionEditor', [
         'catalog' => koops_section_catalog(),
         'defaults' => koops_section_content_defaults(),
-        'previewBase' => KOOPS_CORE_URL . 'assets/previews/',
+        'frontendUrl' => untrailingslashit($frontend_url),
         'previewVersion' => KOOPS_CORE_VERSION,
     ]);
 }
@@ -340,14 +345,6 @@ function koops_modular_pages_menu(): void
         'koops-sections',
         'koops_modular_pages_screen'
     );
-    add_submenu_page(
-        'koops',
-        'Modulinis redaktorius',
-        'Modulinis redaktorius',
-        'edit_pages',
-        'koops-page-builder',
-        'koops_page_builder_screen'
-    );
 }
 add_action('admin_menu', 'koops_modular_pages_menu', 20);
 
@@ -373,7 +370,7 @@ function koops_modular_pages_screen(): void
                 <tr>
                     <td><strong><?php echo esc_html(get_the_title($page)); ?></strong></td>
                     <td><?php echo esc_html((string) count($sections)); ?></td>
-                    <td style="text-align:right"><a class="button button-primary" href="<?php echo esc_url(admin_url('admin.php?page=koops-page-builder&post=' . $page->ID)); ?>">Redaguoti sekcijas</a></td>
+                    <td style="text-align:right"><a class="button button-primary" href="<?php echo esc_url((string) get_edit_post_link($page->ID, '')); ?>">Redaguoti puslapį</a></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

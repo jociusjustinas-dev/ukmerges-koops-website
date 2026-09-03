@@ -150,9 +150,10 @@ Prieš sakant, kad pataisyta, padaryk screenshot arba inspect realias `getBoundi
   statiniai duomenys yra `lib/wordpress.ts`.
 - Puslapių struktūra valdoma Gutenberg bloku `koops/section`. Administracijoje
   ji pasiekiama per **KOOPS → Puslapių sekcijos**. Bloko seka valdo sekcijų
-  eiliškumą, `enabled` – matomumą. Visi blokai iš anksto užpildyti dabartiniu
-  viešos svetainės turiniu ir Gutenberg drobėje turi tikrą sekcijos vaizdo
-  miniatiūrą. Laukas laikomas turinio pakeitimu tik tada, kai jo reikšmė skiriasi
+  eiliškumą, `enabled` – matomumą. Gutenberg drobėje įterpiamas tikras Vercel
+  puslapis, todėl redaktorius mato realų dizainą, šriftus ir animacijas. Paspaudus
+  sekciją parenkamas atitinkamas Gutenberg blokas, o jo laukai rodomi dešinėje.
+  Laukas laikomas turinio pakeitimu tik tada, kai jo reikšmė skiriasi
   nuo numatytosios; REST atsakyme tokie laukai grąžinami `overrides` masyve.
   Taip numatytasis WordPress turinys matomas redaktoriuje, bet nepažeidžia
   sudėtingo React žymėjimo ir animacijų.
@@ -171,9 +172,8 @@ Prieš sakant, kad pataisyta, padaryk screenshot arba inspect realias `getBoundi
 - Turinys redaguojamas Gutenberg redaktoriuje ir native KOOPS laukeliuose.
   Tema neturi mokamos ACF Pro priklausomybės. Jei ACF Pro bus naudojamas
   vėliau, laukų raktus ir esamą duomenų modelį išlaikyti.
-- Sekcijų miniatiūros saugomos
-  `wp-content/plugins/koops-core/assets/previews/`; kiekvienas registruotas
-  sekcijos tipas privalo turėti tokio paties slug pavadinimo `.jpg` failą.
+- `?koops-editor=1` yra tik administravimo peržiūros būsena: ji apibrėžia
+  paspaudžiamas sekcijų ribas ir ryšį su Gutenberg, bet nekeičia viešo puslapio.
 - Formos siunčiamos per `wp_mail`; prieš gamybinį paleidimą būtina prijungti
   SMTP, patikrinti pristatymą ir privatumo sutikimą.
 - WordPress paketo diegimo bei paleidimo eiga aprašyta `wordpress/README.md`.

@@ -7,7 +7,7 @@
   const { PanelBody, SelectControl, TextControl, TextareaControl, ToggleControl, Button } = components;
   const catalog = (window.koopsSectionEditor && window.koopsSectionEditor.catalog) || {};
   const defaults = (window.koopsSectionEditor && window.koopsSectionEditor.defaults) || {};
-  const previewBase = (window.koopsSectionEditor && window.koopsSectionEditor.previewBase) || '';
+  const frontendUrl = ((window.koopsSectionEditor && window.koopsSectionEditor.frontendUrl) || '').replace(/\/$/, '');
   const previewVersion = (window.koopsSectionEditor && window.koopsSectionEditor.previewVersion) || '';
   const options = [{ label: 'Pasirinkite sekciją', value: '' }].concat(
     Object.entries(catalog).map(([value, item]) => ({ label: item.label, value }))
@@ -18,7 +18,6 @@
     const set = props.setAttributes;
     const selected = catalog[a.sectionType];
     const previewTitle = a.title || (selected ? selected.label : 'Pasirinkite sekciją');
-    const previewUrl = a.sectionType ? previewBase + a.sectionType + '.jpg?ver=' + encodeURIComponent(previewVersion) : '';
     const blockProps = useBlockProps({
       className: 'koops-section-preview' + (a.enabled ? '' : ' is-disabled')
     });
@@ -76,7 +75,6 @@
           el('span', null, selected ? selected.page.toUpperCase() : 'KOOPS'),
           el('strong', null, a.enabled ? 'Rodoma' : 'Išjungta')
         ),
-        previewUrl ? el('img', { className: 'koops-section-preview__screenshot', src: previewUrl, alt: (selected ? selected.label : 'KOOPS sekcija') + ' peržiūra' }) : null,
         el('h3', null, previewTitle),
         a.description ? el('p', null, a.description) : el('p', null, 'Paspauskite bloką — laukai atsidarys dešinėje.')
       )
@@ -162,50 +160,168 @@
     render: KoopsSelectedSectionInspector
   });
 
-  // WordPress 7.1 isolates the canvas in an iframe and server-registered dynamic
-  // blocks may not render their editor component there. Keep the Gutenberg
-  // workspace useful by mounting a visual, clickable view of the same blocks.
-  let visualCanvasTimer = 0;
-  function renderVisualCanvas() {
-    const iframe = document.querySelector('iframe[name="editor-canvas"]');
-    const doc = iframe && iframe.contentDocument;
-    const blockStore = data.select('core/block-editor');
-    if (!doc || !doc.body || !blockStore) return;
+  // Render the real Next.js page inside Gutenberg. The public frontend remains
+  // the only source of layout, fonts and animation; WordPress only selects and
+  // edits the matching section block.
+  let editorTimer = 0;
+  let sidebarSignature = '';
 
-    const sectionBlocks = blockStore.getBlocks().filter((block) => block.name === 'koops/section');
-    if (!sectionBlocks.length) return;
+  function sectionBlocks() {
+    const store = data.select('core/block-editor');
+    return store ? store.getBlocks().filter((block) => block.name === 'koops/section') : [];
+  }
 
-    const nativeCards = doc.querySelectorAll('.koops-section-preview:not(.koops-visual-card)');
-    if (nativeCards.length) {
-      const staleCanvas = doc.getElementById('koops-gutenberg-canvas');
-      if (staleCanvas) staleCanvas.remove();
+  function currentSlug() {
+    const editor = data.select('core/editor');
+    const slug = editor && editor.getEditedPostAttribute ? editor.getEditedPostAttribute('slug') : '';
+    if (slug) return slug;
+    const title = document.querySelector('.editor-post-title__input');
+    return title && title.value ? title.value : 'pradinis';
+  }
+
+  function previewUrl() {
+    const slug = currentSlug();
+    const path = !slug || slug === 'pradinis' ? '/' : '/' + encodeURIComponent(slug);
+    return frontendUrl + path + '?koops-editor=1&ver=' + encodeURIComponent(previewVersion);
+  }
+
+  function liveFrame() {
+    const canvasFrame = document.querySelector('iframe[name="editor-canvas"]');
+    const doc = canvasFrame && canvasFrame.contentDocument;
+    return doc ? doc.getElementById('koops-live-page') : null;
+  }
+
+  function postToPreview(message) {
+    const frame = liveFrame();
+    if (!frame || !frame.contentWindow || !frontendUrl) return;
+    let origin = '*';
+    try { origin = new URL(frontendUrl).origin; } catch (error) { /* use wildcard for a malformed legacy option */ }
+    frame.contentWindow.postMessage(Object.assign({ source: 'koops-gutenberg-editor' }, message), origin);
+  }
+
+  function updateSection(block, changes) {
+    data.dispatch('core/block-editor').updateBlockAttributes(block.clientId, changes);
+    postToPreview({ type: 'update-section', sectionType: block.attributes.sectionType, changes });
+  }
+
+  function ensureSidebarOpen() {
+    const editPost = data.dispatch('core/edit-post');
+    if (editPost && editPost.openGeneralSidebar) editPost.openGeneralSidebar('edit-post/block');
+  }
+
+  function addSidebarField(panel, block, labelText, key, tag, className) {
+    const label = document.createElement('label');
+    label.className = 'koops-live-field' + (className ? ' ' + className : '');
+    const title = document.createElement('span');
+    title.textContent = labelText;
+    const input = document.createElement(tag || 'input');
+    if (tag === 'textarea') input.rows = key === 'description' ? 5 : 3;
+    input.value = block.attributes[key] || '';
+    input.addEventListener('change', () => {
+      const changes = {};
+      changes[key] = input.value;
+      updateSection(block, changes);
+    });
+    label.append(title, input);
+    panel.appendChild(label);
+    return input;
+  }
+
+  function renderSidebar(block) {
+    const inspector = document.querySelector('.block-editor-block-inspector');
+    if (!inspector) return;
+
+    const previous = inspector.querySelector('.koops-live-sidebar');
+    if (!block || block.name !== 'koops/section') {
+      if (previous) previous.remove();
+      sidebarSignature = '';
       return;
     }
 
-    let style = doc.getElementById('koops-gutenberg-canvas-style');
-    if (!style) {
-      style = doc.createElement('style');
-      style.id = 'koops-gutenberg-canvas-style';
+    const signature = JSON.stringify([block.clientId, block.attributes]);
+    if (previous && signature === sidebarSignature) return;
+    if (previous) previous.remove();
+    sidebarSignature = signature;
+
+    if (!document.getElementById('koops-live-editor-style')) {
+      const style = document.createElement('style');
+      style.id = 'koops-live-editor-style';
       style.textContent = [
-        'body{background:#f1f1ef!important;}',
-        '#koops-gutenberg-canvas{box-sizing:border-box;max-width:980px;margin:40px auto;padding:0 24px 80px;display:grid;gap:18px;}',
-        '.koops-visual-card{display:block;overflow:hidden;width:100%;padding:0;text-align:left;color:#f8f7f1;background:#10170b;border:2px solid #56604f;border-radius:24px;box-shadow:0 10px 30px rgba(16,23,11,.08);cursor:pointer;}',
-        '.koops-visual-card:hover,.koops-visual-card.is-selected{border-color:#f8dc83;box-shadow:0 0 0 3px rgba(248,220,131,.22);}',
-        '.koops-visual-card.is-disabled{opacity:.48;}',
-        '.koops-visual-card img{display:block;width:100%;height:280px;object-fit:cover;object-position:center;border:0;}',
-        '.koops-visual-card__copy{display:grid;grid-template-columns:1fr auto;gap:10px 24px;padding:22px 24px 26px;}',
-        '.koops-visual-card__meta{color:#adb3a8;font:600 12px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.08em;text-transform:uppercase;}',
-        '.koops-visual-card__state{color:#f8dc83;text-align:right;}',
-        '.koops-visual-card h3{grid-column:1/-1;margin:18px 0 0;color:#fff;font:400 clamp(30px,5vw,54px)/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}',
-        '.koops-visual-card p{grid-column:1/-1;max-width:680px;margin:4px 0 0;color:#c9cec5;font:400 16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}',
-        '.koops-visual-fields{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:24px;background:#fff;color:#10170b;border-top:1px solid #d7d9d4;cursor:default;}',
-        '.koops-visual-field{display:grid;gap:7px;font:600 13px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}',
-        '.koops-visual-field.is-wide{grid-column:1/-1;}',
-        '.koops-visual-field input,.koops-visual-field textarea,.koops-visual-field select{box-sizing:border-box;width:100%;padding:10px 12px;color:#10170b;background:#fff;border:1px solid #8b9087;border-radius:8px;font:400 15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}',
-        '.koops-visual-toggle{grid-column:1/-1;display:flex;align-items:center;gap:9px;font:600 14px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}',
-        '.koops-visual-toggle input{width:18px;height:18px;}',
-        '.koops-visual-help{grid-column:1/-1;margin:0!important;padding:12px 14px;color:#475044!important;background:#edf3ea;border-radius:10px;font-size:13px!important;}',
-        '@media(max-width:600px){#koops-gutenberg-canvas{padding-inline:14px}.koops-visual-card img{height:220px}.koops-visual-card__copy{padding:18px}.koops-visual-card h3{font-size:30px}.koops-visual-fields{grid-template-columns:1fr;padding:18px}.koops-visual-field.is-wide{grid-column:auto}}'
+        '.koops-live-sidebar{display:grid;gap:16px;padding:20px 16px 28px;border-top:1px solid #ddd;}',
+        '.koops-live-sidebar h2{margin:0;font-size:15px;line-height:1.35;}',
+        '.koops-live-sidebar__toggle{display:flex;align-items:center;gap:9px;font-weight:600;}',
+        '.koops-live-sidebar__toggle input{width:18px;height:18px;margin:0;}',
+        '.koops-live-field{display:grid;gap:7px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.035em;}',
+        '.koops-live-field input,.koops-live-field textarea{box-sizing:border-box;width:100%;padding:9px 10px;border:1px solid #949494;border-radius:4px;background:#fff;color:#1e1e1e;font:400 14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;text-transform:none;letter-spacing:normal;}',
+        '.koops-live-field textarea{resize:vertical;}',
+        '.koops-live-media{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;}',
+        '.koops-live-media .button{height:38px;align-self:end;}',
+        '.koops-live-sidebar__type{margin:0;color:#757575;font-size:12px;text-transform:uppercase;letter-spacing:.06em;}'
+      ].join('');
+      document.head.appendChild(style);
+    }
+
+    const panel = document.createElement('div');
+    panel.className = 'koops-live-sidebar';
+    const heading = document.createElement('h2');
+    heading.textContent = catalog[block.attributes.sectionType]?.label || 'Sekcijos turinys';
+    const type = document.createElement('p');
+    type.className = 'koops-live-sidebar__type';
+    type.textContent = block.attributes.sectionType || '';
+
+    const toggleLabel = document.createElement('label');
+    toggleLabel.className = 'koops-live-sidebar__toggle';
+    const toggle = document.createElement('input');
+    toggle.type = 'checkbox';
+    toggle.checked = block.attributes.enabled !== false;
+    toggle.addEventListener('change', () => updateSection(block, { enabled: toggle.checked }));
+    const toggleText = document.createElement('span');
+    toggleText.textContent = 'Rodyti svetainėje';
+    toggleLabel.append(toggle, toggleText);
+    panel.append(heading, type, toggleLabel);
+
+    addSidebarField(panel, block, 'Mažoji antraštė', 'eyebrow', 'input');
+    addSidebarField(panel, block, 'Antraštė', 'title', 'textarea');
+    addSidebarField(panel, block, 'Aprašymas', 'description', 'textarea');
+    addSidebarField(panel, block, 'Mygtuko tekstas', 'primaryLabel', 'input');
+    addSidebarField(panel, block, 'Mygtuko nuoroda', 'primaryUrl', 'input');
+
+    const media = document.createElement('div');
+    media.className = 'koops-live-media';
+    const imageInput = addSidebarField(media, block, 'Nuotraukos adresas', 'imageUrl', 'input');
+    const mediaButton = document.createElement('button');
+    mediaButton.type = 'button';
+    mediaButton.className = 'button button-secondary';
+    mediaButton.textContent = 'Pasirinkti';
+    mediaButton.addEventListener('click', () => {
+      if (!wp.media) return;
+      const picker = wp.media({ title: 'Pasirinkite sekcijos nuotrauką', multiple: false, library: { type: 'image' } });
+      picker.on('select', () => {
+        const selected = picker.state().get('selection').first().toJSON();
+        imageInput.value = selected.url || '';
+        updateSection(block, { imageId: selected.id || 0, imageUrl: selected.url || '' });
+      });
+      picker.open();
+    });
+    media.appendChild(mediaButton);
+    panel.appendChild(media);
+    inspector.appendChild(panel);
+  }
+
+  function renderLiveCanvas() {
+    if (!frontendUrl) return;
+    const canvasFrame = document.querySelector('iframe[name="editor-canvas"]');
+    const doc = canvasFrame && canvasFrame.contentDocument;
+    if (!doc || !doc.body || !sectionBlocks().length) return;
+
+    if (!doc.getElementById('koops-live-canvas-style')) {
+      const style = doc.createElement('style');
+      style.id = 'koops-live-canvas-style';
+      style.textContent = [
+        'html,body{height:100%;min-height:100%;margin:0!important;padding:0!important;background:#dfe1dc!important;overflow:hidden!important;}',
+        '.block-editor-block-list__layout,.is-root-container{display:none!important;}',
+        '#koops-gutenberg-canvas{position:fixed;inset:0;z-index:9999;background:#dfe1dc;}',
+        '#koops-live-page{display:block;width:100%;height:100%;border:0;background:#fff;}'
       ].join('');
       doc.head.appendChild(style);
     }
@@ -217,134 +333,60 @@
       doc.body.appendChild(canvas);
     }
 
-    const selectedId = blockStore.getSelectedBlockClientId();
-    const signature = JSON.stringify(sectionBlocks.map((block) => [block.clientId, block.attributes, block.clientId === selectedId]));
-    if (canvas.dataset.signature === signature) return;
-    canvas.dataset.signature = signature;
-    canvas.replaceChildren();
-
-    sectionBlocks.forEach((block) => {
-      const attributes = block.attributes || {};
-      const type = attributes.sectionType || '';
-      const section = catalog[type] || {};
-      const card = doc.createElement('div');
-      card.className = 'koops-section-preview koops-visual-card'
-        + (attributes.enabled === false ? ' is-disabled' : '')
-        + (block.clientId === selectedId ? ' is-selected' : '');
-      card.tabIndex = 0;
-      card.setAttribute('role', 'button');
-      card.setAttribute('aria-label', (section.label || type || 'KOOPS sekcija') + ' — redaguoti');
-
-      if (type) {
-        const image = doc.createElement('img');
-        image.src = previewBase + type + '.jpg?ver=' + encodeURIComponent(previewVersion);
-        image.alt = (section.label || type) + ' peržiūra';
-        card.appendChild(image);
-      }
-
-      const copy = doc.createElement('span');
-      copy.className = 'koops-visual-card__copy';
-      const meta = doc.createElement('span');
-      meta.className = 'koops-visual-card__meta';
-      meta.textContent = section.label || type || 'KOOPS sekcija';
-      const state = doc.createElement('strong');
-      state.className = 'koops-visual-card__meta koops-visual-card__state';
-      state.textContent = attributes.enabled === false ? 'Išjungta' : 'Rodoma';
-      const heading = doc.createElement('h3');
-      heading.textContent = attributes.title || section.label || 'KOOPS sekcija';
-      const description = doc.createElement('p');
-      description.textContent = attributes.description || 'Paspauskite sekciją — turinio laukai atsidarys dešinėje.';
-      copy.append(meta, state, heading, description);
-      card.appendChild(copy);
-
-      if (block.clientId === selectedId) {
-        const fields = doc.createElement('div');
-        fields.className = 'koops-visual-fields';
-        fields.addEventListener('click', (event) => event.stopPropagation());
-
-        const help = doc.createElement('p');
-        help.className = 'koops-visual-help';
-        help.textContent = 'Keiskite tik reikalingus laukus. Išsaugokite puslapį viršuje esančiu mygtuku.';
-        fields.appendChild(help);
-
-        const toggleLabel = doc.createElement('label');
-        toggleLabel.className = 'koops-visual-toggle';
-        const toggle = doc.createElement('input');
-        toggle.type = 'checkbox';
-        toggle.checked = attributes.enabled !== false;
-        toggle.addEventListener('change', () => data.dispatch('core/block-editor').updateBlockAttributes(block.clientId, { enabled: toggle.checked }));
-        const toggleText = doc.createElement('span');
-        toggleText.textContent = 'Rodyti svetainėje';
-        toggleLabel.append(toggle, toggleText);
-        fields.appendChild(toggleLabel);
-
-        function addField(labelText, key, tag, wide) {
-          const label = doc.createElement('label');
-          label.className = 'koops-visual-field' + (wide ? ' is-wide' : '');
-          const labelTitle = doc.createElement('span');
-          labelTitle.textContent = labelText;
-          const input = doc.createElement(tag || 'input');
-          if (tag === 'textarea') input.rows = key === 'description' ? 4 : 3;
-          input.value = attributes[key] || '';
-          input.addEventListener('change', () => {
-            const update = {};
-            update[key] = input.value;
-            data.dispatch('core/block-editor').updateBlockAttributes(block.clientId, update);
-          });
-          label.append(labelTitle, input);
-          fields.appendChild(label);
-        }
-
-        const typeLabel = doc.createElement('label');
-        typeLabel.className = 'koops-visual-field is-wide';
-        const typeTitle = doc.createElement('span');
-        typeTitle.textContent = 'Sekcijos tipas';
-        const typeSelect = doc.createElement('select');
-        Object.entries(catalog).forEach(([value, item]) => {
-          const option = doc.createElement('option');
-          option.value = value;
-          option.textContent = item.label;
-          option.selected = value === type;
-          typeSelect.appendChild(option);
-        });
-        typeSelect.addEventListener('change', () => {
-          data.dispatch('core/block-editor').updateBlockAttributes(
-            block.clientId,
-            Object.assign({ sectionType: typeSelect.value }, defaults[typeSelect.value] || {})
-          );
-        });
-        typeLabel.append(typeTitle, typeSelect);
-        fields.appendChild(typeLabel);
-
-        addField('Mažoji antraštė', 'eyebrow', 'input', false);
-        addField('Antraštė', 'title', 'textarea', true);
-        addField('Aprašymas', 'description', 'textarea', true);
-        addField('Mygtuko tekstas', 'primaryLabel', 'input', false);
-        addField('Mygtuko nuoroda', 'primaryUrl', 'input', false);
-        addField('Nuotraukos adresas', 'imageUrl', 'input', true);
-        card.appendChild(fields);
-      }
-
-      function selectCard(event) {
-        if (event.target.closest('.koops-visual-fields')) return;
-        data.dispatch('core/block-editor').selectBlock(block.clientId);
-        const editPost = data.dispatch('core/edit-post');
-        if (editPost && editPost.openGeneralSidebar) editPost.openGeneralSidebar('edit-post/block');
-      }
-      card.addEventListener('click', selectCard);
-      card.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') selectCard(event);
-      });
-      canvas.appendChild(card);
-    });
+    let frame = doc.getElementById('koops-live-page');
+    const url = previewUrl();
+    if (!frame) {
+      frame = doc.createElement('iframe');
+      frame.id = 'koops-live-page';
+      frame.title = 'Tikra puslapio peržiūra';
+      frame.setAttribute('allow', 'fullscreen');
+      canvas.replaceChildren(frame);
+    }
+    if (frame.dataset.previewUrl !== url) {
+      frame.dataset.previewUrl = url;
+      frame.src = url;
+    }
   }
 
-  function scheduleVisualCanvas() {
-    window.clearTimeout(visualCanvasTimer);
-    visualCanvasTimer = window.setTimeout(renderVisualCanvas, 80);
+  function selectPreviewSection(sectionType) {
+    const block = sectionBlocks().find((item) => item.attributes.sectionType === sectionType);
+    if (!block) return;
+    data.dispatch('core/block-editor').selectBlock(block.clientId);
+    ensureSidebarOpen();
+    window.setTimeout(() => renderSidebar(block), 120);
+    postToPreview({ type: 'select-section', sectionType });
   }
 
-  data.subscribe(scheduleVisualCanvas);
-  window.setInterval(scheduleVisualCanvas, 1000);
-  scheduleVisualCanvas();
+  window.addEventListener('message', (event) => {
+    const message = event.data;
+    if (!message || message.source !== 'koops-cms-preview') return;
+    let expectedOrigin = '';
+    try { expectedOrigin = new URL(frontendUrl).origin; } catch (error) { return; }
+    if (event.origin !== expectedOrigin) return;
+    if (message.type === 'select-section' && message.sectionType) selectPreviewSection(message.sectionType);
+    if (message.type === 'ready') {
+      const selected = data.select('core/block-editor').getSelectedBlock();
+      if (selected && selected.name === 'koops/section') {
+        postToPreview({ type: 'select-section', sectionType: selected.attributes.sectionType });
+      }
+    }
+  });
+
+  function refreshEditor() {
+    renderLiveCanvas();
+    const selected = data.select('core/block-editor')?.getSelectedBlock();
+    renderSidebar(selected);
+    if (selected && selected.name === 'koops/section') {
+      postToPreview({ type: 'select-section', sectionType: selected.attributes.sectionType });
+    }
+  }
+
+  function scheduleEditor() {
+    window.clearTimeout(editorTimer);
+    editorTimer = window.setTimeout(refreshEditor, 100);
+  }
+
+  data.subscribe(scheduleEditor);
+  window.setInterval(scheduleEditor, 1200);
+  scheduleEditor();
 })(window.wp);
