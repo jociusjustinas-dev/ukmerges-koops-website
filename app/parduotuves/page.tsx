@@ -4,6 +4,7 @@ import { SiteHeader } from "../../components/SiteHeader";
 import { StoresFinder } from "../../components/StoresFinder";
 import { StoresPageMotion } from "../../components/StoresPageMotion";
 import { getKoopsCmsData } from "../../lib/wordpress";
+import { CmsPageController } from "../../components/CmsPageController";
 
 export const metadata: Metadata = {
   title: "Parduotuvės | KOOPS Ukmergėje ir rajone",
@@ -34,15 +35,15 @@ const faqs = [
 ];
 
 export default async function StoresPage() {
-  const { stores } = await getKoopsCmsData();
+  const { stores, pages } = await getKoopsCmsData();
   return (
-    <div className="site-shell stores-page" id="pradzia">
+    <div className="site-shell stores-page" id="pradzia" data-cms-page="parduotuves">
       <a className="skip-link" href="#turinys">Pereiti prie turinio</a>
       <SiteHeader />
       <StoresPageMotion />
 
       <main id="turinys">
-        <section className="stores-directory" id="sarasas" aria-labelledby="stores-list-title">
+        <section className="stores-directory" id="sarasas" aria-labelledby="stores-list-title" data-cms-section="stores-directory">
           <div className="tt-container">
             <p className="section-label light-label">PARDUOTUVĖS</p>
             <h1 className="location-headline" id="stores-list-title">
@@ -57,7 +58,7 @@ export default async function StoresPage() {
           </div>
         </section>
 
-        <section className="stores-faq" aria-labelledby="stores-faq-title">
+        <section className="stores-faq" aria-labelledby="stores-faq-title" data-cms-section="stores-faq">
           <div className="tt-container stores-faq-layout">
             <div>
               <p className="section-label">GREITI ATSAKYMAI</p>
@@ -77,6 +78,7 @@ export default async function StoresPage() {
           </div>
         </section>
       </main>
+      <CmsPageController page="parduotuves" sections={pages.parduotuves?.sections} />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org",

@@ -4,7 +4,7 @@ import { contactChannels } from "../../lib/contacts";
 /** BYQ: structured-data-2 — contact destination channels */
 export function ContactChannels() {
   return (
-    <section
+    <section data-cms-section="contact-channels"
       className="tt-jobs contacts-channels"
       id="keliai"
       aria-labelledby="contacts-channels-title"

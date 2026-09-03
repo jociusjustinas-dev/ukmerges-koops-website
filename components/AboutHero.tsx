@@ -84,6 +84,7 @@ export function AboutHero() {
 
   return (
     <section
+      data-cms-section="about-hero"
       ref={rootRef}
       className="careers-hero about-hero"
       aria-labelledby="about-hero-title"

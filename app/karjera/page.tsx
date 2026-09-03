@@ -8,6 +8,7 @@ import { AvenirButtonArrow } from "../byq-icons";
 import { careersContact } from "../../lib/jobs";
 import { getKoopsCmsData } from "../../lib/wordpress";
 import { RollingLabel } from "../../components/RollingLabel";
+import { CmsPageController } from "../../components/CmsPageController";
 
 export const metadata: Metadata = {
   title: "Karjera | KOOPS Ukmergėje ir rajone",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CareersPage() {
-  const { jobs } = await getKoopsCmsData();
+  const { jobs, pages } = await getKoopsCmsData();
   const jobSchema = {
     "@context": "https://schema.org",
     "@graph": jobs.map((job) => ({
@@ -41,7 +42,7 @@ export default async function CareersPage() {
   };
 
   return (
-    <div className="site-shell careers-page" id="pradzia">
+    <div className="site-shell careers-page" id="pradzia" data-cms-page="karjera">
       <a className="skip-link" href="#turinys">
         Pereiti prie turinio
       </a>
@@ -59,6 +60,7 @@ export default async function CareersPage() {
           id="pozicijos"
           aria-labelledby="careers-jobs-title"
           data-byq-component="structured-data-2-careers"
+          data-cms-section="careers-jobs"
         >
           <div className="tt-container jobs-layout">
             <div className="jobs-intro">
@@ -112,6 +114,7 @@ export default async function CareersPage() {
           id="susisiekti"
           aria-labelledby="careers-apply-title"
           data-byq-component="terra-tory-contact-1"
+          data-cms-section="careers-enquiry"
         >
           <div className="tt-container restaurant-enquiry-grid">
             <div className="restaurant-enquiry-intro">
@@ -144,6 +147,7 @@ export default async function CareersPage() {
           </div>
         </section>
       </main>
+      <CmsPageController page="karjera" sections={pages.karjera?.sections} />
 
       <SiteFooter showCta={false} />
     </div>

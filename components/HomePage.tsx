@@ -11,6 +11,8 @@ import type { restaurant as restaurantDefaults } from "../lib/restaurant";
 import { AvenirButtonArrow, ByqChevron } from "../app/byq-icons";
 import { SupplierForm } from "./SupplierForm";
 import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
+import { CmsPageController } from "./CmsPageController";
+import type { CmsPageSection } from "../lib/wordpress";
 
 const heroUpdates = [
   {
@@ -62,9 +64,10 @@ type HomePageProps = {
   featuredNews: NewsItem[];
   jobs: Job[];
   restaurant: typeof restaurantDefaults;
+  cmsSections?: CmsPageSection[];
 };
 
-export function HomePage({ featuredStores, featuredNews, jobs, restaurant }: HomePageProps) {
+export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSections }: HomePageProps) {
   const [heroUpdateIndex, setHeroUpdateIndex] = React.useState(0);
   const [heroUpdatesPaused, setHeroUpdatesPaused] = React.useState(false);
   const [restaurantSlide, setRestaurantSlide] = React.useState(0);
@@ -414,7 +417,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant }: Hom
   const activeHeroUpdate = heroUpdates[heroUpdateIndex];
 
   return (
-    <div className="site-shell" ref={pageRef}>
+    <div className="site-shell" ref={pageRef} data-cms-page="pradinis">
       <a className="skip-link" href="#turinys">Pereiti prie turinio</a>
 
       <header className="floating-nav" data-byq-adaptation="terra-tory-design-system-navigation">
@@ -476,7 +479,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant }: Hom
 
       <main id="turinys">
         {/* BYQ: terra-tory-hero-1 adapted to KOOPS */}
-        <section className="tt-hero" id="pradzia" data-byq-component="terra-tory-hero-1">
+        <section className="tt-hero" id="pradzia" data-byq-component="terra-tory-hero-1" data-cms-section="home-hero">
           <div className="tt-hero-background" aria-hidden="true">
             <img src="/koops-hero-market.jpg" alt="" />
           </div>
@@ -535,12 +538,12 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant }: Hom
           </aside>
         </section>
 
-        <div className="tt-hero-spacer" aria-hidden="true" />
+        <div className="tt-hero-spacer" aria-hidden="true" data-cms-section="home-hero" />
 
         <KoopsBentoSection />
 
         {/* BYQ: terra-tory-team-1 adapted to location cards */}
-        <section className="tt-locations" id="parduotuves" aria-labelledby="parduotuviu-antraste" data-byq-component="terra-tory-team-1">
+        <section className="tt-locations" id="parduotuves" aria-labelledby="parduotuviu-antraste" data-byq-component="terra-tory-team-1" data-cms-section="home-stores">
           <div className="tt-container">
             <div className="location-headline" id="parduotuviu-antraste">
               <span>Raskite</span><span>artimiausią</span><i className="title-push-line" style={{ width: 0 }} aria-hidden="true" /><span>KOOPS</span><span>parduotuvę</span>
@@ -615,7 +618,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant }: Hom
         </section>
 
         {/* BYQ: terra-tory-blog-grid-1 */}
-        <section className="tt-news" id="naujienos" aria-labelledby="naujienu-antraste" data-byq-component="terra-tory-blog-grid-1">
+        <section className="tt-news" id="naujienos" aria-labelledby="naujienu-antraste" data-byq-component="terra-tory-blog-grid-1" data-cms-section="home-news">
           <div className="tt-container">
             <div className="tt-section-header">
               <div className="dashed-divider" />
@@ -663,7 +666,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant }: Hom
         </section>
 
         {/* BYQ: terra-tory-combo-6 */}
-        <section className="tt-story" id="restoranas" aria-labelledby="restorano-antraste" data-byq-component="terra-tory-combo-6">
+        <section className="tt-story" id="restoranas" aria-labelledby="restorano-antraste" data-byq-component="terra-tory-combo-6" data-cms-section="home-restaurant">
           <div className="tt-container">
             <div className="story-headline">
               <p className="section-label light-label">RESTORANAS „VILKMERGĖ“ · NUO 1965 METŲ</p>
@@ -748,7 +751,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant }: Hom
         </section>
 
         {/* BYQ Supply: structured-data-2 careers list, adapted to KOOPS */}
-        <section className="tt-jobs" id="karjera" aria-labelledby="karjeros-antraste" data-byq-component="structured-data-2-careers">
+        <section className="tt-jobs" id="karjera" aria-labelledby="karjeros-antraste" data-byq-component="structured-data-2-careers" data-cms-section="home-jobs">
           <div className="tt-container jobs-layout">
             <div className="jobs-intro">
               <p className="section-label light-label">KARJERA</p>
@@ -788,7 +791,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant }: Hom
         <KoopsValueFeaturesSection />
 
         {/* BYQ: terra-tory-contact-1 */}
-        <section className="tt-contact" id="tiekejams" aria-labelledby="tiekeju-antraste" data-byq-component="terra-tory-contact-1">
+        <section className="tt-contact" id="tiekejams" aria-labelledby="tiekeju-antraste" data-byq-component="terra-tory-contact-1" data-cms-section="home-suppliers">
           <div className="tt-container contact-grid">
             <div className="contact-content">
               <div className="contact-heading"><p className="section-label">TIEKĖJAMS</p><h2 id="tiekeju-antraste">Auginkime vietos pasiūlą kartu</h2><p>Ieškome patikimų gamintojų ir tiekėjų, norinčių pasiūlyti savo produkciją KOOPS pirkėjams.</p></div>
@@ -804,10 +807,11 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant }: Hom
           </div>
         </section>
       </main>
+      <CmsPageController page="pradinis" sections={cmsSections} />
 
         {/* BYQ: terra-tory-footer-1 */}
       <footer className="tt-footer" id="kontaktai" data-byq-component="terra-tory-footer-1">
-        <section className="footer-cta" aria-labelledby="footer-cta-title">
+        <section className="footer-cta" aria-labelledby="footer-cta-title" data-cms-section="footer-cta">
           <div className="orbit footer-orbit-one" aria-hidden="true" /><div className="orbit footer-orbit-two" aria-hidden="true" />
           <p className="section-label light-label">KOOPS</p>
           <h2 id="footer-cta-title"><span className="footer-title-desktop"><span>Parduotuvė gali būti</span><span>arčiau, nei manote</span></span><span className="footer-title-mobile"><span>Parduotuvė gali</span><span>būti arčiau,</span><span>nei manote</span></span></h2>

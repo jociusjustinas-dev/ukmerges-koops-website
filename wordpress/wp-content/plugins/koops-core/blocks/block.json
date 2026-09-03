@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "koops/section",
+  "version": "0.7.1",
+  "title": "KOOPS sekcija",
+  "description": "Esama KOOPS dizaino sistemos sekcija.",
+  "category": "koops",
+  "icon": "layout",
+  "textdomain": "koops",
+  "attributes": {
+    "sectionType": { "type": "string", "default": "" },
+    "enabled": { "type": "boolean", "default": true },
+    "eyebrow": { "type": "string", "default": "" },
+    "title": { "type": "string", "default": "" },
+    "description": { "type": "string", "default": "" },
+    "primaryLabel": { "type": "string", "default": "" },
+    "primaryUrl": { "type": "string", "default": "" },
+    "imageUrl": { "type": "string", "default": "" },
+    "imageId": { "type": "number", "default": 0 }
+  },
+  "supports": {
+    "html": false,
+    "customClassName": false,
+    "anchor": false,
+    "reusable": false
+  },
+  "editorScript": "file:./editor.js",
+  "editorStyle": "file:./editor.css"
+}

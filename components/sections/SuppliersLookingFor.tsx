@@ -5,7 +5,7 @@ export function SuppliersLookingFor() {
   const { fresh, dairy, meat, local } = supplierLookingFor;
 
   return (
-    <section
+    <section data-cms-section="suppliers-looking"
       className="koops-bento-section suppliers-looking"
       id="ko-ieskome"
       aria-labelledby="suppliers-looking-title"

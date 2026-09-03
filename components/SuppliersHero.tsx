@@ -102,6 +102,7 @@ export function SuppliersHero() {
 
   return (
     <section
+      data-cms-section="suppliers-hero"
       ref={rootRef}
       className="careers-hero suppliers-hero"
       aria-labelledby="suppliers-hero-title"

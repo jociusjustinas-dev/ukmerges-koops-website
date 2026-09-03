@@ -148,6 +148,13 @@ Prieš sakant, kad pataisyta, padaryk screenshot arba inspect realias `getBoundi
   pasiekiami.
 - Next.js turinį gauna iš `/wp-json/koops/v1/site`; integracijos ir atsarginiai
   statiniai duomenys yra `lib/wordpress.ts`.
+- Puslapių struktūra valdoma Gutenberg bloku `koops/section`. Administracijoje
+  ji pasiekiama per **KOOPS → Puslapių sekcijos**. Bloko seka valdo sekcijų
+  eiliškumą, `enabled` – matomumą, o neužpildyti turinio laukai palieka esamą
+  React dizaino tekstą.
+- ACF PRO serveryje neįdiegtas. Dabartinis pasirinktinio Gutenberg bloko
+  sprendimas suteikia tą pačią sekcijų ir laukų redagavimo logiką be mokamos
+  priklausomybės; nekeisti jo į ACF be licencijos ir migracijos plano.
 - `koops_store`, `koops_classified` ir `koops_job` yra atskiri vieši turinio
   tipai su REST API palaikymu. Naujienoms naudojami standartiniai WordPress
   įrašai.
@@ -211,11 +218,14 @@ Kol analitikos nėra, tikrinama pagal veikiančias nuorodas, formos užbaigimą,
 
 1. Prieš pakeitimą perskaityk susijusį komponentą ir CSS; nekurk atsitiktinių override'ų.
 2. Redagavimui naudok `apply_patch`.
-3. Patikrink: `npm run build`.
+3. Patikrink: `npm run build`; jei vietinis vinext runtime sugadintas, naudok
+   Vercel produkcinį build ir jo klaidų išvestį kaip galutinę patikrą.
 4. Lokalius pakeitimus committink su trumpa, aiškia žinute.
-5. GitHub `origin` yra `jociusjustinas-dev/ukmerges-koops-website`. Push į GitHub **neatnaujina** gyvos Sites koncepcijos automatiškai.
-6. Gyvos koncepcijos publikavimui naudok Sites įrankius ir esamą `project_id` iš `.openai/hosting.json`: sukurk archive per oficialų `package-site.sh`, išsaugok version ir deploy'ink saved version.
-7. Kiekvieną publikavimą patikrink, kol deployment status yra `succeeded`.
+5. GitHub `origin` yra `jociusjustinas-dev/ukmerges-koops-website`.
+6. Produkcinis frontendas publikuojamas į esamą Vercel projektą `ukmerges-koops-website`; nekurk naujo Vercel projekto.
+7. WordPress įskiepio pakeitimams paleisk `wordpress/package.sh`, įkelk
+   `wordpress/dist/koops-core.zip` ir patikrink REST atsakymą.
+8. Kiekvieną publikavimą patikrink, kol deployment status yra `succeeded`.
 
 ## Bendravimas su naudotoju
 

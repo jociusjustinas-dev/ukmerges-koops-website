@@ -102,6 +102,7 @@ export function CareersHero() {
 
   return (
     <section
+      data-cms-section="careers-hero"
       ref={rootRef}
       className="careers-hero"
       aria-labelledby="careers-hero-title"

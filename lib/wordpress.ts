@@ -26,6 +26,24 @@ export type WordPressOptions = {
   restaurant_capacity?: string;
 };
 
+export type CmsPageSection = {
+  id: string;
+  type: string;
+  enabled: boolean;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  primaryLabel?: string;
+  primaryUrl?: string;
+  imageUrl?: string;
+};
+
+export type CmsPage = {
+  id: number;
+  title: string;
+  sections: CmsPageSection[];
+};
+
 type RawTerm = { name?: string; slug?: string };
 type RawEntry = {
   id?: number;
@@ -65,6 +83,7 @@ type RawSiteData = {
   news?: RawEntry[];
   classifieds?: RawEntry[];
   jobs?: RawEntry[];
+  pages?: Record<string, CmsPage>;
 };
 
 export type KoopsCmsData = {
@@ -73,6 +92,7 @@ export type KoopsCmsData = {
   news: NewsItem[];
   classifieds: Classified[];
   jobs: Job[];
+  pages: Record<string, CmsPage>;
 };
 
 function phoneHref(phone = "") {
@@ -182,6 +202,7 @@ const fallback: KoopsCmsData = {
   news: fallbackNews,
   classifieds: fallbackClassifieds,
   jobs: fallbackJobs,
+  pages: {},
 };
 
 export async function getKoopsCmsData(): Promise<KoopsCmsData> {
@@ -206,6 +227,7 @@ export async function getKoopsCmsData(): Promise<KoopsCmsData> {
       news: liveNews.length ? liveNews : fallback.news,
       classifieds: liveClassifieds,
       jobs: liveJobs.length ? liveJobs : fallback.jobs,
+      pages: raw.pages || {},
     };
   } catch {
     return fallback;

@@ -4,7 +4,7 @@ import { supplierProcessSteps } from "../../lib/suppliers";
 /** BYQ: structured-data-2 / tt-jobs — process steps (kaip veikia) */
 export function SuppliersProcess() {
   return (
-    <section
+    <section data-cms-section="suppliers-process"
       className="tt-jobs suppliers-process"
       id="kaip-veikia"
       aria-labelledby="suppliers-process-title"

@@ -115,7 +115,7 @@ export function KoopsValueFeaturesSection() {
   };
 
   return (
-    <section className="tt-about" id="apie" aria-labelledby="apie-antraste" data-byq-component="terra-tory-services-1">
+    <section className="tt-about" id="apie" aria-labelledby="apie-antraste" data-byq-component="terra-tory-services-1" data-cms-section="home-values">
       <div className="tt-container">
         <div className="about-marquee-header">
           <p className="section-label">APIE KOOPS</p>

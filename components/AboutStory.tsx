@@ -4,7 +4,7 @@ import { aboutOrg, aboutStory } from "../lib/about";
 /** BYQ: terra-tory-combo-6 — about story */
 export function AboutStory() {
   return (
-    <section
+    <section data-cms-section="about-story"
       className="tt-story about-story"
       aria-labelledby="about-story-title"
       data-byq-component="terra-tory-combo-6"

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: KOOPS Core
  * Description: KOOPS turinio tipai, valdymo laukai, bendri duomenys ir formos.
- * Version: 0.2.0
+ * Version: 0.7.1
  * Author: KOOPS
  * Text Domain: koops
  */
@@ -11,8 +11,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('KOOPS_CORE_VERSION', '0.2.0');
+define('KOOPS_CORE_VERSION', '0.7.1');
 define('KOOPS_CORE_PATH', plugin_dir_path(__FILE__));
+define('KOOPS_CORE_URL', plugin_dir_url(__FILE__));
+
+require_once KOOPS_CORE_PATH . 'includes/modular-pages.php';
 
 function koops_register_content_types(): void
 {
@@ -676,6 +679,7 @@ function koops_rest_posts(string $post_type): array
 
 function koops_rest_site_data(): WP_REST_Response
 {
+    do_action('litespeed_control_set_nocache', 'KOOPS headless API');
     $options = wp_parse_args((array) get_option('koops_options', []), koops_default_options());
     unset($options['form_recipient']);
 
@@ -690,8 +694,9 @@ function koops_rest_site_data(): WP_REST_Response
         )),
         'classifieds' => koops_rest_posts('koops_classified'),
         'jobs' => koops_rest_posts('koops_job'),
+        'pages' => koops_rest_pages(),
     ]);
-    $response->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    $response->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
     return $response;
 }
 

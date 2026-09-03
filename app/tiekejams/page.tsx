@@ -6,6 +6,8 @@ import { SuppliersHero } from "../../components/SuppliersHero";
 import { SuppliersLookingFor } from "../../components/sections/SuppliersLookingFor";
 import { SuppliersProcess } from "../../components/sections/SuppliersProcess";
 import { suppliersContact } from "../../lib/suppliers";
+import { getKoopsCmsData } from "../../lib/wordpress";
+import { CmsPageController } from "../../components/CmsPageController";
 
 export const metadata: Metadata = {
   title: "Tiekėjams | KOOPS Ukmergė",
@@ -13,9 +15,10 @@ export const metadata: Metadata = {
     "Pasiūlykite produkciją KOOPS: ko ieškome, ką pateikti, kam rašyti ir paprasta forma vietos gamintojams.",
 };
 
-export default function SuppliersPage() {
+export default async function SuppliersPage() {
+  const { pages } = await getKoopsCmsData();
   return (
-    <div className="site-shell suppliers-page" id="pradzia">
+    <div className="site-shell suppliers-page" id="pradzia" data-cms-page="tiekejams">
       <a className="skip-link" href="#turinys">
         Pereiti prie turinio
       </a>
@@ -34,6 +37,7 @@ export default function SuppliersPage() {
           id="forma"
           aria-labelledby="suppliers-form-title"
           data-byq-component="terra-tory-contact-1"
+          data-cms-section="suppliers-enquiry"
         >
           <div className="tt-container contact-grid">
             <div className="contact-content">
@@ -79,6 +83,7 @@ export default function SuppliersPage() {
           </div>
         </section>
       </main>
+      <CmsPageController page="tiekejams" sections={pages.tiekejams?.sections} />
 
       <SiteFooter showCta={false} />
     </div>

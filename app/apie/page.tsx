@@ -6,6 +6,8 @@ import { KoopsBentoSection } from "../../components/sections/KoopsBentoSection";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
 import { aboutOrg } from "../../lib/about";
+import { getKoopsCmsData } from "../../lib/wordpress";
+import { CmsPageController } from "../../components/CmsPageController";
 
 export const metadata: Metadata = {
   title: "Apie KOOPS | Ukmergės rajono vartotojų kooperatyvas",
@@ -13,7 +15,8 @@ export const metadata: Metadata = {
     "Ukmergės rajono vartotojų kooperatyvas: žmonės, vieta ir istorija. Parduotuvės, restoranas „Vilkmergė“ ir vietos partnerystė.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const { pages } = await getKoopsCmsData();
   const schema = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -32,7 +35,7 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="site-shell about-page" id="pradzia">
+    <div className="site-shell about-page" id="pradzia" data-cms-page="apie">
       <a className="skip-link" href="#turinys">
         Pereiti prie turinio
       </a>
@@ -43,8 +46,9 @@ export default function AboutPage() {
         <AboutHero />
         <AboutStory />
         <AboutPillars />
-        <KoopsBentoSection />
+        <KoopsBentoSection cmsSection="about-bento" />
       </main>
+      <CmsPageController page="apie" sections={pages.apie?.sections} />
 
       <SiteFooter showCta={false} />
     </div>

@@ -35,6 +35,7 @@ export default async function Home() {
       featuredNews={cms.news.slice(0, 4)}
       jobs={cms.jobs}
       restaurant={restaurant}
+      cmsSections={cms.pages.pradinis?.sections}
     />
   );
 }

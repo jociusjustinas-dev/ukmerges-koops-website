@@ -99,7 +99,7 @@ export function SiteFooter({
       data-byq-component="terra-tory-footer-1"
     >
       {showCta ? (
-        <section className="footer-cta" aria-labelledby="footer-cta-title">
+        <section className="footer-cta" aria-labelledby="footer-cta-title" data-cms-section="footer-cta">
           <div className="orbit footer-orbit-one" aria-hidden="true" />
           <div className="orbit footer-orbit-two" aria-hidden="true" />
           <p className="section-label light-label">KOOPS</p>

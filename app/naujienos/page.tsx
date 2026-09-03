@@ -4,6 +4,7 @@ import { NewsPageHeading } from "../../components/NewsPageHeading";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
 import { getKoopsCmsData } from "../../lib/wordpress";
+import { CmsPageController } from "../../components/CmsPageController";
 
 export const metadata: Metadata = {
   title: "Naujienos ir akcijos | KOOPS",
@@ -11,21 +12,22 @@ export const metadata: Metadata = {
 };
 
 export default async function NewsArchivePage() {
-  const { news } = await getKoopsCmsData();
+  const { news, pages } = await getKoopsCmsData();
   return (
-    <div className="site-shell news-page" id="pradzia">
+    <div className="site-shell news-page" id="pradzia" data-cms-page="naujienos">
       <a className="skip-link" href="#turinys">Pereiti prie turinio</a>
       <SiteHeader variant="solid" />
 
       <main id="turinys">
         {/* BYQ: terra-tory-blog-grid-1 card language adapted to archive list */}
-        <section className="tt-news news-page-main" aria-labelledby="news-archive-title" data-byq-component="terra-tory-blog-grid-1">
+        <section className="tt-news news-page-main" aria-labelledby="news-archive-title" data-byq-component="terra-tory-blog-grid-1" data-cms-section="news-listing">
           <div className="tt-container">
             <NewsPageHeading />
             <NewsListing items={news} />
           </div>
         </section>
       </main>
+      <CmsPageController page="naujienos" sections={pages.naujienos?.sections} />
 
       <SiteFooter
         ctaHref="/parduotuves"

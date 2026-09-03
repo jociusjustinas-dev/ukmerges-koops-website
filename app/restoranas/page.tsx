@@ -8,6 +8,7 @@ import {
   restaurant as restaurantDefaults,
 } from "../../lib/restaurant";
 import { getKoopsCmsData } from "../../lib/wordpress";
+import { CmsPageController } from "../../components/CmsPageController";
 
 export const metadata: Metadata = {
   title: "Restoranas „Vilkmergė“ | KOOPS",
@@ -20,7 +21,7 @@ function phoneHref(phone: string) {
 }
 
 export default async function RestaurantPage() {
-  const { options } = await getKoopsCmsData();
+  const { options, pages } = await getKoopsCmsData();
   const restaurant = {
     ...restaurantDefaults,
     since: Number(options.restaurant_since) || restaurantDefaults.since,
@@ -52,7 +53,7 @@ export default async function RestaurantPage() {
   };
 
   return (
-    <div className="site-shell restaurant-page" id="pradzia">
+    <div className="site-shell restaurant-page" id="pradzia" data-cms-page="restoranas">
       <a className="skip-link" href="#turinys">
         Pereiti prie turinio
       </a>
@@ -69,6 +70,7 @@ export default async function RestaurantPage() {
           className="koops-bento-section restaurant-halls"
           aria-labelledby="restaurant-halls-title"
           data-byq-component="terra-tory-bento-1"
+          data-cms-section="restaurant-halls"
         >
           <div className="tt-container">
             <header className="koops-bento-header">
@@ -133,6 +135,7 @@ export default async function RestaurantPage() {
           id="uzklausa"
           aria-labelledby="restaurant-enquiry-title"
           data-byq-component="terra-tory-contact-1"
+          data-cms-section="restaurant-enquiry"
         >
           <div className="tt-container restaurant-enquiry-grid">
             <div className="restaurant-enquiry-intro">
@@ -170,6 +173,7 @@ export default async function RestaurantPage() {
           </div>
         </section>
       </main>
+      <CmsPageController page="restoranas" sections={pages.restoranas?.sections} />
 
       <SiteFooter showCta={false} />
     </div>

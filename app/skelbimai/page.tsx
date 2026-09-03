@@ -4,6 +4,7 @@ import { RollingLabel } from "../../components/RollingLabel";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
 import { getKoopsCmsData } from "../../lib/wordpress";
+import { CmsPageController } from "../../components/CmsPageController";
 
 export const metadata: Metadata = {
   title: "Skelbimai | KOOPS Ukmergė",
@@ -11,15 +12,15 @@ export const metadata: Metadata = {
 };
 
 export default async function ClassifiedsPage() {
-  const { classifieds } = await getKoopsCmsData();
+  const { classifieds, pages } = await getKoopsCmsData();
   return (
-    <div className="site-shell classifieds-page" id="pradzia">
+    <div className="site-shell classifieds-page" id="pradzia" data-cms-page="skelbimai">
       <a className="skip-link" href="#turinys">Pereiti prie turinio</a>
       <ClassifiedsPageMotion />
       <SiteHeader />
 
       <main id="turinys">
-        <section className="classifieds-directory" aria-labelledby="classifieds-title">
+        <section className="classifieds-directory" aria-labelledby="classifieds-title" data-cms-section="classifieds-listing">
           <div className="tt-container classifieds-directory-inner">
             <p className="section-label light-label">KOOPS SKELBIMAI</p>
             <h1 id="classifieds-title">Skelbimai</h1>
@@ -61,6 +62,7 @@ export default async function ClassifiedsPage() {
           </div>
         </section>
       </main>
+      <CmsPageController page="skelbimai" sections={pages.skelbimai?.sections} />
 
       <SiteFooter showCta={false} />
     </div>

@@ -7,6 +7,7 @@ import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
 import { contactsOrg, socialLinks } from "../../lib/contacts";
 import { getKoopsCmsData } from "../../lib/wordpress";
+import { CmsPageController } from "../../components/CmsPageController";
 
 export const metadata: Metadata = {
   title: "Kontaktai | KOOPS Ukmergė",
@@ -19,7 +20,7 @@ function phoneHref(phone: string) {
 }
 
 export default async function ContactsPage() {
-  const { options } = await getKoopsCmsData();
+  const { options, pages } = await getKoopsCmsData();
   const addressLines = (options.address || contactsOrg.addressLines.join(", ")).split(/,\s*(?=LT-|\d{5}|Ukmergė)/, 2);
   const org = {
     ...contactsOrg,
@@ -56,7 +57,7 @@ export default async function ContactsPage() {
   };
 
   return (
-    <div className="site-shell contacts-page" id="pradzia">
+    <div className="site-shell contacts-page" id="pradzia" data-cms-page="kontaktai">
       <a className="skip-link" href="#turinys">
         Pereiti prie turinio
       </a>
@@ -71,6 +72,7 @@ export default async function ContactsPage() {
           id="forma"
           aria-labelledby="contacts-form-title"
           data-byq-component="terra-tory-contact-1"
+          data-cms-section="contact-form"
         >
           <div className="tt-container contact-grid">
             <div className="contact-content">
@@ -130,6 +132,7 @@ export default async function ContactsPage() {
 
         <ContactChannels />
       </main>
+      <CmsPageController page="kontaktai" sections={pages.kontaktai?.sections} />
 
       <SiteFooter showCta={false} />
     </div>

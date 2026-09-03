@@ -1,6 +1,7 @@
-export function KoopsBentoSection() {
+export function KoopsBentoSection({ cmsSection = "home-bento" }: { cmsSection?: string }) {
   return (
     <section
+      data-cms-section={cmsSection}
       className="koops-bento-section"
       aria-labelledby="koops-bento-title"
       data-byq-component="terra-tory-home-c-features"
