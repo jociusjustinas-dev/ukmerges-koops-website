@@ -4,7 +4,7 @@
   const { blocks, blockEditor, components, data, element, hooks, plugins } = wp;
   const el = element.createElement;
   const { InspectorControls, MediaUpload, MediaUploadCheck, useBlockProps } = blockEditor;
-  const { PanelBody, SelectControl, TextControl, TextareaControl, ToggleControl, Button, Notice } = components;
+  const { PanelBody, SelectControl, TextControl, TextareaControl, ToggleControl, Button } = components;
   const catalog = (window.koopsSectionEditor && window.koopsSectionEditor.catalog) || {};
   const defaults = (window.koopsSectionEditor && window.koopsSectionEditor.defaults) || {};
   const previewBase = (window.koopsSectionEditor && window.koopsSectionEditor.previewBase) || '';
@@ -47,7 +47,6 @@
         el(
           PanelBody,
           { title: 'Turinys', initialOpen: true },
-          el(Notice, { status: 'info', isDismissible: false }, 'Laukuose pateiktas dabartinis svetainės turinys.'),
           el(TextControl, { label: 'Mažoji antraštė', value: a.eyebrow, onChange: (eyebrow) => set({ eyebrow }) }),
           el(TextareaControl, { label: 'Antraštė', help: 'Naują eilutę įrašykite Enter klavišu.', value: a.title, onChange: (title) => set({ title }) }),
           el(TextareaControl, { label: 'Aprašymas', value: a.description, onChange: (description) => set({ description }) }),
@@ -137,7 +136,6 @@
       el(
         PanelBody,
         { title: 'Turinys', initialOpen: true },
-        el(Notice, { status: 'info', isDismissible: false }, 'Laukuose pateiktas dabartinis svetainės turinys.'),
         el(TextControl, { label: 'Mažoji antraštė', value: a.eyebrow, onChange: (eyebrow) => set({ eyebrow }) }),
         el(TextareaControl, { label: 'Antraštė', help: 'Naują eilutę įrašykite Enter klavišu.', value: a.title, onChange: (title) => set({ title }) }),
         el(TextareaControl, { label: 'Aprašymas', value: a.description, onChange: (description) => set({ description }) }),
