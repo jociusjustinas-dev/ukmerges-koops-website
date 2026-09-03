@@ -187,6 +187,26 @@ Prieš sakant, kad pataisyta, padaryk screenshot arba inspect realias `getBoundi
   SMTP, patikrinti pristatymą ir privatumo sutikimą.
 - WordPress paketo diegimo bei paleidimo eiga aprašyta `wordpress/README.md`.
 
+### Privalomas SMTP paleidimo kontrolinis punktas
+
+Tai yra **paleidimą blokuojantis darbas**, kurį būtina priminti naudotojui prieš
+skelbiant, kad projektas baigtas, ir dar kartą prieš galutinį svetainės paleidimą.
+
+- `FluentSMTP` WordPress aplinkoje įdiegtas ir aktyvuotas, bet dar neprijungtas
+  prie veikiančios pašto paskyros.
+- Rekomenduojama jungti atskirą `uzklausos@urvk.lt` paskyrą per Microsoft 365
+  OAuth. Alternatyva – autentifikuoti kliento pasirinktą `@urvk.lt` paskyrą.
+- Pašto paskyros savininkas pats įveda Microsoft prisijungimo duomenis ir
+  patvirtina OAuth leidimą; slaptažodžio kūrėjui perduoti nereikia.
+- Po autentifikacijos būtina išsiųsti po realią kontrolinę užklausą iš bendros,
+  tiekėjų, karjeros ir restorano formos.
+- Patikrinti: įrašas atsiranda WordPress **Užklausos** skiltyje, restorano laiškas
+  pristatomas į `restoranas@urvk.lt`, o visi kiti – į `direktore@urvk.lt`;
+  `Reply-To` turi būti užklausą pateikusio lankytojo adresas.
+- Patikrinti laiškų žurnalą, gavėjo „Inbox“ ir „Spam“, SPF/DKIM rezultatą bei
+  klaidų nebuvimą. Kol šie testai nebaigti, SMTP ir formų pristatymo negalima
+  žymėti kaip užbaigto.
+
 ## Turinio būsena ir patvirtinti duomenys
 
 Patvirtinta pagal kliento failus:
