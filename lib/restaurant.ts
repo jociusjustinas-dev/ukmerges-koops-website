@@ -13,7 +13,6 @@ export const restaurant = {
   mapUrl: "https://www.google.com/maps/search/?api=1&query=Kauno+g.+7,+Ukmergė",
   hallsCount: 3,
   maxGuests: 154,
-  hours: "Pagal užsakymą ir renginį",
 };
 
 export type RestaurantHall = {
@@ -33,8 +32,8 @@ export const restaurantHalls: RestaurantHall[] = [
     image: "/vilkmerge-hall.jpg",
   },
   {
-    slug: "vidurine-sale",
-    name: "Vidurinė salė",
+    slug: "baras",
+    name: "Baras",
     capacity: "Iki 40 svečių",
     suited: "Krikštynos, šeimos šventės, oficialūs susitikimai",
     image: "/vilkmerge-table.jpg",
@@ -42,7 +41,7 @@ export const restaurantHalls: RestaurantHall[] = [
   {
     slug: "maza-sale",
     name: "Mažoji salė",
-    capacity: "Iki 24 svečių",
+    capacity: "Iki 8 svečių",
     suited: "Jaukios vakarienės ir mažesnės progos",
     image: "/vilkmerge-menu.jpg",
   },

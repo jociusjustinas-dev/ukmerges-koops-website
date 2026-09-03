@@ -72,7 +72,7 @@ export default function RestaurantPage() {
               </div>
 
               <article className="koops-bento-card">
-                <p className="section-label">VIDURINĖ SALĖ</p>
+                <p className="section-label">BARAS</p>
                 <div className="koops-bento-card-bottom">
                   <div className="koops-bento-card-content">
                     <h3>Iki 40</h3>
@@ -93,7 +93,7 @@ export default function RestaurantPage() {
                 <p className="section-label">MAŽOJI · BENDRA TALPA</p>
                 <div className="koops-bento-card-content">
                   <h3>Iki 154</h3>
-                  <p>Mažoji salė — iki 24 svečių. Visas erdves suderinsime pagal renginį.</p>
+                  <p>Mažoji salė — iki 8 svečių. Visas erdves suderinsime pagal renginį.</p>
                 </div>
                 <div className="koops-bento-actions">
                   <a className="text-link" href="#uzklausa">
@@ -142,10 +142,6 @@ export default function RestaurantPage() {
                       {restaurant.address}
                     </a>
                   </p>
-                </div>
-                <div>
-                  <strong>Darbo laikas</strong>
-                  <p>{restaurant.hours}</p>
                 </div>
               </div>
             </div>

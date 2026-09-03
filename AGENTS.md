@@ -11,7 +11,7 @@
 - GitHub: `https://github.com/jociusjustinas-dev/ukmerges-koops-website` (privatus).
 - Sprendimų priėmėjas / kontaktas: Laurynas.
 
-Tai nėra galutinis turinio šaltinis. Dalis kontaktų, parduotuvių duomenų, darbo skelbimų ir restorano turinio yra demonstraciniai arba paimti iš seno puslapio. Keičiant į WordPress, šiuos duomenis būtina patvirtinti.
+Kliento pateikti turinio šaltiniai yra `PRADINIS PUSLAPIS.docx` ir `Pard. saras.tinklapiui.xlsx`. Pagal juos patvirtinti parduotuvių duomenys, bendrieji kontaktai ir pagrindinė restorano informacija jau perkelti į kodą. Darbo skelbimai ir naujienų įrašai tebėra demonstraciniai, kol klientas pateiks galutinį turinį.
 
 ## Verslo prioritetai
 
@@ -135,14 +135,23 @@ Prieš sakant, kad pataisyta, padaryk screenshot arba inspect realias `getBoundi
 - `public/` – logo ir nuotraukos. Hero nekeisti be aiškaus vartotojo prašymo.
 - `.openai/hosting.json` – Sites projekto identifikatorius. Nekeisti ir nekurti naujo Sites projekto.
 
-## Turinio būsena ir kas dar nepatvirtinta
+## Turinio būsena ir patvirtinti duomenys
+
+Patvirtinta pagal kliento failus:
+
+- 34 parduotuvės; adresai, telefonai ir darbo laikas saugomi `lib/stores.ts`;
+- bendras telefonas `0 340 53235`, administracija `0 340 51049`, el. paštas `direktore@urvk.lt`;
+- bendras adresas `Vasario 16-osios g. 30, LT-20130 Ukmergė` papildomai patikrintas senoje oficialioje svetainėje;
+- restoranas „Vilkmergė“: `Kauno g. 7, Ukmergė`, `0 340 52079`, `+370 618 72548`, `restoranas@urvk.lt`;
+- restoranas veikia nuo 1965 m., turi 3 erdves ir priima iki 154 svečių; Didžioji salė — iki 90, baras — iki 40, mažoji salė — iki 8;
+- parduotuvė „Pušelė“ priskirta miesto grupei;
+- parduotuvių specifinės paslaugos kliento sąraše nepateiktos, todėl jų negalima rodyti kaip patvirtinto fakto.
 
 Dar neturime:
 
-- patvirtinto struktūruoto parduotuvių sąrašo;
-- galutinių kontaktų;
 - galutinių darbo pasiūlymų;
-- galutinės restorano informacijos ir visų nuotraukų;
+- galutinių naujienų įrašų;
+- galutinio restorano meniu ir visų nuotraukų;
 - GA4 / Search Console prieigų ir istorinių duomenų;
 - vartotojų interviu / apklausų;
 - galutinės redirect'ų lentelės;

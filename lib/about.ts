@@ -1,5 +1,3 @@
-/** Demonstraciniai „Apie KOOPS“ duomenys — patvirtinti prieš WordPress */
-
 export const aboutOrg = {
   legalName: "Ukmergės rajono vartotojų kooperatyvas",
   shortName: "KOOPS",
@@ -8,7 +6,6 @@ export const aboutOrg = {
   phoneDisplay: "0 340 53235",
   phoneHref: "tel:+37034053235",
   storeCount: 34,
-  note: "Demonstracinis turinys. Istoriją, skaičius ir formuluočių galutinę versiją reikia patvirtinti prieš WordPress.",
 };
 
 export const aboutHeroGallery = [

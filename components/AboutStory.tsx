@@ -20,7 +20,6 @@ export function AboutStory() {
           </div>
           <div className="story-copy">
             <p>{aboutStory.body}</p>
-            <p className="about-story-note">{aboutOrg.note}</p>
             <dl>
               {aboutStory.facts.map((fact) => (
                 <div key={fact.label}>

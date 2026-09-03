@@ -3,10 +3,8 @@ export const suppliersContact = {
   phoneDisplay: "0 340 53235",
   phoneHref: "tel:+37034053235",
   addressLines: ["Vasario 16-osios g. 30", "LT-20130 Ukmergė"],
-  note: "Demonstracinis kelias. Galutinį kontaktą ir procesą reikia patvirtinti prieš WordPress.",
 };
 
-/** Demonstracinės kategorijos — patvirtinti prieš WordPress */
 export const supplierLookingFor = {
   fresh: {
     label: "ŠVIEŽIA",
@@ -26,11 +24,10 @@ export const supplierLookingFor = {
   local: {
     label: "VIETOS GAMINIAI",
     title: "Aiški kilmė",
-    body: "Medus, uogienės, konservai, gėrimai. Demonstracinis sąrašas — patvirtinsime prieš WordPress.",
+    body: "Medus, uogienės, konservai ir gėrimai.",
   },
 } as const;
 
-/** Demonstracinis tiekėjo kelias — patvirtinti prieš WordPress */
 export const supplierProcessSteps = [
   {
     step: "01",

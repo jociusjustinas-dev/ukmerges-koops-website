@@ -1,6 +1,5 @@
 import { socialLinks } from "./site";
 
-/** Demonstraciniai kontaktai — patvirtinti prieš WordPress */
 export const contactsOrg = {
   legalName: "Ukmergės rajono vartotojų kooperatyvas",
   shortName: "KOOPS",

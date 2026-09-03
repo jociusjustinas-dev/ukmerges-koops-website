@@ -16,7 +16,7 @@ const features = [
   },
   {
     title: `Iki ${restaurant.maxGuests} svečių`,
-    body: "Talpą deriname pagal renginį. Didžioji salė — iki 90, vidurinė — iki 40, mažoji — iki 24.",
+    body: "Restorane galime priimti iki 154 svečių. Siūlome Didžiąją salę, barą ir mažąją salę, kurioje telpa iki 8 svečių.",
     tone: "sprout" as const,
     icon: (
       <svg width="100%" height="100%" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">

@@ -7,6 +7,7 @@ import { KoopsValueFeaturesSection } from "../components/sections/KoopsValueFeat
 import { featuredStores } from "../lib/stores";
 import { featuredNews, newsHref } from "../lib/news";
 import { jobs } from "../lib/jobs";
+import { restaurant } from "../lib/restaurant";
 import { AvenirButtonArrow, ByqChevron } from "./byq-icons";
 import { SupplierForm } from "../components/SupplierForm";
 import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
@@ -485,7 +486,7 @@ export default function Home() {
                   <span>arčiau</span>
                   <span>jūsų.</span>
                 </h1>
-                <p className="body-large">Raskite artimiausią parduotuvę.</p>
+                <p className="body-large">Raskite artimiausią parduotuvę, jos darbo laiką ir maršrutą.</p>
                 <a className="pill-button accent" href="/parduotuves" aria-label="Rasti artimiausią parduotuvę">
                   <RollingLabel>Rasti parduotuvę</RollingLabel>
                 </a>
@@ -702,11 +703,11 @@ export default function Home() {
               </div>
               <div className="story-copy">
                 <p>Miesto širdyje įsikūręs restoranas laukia Jūsų.</p>
-                <p className="story-summary">Restorane galime priimti iki 154 svečių. Siūlome 3 skirtingo dydžio sales: Didžiąją, barą ir mažąją.</p>
+                <p className="story-summary">Restorane galime priimti iki {restaurant.maxGuests} svečių. Siūlome 3 skirtingo dydžio sales: Didžiąją, barą ir mažąją.</p>
                 <dl>
                   <div><dt>Pokylių salės</dt><dd>3 salės</dd></div>
-                  <div><dt>Talpa</dt><dd>Iki 154 svečių</dd></div>
-                  <div><dt>Adresas</dt><dd>Kauno g. 7, Ukmergė</dd></div>
+                  <div><dt>Talpa</dt><dd>Iki {restaurant.maxGuests} svečių</dd></div>
+                  <div><dt>Adresas</dt><dd>{restaurant.address}</dd></div>
                   <div><dt>Mažoji salė</dt><dd>Iki 8 svečių</dd></div>
                 </dl>
                 <p className="story-note">Visas erdves suderinsime pagal renginį.</p>
@@ -714,15 +715,15 @@ export default function Home() {
                   <dl className="story-contact-list">
                     <div>
                       <dt>Telefonas</dt>
-                      <dd><a href="tel:+37061872548">+370 618 72548</a></dd>
+                      <dd><a href={restaurant.mobileHref}>{restaurant.mobileDisplay}</a></dd>
                     </div>
                     <div>
                       <dt>El. paštas</dt>
-                      <dd><a href="mailto:restoranas@urvk.lt">restoranas@urvk.lt</a></dd>
+                      <dd><a href={`mailto:${restaurant.email}`}>{restaurant.email}</a></dd>
                     </div>
                     <div>
                       <dt>Adresas</dt>
-                      <dd><a href="https://maps.google.com/?q=Vilkmerg%C4%97+Ukmerg%C4%97" target="_blank" rel="noreferrer">Kauno g. 7, Ukmergė</a></dd>
+                      <dd><a href={restaurant.mapUrl} target="_blank" rel="noreferrer">{restaurant.address}</a></dd>
                     </div>
                   </dl>
                 </div>

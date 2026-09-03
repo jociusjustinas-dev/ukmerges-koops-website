@@ -41,7 +41,7 @@ export default function SuppliersPage() {
                 <p className="section-label">PASIŪLYMO FORMA</p>
                 <h2 id="suppliers-form-title">Pasiūlykite savo produkciją</h2>
                 <p>
-                  Užpildykite trumpą formą — paruošime laišką. {suppliersContact.note}
+                  Užpildykite trumpą formą — paruošime laišką.
                 </p>
               </div>
               <div className="contact-details">

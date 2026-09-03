@@ -108,14 +108,16 @@ export default async function StoreDetailPage({ params }: StorePageProps) {
                   </div>
                 </dl>
 
-                <div className="store-detail-services">
-                  <p className="section-label light-label">PASLAUGOS</p>
-                  <ul>
-                    {store.services.map((service) => (
-                      <li key={service}>{service}</li>
-                    ))}
-                  </ul>
-                </div>
+                {store.services.length > 0 ? (
+                  <div className="store-detail-services">
+                    <p className="section-label light-label">PASLAUGOS</p>
+                    <ul>
+                      {store.services.map((service) => (
+                        <li key={service}>{service}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
 
                 <a className="text-link store-detail-back" href="/parduotuves">
                   Visos parduotuvės <span aria-hidden="true">→</span>

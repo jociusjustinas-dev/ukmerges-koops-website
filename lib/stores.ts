@@ -22,7 +22,8 @@ function mapsUrl(address: string) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address}, Lietuva`)}`;
 }
 
-const grocery = ["Kasdienės prekės"];
+// Konkrečių paslaugų pagal parduotuves klientas nepateikė, todėl jų neatributuojame.
+const grocery: string[] = [];
 
 export const stores = [
   {
@@ -38,7 +39,7 @@ export const stores = [
     lat: 55.25012,
     lng: 24.75917,
     map: mapsUrl("Vasario 16-osios g. 30, Ukmergė"),
-    services: ["Kasdienės prekės", "Vietos gamintojų produkcija", "Grynųjų išėmimas"],
+    services: grocery,
   },
   {
     slug: "slaitai",
@@ -68,7 +69,7 @@ export const stores = [
     lat: 55.25187,
     lng: 24.75062,
     map: mapsUrl("A. Smetonos g. 43, Ukmergė"),
-    services: ["Kasdienės prekės", "Vietos gamintojų produkcija"],
+    services: grocery,
   },
   {
     slug: "vaivorykste",
@@ -154,7 +155,7 @@ export const stores = [
     lat: 55.24006,
     lng: 24.7945,
     map: mapsUrl("Putinų g. 40, Ukmergė"),
-    services: ["Kasdienės prekės", "Vietos gamintojų produkcija"],
+    services: grocery,
   },
   {
     slug: "atkociai",
@@ -320,8 +321,8 @@ export const stores = [
     hours: "I–V 9:00–18:00 · VI 9:00–15:00 · VII nedirba",
     phone: "0 340 69353",
     phoneHref: "+37034069353",
-    lat: 55.2059,
-    lng: 24.86426,
+    lat: 55.20318,
+    lng: 24.8559519,
     map: mapsUrl("Vilkmergėlės g. 17, Antakalnis III, Ukmergės rajonas"),
     services: grocery,
   },
