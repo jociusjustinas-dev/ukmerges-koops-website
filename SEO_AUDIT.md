@@ -7,7 +7,7 @@ Audituota versija: <https://ukmerges-koops-website.vercel.app/>
 Domeno kandidatas: <https://ukmergeskoops.lt/> — klientas dar nepatvirtino, todėl
 SEO konfigūracijoje jis nenaudojamas.
 
-Kodo būsena audito metu: `92e2816`
+Kodo būsena po P1: `b40ae56`
 
 ## P0 įgyvendinimo būsena
 
@@ -27,6 +27,23 @@ Vietinė kontrolinė patikra: 50 URL, 50 atsakymų `200`, 0 vidinių klaidų,
 0 trūkstamų canonical, 0 pasikartojančių title ir meta aprašymų. Likę seni URL
 neperadresuojami, kol nepatvirtinta, kur turi keliauti jų turinys.
 
+## P1 įgyvendinimo būsena
+
+- sutvarkytas mobilus parduotuvių puslapio hydration neatitikimas;
+- Mapbox ir jo duomenys kraunami tik naudotojui paprašius parodyti žemėlapį;
+- pagrindiniai H1 ir LCP vaizdai nebėra slepiami iki vėlai paleidžiamos GSAP
+  animacijos;
+- hero bei restorano vaizdai optimizuoti per `next/image`, žemiau esantys vaizdai
+  kraunami atidėtai;
+- visi vieši šablonai turi canonical, `og:url`, `og:image` ir didelę Twitter
+  dalinimosi kortelę;
+- pridėti bendri `Organization` ir `WebSite`, patikslinti parduotuvių,
+  restorano bei naujienų struktūriniai duomenys;
+- pašalinti automatiškai aptikti prieinamumo pažeidimai penkiuose pagrindiniuose
+  šablonuose;
+- build, TypeScript ir testai praeina; ESLint turi 0 klaidų (lieka 37 vaizdų
+  optimizavimo perspėjimai).
+
 ## Apimtis ir metodika
 
 - automatiškai nuskaityti visi iš pagrindinio puslapio pasiekiami vidiniai URL;
@@ -45,15 +62,14 @@ Web Vitals, nes nėra GA4, Search Console ir CrUX duomenų.
 
 ## Verdiktas
 
-Vizualinė ir semantinė bazė gera, tačiau svetainė **dar neparuošta galutinio
-domeno paleidimui ir indeksavimui**. Paleidimą blokuoja šešios problemos:
+Laikina Vercel versija techniškai paruošta kliento peržiūrai: svarbiausių
+šablonų SEO, Best Practices ir automatinio prieinamumo rezultatai yra po 100,
+o parduotuvių puslapis pakilo nuo 36 iki 96 Performance balų.
 
-1. Vercel versijoje nėra veikiančių `robots.txt` ir `sitemap.xml`;
-2. visuose 50 veikiančių puslapių nėra canonical;
-3. JSON-LD naudoja seną `jociusj.chatgpt.site` domeną;
-4. pagrindiniame puslapyje yra vidinė nuoroda į 404;
-5. vidinis `/strategija` puslapis indeksuojamas;
-6. nėra parengto ir patikrinto seno domeno URL → naujo URL 301 plano.
+Galutinio domeno paleidimui dar sąmoningai nepasiruošta, nes nėra kliento
+patvirtinimo. Prieš jį būtina: patvirtinti domeną ir vieną NAP versiją, užbaigti
+senų URL 301/410 lentelę, pakeisti `SITE_URL`, prijungti Search Console bei SMTP
+ir atlikti realių formų pristatymo kontrolę.
 
 ## Nuskaitymo rezultatai
 
@@ -61,22 +77,20 @@ domeno paleidimui ir indeksavimui**. Paleidimą blokuoja šešios problemos:
 |---|---:|
 | Nuskaityta vidinių URL | 51 |
 | Veikiantys `200` puslapiai | 50 |
-| Vidiniai `404` | 1 |
+| Vidiniai `404` | 0 |
 | Veikiantys puslapiai su vienu H1 | 50 / 50 |
 | Veikiantys puslapiai su `lang="lt"` | 50 / 50 |
 | Unikalūs title tarp veikiančių puslapių | 50 / 50 |
 | Unikalūs meta aprašymai | 50 / 50 |
-| Veikiantys puslapiai su canonical | 0 / 50 |
-| Veikiantys puslapiai su `og:image` | 0 / 50 |
-| Veikiantys puslapiai su JSON-LD | 45 / 50 |
-| HTML rasti `<img>` elementai | 251 |
-| `<img>` su `width` ir `height` | 0 / 251 |
-| `<img>` su tuščiu `alt` | 111 / 251 |
+| Veikiantys puslapiai su canonical | 50 / 50 |
+| Veikiantys puslapiai su `og:image` | 50 / 50 |
+| Veikiantys puslapiai su JSON-LD | 50 / 50 |
 
-Tuščias `alt` nėra automatiškai klaida: dekoratyviniams vaizdams jis teisingas.
-Naujienų, parduotuvių ir turinio fotografijoms reikia atskiros rankinės peržiūros.
+## Pradinio audito P0 radiniai
 
-## P0 — būtina ištaisyti prieš paleidimą
+Žemiau palikta pradinė būklė sprendimų atsekamumui. Pirmi penki radiniai jau
+pašalinti; 301 migracijos planas lieka priklausomas nuo galutinės struktūros ir
+kliento domeno patvirtinimo.
 
 ### 1. Galutinis domenas ir canonical
 
@@ -172,16 +186,18 @@ Masinis visko nukreipimas į pagrindinį puslapį laikytinas minkštu 404.
 
 ### Mobilus našumas
 
-| Puslapis | Performance | Accessibility | Best practices | SEO | FCP | LCP | TBT | CLS | Dydis |
+| Puslapis | Performance prieš → po | Accessibility | Best practices | SEO | FCP po | LCP po | TBT po | CLS | Dydis po |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Pradinis | 69 | 96 | 100 | 100 | 1,2 s | 10,1 s | 20 ms | 0 | 2 301 KiB |
-| Parduotuvės | 36 | 100 | 96 | 100 | 4,9 s | 9,3 s | 1 270 ms | 0 | 1 759 KiB |
-| Restoranas | 74 | 96 | 100 | 100 | 2,0 s | 5,3 s | 20 ms | 0 | 1 871 KiB |
-| Naujienos | 91 | 100 | 100 | 100 | 1,2 s | 3,4 s | 10 ms | 0 | 669 KiB |
-| Kontaktai | 87 | 100 | 100 | 100 | 1,7 s | 3,7 s | 20 ms | 0 | 833 KiB |
+| Pradinis | 69 → 81 | 100 | 100 | 100 | 2,1 s | 4,0 s | 10 ms | 0 | 1 415 KiB |
+| Parduotuvės | 36 → 96 | 100 | 100 | 100 | 1,4 s | 2,6 s | 10 ms | 0 | 621 KiB |
+| Restoranas | 74 → 97 | 100 | 100 | 100 | 1,2 s | 2,4 s | 20 ms | 0 | 880 KiB |
+| Naujienos | 91 → 83 | 100 | 100 | 100 | 2,3 s | 3,7 s | 20 ms | 0 | 671 KiB |
+| Kontaktai | 87 → 83 | 100 | 100 | 100 | 1,8 s | 3,8 s | 30 ms | 0 | 835 KiB |
 
-Geras LCP yra iki 2,5 s. Visi penki matuoti šablonai šios ribos nepasiekia;
-pradinis, parduotuvės ir restoranas yra blogoje zonoje.
+Geras LCP yra iki 2,5 s. Restoranas ribą pasiekia, parduotuvių puslapis yra
+arti jos. Pradinio, naujienų ir kontaktų LCP dar rekomenduojama optimizuoti P2;
+vienkartiniai laboratoriniai balai gali svyruoti, todėl galutinį sprendimą reikia
+grįsti kelių matavimų mediana ir vėliau lauko Core Web Vitals.
 
 #### Pradinis
 
@@ -225,34 +241,33 @@ išlaikyti veikiantį be Mapbox.
 
 ### Open Graph ir dalinimasis
 
-- nė vienas iš 50 veikiančių puslapių neturi `og:image`;
-- `og:url` nėra;
-- Twitter kortelė naudoja `summary`, o reikia `summary_large_image`;
-- `/icon.png` veikia ir naudojamas kaip favicon; `/favicon.ico` 404 nėra kritinis.
+- visi 50 viešų URL turi `og:url`, `og:image` ir `summary_large_image`;
+- pagrindiniai puslapiai naudoja bendrą KOOPS vaizdą, restoranas ir dinaminiai
+  naujienų bei parduotuvių puslapiai — savo turinio vaizdą, kai jis pateiktas;
+- `/icon.png` veikia kaip favicon ir Apple Touch Icon.
 
-Reikia bendro 1200 × 630 px vaizdo ir dinaminių naujienų, parduotuvių bei
-restorano OG vaizdų.
+Prieš galutinį domeną dar verta paruošti specialiai dalinimuisi apkarpytą
+1200 × 630 px KOOPS vaizdą, bet dabartinės kortelės techniškai veikia.
 
 ### Struktūriniai duomenys
 
-Visos svetainės lygiu trūksta `WebSite` + `Organization` grafo su stabiliu
-`@id`, galutinio domeno URL, logotipu, kontaktais ir socialiniais profiliais.
+Svetainės lygiu veikia `WebSite` + `Organization` grafas su stabiliais `@id`,
+laikinu produkcijos URL, logotipu, kontaktais ir turimais socialiniais profiliais.
 
-**Parduotuvės.** `GroceryStore` yra visuose 34 puslapiuose, bet trūksta teisingo
-`url`, stabilaus `@id`, `geo`, `openingHoursSpecification`, `hasMap`, ryšio su
+**Parduotuvės.** Visi 34 detalūs puslapiai turi `GroceryStore` su stabiliu
+`@id`, `url`, telefonu, koordinatėmis, `hasMap`, darbo laiku, ryšiu su
 organizacija ir `BreadcrumbList`.
 
-**Restoranas.** Trūksta `image`, `geo`, `openingHoursSpecification`, `hasMap`,
-`servesCuisine`, `priceRange` ir ryšio su organizacija. URL klaidingas.
+**Restoranas.** `Restaurant` turi stabilų URL, vaizdą, žemėlapį, ryšį su
+organizacija ir patvirtintus kontaktinius faktus. `openingHoursSpecification`,
+`servesCuisine` bei `priceRange` nededami, kol klientas nepateikė tikslių faktų.
 
-**Naujienos.** `NewsArticle` yra visuose šešiuose straipsniuose, bet trūksta
-`mainEntityOfPage`, `author`, `dateModified`, leidėjo `@id`, URL ir logotipo.
+**Naujienos.** `NewsArticle` turi `mainEntityOfPage`, publikavimo ir pakeitimo
+datas, organizaciją kaip autorių bei leidėją ir jos stabilų `@id`.
 
-**Darbo pasiūlymai.** Dvi `JobPosting` schemos dedamos į bendrą `/karjera`
-puslapį. Trūksta `datePosted`, tikslaus `jobLocation`, stabilaus `url` /
-`identifier`; nėra `validThrough`. Google rekomenduoja konkretų darbo pasiūlymą
-žymėti jo atskirame puslapyje. Dabartinė schema nėra tinkama patikimai „Google
-Jobs“ integracijai.
+**Darbo pasiūlymai.** Nepilna ir klaidinanti `JobPosting` schema pašalinta;
+bendras karjeros puslapis žymimas `ItemList`. „Google Jobs“ schema bus pagrįsta
+tik sukūrus atskirus darbo pasiūlymų URL su datomis ir vieta.
 
 **AEO.** Parduotuvių puslapyje yra penki matomi DUK ir atitinkantis `FAQPage`.
 Tai naudinga atsakymų aiškumui, bet svarbesni yra tikslūs vietų faktai,
@@ -260,14 +275,10 @@ LocalBusiness schema ir atskiri indeksuojami URL.
 
 ## P1 — prieinamumas
 
-„Lighthouse“ nustatė:
-
-- pagrindinio puslapio `.jobs-list` yra `div` su draudžiamu `aria-label` be
-  semantinio `role`;
-- restorano užklausos skiltyje du tekstai turi 4,42:1 kontrastą, kai reikia bent
-  4,5:1;
-- datos ir pasirinkimo placeholder kontrastas yra 3,04:1;
-- parduotuvių puslapis registruoja React hydration klaidą.
+Visi keturi pradiniame audite rasti pažeidimai pašalinti: sąrašų semantika,
+restorano tekstų bei laukų kontrastas, telefono veiksmo prieinamas pavadinimas ir
+parduotuvių hydration neatitikimas. Galutinis mobilus „Lighthouse“ penkiuose
+pagrindiniuose šablonuose: Accessibility 100/100.
 
 ## P2 — turinys ir vietinis SEO
 
@@ -315,8 +326,10 @@ laikinai nustatyti `noindex`.
 
 ### Vaizdai
 
-Visi 251 HTML vaizdai neturi aiškių `width` ir `height`. Reikia Next Image arba
-`srcset`, `sizes`, matmenų ir modernių formatų.
+Pradiniame HTML audite visi 251 vaizdo atvejai neturėjo aiškių `width` ir
+`height`. P1 metu svarbiausi LCP vaizdai perkelti į `next/image`, pridėti
+`sizes`, prioritetai ir atidėtas žemiau matomų vaizdų krovimas. Likę 37 lint
+perspėjimai žymi P2 kandidatus, daugiausia dinaminius WordPress vaizdus.
 
 Rankiniu būdu peržiūrėti 111 tuščių `alt`: dekoratyvinius palikti tuščius, o
 naujienų, parduotuvių ir turinio fotografijoms įrašyti trumpą kontekstinį
@@ -355,16 +368,14 @@ Po galutinio domeno paleidimo:
 
 ## Rekomenduojama darbų seka
 
-1. Įvesti vieną `SITE_URL` ir sutvarkyti canonical, Open Graph bei JSON-LD URL.
-2. Pašalinti vidinį 404 ir nustatyti `/strategija` `noindex` arba apsaugą.
-3. Sugeneruoti dinaminį `robots.txt` ir sitemap iš WordPress turinio.
-4. Parengti visų seno sitemap URL 301 / 410 lentelę ir ją testuoti.
-5. Pašalinti parduotuvių hydration klaidą ir atidėti Mapbox įkėlimą.
-6. Optimizuoti vaizdus ir nebeatidėti H1 matomumo animacija.
-7. Užbaigti visas struktūrinių duomenų schemas ir atskirus darbo puslapius.
-8. Įdėti OG vaizdus, sutvarkyti prasmingus `alt` ir vaizdų matmenis.
-9. Ištaisyti ARIA ir kontrasto pažeidimus.
-10. Patvirtinti NAP, prijungti domeną, Search Console, sitemap ir stebėseną.
+1. Gauti kliento galutinio domeno ir vienos NAP versijos patvirtinimą.
+2. Užbaigti visų seno sitemap URL 301 / 410 lentelę ir ją testuoti.
+3. Pakeisti `SITE_URL`, prijungti domeną, Search Console ir pateikti sitemap.
+4. Su klientu prijungti SMTP ir patikrinti restorano bei bendrų formų laiškus.
+5. Paruošti atskirus darbo pasiūlymų URL, kai bus galutinis turinys.
+6. P2 metu optimizuoti likusius WordPress vaizdus ir pradinių, naujienų bei
+   kontaktų šablonų LCP.
+7. Po paleidimo stebėti 301, 404, indeksavimą ir realius Core Web Vitals.
 
 ## Paleidimo SEO priėmimo kriterijai
 
