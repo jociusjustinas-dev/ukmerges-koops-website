@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
 import { NewsListing } from "../../components/NewsListing";
 import { NewsPageHeading } from "../../components/NewsPageHeading";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
 import { getKoopsCmsData } from "../../lib/wordpress";
 import { CmsPageController } from "../../components/CmsPageController";
+import { createPageMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Naujienos ir akcijos | KOOPS",
   description: "KOOPS naujienos, akcijos ir Ukmergės krašto aktualijos — vietos produkcija, parduotuvės ir restoranas „Vilkmergė“.",
-  alternates: { canonical: "/naujienos" },
-};
+  path: "/naujienos",
+});
 
 export default async function NewsArchivePage() {
   const { news, pages } = await getKoopsCmsData();

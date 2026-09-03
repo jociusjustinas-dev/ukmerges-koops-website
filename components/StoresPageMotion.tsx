@@ -37,7 +37,7 @@ export function StoresPageMotion() {
           const pushLines = root.querySelectorAll<HTMLElement>(".title-push-line");
 
           if (reduceMotion) {
-            pushLines.forEach((line) => line.style.removeProperty("width"));
+            pushLines.forEach((line) => line.style.removeProperty("transform"));
             if (directory) revealIntroImmediately(directory);
             window.dispatchEvent(new Event("resize"));
             return;
@@ -50,12 +50,8 @@ export function StoresPageMotion() {
             const lead = directory.querySelector<HTMLElement>(".stores-directory-lead");
             const finder = directory.querySelector<HTMLElement>(".stores-finder");
 
-            let pushTarget: { element: HTMLElement; width: number } | null = null;
             if (pushLine) {
-              pushLine.style.removeProperty("width");
-              const width = pushLine.getBoundingClientRect().width;
-              pushLine.style.width = "0px";
-              pushTarget = { element: pushLine, width };
+              gsap.set(pushLine, { scaleX: 0, transformOrigin: "left center" });
             }
 
             const finishIntro = () => {
@@ -76,25 +72,25 @@ export function StoresPageMotion() {
             if (words.length) {
               intro.fromTo(
                 words,
-                { y: isMobile ? 24 : 42, autoAlpha: 0 },
-                { y: 0, autoAlpha: 1, stagger: 0.07 },
+                { y: isMobile ? 18 : 28 },
+                { y: 0, stagger: 0.07 },
                 0.16,
               );
             }
 
-            if (pushTarget && isDesktop && window.innerWidth > 1100) {
+            if (pushLine && isDesktop && window.innerWidth > 1100) {
               intro.to(
-                pushTarget.element,
+                pushLine,
                 {
-                  width: pushTarget.width,
+                  scaleX: 1,
                   duration: 0.82,
                   ease: "power3.inOut",
-                  clearProps: "width",
+                  clearProps: "transform,transformOrigin",
                 },
                 0.68,
               );
             } else if (pushLine) {
-              pushLine.style.removeProperty("width");
+              gsap.set(pushLine, { scaleX: 1, clearProps: "transform,transformOrigin" });
             }
 
             if (lead) {
@@ -104,8 +100,8 @@ export function StoresPageMotion() {
             if (finder) {
               intro.fromTo(
                 finder,
-                { y: isMobile ? 24 : 36, autoAlpha: 0 },
-                { y: 0, autoAlpha: 1, duration: 0.88, clearProps: "transform" },
+                { y: isMobile ? 16 : 24 },
+                { y: 0, duration: 0.72, clearProps: "transform" },
                 0.62,
               );
             }

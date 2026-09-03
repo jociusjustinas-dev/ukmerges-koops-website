@@ -5,10 +5,30 @@ import { SiteHeader } from "../../../components/SiteHeader";
 import { RollingLabel } from "../../../components/RollingLabel";
 import { getKoopsCmsData } from "../../../lib/wordpress";
 import { absoluteUrl } from "../../../lib/site-url";
+import { createPageMetadata } from "../../../lib/metadata";
 
 type StorePageProps = {
   params: Promise<{ slug: string }>;
 };
+
+const schemaDays = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+const romanDayIndex: Record<string, number> = { I: 0, II: 1, III: 2, IV: 3, V: 4, VI: 5, VII: 6 };
+
+function schemaOpeningHours(hours: string) {
+  return hours.split("·").flatMap((part) => {
+    const value = part.trim();
+    if (/nedirba/i.test(value)) return [];
+    const time = value.match(/(\d{1,2}:\d{2})[–-](\d{1,2}:\d{2})/);
+    if (!time) return [];
+    if (/^Kasdien\b/i.test(value)) return [`Mo-Su ${time[1]}-${time[2]}`];
+    const days = value.match(/^(VII|VI|IV|V|III|II|I)(?:[–-](VII|VI|IV|V|III|II|I))?/);
+    if (!days) return [];
+    const first = romanDayIndex[days[1]];
+    const last = romanDayIndex[days[2] || days[1]];
+    const range = first === last ? schemaDays[first] : `${schemaDays[first]}-${schemaDays[last]}`;
+    return [`${range} ${time[1]}-${time[2]}`];
+  });
+}
 
 export async function generateStaticParams() {
   const { stores } = await getKoopsCmsData();
@@ -20,11 +40,12 @@ export async function generateMetadata({ params }: StorePageProps): Promise<Meta
   const { stores } = await getKoopsCmsData();
   const store = stores.find((item) => item.slug === slug);
   if (!store) return { title: "Parduotuvė | KOOPS" };
-  return {
+  return createPageMetadata({
     title: `Parduotuvė „${store.name}“ | KOOPS`,
     description: `${store.address}. Darbo laikas: ${store.hours}. Telefonas ${store.phone}.`,
-    alternates: { canonical: `/parduotuves/${store.slug}` },
-  };
+    path: `/parduotuves/${store.slug}`,
+    image: store.image || undefined,
+  });
 }
 
 export default async function StoreDetailPage({ params }: StorePageProps) {
@@ -33,19 +54,41 @@ export default async function StoreDetailPage({ params }: StorePageProps) {
   const store = stores.find((item) => item.slug === slug);
   if (!store) notFound();
 
+  const pageUrl = absoluteUrl(`/parduotuves/${store.slug}`);
   const schema = {
     "@context": "https://schema.org",
-    "@type": "GroceryStore",
-    name: `KOOPS parduotuvė „${store.name}“`,
-    image: store.image,
-    telephone: store.phoneHref,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: store.address,
-      addressLocality: store.city,
-      addressCountry: "LT",
-    },
-    url: absoluteUrl(`/parduotuves/${store.slug}`),
+    "@graph": [
+      {
+        "@type": "GroceryStore",
+        "@id": `${pageUrl}#store`,
+        name: `KOOPS parduotuvė „${store.name}“`,
+        image: store.image || undefined,
+        telephone: store.phoneHref.replace("tel:", ""),
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: store.address,
+          addressLocality: store.city,
+          addressCountry: "LT",
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: store.lat,
+          longitude: store.lng,
+        },
+        openingHours: schemaOpeningHours(store.hours),
+        hasMap: store.map,
+        parentOrganization: { "@id": `${absoluteUrl("/")}#organization` },
+        url: pageUrl,
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Pradžia", item: absoluteUrl("/") },
+          { "@type": "ListItem", position: 2, name: "Parduotuvės", item: absoluteUrl("/parduotuves") },
+          { "@type": "ListItem", position: 3, name: store.name, item: pageUrl },
+        ],
+      },
+    ],
   };
 
   return (

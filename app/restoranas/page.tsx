@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { RestaurantEnquiryForm } from "../../components/RestaurantEnquiryForm";
 import { RestaurantHero } from "../../components/RestaurantHero";
 import { RestaurantValueFeatures } from "../../components/sections/RestaurantValueFeatures";
@@ -10,13 +9,14 @@ import {
 import { getKoopsCmsData } from "../../lib/wordpress";
 import { CmsPageController } from "../../components/CmsPageController";
 import { absoluteUrl } from "../../lib/site-url";
+import { createPageMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Restoranas „Vilkmergė“ | KOOPS",
-  description:
-    "Restoranas „Vilkmergė“ Ukmergėje — 3 salės, iki 154 svečių. Užklausa šventei, renginiui ar vakarienei ir tiesioginis skambutis.",
-  alternates: { canonical: "/restoranas" },
-};
+  description: "Restoranas „Vilkmergė“ Ukmergėje — 3 salės, iki 154 svečių. Užklausa šventei, renginiui ar vakarienei ir tiesioginis skambutis.",
+  path: "/restoranas",
+  image: "/vilkmerge.jpg",
+});
 
 function phoneHref(phone: string) {
   return `tel:${phone.replace(/[^\d+]/g, "").replace(/^0/, "+370")}`;
@@ -42,6 +42,7 @@ export default async function RestaurantPage() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Restaurant",
+    "@id": `${absoluteUrl("/restoranas")}#restaurant`,
     name: `Restoranas „${restaurant.name}“`,
     telephone: restaurant.phoneHref.replace("tel:", ""),
     email: restaurant.email,
@@ -51,6 +52,9 @@ export default async function RestaurantPage() {
       addressLocality: "Ukmergė",
       addressCountry: "LT",
     },
+    image: absoluteUrl("/vilkmerge.jpg"),
+    hasMap: restaurant.mapUrl,
+    parentOrganization: { "@id": `${absoluteUrl("/")}#organization` },
     url: absoluteUrl("/restoranas"),
   };
 

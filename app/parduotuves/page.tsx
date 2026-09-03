@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
 import { StoresFinder } from "../../components/StoresFinder";
 import { StoresPageMotion } from "../../components/StoresPageMotion";
 import { getKoopsCmsData } from "../../lib/wordpress";
 import { CmsPageController } from "../../components/CmsPageController";
+import { createPageMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Parduotuvės | KOOPS Ukmergėje ir rajone",
   description: "Raskite artimiausią KOOPS parduotuvę: adresą, darbo laiką, telefoną ir maršrutą Ukmergėje bei rajone.",
-  alternates: { canonical: "/parduotuves" },
-};
+  path: "/parduotuves",
+});
 
 const faqs = [
   {
@@ -50,7 +50,11 @@ export default async function StoresPage() {
             <h1 className="location-headline" id="stores-list-title">
               <span>Raskite</span>
               <span>artimiausią</span>
-              <i className="title-push-line" style={{ width: 0 }} aria-hidden="true" />
+              <i
+                className="title-push-line"
+                style={{ transform: "scaleX(0)", transformOrigin: "left center" }}
+                aria-hidden="true"
+              />
               <span>KOOPS</span>
               <span>parduotuvę</span>
             </h1>

@@ -15,11 +15,10 @@ export function SiteHeader({ variant = "transparent" }: { variant?: "transparent
   const cms = useCmsOptions();
   const phone = cms.phone || "0 340 53235";
   const email = cms.email || "direktore@urvk.lt";
-  const [scrolled, setScrolled] = React.useState(variant === "solid");
+  const [scrolled, setScrolled] = React.useState(false);
 
   React.useEffect(() => {
     if (variant === "solid") {
-      setScrolled(true);
       return;
     }
 
@@ -53,7 +52,7 @@ export function SiteHeader({ variant = "transparent" }: { variant?: "transparent
   }, [variant]);
 
   return (
-    <header className={`floating-nav${scrolled ? " is-scrolled" : ""}`} data-byq-adaptation="terra-tory-design-system-navigation">
+    <header className={`floating-nav${variant === "solid" || scrolled ? " is-scrolled" : ""}`} data-byq-adaptation="terra-tory-design-system-navigation">
       <div className="nav-shell">
         <div className="nav-left">
           <a className="brand" href="/" aria-label="KOOPS – į pradžią">

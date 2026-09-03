@@ -18,7 +18,7 @@ export function ContactChannels() {
           </p>
         </div>
 
-        <div className="jobs-list" aria-label="Kontaktų keliai">
+        <div className="jobs-list" role="region" aria-label="Kontaktų keliai">
           {contactChannels.map((item) => (
             <a
               className="job-row"

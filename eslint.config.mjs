@@ -35,6 +35,10 @@ const eslintConfig = defineConfig([
         version: "detect",
       },
     },
+    rules: {
+      // Vinext does not require Next's client router for ordinary internal links.
+      "@next/next/no-html-link-for-pages": "off",
+    },
   },
 ]);
 

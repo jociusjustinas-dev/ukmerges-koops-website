@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
 import { ClassifiedsPageMotion } from "../../components/ClassifiedsPageMotion";
 import { RollingLabel } from "../../components/RollingLabel";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
 import { getKoopsCmsData } from "../../lib/wordpress";
 import { CmsPageController } from "../../components/CmsPageController";
+import { createPageMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Skelbimai | KOOPS Ukmergė",
   description: "KOOPS skelbimai: nuomojamos patalpos, turto pasiūlymai ir kita aktuali informacija Ukmergėje bei rajone.",
-  alternates: { canonical: "/skelbimai" },
-};
+  path: "/skelbimai",
+});
 
 export default async function ClassifiedsPage() {
   const { classifieds, pages } = await getKoopsCmsData();

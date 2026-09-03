@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { restaurantGallery } from "../lib/restaurant";
 
 function ImageStrip() {
@@ -8,7 +9,14 @@ function ImageStrip() {
           className={`restaurant-gallery-frame${img.big ? " is-big" : ""}`}
           key={img.src}
         >
-          <img src={img.src} alt={img.alt} />
+          <Image
+            src={img.src}
+            alt={img.alt}
+            fill
+            priority
+            sizes="(max-width: 767px) 240px, (max-width: 1199px) 46vw, 560px"
+            quality={78}
+          />
         </div>
       ))}
     </div>

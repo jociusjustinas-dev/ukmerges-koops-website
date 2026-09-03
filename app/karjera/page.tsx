@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { CareerApplyForm } from "../../components/CareerApplyForm";
 import { CareersHero } from "../../components/CareersHero";
 import { CareersValueFeatures } from "../../components/sections/CareersValueFeatures";
@@ -10,36 +9,26 @@ import { getKoopsCmsData } from "../../lib/wordpress";
 import { RollingLabel } from "../../components/RollingLabel";
 import { CmsPageController } from "../../components/CmsPageController";
 import { absoluteUrl } from "../../lib/site-url";
+import { createPageMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Karjera | KOOPS Ukmergėje ir rajone",
-  description:
-    "Darbo pasiūlymai KOOPS: parduotuvės, restoranas „Vilkmergė“ ir logistika. Aiški pozicija, vieta ir paprastas kandidatavimas.",
-  alternates: { canonical: "/karjera" },
-};
+  description: "Darbo pasiūlymai KOOPS: parduotuvės, restoranas „Vilkmergė“ ir logistika. Aiški pozicija, vieta ir paprastas kandidatavimas.",
+  path: "/karjera",
+});
 
 export default async function CareersPage() {
   const { jobs, pages } = await getKoopsCmsData();
   const jobSchema = {
     "@context": "https://schema.org",
-    "@graph": jobs.map((job) => ({
-      "@type": "JobPosting",
-      title: job.title,
+    "@type": "ItemList",
+    name: "KOOPS darbo pasiūlymai",
+    itemListElement: jobs.map((job, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: job.title,
       description: job.summary,
-      employmentType: job.employment.includes("Dalinis") ? "PART_TIME" : "FULL_TIME",
-      hiringOrganization: {
-        "@type": "Organization",
-        name: "Ukmergės rajono vartotojų kooperatyvas",
-        url: absoluteUrl("/"),
-      },
-      jobLocation: {
-        "@type": "Place",
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Ukmergė",
-          addressCountry: "LT",
-        },
-      },
+      url: absoluteUrl(job.applyUrl),
     })),
   };
 
@@ -80,7 +69,7 @@ export default async function CareersPage() {
                 <RollingLabel>Neradau pozicijos</RollingLabel>
               </a>
             </div>
-            <div className="jobs-list" aria-label="Darbo pasiūlymai">
+            <div className="jobs-list" role="region" aria-label="Darbo pasiūlymai">
               {jobs.map((job) => (
                 <a
                   className="job-row"

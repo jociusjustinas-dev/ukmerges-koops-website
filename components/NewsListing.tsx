@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { useMemo, useState } from "react";
-import gsap from "gsap";
 import {
   newsDateLabel,
   newsHref,
@@ -12,12 +11,19 @@ import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
 
 type CategoryFilter = "visos" | string;
 
-function ListCard({ item }: { item: NewsItem }) {
+function ListCard({ item, priority = false }: { item: NewsItem; priority?: boolean }) {
   return (
     <a className="news-list-card" href={newsHref(item.slug)}>
       <div className={`news-list-media${item.image ? "" : " is-placeholder"}`}>
         {item.image ? (
-          <img loading="lazy" src={item.image} alt="" />
+          <img
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={priority ? "high" : "auto"}
+            width="1200"
+            height="800"
+            src={item.image}
+            alt=""
+          />
         ) : (
           <img className="store-cover-logo" src="/koops-logo.png" alt="" />
         )}
@@ -49,13 +55,18 @@ export function NewsListing({ items }: { items: NewsItem[] }) {
     [category, items],
   );
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
 
     const clearFallback = withIntroFallback(root);
-    const media = gsap.matchMedia();
-    media.add(
+    let cancelled = false;
+    let revert = () => {};
+
+    void import("gsap").then(({ gsap }) => {
+      if (cancelled) return;
+      const media = gsap.matchMedia();
+      media.add(
       {
         reduceMotion: "(prefers-reduced-motion: reduce)",
         canAnimate: "(prefers-reduced-motion: no-preference)",
@@ -71,8 +82,9 @@ export function NewsListing({ items }: { items: NewsItem[] }) {
 
         const bar = root.querySelector<HTMLElement>(".news-listing-bar");
         const cards = root.querySelectorAll<HTMLElement>(".news-list-card");
+        const animatedCards = Array.from(cards).slice(1);
         const empty = root.querySelector<HTMLElement>(".news-listing-empty");
-        const targets = [bar, ...Array.from(cards), empty].filter(Boolean) as HTMLElement[];
+        const targets = [bar, ...animatedCards, empty].filter(Boolean) as HTMLElement[];
 
         if (!targets.length) {
           revealIntroImmediately(root);
@@ -92,9 +104,9 @@ export function NewsListing({ items }: { items: NewsItem[] }) {
         if (bar) {
           intro.fromTo(bar, { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.42);
         }
-        if (cards.length) {
+        if (animatedCards.length) {
           intro.fromTo(
-            cards,
+            animatedCards,
             { y: 22, autoAlpha: 0 },
             { y: 0, autoAlpha: 1, stagger: 0.07 },
             bar ? 0.52 : 0.42,
@@ -104,10 +116,13 @@ export function NewsListing({ items }: { items: NewsItem[] }) {
         }
       },
     );
+      revert = () => media.revert();
+    });
 
     return () => {
+      cancelled = true;
       clearFallback();
-      media.revert();
+      revert();
     };
   }, []);
 
@@ -142,8 +157,8 @@ export function NewsListing({ items }: { items: NewsItem[] }) {
 
       {visible.length > 0 ? (
         <div className="news-list-grid">
-          {visible.map((item) => (
-            <ListCard item={item} key={item.slug} />
+          {visible.map((item, index) => (
+            <ListCard item={item} priority={index === 0} key={item.slug} />
           ))}
         </div>
       ) : (

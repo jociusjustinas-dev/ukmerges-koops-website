@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
 import { RollingLabel } from "../../components/RollingLabel";
+import { createPageMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "KOOPS | Svetainės atnaujinimo strategija",
   description: "Ukmergės rajono vartotojų kooperatyvo svetainės atnaujinimo strategija.",
-  alternates: { canonical: "/strategija" },
-  robots: { index: false, follow: false },
-};
+  path: "/strategija",
+  noIndex: true,
+});
 
 const goals = [
   { number: "01", title: "Rasti parduotuvę", text: "Aiškiai parodyti artimiausią vietą, darbo laiką ir maršrutą." },

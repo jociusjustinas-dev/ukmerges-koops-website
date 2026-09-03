@@ -1,18 +1,21 @@
 "use client";
 
 import * as React from "react";
-import gsap from "gsap";
 import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
 
 export function ClassifiedsPageMotion() {
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     const root = document.querySelector<HTMLElement>(".classifieds-directory");
     if (!root) return;
 
     const clearFallback = withIntroFallback(root);
-    const media = gsap.matchMedia();
+    let cancelled = false;
+    let revert = () => {};
 
-    media.add(
+    void import("gsap").then(({ gsap }) => {
+      if (cancelled) return;
+      const media = gsap.matchMedia();
+      media.add(
       {
         isMobile: "(max-width: 767px)",
         reduceMotion: "(prefers-reduced-motion: reduce)",
@@ -36,7 +39,7 @@ export function ClassifiedsPageMotion() {
         const cards = root.querySelectorAll<HTMLElement>(".classified-card");
         const empty = root.querySelector<HTMLElement>(".classifieds-empty");
         const emptyContent = empty?.querySelectorAll<HTMLElement>(":scope > *");
-        const targets = [label, title, lead, ...Array.from(cards), empty].filter(Boolean) as HTMLElement[];
+        const targets = [label, lead, ...Array.from(cards), empty].filter(Boolean) as HTMLElement[];
 
         gsap.set(targets, { autoAlpha: 0 });
         if (emptyContent?.length) gsap.set(emptyContent, { autoAlpha: 0 });
@@ -50,8 +53,8 @@ export function ClassifiedsPageMotion() {
         if (title) {
           intro.fromTo(
             title,
-            { y: isMobile ? 26 : 40, autoAlpha: 0 },
-            { y: 0, autoAlpha: 1 },
+            { y: isMobile ? 20 : 28 },
+            { y: 0 },
             0.12,
           );
         }
@@ -82,10 +85,13 @@ export function ClassifiedsPageMotion() {
         }
       },
     );
+      revert = () => media.revert();
+    });
 
     return () => {
+      cancelled = true;
       clearFallback();
-      media.revert();
+      revert();
     };
   }, []);
 

@@ -56,8 +56,8 @@ export function CareersValueFeatures() {
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) {
-      setVisible(true);
-      return;
+      const frame = window.requestAnimationFrame(() => setVisible(true));
+      return () => window.cancelAnimationFrame(frame);
     }
 
     const obs = new IntersectionObserver(

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { FaFacebookF, FaInstagram } from "react-icons/fa6";
 import { KoopsBentoSection } from "./sections/KoopsBentoSection";
 import { KoopsValueFeaturesSection } from "./sections/KoopsValueFeaturesSection";
@@ -169,7 +170,10 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
           }
 
           if (reduceMotion) {
-            titlePushLines.forEach((pushLine) => pushLine.style.removeProperty("width"));
+            titlePushLines.forEach((pushLine) => {
+              pushLine.style.removeProperty("width");
+              pushLine.style.removeProperty("transform");
+            });
             const hero = root.querySelector<HTMLElement>(".tt-hero");
             if (hero) revealIntroImmediately(hero);
             return;
@@ -189,8 +193,9 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
           if (line) {
             line.style.removeProperty("width");
           }
-          const targetWidth = line?.getBoundingClientRect().width ?? 0;
-          if (line) line.style.width = "0px";
+          if (line) {
+            gsap.set(line, { scaleX: 0, transformOrigin: "left center" });
+          }
 
           const heroTimeline = gsap.timeline({
             defaults: { duration: 0.8, ease: "power3.out" },
@@ -202,24 +207,24 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
 
           heroTimeline.fromTo(
             heroWords,
-            { y: isMobile ? 24 : 42, autoAlpha: 0 },
-            { y: 0, autoAlpha: 1, stagger: 0.07 },
+            { y: isMobile ? 18 : 28 },
+            { y: 0, stagger: 0.07 },
             0.16,
           );
 
-          if (line && isDesktop && window.innerWidth > 1100 && targetWidth) {
+          if (line && isDesktop && window.innerWidth > 1100) {
             heroTimeline.to(
               line,
               {
-                width: targetWidth,
+                scaleX: 1,
                 duration: 0.82,
                 ease: "power3.inOut",
-                clearProps: "width",
+                clearProps: "transform,transformOrigin",
               },
               0.68,
             );
           } else if (line) {
-            line.style.removeProperty("width");
+            gsap.set(line, { scaleX: 1, clearProps: "transform,transformOrigin" });
           }
 
           if (heroBody) {
@@ -299,11 +304,9 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
             const pushLineElements = pushLine
               ? Array.from(section.querySelectorAll<HTMLElement>(pushLine))
               : [];
-            const pushLineTargets = pushLineElements.map((pushLineElement) => {
+            pushLineElements.forEach((pushLineElement) => {
               pushLineElement.style.removeProperty("width");
-              const width = pushLineElement.getBoundingClientRect().width;
-              pushLineElement.style.width = "0px";
-              return { element: pushLineElement, width };
+              gsap.set(pushLineElement, { scaleX: 0, transformOrigin: "left center" });
             });
             const itemElements = items ? section.querySelectorAll<HTMLElement>(items) : [];
             const timeline = gsap.timeline({
@@ -333,14 +336,14 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
               );
             }
 
-            pushLineTargets.forEach(({ element, width }) => {
+            pushLineElements.forEach((element) => {
               timeline.to(
                 element,
                 {
-                  width,
+                  scaleX: 1,
                   duration: 0.82,
                   ease: "power3.inOut",
-                  clearProps: "width",
+                  clearProps: "transform,transformOrigin",
                 },
                 0.55,
               );
@@ -358,7 +361,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                   stagger: 0.1,
                   ...(isLocationItems ? { clearProps: "transform" } : { scale: 1 }),
                 },
-                pushLineTargets.length ? 0.58 : headingElements.length ? 0.34 : 0,
+                pushLineElements.length ? 0.58 : headingElements.length ? 0.34 : 0,
               );
             }
           });
@@ -480,7 +483,14 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
         {/* BYQ: terra-tory-hero-1 adapted to KOOPS */}
         <section className="tt-hero" id="pradzia" data-byq-component="terra-tory-hero-1" data-cms-section="home-hero">
           <div className="tt-hero-background" aria-hidden="true">
-            <img src="/koops-hero-market.jpg" alt="" />
+            <Image
+              src="/koops-hero-market.jpg"
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              quality={78}
+            />
           </div>
           <div className="tt-hero-overlay" aria-hidden="true" />
           <div className="tt-container tt-hero-stage">
@@ -491,7 +501,12 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                   <span>KOOPS</span>
                   <span>parduotuvės</span>
                   <span className="hero-title-break" aria-hidden="true" />
-                  <i ref={heroLineRef} className="hero-headline-line title-push-line" style={{ width: 0 }} aria-hidden="true" />
+                  <i
+                    ref={heroLineRef}
+                    className="hero-headline-line title-push-line"
+                    style={{ transform: "scaleX(0)", transformOrigin: "left center" }}
+                    aria-hidden="true"
+                  />
                   <span>arčiau</span>
                   <span>jūsų.</span>
                 </h1>
@@ -513,7 +528,13 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
           >
             <a className="hero-update-link" href={activeHeroUpdate.href} key={activeHeroUpdate.title}>
               <span className="hero-update-media">
-                <img src={activeHeroUpdate.image} alt="" />
+                <Image
+                  src={activeHeroUpdate.image}
+                  alt=""
+                  fill
+                  sizes="(max-width: 767px) calc(100vw - 48px), 284px"
+                  quality={76}
+                />
                 <span className="hero-update-kicker">Aktualu</span>
               </span>
               <span className="hero-update-copy">
@@ -545,7 +566,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
         <section className="tt-locations" id="parduotuves" aria-labelledby="parduotuviu-antraste" data-byq-component="terra-tory-team-1" data-cms-section="home-stores">
           <div className="tt-container">
             <div className="location-headline" id="parduotuviu-antraste">
-              <span>Raskite</span><span>artimiausią</span><i className="title-push-line" style={{ width: 0 }} aria-hidden="true" /><span>KOOPS</span><span>parduotuvę</span>
+              <span>Raskite</span><span>artimiausią</span><i className="title-push-line" style={{ transform: "scaleX(0)", transformOrigin: "left center" }} aria-hidden="true" /><span>KOOPS</span><span>parduotuvę</span>
             </div>
             <div className="location-carousel" role="region" aria-roledescription="karuselė" aria-label="KOOPS parduotuvės">
               <div className="location-grid" ref={locationCarouselRef} onScroll={handleLocationScroll}>
@@ -557,9 +578,9 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                     aria-label={`Parduotuvė „${store.name}“ – atverti puslapį`}
                   >
                     {store.image ? (
-                      <img src={store.image} alt={`Parduotuvė „${store.name}“`} />
+                      <img loading="lazy" src={store.image} alt={`Parduotuvė „${store.name}“`} />
                     ) : (
-                      <img className="store-cover-logo" src="/koops-logo.png" alt="" />
+                      <img className="store-cover-logo" loading="lazy" src="/koops-logo.png" alt="" />
                     )}
                   </a>
                   <div className="location-info">
@@ -677,6 +698,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                   key={restaurantSlides[restaurantSlide].src}
                   src={restaurantSlides[restaurantSlide].src}
                   alt={restaurantSlides[restaurantSlide].alt}
+                  loading="lazy"
                 />
                 <div className="story-gallery-controls">
                   <div className="story-gallery-dots" aria-label="Pasirinkti galerijos nuotrauką">
@@ -760,7 +782,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                 <RollingLabel>Visi darbo pasiūlymai</RollingLabel>
               </a>
             </div>
-            <div className="jobs-list" aria-label="Naujausi darbo pasiūlymai">
+            <div className="jobs-list" role="region" aria-label="Naujausi darbo pasiūlymai">
               {jobs.slice(0, 3).map((job) => (
                 <a
                   className="job-row"
@@ -814,7 +836,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
           <div className="tt-container footer-content">
             <div className="footer-grid">
               <div className="footer-brand">
-                <img src="/koops-logo.png" alt="KOOPS prekybos sistema" />
+                <img loading="lazy" src="/koops-logo.png" alt="KOOPS prekybos sistema" />
                 <p>Arti miesto ir rajono žmonių kasdien.</p>
                 <div className="footer-socials" aria-label="KOOPS socialiniai tinklai">
                   {socialLinks.map((social) => {

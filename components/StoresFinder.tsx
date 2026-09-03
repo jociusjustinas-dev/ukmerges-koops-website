@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type MouseEvent } from "react";
 import { createPortal } from "react-dom";
 import type { Map as MapboxMap, Marker, StyleSpecification } from "mapbox-gl";
 import type { Store, StoreArea } from "../lib/stores";
@@ -11,6 +11,13 @@ type AreaFilter = "visos" | StoreArea;
 
 const MOBILE_BATCH = 10;
 const MOBILE_MQ = "(max-width: 767px)";
+const subscribeToMobileViewport = (onChange: () => void) => {
+  const mediaQuery = window.matchMedia(MOBILE_MQ);
+  mediaQuery.addEventListener("change", onChange);
+  return () => mediaQuery.removeEventListener("change", onChange);
+};
+const getMobileViewportSnapshot = () => window.matchMedia(MOBILE_MQ).matches;
+const subscribeToClient = () => () => {};
 const FALLBACK_MAP_STYLE: StyleSpecification = {
   version: 8,
   sources: {
@@ -44,10 +51,10 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const [previewSlug, setPreviewSlug] = useState<string | null>(null);
   const [mapReady, setMapReady] = useState(false);
-  const [portalReady, setPortalReady] = useState(false);
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined" ? window.matchMedia(MOBILE_MQ).matches : false,
-  );
+  const [mapRequested, setMapRequested] = useState(false);
+  const [mapUnavailable, setMapUnavailable] = useState(false);
+  const portalReady = useSyncExternalStore(subscribeToClient, () => true, () => false);
+  const isMobile = useSyncExternalStore(subscribeToMobileViewport, getMobileViewportSnapshot, () => false);
   const [shownCount, setShownCount] = useState(MOBILE_BATCH);
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<MapboxMap | null>(null);
@@ -70,6 +77,7 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
   const previewStore = previewSlug ? stores.find((store) => store.slug === previewSlug) ?? null : null;
 
   const openPreview = (slug: string) => {
+    setMapRequested(true);
     setActiveSlug(slug);
     setPreviewSlug(slug);
   };
@@ -83,23 +91,22 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
   };
 
   useEffect(() => {
-    setPortalReady(true);
-  }, []);
-
-  useLayoutEffect(() => {
-    const mq = window.matchMedia(MOBILE_MQ);
-    const sync = () => setIsMobile(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
-
-  useEffect(() => {
-    if (!isMobile) return;
-    setShownCount(MOBILE_BATCH);
-  }, [area, query, isMobile]);
+    const container = mapRef.current;
+    if (!container || mapRequested) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setMapRequested(true);
+        observer.disconnect();
+      },
+      { rootMargin: "320px 0px" },
+    );
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [mapRequested]);
 
   useEffect(() => {
+    if (!mapRequested) return;
     let cancelled = false;
     let resizeObserver: ResizeObserver | null = null;
     const retryTimers: number[] = [];
@@ -128,18 +135,30 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
       const accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
       if (!accessToken) {
         console.error("Trūksta NEXT_PUBLIC_MAPBOX_TOKEN aplinkos kintamojo.");
+        setMapUnavailable(true);
+        return;
+      }
+      const supportsMapbox = (mapboxgl as unknown as { supported?: () => boolean }).supported;
+      if (supportsMapbox && !supportsMapbox()) {
+        setMapUnavailable(true);
         return;
       }
 
-      const map = new mapboxgl.Map({
-        container: mapRef.current,
-        style: "mapbox://styles/mapbox/light-v11",
-        center: [24.76, 55.25],
-        zoom: 9.5,
-        accessToken,
-        scrollZoom: false,
-        attributionControl: true,
-      });
+      let map: MapboxMap;
+      try {
+        map = new mapboxgl.Map({
+          container: mapRef.current,
+          style: "mapbox://styles/mapbox/light-v11",
+          center: [24.76, 55.25],
+          zoom: 9.5,
+          accessToken,
+          scrollZoom: false,
+          attributionControl: true,
+        });
+      } catch {
+        setMapUnavailable(true);
+        return;
+      }
       let fallbackApplied = false;
       map.on("error", (event) => {
         const mapError = event.error as Error & { status?: number };
@@ -227,14 +246,15 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
       }
       markers.current = {};
     };
-  }, [stores]);
+  }, [stores, mapRequested]);
 
   useEffect(() => {
     const map = mapInstance.current;
     if (!map || !mapReady) return;
 
+    const visibleSlugs = new Set(visible.map((store) => store.slug));
     Object.entries(markers.current).forEach(([slug, marker]) => {
-      const isVisible = visible.some((store) => store.slug === slug);
+      const isVisible = visibleSlugs.has(slug);
       const el = marker.getElement();
       if (el) el.classList.toggle("is-hidden", !isVisible);
     });
@@ -303,7 +323,10 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
           <input
             type="text"
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setShownCount(MOBILE_BATCH);
+            }}
             placeholder="Ukmergė, Deltuva, gatvė…"
             autoComplete="off"
             enterKeyHint="search"
@@ -313,7 +336,10 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
               type="button"
               className="stores-finder-search-clear"
               aria-label="Išvalyti paiešką"
-              onClick={() => setQuery("")}
+              onClick={() => {
+                setQuery("");
+                setShownCount(MOBILE_BATCH);
+              }}
             >
               <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
                 <path
@@ -340,7 +366,10 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
               key={value}
               className={area === value ? "is-active" : ""}
               aria-pressed={area === value}
-              onClick={() => setArea(value)}
+              onClick={() => {
+                setArea(value);
+                setShownCount(MOBILE_BATCH);
+              }}
             >
               {label}
             </button>
@@ -441,7 +470,21 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
 
         <aside className="stores-finder-map-col">
           <div className="stores-finder-map-wrap">
-            <div ref={mapRef} className="stores-finder-map" data-lenis-prevent aria-label="KOOPS parduotuvių žemėlapis" />
+            <div className="stores-finder-map-stage" role="region" aria-label="KOOPS parduotuvių žemėlapis">
+              <div ref={mapRef} className="stores-finder-map" data-lenis-prevent />
+              {!mapRequested ? (
+                <button type="button" className="stores-finder-map-load" onClick={() => setMapRequested(true)}>
+                  <span>Interaktyvus žemėlapis</span>
+                  <strong>Rodyti žemėlapį</strong>
+                </button>
+              ) : mapUnavailable ? (
+                <p className="stores-finder-map-status" role="status">
+                  Žemėlapio rodyti nepavyko. Maršrutą atidarykite pasirinktos parduotuvės kortelėje.
+                </p>
+              ) : !mapReady ? (
+                <p className="stores-finder-map-status" role="status">Žemėlapis kraunamas…</p>
+              ) : null}
+            </div>
           </div>
         </aside>
       </div>

@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
 import { getKoopsCmsData } from "../../lib/wordpress";
+import { createPageMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Privatumas ir slapukai | KOOPS",
   description: "Informacija apie KOOPS svetainėje naudojamus slapukus, jų paskirtį ir lankytojo pasirinkimų valdymą.",
-  alternates: { canonical: "/privatumo-politika" },
-};
+  path: "/privatumo-politika",
+});
 
 export default async function PrivacyPage() {
   const { options } = await getKoopsCmsData();

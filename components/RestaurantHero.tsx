@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import gsap from "gsap";
 import type { restaurant as restaurantDefaults } from "../lib/restaurant";
 import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
 import { RestaurantGalleryMarquee } from "./RestaurantGalleryMarquee";
@@ -13,8 +12,6 @@ const closingWords = ["gyvena", "atsiminimai."] as const;
 /** BYQ: terra-tory-hero-5 + terra-tory-gallery-1 marquee as media */
 export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDefaults }) {
   const rootRef = React.useRef<HTMLDivElement>(null);
-  const mediaRef = React.useRef<HTMLDivElement>(null);
-  const [mediaVisible, setMediaVisible] = React.useState(false);
 
   React.useLayoutEffect(() => {
     const root = rootRef.current;
@@ -24,7 +21,7 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
     let cancelled = false;
     let revert = () => {};
 
-    void import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
+    void Promise.all([import("gsap"), import("gsap/ScrollTrigger")]).then(([{ gsap }, { ScrollTrigger }]) => {
       if (cancelled || !root) return;
       gsap.registerPlugin(ScrollTrigger);
 
@@ -55,30 +52,20 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
           const actions = root.querySelector<HTMLElement>(".restaurant-hero-actions");
 
           if (reduceMotion) {
-            pushLine?.style.removeProperty("width");
+            pushLine?.style.removeProperty("transform");
             revealIntroImmediately(root);
             return;
           }
 
           clearFallback();
 
-          const introTargets = [
-            label,
-            titleLine,
-            actions,
-            ...Array.from(words),
-            ...Array.from(closingWordsEls),
-          ].filter(Boolean) as HTMLElement[];
+          const introTargets = [label, actions].filter(Boolean) as HTMLElement[];
           if (introTargets.length) {
             gsap.set(introTargets, { autoAlpha: 0 });
           }
 
-          let pushTarget: { element: HTMLElement; width: number } | null = null;
           if (pushLine) {
-            pushLine.style.removeProperty("width");
-            const width = pushLine.getBoundingClientRect().width;
-            pushLine.style.width = "0px";
-            pushTarget = { element: pushLine, width };
+            gsap.set(pushLine, { scaleX: 0, transformOrigin: "left center" });
           }
 
           const intro = gsap.timeline({
@@ -92,8 +79,8 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
           if (titleLine) {
             intro.fromTo(
               titleLine,
-              { y: isMobile ? 24 : 36, autoAlpha: 0 },
-              { y: 0, autoAlpha: 1 },
+              { y: isMobile ? 18 : 28 },
+              { y: 0 },
               0.16,
             );
           }
@@ -101,32 +88,32 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
           if (words.length) {
             intro.fromTo(
               words,
-              { y: isMobile ? 20 : 28, autoAlpha: 0 },
-              { y: 0, autoAlpha: 1, stagger: 0.07 },
+              { y: isMobile ? 16 : 22 },
+              { y: 0, stagger: 0.07 },
               0.28,
             );
           }
 
-          if (pushTarget && isDesktop && window.innerWidth > 991) {
+          if (pushLine && isDesktop && window.innerWidth > 991) {
             intro.to(
-              pushTarget.element,
+              pushLine,
               {
-                width: pushTarget.width,
+                scaleX: 1,
                 duration: 0.82,
                 ease: "power3.inOut",
-                clearProps: "width",
+                clearProps: "transform,transformOrigin",
               },
               0.52,
             );
           } else if (pushLine) {
-            pushLine.style.removeProperty("width");
+            gsap.set(pushLine, { scaleX: 1, clearProps: "transform,transformOrigin" });
           }
 
           if (closingWordsEls.length) {
             intro.fromTo(
               closingWordsEls,
-              { y: isMobile ? 20 : 28, autoAlpha: 0 },
-              { y: 0, autoAlpha: 1, stagger: 0.07 },
+              { y: isMobile ? 16 : 22 },
+              { y: 0, stagger: 0.07 },
               0.42,
             );
           }
@@ -144,36 +131,6 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
 
       revert = () => media.revert();
     });
-
-    const reduceMotionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduceMotionMq.matches) {
-      setMediaVisible(true);
-      return () => {
-        cancelled = true;
-        clearFallback();
-        revert();
-      };
-    }
-
-    const mediaEl = mediaRef.current;
-    if (mediaEl) {
-      const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setMediaVisible(true);
-            obs.disconnect();
-          }
-        },
-        { threshold: 0.1 },
-      );
-      obs.observe(mediaEl);
-      return () => {
-        cancelled = true;
-        clearFallback();
-        revert();
-        obs.disconnect();
-      };
-    }
 
     return () => {
       cancelled = true;
@@ -197,7 +154,7 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
                 <span className="restaurant-hero-title-row">
                   <i
                     className="restaurant-hero-title-rule title-push-line"
-                    style={{ width: 0 }}
+                    style={{ transform: "scaleX(0)", transformOrigin: "left center" }}
                     aria-hidden="true"
                   />
                   {inlineWords.map((word) => (
@@ -237,8 +194,7 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
         aria-label="Restorano „Vilkmergė“ nuotraukų galerija"
       >
         <div
-          ref={mediaRef}
-          className={`restaurant-hero-media restaurant-hero-media-marquee${mediaVisible ? " is-visible" : ""}`}
+          className="restaurant-hero-media restaurant-hero-media-marquee is-visible"
         >
           <RestaurantGalleryMarquee />
         </div>

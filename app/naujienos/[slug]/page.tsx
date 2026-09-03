@@ -11,6 +11,7 @@ import {
 } from "../../../lib/news";
 import { getKoopsCmsData } from "../../../lib/wordpress";
 import { absoluteUrl } from "../../../lib/site-url";
+import { createPageMetadata } from "../../../lib/metadata";
 
 type NewsPageProps = {
   params: Promise<{ slug: string }>;
@@ -26,11 +27,12 @@ export async function generateMetadata({ params }: NewsPageProps): Promise<Metad
   const { news } = await getKoopsCmsData();
   const item = news.find((entry) => entry.slug === slug);
   if (!item) return { title: "Naujiena | KOOPS" };
-  return {
+  return createPageMetadata({
     title: `${item.title} | KOOPS`,
     description: item.excerpt ?? item.title,
-    alternates: { canonical: newsHref(item.slug) },
-  };
+    path: newsHref(item.slug),
+    image: item.image || undefined,
+  });
 }
 
 function ArticleBlocks({ blocks }: { blocks: NewsBodyBlock[] }) {
@@ -92,14 +94,15 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
     headline: item.title,
     description: item.excerpt,
     datePublished: item.date,
+    dateModified: item.date,
     image: item.image,
     url: shareUrl,
     mainEntityOfPage: shareUrl,
     articleSection: item.category,
     publisher: {
-      "@type": "Organization",
-      name: "KOOPS",
+      "@id": `${absoluteUrl("/")}#organization`,
     },
+    author: { "@id": `${absoluteUrl("/")}#organization` },
   };
 
   return (

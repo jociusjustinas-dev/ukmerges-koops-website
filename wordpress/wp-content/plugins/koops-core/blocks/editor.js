@@ -218,7 +218,7 @@
     const frame = liveFrame();
     if (!frame || !frame.contentWindow || !frontendUrl) return;
     let origin = '*';
-    try { origin = new URL(frontendUrl).origin; } catch (error) { /* use wildcard for a malformed legacy option */ }
+    try { origin = new URL(frontendUrl).origin; } catch { /* use wildcard for a malformed legacy option */ }
     frame.contentWindow.postMessage(Object.assign({ source: 'koops-gutenberg-editor' }, message), origin);
   }
 
@@ -412,7 +412,7 @@
     const message = event.data;
     if (!message || message.source !== 'koops-cms-preview') return;
     let expectedOrigin = '';
-    try { expectedOrigin = new URL(frontendUrl).origin; } catch (error) { return; }
+    try { expectedOrigin = new URL(frontendUrl).origin; } catch { return; }
     if (event.origin !== expectedOrigin) return;
     if (message.type === 'select-section' && message.sectionType) selectPreviewSection(message.sectionType);
     if (message.type === 'ready') {

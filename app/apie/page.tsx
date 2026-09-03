@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { AboutHero } from "../../components/AboutHero";
 import { AboutStory } from "../../components/AboutStory";
 import { AboutPillars } from "../../components/sections/AboutPillars";
@@ -9,13 +8,13 @@ import { aboutOrg } from "../../lib/about";
 import { getKoopsCmsData } from "../../lib/wordpress";
 import { CmsPageController } from "../../components/CmsPageController";
 import { absoluteUrl } from "../../lib/site-url";
+import { createPageMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Apie KOOPS | Ukmergės rajono vartotojų kooperatyvas",
-  description:
-    "Ukmergės rajono vartotojų kooperatyvas: žmonės, vieta ir istorija. Parduotuvės, restoranas „Vilkmergė“ ir vietos partnerystė.",
-  alternates: { canonical: "/apie" },
-};
+  description: "Ukmergės rajono vartotojų kooperatyvas: žmonės, vieta ir istorija. Parduotuvės, restoranas „Vilkmergė“ ir vietos partnerystė.",
+  path: "/apie",
+});
 
 export default async function AboutPage() {
   const { pages } = await getKoopsCmsData();

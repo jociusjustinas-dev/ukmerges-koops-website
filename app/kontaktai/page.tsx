@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { ContactEnquiryForm } from "../../components/ContactEnquiryForm";
 import { ContactsHeading } from "../../components/ContactsHeading";
 import { ContactsPageMotion } from "../../components/ContactsPageMotion";
@@ -9,13 +8,13 @@ import { contactsOrg, socialLinks } from "../../lib/contacts";
 import { getKoopsCmsData } from "../../lib/wordpress";
 import { CmsPageController } from "../../components/CmsPageController";
 import { absoluteUrl } from "../../lib/site-url";
+import { createPageMetadata } from "../../lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Kontaktai | KOOPS Ukmergė",
-  description:
-    "KOOPS kontaktai Ukmergėje: adresas, telefonas, el. paštas ir forma. Parduotuvės, restoranas, tiekėjai ir karjera — aiškūs keliai.",
-  alternates: { canonical: "/kontaktai" },
-};
+  description: "KOOPS kontaktai Ukmergėje: adresas, telefonas, el. paštas ir forma. Parduotuvės, restoranas, tiekėjai ir karjera — aiškūs keliai.",
+  path: "/kontaktai",
+});
 
 function phoneHref(phone: string) {
   return `tel:${phone.replace(/[^\d+]/g, "").replace(/^0/, "+370")}`;

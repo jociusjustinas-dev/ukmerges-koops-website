@@ -1,11 +1,7 @@
 "use client";
 
 import * as React from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
-
-gsap.registerPlugin(ScrollTrigger);
 
 /** Kontaktų puslapio antrinis turinys po H1 — forma / kanalai */
 export function ContactsPageMotion() {
@@ -19,9 +15,14 @@ export function ContactsPageMotion() {
     const clearFormFallback = formSection ? withIntroFallback(formSection) : () => {};
     const clearChannelsFallback = channels ? withIntroFallback(channels) : () => {};
     let channelsSafetyId = 0;
+    let cancelled = false;
+    let revert = () => {};
 
-    const media = gsap.matchMedia();
-    media.add(
+    void Promise.all([import("gsap"), import("gsap/ScrollTrigger")]).then(([{ gsap }, { ScrollTrigger }]) => {
+      if (cancelled) return;
+      gsap.registerPlugin(ScrollTrigger);
+      const media = gsap.matchMedia();
+      media.add(
       {
         reduceMotion: "(prefers-reduced-motion: reduce)",
         canAnimate: "(prefers-reduced-motion: no-preference)",
@@ -116,12 +117,15 @@ export function ContactsPageMotion() {
         }
       },
     );
+      revert = () => media.revert();
+    });
 
     return () => {
+      cancelled = true;
       window.clearTimeout(channelsSafetyId);
       clearFormFallback();
       clearChannelsFallback();
-      media.revert();
+      revert();
     };
   }, []);
 
