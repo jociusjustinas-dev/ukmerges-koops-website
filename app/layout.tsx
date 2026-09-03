@@ -6,11 +6,26 @@ import { CmsProvider } from "../components/CmsProvider";
 import { getKoopsCmsData } from "../lib/wordpress";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ukmerges-koops-website.vercel.app"),
+  applicationName: "KOOPS",
   title: "KOOPS | Parduotuvės Ukmergėje ir rajone",
   description: "Raskite KOOPS parduotuves, darbo laiką, naujienas, restorano „Vilkmergė“ informaciją ir darbo pasiūlymus.",
   icons: {
-    icon: "/koops-logo.png",
-    shortcut: "/koops-logo.png",
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    shortcut: [{ url: "/icon.png", type: "image/png" }],
+    apple: [{ url: "/icon.png", type: "image/png" }],
+  },
+  openGraph: {
+    type: "website",
+    locale: "lt_LT",
+    siteName: "KOOPS",
+    title: "KOOPS | Parduotuvės Ukmergėje ir rajone",
+    description: "Raskite KOOPS parduotuves, darbo laiką, naujienas, restorano „Vilkmergė“ informaciją ir darbo pasiūlymus.",
+  },
+  twitter: {
+    card: "summary",
+    title: "KOOPS | Parduotuvės Ukmergėje ir rajone",
+    description: "Raskite KOOPS parduotuves, darbo laiką, naujienas, restorano „Vilkmergė“ informaciją ir darbo pasiūlymus.",
   },
 };
 
