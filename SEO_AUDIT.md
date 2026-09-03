@@ -1,194 +1,374 @@
-# KOOPS svetainės SEO auditas
+# Ukmergės KOOPS svetainės SEO auditas
 
-Audito data: 2026-09-03  
-Audituota versija: https://ukmerges-koops-website.vercel.app/  
-Apimtis: 51 unikalus veikiantis puslapis, vidinės nuorodos, metaduomenys, indeksavimo signalai, struktūriniai duomenys, mobilus Lighthouse ir senos svetainės URL migracija.
+Audito data: 2026-09-03
 
-## Santrauka
+Audituota versija: <https://ukmerges-koops-website.vercel.app/>
 
-Svetainė turi tvarkingą semantinį pagrindą: visi veikiantys puslapiai turi unikalius `title`, meta aprašymus ir po vieną H1; naudojamas `lang="lt"`, HTTPS ir HSTS; indeksuojamuose puslapiuose nerasta masinių 4xx ar antraščių hierarchijos problemų.
+Galutinis numatytas domenas: <https://ukmergeskoops.lt/>
 
-Tačiau dabartinė versija dar nėra paruošta indeksuoti galutiniame domene. Kritinės priežastys:
+Kodo būsena audito metu: `92e2816`
 
-1. nėra `robots.txt`;
-2. nėra `sitemap.xml`;
-3. visuose 51 veikiančiame puslapyje nėra canonical nuorodos;
-4. dalis JSON-LD URL vis dar nukreipia į seną `jociusj.chatgpt.site` koncepciją;
-5. pagrindiniame puslapyje yra vidinė nuoroda į neegzistuojančią naujieną;
-6. klientui skirtas `/strategija` puslapis yra indeksuojamas;
-7. pagrindinių puslapių mobilus LCP neatitinka gero Core Web Vitals lygio.
+## Apimtis ir metodika
 
-Lighthouse SEO balas `100` šių problemų nepaneigia: Lighthouse netikrina pilnos sitemap, canonical, migracijos ir struktūrinių duomenų semantikos.
+- automatiškai nuskaityti visi iš pagrindinio puslapio pasiekiami vidiniai URL;
+- patikrintas serverio HTML, HTTP būsenos, `title`, meta aprašymai, canonical,
+  robots signalai, H1, Open Graph, Twitter kortelės, favicon ir JSON-LD;
+- atlikti mobilūs „Lighthouse 12.8.2“ matavimai penkiems pagrindiniams
+  šablonams;
+- peržiūrėtas Next.js kodas, struktūrinių duomenų generavimas ir Mapbox
+  inicializavimas;
+- peržiūrėtas dabartinės `ukmergeskoops.lt` svetainės sitemap ir viešas
+  indeksavimas, kad būtų įvertinta migracijos rizika;
+- patikrintas headless WordPress indeksavimo elgesys.
 
-## P0 — sutvarkyti prieš domeno paleidimą
+Auditas neatspindi realių paieškos užklausų, pozicijų, paspaudimų ar lauko Core
+Web Vitals, nes nėra GA4, Search Console ir CrUX duomenų.
 
-### 1. Robots ir sitemap
+## Verdiktas
 
-- `https://ukmerges-koops-website.vercel.app/robots.txt` grąžina 404.
-- `https://ukmerges-koops-website.vercel.app/sitemap.xml` grąžina 404.
-- Reikia generuoti abu failus iš realaus WordPress turinio.
-- Sitemap turi apimti pagrindinius puslapius, 34 parduotuvių puslapius ir naujienas, bet ne `/strategija`, API ar administravimo adresus.
+Vizualinė ir semantinė bazė gera, tačiau svetainė **dar neparuošta galutinio
+domeno paleidimui ir indeksavimui**. Paleidimą blokuoja šešios problemos:
 
-### 2. Canonical nėra nė viename puslapyje
+1. Vercel versijoje nėra veikiančių `robots.txt` ir `sitemap.xml`;
+2. visuose 50 veikiančių puslapių nėra canonical;
+3. JSON-LD naudoja seną `jociusj.chatgpt.site` domeną;
+4. pagrindiniame puslapyje yra vidinė nuoroda į 404;
+5. vidinis `/strategija` puslapis indeksuojamas;
+6. nėra parengto ir patikrinto seno domeno URL → naujo URL 301 plano.
 
-Visuose 51 veikiančiame puslapyje trūksta `<link rel="canonical">`. Canonical turi būti absoliutus ir naudoti galutinį domeną `https://ukmergeskoops.lt`, ne Vercel ar koncepcijos domeną.
+## Nuskaitymo rezultatai
 
-### 3. Neteisingi struktūrinių duomenų URL
+| Rodiklis | Rezultatas |
+|---|---:|
+| Nuskaityta vidinių URL | 51 |
+| Veikiantys `200` puslapiai | 50 |
+| Vidiniai `404` | 1 |
+| Veikiantys puslapiai su vienu H1 | 50 / 50 |
+| Veikiantys puslapiai su `lang="lt"` | 50 / 50 |
+| Unikalūs title tarp veikiančių puslapių | 50 / 50 |
+| Unikalūs meta aprašymai | 50 / 50 |
+| Veikiantys puslapiai su canonical | 0 / 50 |
+| Veikiantys puslapiai su `og:image` | 0 / 50 |
+| Veikiantys puslapiai su JSON-LD | 45 / 50 |
+| HTML rasti `<img>` elementai | 251 |
+| `<img>` su `width` ir `height` | 0 / 251 |
+| `<img>` su tuščiu `alt` | 111 / 251 |
 
-Šiuose šablonuose JSON-LD nurodo `https://ukmerges-koops-koncepcija.jociusj.chatgpt.site`:
+Tuščias `alt` nėra automatiškai klaida: dekoratyviniams vaizdams jis teisingas.
+Naujienų, parduotuvių ir turinio fotografijoms reikia atskiros rankinės peržiūros.
 
-- parduotuvės detalės (`GroceryStore`);
-- restoranas (`Restaurant`);
-- „Apie mus“ (`Organization`);
-- kontaktai (`Organization`).
+## P0 — būtina ištaisyti prieš paleidimą
 
-Tai klaidingai susieja turinį su kitu domenu. Reikia vieno centrinio `SITE_URL` ir visur generuoti galutinio domeno URL.
+### 1. Galutinis domenas ir canonical
 
-### 4. Vidinis 404
+`app/layout.tsx` šiuo metu turi:
 
-Pagrindinio puslapio hero kortelė veda į:
+`metadataBase: https://ukmerges-koops-website.vercel.app`
 
-`/naujienos/vietos-pomidorai` → 404.
+Visiems 50 veikiantiems URL trūksta savireferencinio canonical. Prieš paleidimą
+reikia vieno centrinio `SITE_URL=https://ukmergeskoops.lt` ir absoliutaus
+canonical kiekvienam indeksuojamam puslapiui.
 
-Kortelė yra statinė, o gyvos naujienos gaunamos iš WordPress. Ji turi būti generuojama iš esamos naujienos arba nukreipta į `/naujienos`.
+Priėmimo kriterijai:
+
+- kiekvienas indeksuojamas URL turi vieną canonical į galutinį domeną;
+- canonical, sitemap, Open Graph ir JSON-LD naudoja tą patį protokolą, hostą ir
+  URL struktūrą;
+- Vercel ir Hostinger techniniai domenai nėra canonical taikiniai;
+- `www` arba ne `www` versija pasirinkta viena, kita nuolat peradresuojama 301.
+
+### 2. Robots ir dinaminis sitemap
+
+- `/robots.txt` Vercel versijoje grąžina `404`;
+- `/sitemap.xml` Vercel versijoje grąžina `404`.
+
+Sitemap turi būti generuojamas iš dabartinio WordPress turinio, o ne ranka
+palaikomo sąrašo. Jame turi būti pagrindiniai puslapiai, 34 parduotuvės,
+naujienos, aktyvūs skelbimai ir atskiri galiojantys darbo pasiūlymai.
+
+Neįtraukti `/strategija`, `/api/*`, WordPress techninių URL, 404, peradresuojamų,
+`noindex` arba canonical į kitą URL turinčių puslapių. `robots.txt` turi leisti
+viešą frontendą ir nurodyti galutinį sitemap URL.
+
+### 3. Vidinis 404
+
+Pagrindiniame puslapyje tebėra nuoroda:
+
+`/naujienos/vietos-pomidorai` → `404`
+
+404 grąžina `noindex`, tačiau paveldi pagrindinio puslapio title ir description.
+Pirmiausia reikia pašalinti vidinę nuorodą. Hero naujienos kortelė turi būti
+valdoma iš WordPress ir visada rodyti realiai egzistuojantį įrašą; jei įrašų
+nėra, vesti į `/naujienos`.
+
+### 4. Neteisingi JSON-LD domenai
+
+Senas koncepcijos domenas
+`https://ukmerges-koops-koncepcija.jociusj.chatgpt.site` tebenaudojamas:
+
+- visų 34 parduotuvių `GroceryStore.url`;
+- restorano `Restaurant.url`;
+- „Apie“ ir kontaktų `Organization.url`.
+
+Naujienų dalinimosi URL atskirai užkoduotas į Vercel domeną. Visus URL reikia
+generuoti iš vieno `SITE_URL`.
 
 ### 5. Strategijos puslapis indeksuojamas
 
-`/strategija` turi `200`, title ir description, bet neturi `noindex`. Tai vidinis pristatymo puslapis, todėl jam reikia:
+`/strategija` grąžina `200`, turi title ir H1, bet neturi `noindex` ar canonical.
+Reikia:
 
-`robots: { index: false, follow: false }`
+```ts
+robots: { index: false, follow: false }
+```
 
-Jo taip pat negalima įtraukti į sitemap.
+Stipresnis sprendimas — apsaugoti puslapį autentifikacija arba pašalinti iš
+produkcinio build. Vien `robots.txt` nėra apsauga nuo indeksavimo.
 
-### 6. Galutinis domenas ir 301 migracija
+### 6. 301 migracijos planas
 
-Dabar `metadataBase` yra Vercel domenas. Prieš paleidimą jis turi būti pakeistas į `https://ukmergeskoops.lt`.
+Dabartinis `ukmergeskoops.lt` dar rodo seną WordPress svetainę ir yra
+indeksuojamas. Naujo frontendo negalima tiesiog prijungti nepastačius 301.
 
-Senoje svetainėje rasti URL, kuriems būtinas tikslinis 301 planas:
-
-| Senas URL | Rekomenduojamas naujas URL |
+| Senas URL | Naujas URL / veiksmas |
 |---|---|
 | `/restoranas-vilkmerge` | `/restoranas` |
 | `/apie-mus` | `/apie` |
-| `/akcijos` | `/naujienos` |
-| `/rekomendacijos` | sprendimas pagal išsaugomą turinį; nenukreipti aklai į pradžią |
-| `/ukmerges-duona-2` | sprendimas pagal išsaugomą turinį; nenukreipti aklai į pradžią |
+| `/kontaktai` | `/kontaktai` |
+| `/parduotuves` | `/parduotuves` |
+| `/naujienos` | `/naujienos` |
+| `/skelbimai` | `/skelbimai` |
+| `/privatumo-politika` | viena pasirinkta URL versija |
+| `/akcijos` | tematiškai artimiausias naujienų / akcijos URL |
+| `/rekomendacijos` | išsaugoti turinį naujame puslapyje arba grąžinti 410 |
+| `/ukmerges-duona` | naujas turinys arba 301 į patvirtintą išorinį šaltinį |
+| `/ukmerges-duona-2` | tas pats galutinis taikinys kaip `/ukmerges-duona` |
 
-Seno domeno sitemap turi ir tris vienodus `/akcijos` įrašus, todėl jo negalima kopijuoti tiesiogiai.
+Sename sitemap papildomai yra 47 `3d-flip-book` URL, dvi kategorijos,
+`/author/admin`, `/author/laurita` ir trys pasikartojantys `/akcijos` įrašai.
+Kiekvienam reikia individualaus 301, turinio išsaugojimo arba `410 Gone`.
+Masinis visko nukreipimas į pagrindinį puslapį laikytinas minkštu 404.
 
-## P1 — matomumas ir našumas
+## P1 — didelė organinio matomumo ir UX įtaka
 
-### Mobilus Lighthouse
+### Mobilus našumas
 
-| Puslapis | Performance | Accessibility | Best Practices | SEO | LCP | TBT | CLS |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| Pradinis | 67 | 96 | 100 | 100 | 10,0 s | 60 ms | 0 |
-| Parduotuvės | 36 | 100 | 96 | 100 | 13,1 s | 8 110 ms | 0 |
-| Restoranas | 56 | 96 | 100 | 100 | 9,1 s | 420 ms | 0 |
-| Naujienos | 84 | 100 | 100 | 100 | 3,6 s | 30 ms | 0 |
-| Kontaktai | 87 | 100 | 100 | 100 | 3,8 s | 20 ms | 0 |
+| Puslapis | Performance | Accessibility | Best practices | SEO | FCP | LCP | TBT | CLS | Dydis |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Pradinis | 69 | 96 | 100 | 100 | 1,2 s | 10,1 s | 20 ms | 0 | 2 301 KiB |
+| Parduotuvės | 36 | 100 | 96 | 100 | 4,9 s | 9,3 s | 1 270 ms | 0 | 1 759 KiB |
+| Restoranas | 74 | 96 | 100 | 100 | 2,0 s | 5,3 s | 20 ms | 0 | 1 871 KiB |
+| Naujienos | 91 | 100 | 100 | 100 | 1,2 s | 3,4 s | 10 ms | 0 | 669 KiB |
+| Kontaktai | 87 | 100 | 100 | 100 | 1,7 s | 3,7 s | 20 ms | 0 | 833 KiB |
 
-Tai laboratoriniai mobilūs matavimai, ne realių naudotojų CrUX duomenys. Gero LCP riba yra iki 2,5 s.
+Geras LCP yra iki 2,5 s. Visi penki matuoti šablonai šios ribos nepasiekia;
+pradinis, parduotuvės ir restoranas yra blogoje zonoje.
 
-### Pagrindinis puslapis
+#### Pradinis
 
-- Perduodama apie 2,3 MB.
-- Didžiausi vaizdai: 470 KB, 445 KB, 401 KB ir 361 KB.
-- LCP elementas yra animuojamas H1 tekstas. Jo parodymą atideda įžanginė animacija.
-- Reikia AVIF/WebP variantų, `srcset/sizes`, prioritetinio vieno hero vaizdo ir neblokuoti H1 matomumo animacija.
+- LCP yra animuojamas H1 žodis „parduotuvės“, ne fotografija;
+- įžanginė animacija atideda pagrindinio turinio matomumą;
+- galima sutaupyti apie 1,4 MiB pateikiant mobiliam ekranui tinkamus vaizdus;
+- apie 1,0 MiB galima sutaupyti moderniais formatais.
 
-### Parduotuvės
+H1 turi būti matomas pirmame kadre. Animacija gali judinti jau matomą elementą,
+bet negali atidėti jo opacity taip, kad LCP būtų fiksuojamas po 10 sekundžių.
 
-- Performance 36 ir TBT 8,11 s yra kritinė problema.
-- Mapbox JavaScript paketas sudaro apie 514 KB, papildomai kraunamos žemėlapio plytelės ir šriftai.
-- Aptikta React hydration klaida `#418`.
-- Žemėlapį reikia inicijuoti tik jam priartėjus prie viewport arba po aiškaus naudotojo veiksmo.
-- Parduotuvės sąrašas turi būti pilnai veikiantis be Mapbox; žemėlapis — progresyvus priedas.
+#### Parduotuvės
 
-### Restoranas
+- Performance `36` ir TBT `1 270 ms` — kritinė šablono problema;
+- konsolėje registruojama React hydration klaida `#418`;
+- `StoresFinder` serverio būsenoje `isMobile=false`, o pirmoje kliento renderio
+  būsenoje skaitomas `window.matchMedia`; tai konkretus galimas neatitikimo
+  šaltinis;
+- Mapbox importuojamas ir inicializuojamas iš karto;
+- apie 339 KiB JavaScript matavimo metu buvo nepanaudota.
 
-- `vilkmerge.jpg` perduoda apie 1,07 MB.
-- LCP 9,1 s; dalį vėlavimo sukuria animacijos ir hero vaizdas.
-- Reikia modernaus formato, mobilių dydžių ir aiškaus hero prioriteto.
+Reikia vienodos pradinės serverio ir kliento būsenos, Mapbox įkelti tik
+žemėlapiui priartėjus prie viewport arba paspaudus veiksmą, o parduotuvių sąrašą
+išlaikyti veikiantį be Mapbox.
 
-### Naujienos
+#### Restoranas
 
-- Pirmos kortelės vaizdas yra LCP, tačiau pažymėtas `loading="lazy"`.
-- Pirmą virš matomos ribos esantį vaizdą reikia krauti `eager` / `priority`, kitus palikti `lazy`.
+- LCP `5,3 s`;
+- LCP matavimo metu tapo kitos sekcijos H2, todėl hero nėra stabilus pagrindinio
+  turinio kandidatas;
+- apie 1,87 MiB mobiliai yra per daug;
+- reikia mobilių `srcset/sizes`, AVIF/WebP ir vieno prioritetinio hero vaizdo.
 
-## P1 — struktūriniai duomenys ir AEO
+#### Naujienos ir kontaktai
 
-### Kas jau yra
+- naujienų pirmos kortelės LCP nuotrauka turi `loading="lazy"`; jai reikia
+  `priority` / `eager`;
+- naujienose galima sutaupyti apie 215 KiB pateikiant tinkamą vaizdo dydį;
+- kontaktų LCP yra tekstinio lauko placeholder, todėl viršutinės dalies turinys
+  nėra stabilus LCP kandidatas.
 
-- `GroceryStore` — parduotuvių detalėse;
-- `Restaurant` — restorano puslapyje;
-- `NewsArticle` — naujienų detalėse;
-- `JobPosting` — karjeros puslapyje;
-- `FAQPage` — parduotuvių puslapyje;
-- `Organization` — „Apie mus“ ir kontaktuose.
+### Open Graph ir dalinimasis
 
-### Ko trūksta arba kas netikslu
+- nė vienas iš 50 veikiančių puslapių neturi `og:image`;
+- `og:url` nėra;
+- Twitter kortelė naudoja `summary`, o reikia `summary_large_image`;
+- `/icon.png` veikia ir naudojamas kaip favicon; `/favicon.ico` 404 nėra kritinis.
 
-- Visos svetainės lygiu nėra `WebSite` ir pagrindinio `Organization` grafo.
-- `GroceryStore` trūksta `geo`, `openingHoursSpecification`, teisingo `url` ir ryšio su pagrindine organizacija.
-- `Restaurant` trūksta `image`, `openingHoursSpecification`, `servesCuisine`, `priceRange`, `geo`; `url` neteisingas.
-- `NewsArticle` trūksta `mainEntityOfPage`, `author`, `dateModified`, leidėjo URL ir logotipo.
-- `JobPosting` trūksta privalomų ar praktiškai būtinų laukų: `datePosted`, `validThrough`, stabilaus `url` / `identifier`. Dabartinis žymėjimas gali neatitikti Google darbo skelbimų reikalavimų.
-- Parduotuvės detalėse rodoma breadcrumb navigacija, bet nėra `BreadcrumbList` JSON-LD.
-- Naujienų ir skelbimų sąrašams tinka `CollectionPage` / `ItemList`.
+Reikia bendro 1200 × 630 px vaizdo ir dinaminių naujienų, parduotuvių bei
+restorano OG vaizdų.
 
-Šešiems unikaliems veikiantiems puslapiams nėra jokio JSON-LD: pradinis, naujienų sąrašas, skelbimai, tiekėjams, privatumo politika ir strategija. Privatumo politikai schema nėra būtina; strategija turi būti `noindex`.
+### Struktūriniai duomenys
 
-## P1 — vaizdai ir dalinimasis
+Visos svetainės lygiu trūksta `WebSite` + `Organization` grafo su stabiliu
+`@id`, galutinio domeno URL, logotipu, kontaktais ir socialiniais profiliais.
 
-- Nė vienas iš 51 veikiančio puslapio neturi `og:image`.
-- Twitter kortelė naudoja `summary`, nors vizualiai svetainei tinkamesnė `summary_large_image`.
-- Reikia vieno bendro 1200×630 px OG vaizdo ir atskirų vaizdų naujienoms, parduotuvėms bei restoranui.
-- Daugelyje kortelių ir naujienų viršelių naudojamas tuščias `alt`. Dekoratyviniams vaizdams tai teisinga, tačiau naujienų ir konkrečių parduotuvių nuotraukoms reikia prasmingo alternatyvaus teksto iš WordPress.
-- HTML vaizdai neturi `width` ir `height`. CSS dabar išlaiko CLS ties 0, bet matmenys vis tiek turėtų būti pateikiami, o vaizdai generuojami pagal realų ekrano plotį.
+**Parduotuvės.** `GroceryStore` yra visuose 34 puslapiuose, bet trūksta teisingo
+`url`, stabilaus `@id`, `geo`, `openingHoursSpecification`, `hasMap`, ryšio su
+organizacija ir `BreadcrumbList`.
+
+**Restoranas.** Trūksta `image`, `geo`, `openingHoursSpecification`, `hasMap`,
+`servesCuisine`, `priceRange` ir ryšio su organizacija. URL klaidingas.
+
+**Naujienos.** `NewsArticle` yra visuose šešiuose straipsniuose, bet trūksta
+`mainEntityOfPage`, `author`, `dateModified`, leidėjo `@id`, URL ir logotipo.
+
+**Darbo pasiūlymai.** Dvi `JobPosting` schemos dedamos į bendrą `/karjera`
+puslapį. Trūksta `datePosted`, tikslaus `jobLocation`, stabilaus `url` /
+`identifier`; nėra `validThrough`. Google rekomenduoja konkretų darbo pasiūlymą
+žymėti jo atskirame puslapyje. Dabartinė schema nėra tinkama patikimai „Google
+Jobs“ integracijai.
+
+**AEO.** Parduotuvių puslapyje yra penki matomi DUK ir atitinkantis `FAQPage`.
+Tai naudinga atsakymų aiškumui, bet svarbesni yra tikslūs vietų faktai,
+LocalBusiness schema ir atskiri indeksuojami URL.
+
+## P1 — prieinamumas
+
+„Lighthouse“ nustatė:
+
+- pagrindinio puslapio `.jobs-list` yra `div` su draudžiamu `aria-label` be
+  semantinio `role`;
+- restorano užklausos skiltyje du tekstai turi 4,42:1 kontrastą, kai reikia bent
+  4,5:1;
+- datos ir pasirinkimo placeholder kontrastas yra 3,04:1;
+- parduotuvių puslapis registruoja React hydration klaidą.
 
 ## P2 — turinys ir vietinis SEO
 
-- Visi veikiantys puslapiai turi title ir meta description; tarp galutinių URL realių dublikatų nerasta.
-- Visi veikiantys puslapiai turi po vieną H1.
-- Vienos naujienos title yra 67 simbolių ir gali būti trumpinamas paieškoje.
-- Naujienų straipsnių meta aprašymai dažniausiai tik 71–89 simbolių. Juos verta rašyti kaip atskiras 120–155 simbolių santraukas.
-- Parduotuvės detalės turi tik apie 50–59 matomo teksto žodžius. Vietiniam SEO verta pridėti realias paslaugas, darbo laiko pastabas, vietovės kontekstą ir unikalią informaciją; negalima generuoti išgalvoto teksto.
-- Parduotuvės title turėtų nuosekliai turėti vietovę, pvz. `KOOPS parduotuvė „Pivonija“, Ukmergė`.
-- Tuščias skelbimų archyvas turi tik apie 50 žodžių. Jei skelbimų nėra, reikia aiškios tuščios būsenos ir paaiškinimo; laikinas `noindex` svarstytinas tik tada, jei puslapis ilgai neturės jokio naudingo turinio.
-- Vien lietuviškai svetainei `hreflang` nereikalingas.
+### Kas padaryta gerai
 
-## P2 — prieinamumas, turintis įtakos UX ir netiesiogiai SEO
+- visi 50 veikiantys puslapiai turi unikalų title, meta description, vieną H1
+  ir `lang="lt"`;
+- URL trumpi, lietuviški ir logiškai grupuojami;
+- 34 parduotuvės turi atskirus serverio HTML puslapius;
+- kontaktai, telefonai ir žemėlapių nuorodos nuskaitomi be JavaScript;
+- HTTPS, HSTS ir greitas pradinio HTML atsakas veikia;
+- CLS visuose penkiuose matavimuose buvo `0`.
 
-- Pagrindiniame puslapyje `aria-label="Rasti artimiausią parduotuvę"` nesutampa su matomu mygtuko tekstu.
-- Darbo pasiūlymų `div` turi draudžiamą `aria-label` be tinkamo vaidmens.
-- Restorano mygtuko ir kontaktų nuorodų accessible pavadinimai nesutampa su matomu tekstu.
-- Restorano formoje rasti 4,42:1 ir 3,04:1 kontrasto atvejai; tekstui reikia bent 4,5:1.
-- 404 puslapis yra angliškas. Jis turi būti lietuviškas, su nuorodomis į pradžią, parduotuves ir kontaktus.
+### Ploni parduotuvių puslapiai
 
-## Techniniai teigiami signalai
+Parduotuvių detalėse yra tik 43–52 pagrindinio turinio žodžiai. Reikia pridėti
+tik patvirtintą informaciją: darbo laiko išimtis, konkrečias paslaugas,
+privažiavimą, parkavimą, prieinamumą ir realias fotografijas. Negalima generuoti
+išgalvotų paslaugų vien SEO tekstui pailginti.
 
-- HTTPS ir HSTS įjungti.
-- Serverio atsako pradžia audituotuose puslapiuose apie 93–125 ms.
-- CLS visuose penkiuose Lighthouse mėginiuose buvo 0.
-- `lang="lt"` ir viewport yra.
-- Pagrindinė antraščių hierarchija be praleistų lygių.
-- 51 unikalus audituotas puslapis grąžino 200; rastas vienas vidinis 404.
-- Dinaminės parduotuvių ir naujienų detalės pateikiamos serverio HTML, todėl nėra priklausomos vien nuo kliento JavaScript.
+### Title ir aprašymai
+
+- viena naujienos antraštė yra 67 simbolių;
+- naujienų aprašymai dažniausiai 71–89 simbolių;
+- dauguma parduotuvių title trumpesni nei 30 simbolių ir neįvardija vietovės.
+
+Rekomenduojamas šablonas:
+
+`KOOPS parduotuvė „Pivonija“, Ukmergė | Darbo laikas`
+
+### NAP ir duomenų nuoseklumas
+
+Viešai indeksuojama sena svetainė dar rodo 35 parduotuves, o patvirtintame
+naujos svetainės sąraše yra 34. Ji taip pat rodo restorano adresą `Kauno g. 9`,
+o naujoje informacijoje naudojamas `Kauno g. 7`.
+
+Prieš migraciją reikia patvirtinti faktus ir tą pačią informaciją atnaujinti
+svetainėje, schemoje, Google Business Profile, Facebook ir kataloguose.
+
+### Skelbimai
+
+`/skelbimai` turi tik 38 pagrindinio turinio žodžius ir neturi aktyvių įrašų.
+Kol nėra realaus skelbimo, puslapį reikia papildyti naudinga tuščia būsena arba
+laikinai nustatyti `noindex`.
+
+### Vaizdai
+
+Visi 251 HTML vaizdai neturi aiškių `width` ir `height`. Reikia Next Image arba
+`srcset`, `sizes`, matmenų ir modernių formatų.
+
+Rankiniu būdu peržiūrėti 111 tuščių `alt`: dekoratyvinius palikti tuščius, o
+naujienų, parduotuvių ir turinio fotografijoms įrašyti trumpą kontekstinį
+aprašymą be raktažodžių prikimšimo.
+
+## Headless WordPress indeksavimas
+
+WordPress `/wp-json/` teisingai grąžina `X-Robots-Tag: noindex`, o šakninis URL
+peradresuojamas į Vercel frontendą. Tačiau `robots.txt` nenuoseklus:
+
+```txt
+User-agent: Googlebot
+Disallow: /
+
+User-agent: *
+Allow: /
+```
+
+Google blokuojamas, kiti robotai leidžiami. Techniniame WordPress domene visiems
+robotams reikia blokuoti viešų kopijų crawling ir neindeksuojamiems HTML
+atsakams grąžinti `X-Robots-Tag: noindex`.
+
+## Analitika ir matavimas
+
+Po galutinio domeno paleidimo:
+
+1. patvirtinti Domain property Google Search Console;
+2. pateikti naują sitemap ir patikrinti svarbius URL per URL Inspection;
+3. stebėti senų URL 301, 404 ir indeksavimo pokytį bent 8–12 savaičių;
+4. prijungti GA4 tik po analitinių slapukų sutikimo;
+5. registruoti `store_cta_click`, `store_map_click`, `store_phone_click`,
+   `restaurant_enquiry_start`, `restaurant_enquiry_submit`, `job_apply_click`,
+   `supplier_form_submit` ir bendrų formų užbaigimą;
+6. vėliau sprendimus grįsti Search Console ir realiais 75 procentilio Core Web
+   Vitals, ne vien laboratoriniu Lighthouse.
 
 ## Rekomenduojama darbų seka
 
-1. Patvirtinti galutinį domeną ir centralizuoti `SITE_URL`.
-2. Pašalinti vidinį 404 ir nustatyti `/strategija` kaip `noindex`.
-3. Sugeneruoti canonical, `robots.txt` ir `sitemap.xml`.
-4. Sutvarkyti visų JSON-LD URL ir privalomus laukus.
-5. Parengti 301 migracijos lentelę ir išspręsti `/rekomendacijos` bei `/ukmerges-duona-2` likimą.
-6. Optimizuoti hero vaizdus ir animacijų įtaką LCP.
-7. Atidėti Mapbox inicializavimą, pašalinti hydration klaidą.
-8. Įdėti OG vaizdus, sutvarkyti naujienų ir parduotuvių alt tekstus.
-9. Ištaisyti kontrastą ir accessible pavadinimus.
-10. Po galutinio domeno paleidimo prijungti Search Console, pateikti sitemap ir stebėti indeksavimą bei realius Core Web Vitals.
+1. Įvesti vieną `SITE_URL` ir sutvarkyti canonical, Open Graph bei JSON-LD URL.
+2. Pašalinti vidinį 404 ir nustatyti `/strategija` `noindex` arba apsaugą.
+3. Sugeneruoti dinaminį `robots.txt` ir sitemap iš WordPress turinio.
+4. Parengti visų seno sitemap URL 301 / 410 lentelę ir ją testuoti.
+5. Pašalinti parduotuvių hydration klaidą ir atidėti Mapbox įkėlimą.
+6. Optimizuoti vaizdus ir nebeatidėti H1 matomumo animacija.
+7. Užbaigti visas struktūrinių duomenų schemas ir atskirus darbo puslapius.
+8. Įdėti OG vaizdus, sutvarkyti prasmingus `alt` ir vaizdų matmenis.
+9. Ištaisyti ARIA ir kontrasto pažeidimus.
+10. Patvirtinti NAP, prijungti domeną, Search Console, sitemap ir stebėseną.
 
-## Matavimo ribos
+## Paleidimo SEO priėmimo kriterijai
 
-Auditas atliktas be GA4, Search Console ir realių CrUX lauko duomenų. Todėl jis patikimai vertina techninę būklę bei laboratorinį našumą, bet ne raktažodžių pozicijas, organinį srautą ar realių lankytojų konversijas.
+- nėra vidinių 4xx, 5xx, React hydration ar konsolės klaidų;
+- visi indeksuojami URL yra galutiniame domene ir turi canonical;
+- `robots.txt` ir sitemap grąžina `200`, sitemap turi tik `200`, indeksuojamus
+  ir canonical URL;
+- `/strategija`, WordPress administravimas ir techninės kopijos neindeksuojami;
+- visi seno sitemap URL turi patikrintą 301, 410 arba pagrįstai išsaugotą turinį;
+- JSON-LD validuojamas ir faktai sutampa su matomu turiniu;
+- parduotuvių TBT neviršija 200 ms laboratoriniame matavime;
+- nėra rimtų WCAG A / AA automatinių pažeidimų;
+- veikia OG vaizdai ir dalinimosi peržiūros;
+- Search Console priima sitemap be masinių `Excluded`, `Duplicate` ar
+  `Soft 404` problemų.
+
+## Autoritetingi kriterijų šaltiniai
+
+- Google crawling ir indeksavimas: <https://developers.google.com/search/docs/crawling-indexing>
+- Sitemap: <https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap>
+- Canonical: <https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls>
+- Robots meta: <https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag>
+- JobPosting: <https://developers.google.com/search/docs/appearance/structured-data/job-posting>
+- Struktūrinių duomenų taisyklės: <https://developers.google.com/search/docs/appearance/structured-data/sd-policies>
+- Vaizdų SEO: <https://developers.google.com/search/docs/appearance/google-images>
+- Core Web Vitals ribos: <https://web.dev/articles/defining-core-web-vitals-thresholds>
