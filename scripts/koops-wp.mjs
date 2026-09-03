@@ -118,6 +118,38 @@ async function syncNews(manifestPath) {
   return synced;
 }
 
+async function syncJobs(manifestPath) {
+  const absolutePath = resolve(manifestPath);
+  const manifest = JSON.parse(readFileSync(absolutePath, "utf8"));
+  if (!Array.isArray(manifest) || !manifest.length) throw new Error("Darbo pasiūlymų manifestas turi būti netuščias JSON masyvas.");
+
+  const synced = [];
+  for (const item of manifest) {
+    const existing = await request(`/wp-json/wp/v2/koops_job?context=edit&slug=${encodeURIComponent(item.slug)}&_fields=id,slug`);
+    const payload = {
+      title: item.title,
+      slug: item.slug,
+      status: "publish",
+      date: item.date,
+      excerpt: item.excerpt,
+      content: item.content,
+      meta: {
+        koops_location: item.location,
+        koops_employment: item.employment,
+        koops_department: item.department,
+        koops_apply_url: item.applyUrl,
+        koops_deadline: item.deadline || "",
+      },
+    };
+    const saved = await request(existing.length ? `/wp-json/wp/v2/koops_job/${existing[0].id}` : "/wp-json/wp/v2/koops_job", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    synced.push({ id: saved.id, slug: saved.slug, status: saved.status });
+  }
+  return synced;
+}
+
 function parseJson(value, label) {
   try {
     const parsed = JSON.parse(value);
@@ -152,6 +184,9 @@ if (command === "me") {
 } else if (command === "sync-news") {
   if (!args[0]) throw new Error("Naudojimas: sync-news <manifestas.json>");
   result = await syncNews(args[0]);
+} else if (command === "sync-jobs") {
+  if (!args[0]) throw new Error("Naudojimas: sync-jobs <manifestas.json>");
+  result = await syncJobs(args[0]);
 } else if (command === "options") {
   result = await request("/wp-json/koops/v1/manage/options", {
     method: "PATCH",
@@ -188,7 +223,7 @@ if (command === "me") {
     body: JSON.stringify(parseJson(changes, "Pakeitimai")),
   });
 } else {
-  throw new Error("Komandos: me, keys, revoke-key, site, sync-news, options, section, page, list, item.");
+  throw new Error("Komandos: me, keys, revoke-key, site, sync-news, sync-jobs, options, section, page, list, item.");
 }
 
 process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);

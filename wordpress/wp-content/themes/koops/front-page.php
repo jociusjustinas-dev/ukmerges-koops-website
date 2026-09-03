@@ -56,7 +56,7 @@ $restaurant_url = home_url('/restoranas/');
                 <?php while ($stores->have_posts()) : $stores->the_post(); $id = get_the_ID(); ?>
                     <article class="store-card">
                         <a class="store-card-media" href="<?php the_permalink(); ?>">
-                            <?php $image = koops_post_image($id, 'koops-card', 'koops-bento-local-shopping.jpg'); ?>
+                            <?php $image = koops_post_image($id, 'koops-card', 'local-produce-couple.jpg'); ?>
                             <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr(get_the_title()); ?>">
                         </a>
                         <div class="store-card-body">
@@ -129,4 +129,3 @@ $restaurant_url = home_url('/restoranas/');
     </section>
 </main>
 <?php get_footer(); ?>
-

@@ -15,11 +15,11 @@ const gallery = [
     alt: "KOOPS bendruomenė Ukmergėje",
   },
   {
-    src: "/koops-bento-local-shopping.jpg",
-    alt: "Vietos pirkimas KOOPS parduotuvėje",
+    src: "/store-pivonija.jpeg",
+    alt: "KOOPS parduotuvė „Pivonija“",
   },
   {
-    src: "/local-produce-shopper.jpg",
+    src: "/koops-bento-local-shopping.jpg",
     alt: "Kasdienis darbas šalia pirkėjų",
   },
 ] as const;

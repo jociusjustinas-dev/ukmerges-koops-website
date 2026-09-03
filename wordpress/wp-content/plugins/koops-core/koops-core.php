@@ -2,7 +2,7 @@
 /**
  * Plugin Name: KOOPS Core
  * Description: KOOPS turinio tipai, valdymo laukai, bendri duomenys ir formos.
- * Version: 0.10.0
+ * Version: 0.10.1
  * Author: KOOPS
  * Text Domain: koops
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('KOOPS_CORE_VERSION', '0.10.0');
+define('KOOPS_CORE_VERSION', '0.10.1');
 define('KOOPS_CORE_PATH', plugin_dir_path(__FILE__));
 define('KOOPS_CORE_URL', plugin_dir_url(__FILE__));
 
@@ -59,7 +59,7 @@ function koops_register_content_types(): void
             'rewrite' => ['slug' => $config['slug'], 'with_front' => false],
             'menu_icon' => $config['icon'],
             'menu_position' => 20,
-            'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'revisions'],
+            'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'custom-fields'],
         ]);
     }
 

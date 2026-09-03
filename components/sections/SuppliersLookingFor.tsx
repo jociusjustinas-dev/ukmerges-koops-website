@@ -44,7 +44,7 @@ export function SuppliersLookingFor() {
           </article>
 
           <div className="koops-bento-media" aria-hidden="true">
-            <img loading="lazy" src="/ukmerge-fields-1.jpg" alt="" />
+            <img loading="lazy" src="/ukmerge-fields-5.jpg" alt="" />
           </div>
 
           <article className="koops-bento-card">

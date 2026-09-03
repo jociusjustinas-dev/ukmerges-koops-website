@@ -76,8 +76,8 @@ export default async function SuppliersPage() {
               <img
                 className="contact-image-main"
                 loading="lazy"
-                src="/ukmerge-fields-2.jpg"
-                alt="Lietuvos laukai ir kaimo sodybos"
+                src="/local-produce-couple.jpg"
+                alt="Vietos produkcija ir kasdienis pirkėjo krepšelis"
               />
             </div>
           </div>

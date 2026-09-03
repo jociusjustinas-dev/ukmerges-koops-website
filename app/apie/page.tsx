@@ -46,7 +46,13 @@ export default async function AboutPage() {
         <AboutHero />
         <AboutStory />
         <AboutPillars />
-        <KoopsBentoSection cmsSection="about-bento" />
+        <KoopsBentoSection
+          cmsSection="about-bento"
+          wideImage={{
+            src: "/store-uosis.jpeg",
+            alt: "KOOPS parduotuvė „Uosis“",
+          }}
+        />
       </main>
       <CmsPageController page="apie" sections={pages.apie?.sections} />
 

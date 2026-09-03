@@ -1,4 +1,18 @@
-export function KoopsBentoSection({ cmsSection = "home-bento" }: { cmsSection?: string }) {
+type KoopsBentoSectionProps = {
+  cmsSection?: string;
+  wideImage?: {
+    src: string;
+    alt: string;
+  };
+};
+
+export function KoopsBentoSection({
+  cmsSection = "home-bento",
+  wideImage = {
+    src: "/local-produce-couple.jpg",
+    alt: "Vietos produkcija KOOPS parduotuvėje",
+  },
+}: KoopsBentoSectionProps) {
   return (
     <section
       data-cms-section={cmsSection}
@@ -65,8 +79,8 @@ export function KoopsBentoSection({ cmsSection = "home-bento" }: { cmsSection?: 
             aria-label="Rasti artimiausią KOOPS parduotuvę"
           >
             <img
-              src="/koops-bento-local-shopping.jpg"
-              alt="Pirkėja KOOPS parduotuvėje renkasi vietos produktus"
+              src={wideImage.src}
+              alt={wideImage.alt}
               loading="lazy"
             />
           </a>

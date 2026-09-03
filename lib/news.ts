@@ -83,7 +83,7 @@ export const newsItems: NewsItem[] = [
     excerpt: "Kooperatyvo parduotuvėse – Ukmergės krašto daržovių sezono startas.",
     category: "Vietos produkcija",
     date: "2026-07-18",
-    image: "/local-produce-shopper.jpg",
+    image: "/koops-bento-local-shopping.jpg",
     tone: "muted",
     body: [
       {
@@ -188,7 +188,7 @@ export const newsItems: NewsItem[] = [
     excerpt: "34 vietos Ukmergėje ir rajone – adresai, laikas ir maršrutas.",
     category: "Parduotuvės",
     date: "2026-06-15",
-    image: "/koops-bento-local-shopping.jpg",
+    image: "/store-zemaitkiemis.jpeg",
     tone: "muted",
     body: [
       {

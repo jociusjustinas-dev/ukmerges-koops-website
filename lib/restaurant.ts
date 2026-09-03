@@ -49,9 +49,6 @@ export const restaurantHalls: RestaurantHall[] = [
 
 export const restaurantGallery = [
   { src: "/vilkmerge.jpg", alt: "Restorano „Vilkmergė“ lauko erdvė", big: true },
-  { src: "/vilkmerge-hall.jpg", alt: "Pokylių salė", big: false },
-  { src: "/vilkmerge-table.jpg", alt: "Šventiškai serviruotas stalas", big: false },
-  { src: "/vilkmerge-menu.jpg", alt: "Sezono užkandžiai", big: true },
 ];
 
 export const restaurantEventTypes = [

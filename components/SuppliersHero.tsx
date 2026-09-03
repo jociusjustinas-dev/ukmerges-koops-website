@@ -15,8 +15,8 @@ const gallery = [
     alt: "Ukmergės krašto laukai",
   },
   {
-    src: "/koops-bento-local-shopping.jpg",
-    alt: "Vietos produkcija parduotuvėje",
+    src: "/ukmerge-fields-6.jpg",
+    alt: "Ukmergės krašto rytmečio laukai",
   },
   {
     src: "/ukmerge-fields-1.jpg",

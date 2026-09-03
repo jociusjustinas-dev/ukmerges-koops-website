@@ -71,8 +71,8 @@ export default async function CareersPage() {
                 <span> namų</span>
               </h2>
               <p>
-                Pasirinkite skelbimą — kandidatuosite išorinėje nuorodoje. Nerandate tinkamos
-                pozicijos? Parašykite forma apačioje. {careersContact.applyNote}
+                Pasirinkite poziciją ir pereikite prie kandidatavimo formos. Nerandate tinkamos
+                pozicijos? Parašykite mums žemiau.
               </p>
               <a className="pill-button accent" href="#susisiekti">
                 <RollingLabel>Neradau pozicijos</RollingLabel>
@@ -84,9 +84,7 @@ export default async function CareersPage() {
                   className="job-row"
                   href={job.applyUrl}
                   key={job.id}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`${job.title} — kandidatuoti naujame lange`}
+                  aria-label={`${job.title} — kandidatuoti`}
                 >
                   <div className="job-row-copy">
                     <h3>{job.title}</h3>

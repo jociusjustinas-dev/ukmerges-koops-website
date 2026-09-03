@@ -15,9 +15,7 @@ export const careersContact = {
   phoneDisplay: "0 340 53235",
   phoneHref: "tel:+37034053235",
   address: "Vasario 16-osios g. 30, Ukmergė",
-  /** Demo — patvirtinti prieš WordPress. */
-  listingsUrl: "https://ukmergeskoops.lt/skelbimai/",
-  applyNote: "Demonstraciniai skelbimai. Galutines nuorodas ir kandidatavimo eigą reikia patvirtinti.",
+  listingsUrl: "/karjera#pozicijos",
 };
 
 /** Bendras demo URL — vėliau keisti į konkretaus skelbimo nuorodą. */

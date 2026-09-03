@@ -11,7 +11,7 @@ export const aboutOrg = {
 export const aboutHeroGallery = [
   {
     src: "/koops-bento-local-shopping.jpg",
-    alt: "Pirkėja KOOPS parduotuvėje renkasi vietos produktus",
+    alt: "Pirkėja krauna vietos produktus į pirkinių krepšį",
   },
   {
     src: "/ukmerge-fields-2.jpg",
@@ -32,8 +32,8 @@ export const aboutStory = {
   title: "Kooperatyvas, augęs kartu su Ukmergės kraštu",
   body: "KOOPS jungia parduotuves, restoraną „Vilkmergė“ ir vietos partnerius. Dirbame tam, kad kasdienės prekės, darbas ir šventės būtų arčiau namų.",
   image: {
-    src: "/ukmerge-fields-2.jpg",
-    alt: "Ukmergės krašto laukai ir kaimo sodybos",
+    src: "/ukmerge-fields-5.jpg",
+    alt: "Ukmergės krašto laukai",
   },
   facts: [
     { label: "Parduotuvės", value: "34 vietos" },

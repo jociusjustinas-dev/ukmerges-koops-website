@@ -18,7 +18,7 @@ const heroUpdates = [
   {
     label: "NAUJIENOS",
     title: "Švieži vietos pomidorai – sezono pradžia",
-    image: "/local-produce-shopper.jpg",
+    image: "/koops-bento-local-shopping.jpg",
     href: "/naujienos/vietos-pomidorai",
   },
   {
@@ -36,7 +36,6 @@ const heroUpdates = [
 ];
 
 const restaurantSlides = [
-  { src: "/vilkmerge.jpg", alt: "Restorano „Vilkmergė“ lauko erdvė" },
   { src: "/vilkmerge-hall.jpg", alt: "Šventei paruošta restorano „Vilkmergė“ pokylių salė" },
   { src: "/vilkmerge-table.jpg", alt: "Šventiškai serviruotas restorano stalas" },
   { src: "/vilkmerge-menu.jpg", alt: "Restorano „Vilkmergė“ ruošiami užkandžiai" },
@@ -771,9 +770,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                   className="job-row"
                   href={job.applyUrl}
                   key={job.title}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`${job.title} — kandidatuoti naujame lange`}
+                  aria-label={`${job.title} — kandidatuoti`}
                 >
                   <div className="job-row-copy">
                     <h3>{job.title}</h3>
