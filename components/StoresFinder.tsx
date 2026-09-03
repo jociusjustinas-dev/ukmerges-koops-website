@@ -91,21 +91,6 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
   };
 
   useEffect(() => {
-    const container = mapRef.current;
-    if (!container || mapRequested) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setMapRequested(true);
-        observer.disconnect();
-      },
-      { rootMargin: "320px 0px" },
-    );
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, [mapRequested]);
-
-  useEffect(() => {
     if (!mapRequested) return;
     let cancelled = false;
     let resizeObserver: ResizeObserver | null = null;

@@ -45,7 +45,6 @@ export function StoresPageMotion() {
 
           if (directory) {
             const label = directory.querySelector<HTMLElement>(".section-label");
-            const words = directory.querySelectorAll<HTMLElement>(".location-headline > span");
             const pushLine = directory.querySelector<HTMLElement>(".title-push-line");
             const lead = directory.querySelector<HTMLElement>(".stores-directory-lead");
             const finder = directory.querySelector<HTMLElement>(".stores-finder");
@@ -67,15 +66,6 @@ export function StoresPageMotion() {
 
             if (label) {
               intro.fromTo(label, { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.08);
-            }
-
-            if (words.length) {
-              intro.fromTo(
-                words,
-                { y: isMobile ? 18 : 28 },
-                { y: 0, stagger: 0.07 },
-                0.16,
-              );
             }
 
             if (pushLine && isDesktop && window.innerWidth > 1100) {
