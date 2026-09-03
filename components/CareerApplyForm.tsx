@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { RollingLabel } from "./RollingLabel";
+import { submitEnquiry } from "../lib/submit-enquiry";
 
 type FormErrors = Partial<
   Record<"vardas" | "telefonas" | "el_pastas" | "zinute" | "priedas" | "privatumas", string>
@@ -15,6 +16,8 @@ export function CareerApplyForm() {
   const [errors, setErrors] = React.useState<FormErrors>({});
   const [sent, setSent] = React.useState(false);
   const [fileName, setFileName] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [submitError, setSubmitError] = React.useState("");
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const clearError = (key: keyof FormErrors) => {
@@ -58,7 +61,7 @@ export function CareerApplyForm() {
     setFileName(file.name);
   };
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
@@ -79,19 +82,25 @@ export function CareerApplyForm() {
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
-    setSent(true);
-    setFileName("");
-    form.reset();
+    setIsSubmitting(true);
+    setSubmitError("");
+    try {
+      await submitEnquiry(form, "job");
+      setSent(true);
+      setFileName("");
+      form.reset();
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Žinutės išsiųsti nepavyko.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (sent) {
     return (
       <div className="restaurant-form-success" role="status">
         <h3>Žinutė priimta</h3>
-        <p>
-          Tai demonstracinė koncepcija — tikroje svetainėje čia būtų patvirtinimas ir tolesnis
-          kontaktas.
-        </p>
+        <p>Užklausą išsaugojome ir perdavėme atsakingam darbuotojui.</p>
         <button className="pill-button ghost" type="button" onClick={() => setSent(false)}>
           <RollingLabel>Siųsti dar kartą</RollingLabel>
         </button>
@@ -101,6 +110,8 @@ export function CareerApplyForm() {
 
   return (
     <form className="restaurant-form" onSubmit={onSubmit} noValidate encType="multipart/form-data">
+      <input className="form-honeypot" name="website" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+      {submitError ? <div className="supplier-form-alert is-error" role="alert">{submitError}</div> : null}
       <div className="restaurant-form-grid">
         <label
           className={`form-field form-field-span-full${errors.vardas ? " has-error" : ""}`}
@@ -205,8 +216,8 @@ export function CareerApplyForm() {
       </label>
       {errors.privatumas ? <small className="field-error">{errors.privatumas}</small> : null}
 
-      <button className="pill-button dark" type="submit">
-        <RollingLabel>Siųsti žinutę</RollingLabel>
+      <button className="pill-button dark" type="submit" disabled={isSubmitting}>
+        <RollingLabel>{isSubmitting ? "Siunčiama…" : "Siųsti žinutę"}</RollingLabel>
       </button>
     </form>
   );

@@ -56,6 +56,10 @@ o ne dubliuojami.
 - **Restoranas** – puslapio tekstas ir globalūs patvirtinti kontaktai / talpos.
 - **KOOPS bendri duomenys** – organizacijos kontaktai, socialiniai tinklai,
   privatumo nuoroda ir formų gavėjas.
+- **Užklausos** – visų viešos svetainės formų įrašai. Restorano užklausos
+  siunčiamos restorano el. paštu, o kontaktų, tiekėjų ir karjeros užklausos –
+  bendru formų gavėjo adresu. CV priedas perduodamas el. paštu, tačiau dėl
+  duomenų apsaugos nėra saugomas viešoje medijos bibliotekoje.
 
 ## Saugus redagavimas per REST API
 

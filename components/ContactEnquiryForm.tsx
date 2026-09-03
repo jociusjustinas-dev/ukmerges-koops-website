@@ -3,6 +3,7 @@
 import * as React from "react";
 import { RollingLabel } from "./RollingLabel";
 import { useCmsOptions } from "./CmsProvider";
+import { submitEnquiry } from "../lib/submit-enquiry";
 
 type ContactField = "vardas" | "el_pastas" | "zinute" | "privatumas";
 type ContactFormErrors = Partial<Record<ContactField, string>>;
@@ -38,9 +39,10 @@ type Props = {
 /** BYQ: terra-tory-contact-1 form — bendras kontaktas */
 export function ContactEnquiryForm({ idSuffix = "" }: Props) {
   const cms = useCmsOptions();
-  const recipient = cms.email || "direktore@urvk.lt";
   const [errors, setErrors] = React.useState<ContactFormErrors>({});
   const [status, setStatus] = React.useState<"idle" | "error" | "ready">("idle");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [submitError, setSubmitError] = React.useState("");
   const errorSummaryRef = React.useRef<HTMLDivElement>(null);
   const uid = idSuffix ? `${idPrefix}-${idSuffix}` : idPrefix;
 
@@ -51,10 +53,11 @@ export function ContactEnquiryForm({ idSuffix = "" }: Props) {
       delete next[field];
       return next;
     });
+    setSubmitError("");
     if (status === "ready") setStatus("idle");
   };
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const nextErrors = validateContactForm(form);
@@ -66,16 +69,17 @@ export function ContactEnquiryForm({ idSuffix = "" }: Props) {
       return;
     }
 
-    const data = new FormData(form);
-    const name = String(data.get("vardas") ?? "").trim();
-    const email = String(data.get("el_pastas") ?? "").trim();
-    const message = String(data.get("zinute") ?? "").trim();
-    const subject = encodeURIComponent(`Kontakto užklausa – ${name}`);
-    const body = encodeURIComponent(`Vardas: ${name}\nEl. paštas: ${email}\n\nŽinutė:\n${message}`);
-    window.setTimeout(() => {
-      window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
-    }, 120);
-    setStatus("ready");
+    setIsSubmitting(true);
+    setSubmitError("");
+    try {
+      await submitEnquiry(form, "contact");
+      setStatus("ready");
+      form.reset();
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Žinutės išsiųsti nepavyko.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -85,6 +89,8 @@ export function ContactEnquiryForm({ idSuffix = "" }: Props) {
       noValidate
       aria-label="Kontaktų užklausos forma"
     >
+      <input className="form-honeypot" name="website" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+      {submitError ? <div className="supplier-form-alert is-error" role="alert">{submitError}</div> : null}
       {status === "error" && Object.keys(errors).length > 0 ? (
         <div className="supplier-form-alert is-error" role="alert" tabIndex={-1} ref={errorSummaryRef}>
           <strong>Patikrinkite pažymėtus laukus</strong>
@@ -97,8 +103,8 @@ export function ContactEnquiryForm({ idSuffix = "" }: Props) {
       ) : null}
       {status === "ready" ? (
         <div className="supplier-form-alert is-success" role="status">
-          <strong>Žinutė paruošta siųsti</strong>
-          <p>Patikrinkite paruoštą laišką ir patvirtinkite jo siuntimą.</p>
+          <strong>Žinutė priimta</strong>
+          <p>Užklausą išsaugojome ir perduosime atsakingam darbuotojui.</p>
         </div>
       ) : null}
       <div className="form-halves">
@@ -188,8 +194,8 @@ export function ContactEnquiryForm({ idSuffix = "" }: Props) {
           ) : null}
         </div>
       </div>
-      <button className="pill-button dark" type="submit">
-        <RollingLabel>Siųsti žinutę</RollingLabel>
+      <button className="pill-button dark" type="submit" disabled={isSubmitting}>
+        <RollingLabel>{isSubmitting ? "Siunčiama…" : "Siųsti žinutę"}</RollingLabel>
       </button>
     </form>
   );

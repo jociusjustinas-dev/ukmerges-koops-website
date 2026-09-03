@@ -5,12 +5,15 @@ import { restaurantEventTypes } from "../lib/restaurant";
 import { RestaurantDatePicker } from "./RestaurantDatePicker";
 import { RestaurantSelect } from "./RestaurantSelect";
 import { RollingLabel } from "./RollingLabel";
+import { submitEnquiry } from "../lib/submit-enquiry";
 
 type FormErrors = Partial<Record<"vardas" | "telefonas" | "el_pastas" | "zinute" | "privatumas", string>>;
 
 export function RestaurantEnquiryForm() {
   const [errors, setErrors] = React.useState<FormErrors>({});
   const [sent, setSent] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [submitError, setSubmitError] = React.useState("");
 
   const clearError = (key: keyof FormErrors) => {
     setErrors((prev) => {
@@ -21,7 +24,7 @@ export function RestaurantEnquiryForm() {
     });
   };
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
@@ -42,15 +45,24 @@ export function RestaurantEnquiryForm() {
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
-    setSent(true);
-    form.reset();
+    setIsSubmitting(true);
+    setSubmitError("");
+    try {
+      await submitEnquiry(form, "restaurant");
+      setSent(true);
+      form.reset();
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Užklausos išsiųsti nepavyko.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (sent) {
     return (
       <div className="restaurant-form-success" role="status">
         <h3>Užklausa priimta</h3>
-        <p>Tai demonstracinė koncepcija — tikroje svetainėje čia būtų patvirtinimas ir tolesnis kontaktas.</p>
+        <p>Restorano komanda gavo jūsų užklausą ir susisieks nurodytais kontaktais.</p>
         <button className="pill-button ghost" type="button" onClick={() => setSent(false)}>
           <RollingLabel>Siųsti dar kartą</RollingLabel>
         </button>
@@ -60,6 +72,8 @@ export function RestaurantEnquiryForm() {
 
   return (
     <form className="restaurant-form" onSubmit={onSubmit} noValidate>
+      <input className="form-honeypot" name="website" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+      {submitError ? <div className="supplier-form-alert is-error" role="alert">{submitError}</div> : null}
       <div className="restaurant-form-grid">
         <label className={`form-field${errors.vardas ? " has-error" : ""}`} htmlFor="rest-name">
           <span>VARDAS</span>
@@ -157,8 +171,8 @@ export function RestaurantEnquiryForm() {
           {errors.privatumas ? <small className="field-error">{errors.privatumas}</small> : null}
         </div>
       </div>
-      <button className="pill-button dark" type="submit">
-        <RollingLabel>Siųsti užklausą</RollingLabel>
+      <button className="pill-button dark" type="submit" disabled={isSubmitting}>
+        <RollingLabel>{isSubmitting ? "Siunčiama…" : "Siųsti užklausą"}</RollingLabel>
       </button>
     </form>
   );

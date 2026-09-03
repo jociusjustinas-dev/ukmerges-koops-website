@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { RollingLabel } from "./RollingLabel";
+import { submitEnquiry } from "../lib/submit-enquiry";
 
 type SupplierField = "vardas" | "el_pastas" | "pasiulymas" | "privatumas";
 type SupplierFormErrors = Partial<Record<SupplierField, string>>;
@@ -40,6 +41,8 @@ type Props = {
 export function SupplierForm({ idSuffix = "" }: Props) {
   const [errors, setErrors] = React.useState<SupplierFormErrors>({});
   const [status, setStatus] = React.useState<"idle" | "error" | "ready">("idle");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [submitError, setSubmitError] = React.useState("");
   const errorSummaryRef = React.useRef<HTMLDivElement>(null);
   const uid = idSuffix ? `${idPrefix}-${idSuffix}` : idPrefix;
 
@@ -50,10 +53,11 @@ export function SupplierForm({ idSuffix = "" }: Props) {
       delete next[field];
       return next;
     });
+    setSubmitError("");
     if (status === "ready") setStatus("idle");
   };
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const nextErrors = validateSupplierForm(form);
@@ -65,16 +69,17 @@ export function SupplierForm({ idSuffix = "" }: Props) {
       return;
     }
 
-    const data = new FormData(form);
-    const name = String(data.get("vardas") ?? "").trim();
-    const email = String(data.get("el_pastas") ?? "").trim();
-    const proposal = String(data.get("pasiulymas") ?? "").trim();
-    const subject = encodeURIComponent(`Naujo tiekėjo pasiūlymas – ${name}`);
-    const body = encodeURIComponent(`Vardas: ${name}\nEl. paštas: ${email}\n\nPasiūlymas:\n${proposal}`);
-    window.setTimeout(() => {
-      window.location.href = `mailto:direktore@urvk.lt?subject=${subject}&body=${body}`;
-    }, 120);
-    setStatus("ready");
+    setIsSubmitting(true);
+    setSubmitError("");
+    try {
+      await submitEnquiry(form, "supplier");
+      setStatus("ready");
+      form.reset();
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Pasiūlymo išsiųsti nepavyko.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -84,6 +89,8 @@ export function SupplierForm({ idSuffix = "" }: Props) {
       noValidate
       aria-label="Tiekėjo pasiūlymo forma"
     >
+      <input className="form-honeypot" name="website" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+      {submitError ? <div className="supplier-form-alert is-error" role="alert">{submitError}</div> : null}
       {status === "error" && Object.keys(errors).length > 0 ? (
         <div className="supplier-form-alert is-error" role="alert" tabIndex={-1} ref={errorSummaryRef}>
           <strong>Patikrinkite pažymėtus laukus</strong>
@@ -96,8 +103,8 @@ export function SupplierForm({ idSuffix = "" }: Props) {
       ) : null}
       {status === "ready" ? (
         <div className="supplier-form-alert is-success" role="status">
-          <strong>Pasiūlymas paruoštas siųsti</strong>
-          <p>Patikrinkite paruoštą laišką ir patvirtinkite jo siuntimą.</p>
+          <strong>Pasiūlymas priimtas</strong>
+          <p>Užklausą išsaugojome ir perduosime atsakingam darbuotojui.</p>
         </div>
       ) : null}
       <div className="form-halves">
@@ -187,8 +194,8 @@ export function SupplierForm({ idSuffix = "" }: Props) {
           ) : null}
         </div>
       </div>
-      <button className="pill-button dark" type="submit">
-        <RollingLabel>Siųsti pasiūlymą</RollingLabel>
+      <button className="pill-button dark" type="submit" disabled={isSubmitting}>
+        <RollingLabel>{isSubmitting ? "Siunčiama…" : "Siųsti pasiūlymą"}</RollingLabel>
       </button>
     </form>
   );

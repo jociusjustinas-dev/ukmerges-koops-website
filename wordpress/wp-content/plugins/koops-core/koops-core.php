@@ -2,7 +2,7 @@
 /**
  * Plugin Name: KOOPS Core
  * Description: KOOPS turinio tipai, valdymo laukai, bendri duomenys ir formos.
- * Version: 0.10.1
+ * Version: 0.11.0
  * Author: KOOPS
  * Text Domain: koops
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('KOOPS_CORE_VERSION', '0.10.1');
+define('KOOPS_CORE_VERSION', '0.11.0');
 define('KOOPS_CORE_PATH', plugin_dir_path(__FILE__));
 define('KOOPS_CORE_URL', plugin_dir_url(__FILE__));
 
@@ -62,6 +62,27 @@ function koops_register_content_types(): void
             'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'custom-fields'],
         ]);
     }
+
+    register_post_type('koops_enquiry', [
+        'labels' => [
+            'name' => 'Užklausos',
+            'singular_name' => 'Užklausa',
+            'edit_item' => 'Peržiūrėti užklausą',
+            'view_item' => 'Peržiūrėti užklausą',
+            'search_items' => 'Ieškoti užklausų',
+            'not_found' => 'Užklausų nerasta',
+            'all_items' => 'Visos užklausos',
+        ],
+        'public' => false,
+        'show_ui' => true,
+        'show_in_menu' => 'koops',
+        'show_in_rest' => false,
+        'exclude_from_search' => true,
+        'menu_icon' => 'dashicons-email-alt',
+        'supports' => ['title'],
+        'capability_type' => 'post',
+        'map_meta_cap' => true,
+    ]);
 
     register_taxonomy('koops_store_area', ['koops_store'], [
         'labels' => ['name' => 'Teritorijos', 'singular_name' => 'Teritorija'],
@@ -547,6 +568,167 @@ function koops_filter_expired_classifieds(WP_Query $query): void
 }
 add_action('pre_get_posts', 'koops_filter_expired_classifieds');
 
+function koops_enquiry_type_labels(): array
+{
+    return [
+        'contact' => 'Kontaktų',
+        'supplier' => 'Tiekėjo',
+        'restaurant' => 'Restorano',
+        'job' => 'Karjeros',
+    ];
+}
+
+function koops_create_enquiry(array $data, array $attachments = [])
+{
+    $labels = koops_enquiry_type_labels();
+    $type = sanitize_key((string) ($data['type'] ?? 'contact'));
+    $name = sanitize_text_field((string) ($data['name'] ?? ''));
+    $email = sanitize_email((string) ($data['email'] ?? ''));
+    $phone = sanitize_text_field((string) ($data['phone'] ?? ''));
+    $message = sanitize_textarea_field((string) ($data['message'] ?? ''));
+    $consent = !empty($data['consent']);
+
+    if (
+        !isset($labels[$type])
+        || mb_strlen($name) < 2
+        || mb_strlen($name) > 120
+        || !is_email($email)
+        || mb_strlen($email) > 190
+        || mb_strlen($phone) > 80
+        || mb_strlen($message) < 10
+        || mb_strlen($message) > 5000
+        || !$consent
+    ) {
+        return new WP_Error('koops_invalid_enquiry', 'Patikrinkite privalomus formos laukus.', ['status' => 422]);
+    }
+
+    $details = [
+        'Svečiai' => sanitize_text_field((string) ($data['sveciai'] ?? '')),
+        'Data' => sanitize_text_field((string) ($data['data'] ?? '')),
+        'Renginio tipas' => sanitize_text_field((string) ($data['tipas'] ?? '')),
+    ];
+    $recipient = $type === 'restaurant'
+        ? koops_get_option('restaurant_email', 'restoranas@urvk.lt')
+        : koops_get_option('form_recipient', 'direktore@urvk.lt');
+    $subject = sprintf('[KOOPS] %s užklausa – %s', $labels[$type], $name);
+    $body_lines = [
+        'Užklausos tipas: ' . $labels[$type],
+        'Vardas: ' . $name,
+        'El. paštas: ' . $email,
+        'Telefonas: ' . ($phone ?: 'Nenurodytas'),
+    ];
+    foreach ($details as $label => $value) {
+        if ($value !== '') {
+            $body_lines[] = $label . ': ' . $value;
+        }
+    }
+    $body_lines[] = '';
+    $body_lines[] = $message;
+
+    $attachment_paths = [];
+    $attachment_name = '';
+    if (!empty($attachments['attachment']) && is_array($attachments['attachment'])) {
+        $file = $attachments['attachment'];
+        if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+            return new WP_Error('koops_attachment_failed', 'Priedo įkelti nepavyko.', ['status' => 422]);
+        }
+        if ((int) ($file['size'] ?? 0) > 5 * MB_IN_BYTES) {
+            return new WP_Error('koops_attachment_too_large', 'Priedas gali būti iki 5 MB.', ['status' => 413]);
+        }
+        $attachment_name = sanitize_file_name((string) ($file['name'] ?? ''));
+        $allowed_mimes = [
+            'pdf' => 'application/pdf',
+            'doc' => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ];
+        $file_type = wp_check_filetype_and_ext((string) $file['tmp_name'], $attachment_name, $allowed_mimes);
+        if (empty($file_type['ext']) || empty($file_type['type'])) {
+            return new WP_Error('koops_attachment_type', 'Galima pridėti tik PDF, DOC arba DOCX failą.', ['status' => 422]);
+        }
+        $attachment_paths[] = (string) $file['tmp_name'];
+    }
+
+    $post_id = wp_insert_post([
+        'post_type' => 'koops_enquiry',
+        'post_status' => 'private',
+        'post_title' => sprintf('%s – %s', $labels[$type], $name),
+        'meta_input' => [
+            '_koops_enquiry_type' => $type,
+            '_koops_enquiry_name' => $name,
+            '_koops_enquiry_email' => $email,
+            '_koops_enquiry_phone' => $phone,
+            '_koops_enquiry_message' => $message,
+            '_koops_enquiry_details' => array_filter($details),
+            '_koops_enquiry_attachment' => $attachment_name,
+            '_koops_enquiry_consent_at' => current_time('mysql'),
+            '_koops_enquiry_recipient' => $recipient,
+        ],
+    ], true);
+    if (is_wp_error($post_id)) {
+        return new WP_Error('koops_enquiry_save_failed', 'Užklausos išsaugoti nepavyko.', ['status' => 500]);
+    }
+
+    $headers = ['Reply-To: ' . $name . ' <' . $email . '>'];
+    $sent = wp_mail($recipient, $subject, implode("\n", $body_lines), $headers, $attachment_paths);
+    update_post_meta($post_id, '_koops_enquiry_mail_status', $sent ? 'sent' : 'failed');
+
+    return ['id' => (int) $post_id, 'mailSent' => (bool) $sent];
+}
+
+function koops_enquiry_meta_box(): void
+{
+    add_meta_box('koops_enquiry_details', 'Užklausos duomenys', 'koops_render_enquiry_meta_box', 'koops_enquiry', 'normal', 'high');
+}
+add_action('add_meta_boxes_koops_enquiry', 'koops_enquiry_meta_box');
+
+function koops_render_enquiry_meta_box(WP_Post $post): void
+{
+    $labels = koops_enquiry_type_labels();
+    $type = (string) get_post_meta($post->ID, '_koops_enquiry_type', true);
+    $details = (array) get_post_meta($post->ID, '_koops_enquiry_details', true);
+    $rows = array_merge([
+        'Tipas' => $labels[$type] ?? $type,
+        'Vardas' => get_post_meta($post->ID, '_koops_enquiry_name', true),
+        'El. paštas' => get_post_meta($post->ID, '_koops_enquiry_email', true),
+        'Telefonas' => get_post_meta($post->ID, '_koops_enquiry_phone', true),
+    ], $details, [
+        'Priedas' => get_post_meta($post->ID, '_koops_enquiry_attachment', true),
+        'Gavėjas' => get_post_meta($post->ID, '_koops_enquiry_recipient', true),
+        'Laiško būsena' => get_post_meta($post->ID, '_koops_enquiry_mail_status', true) === 'sent' ? 'Perduotas siųsti' : 'Siuntimo klaida',
+        'Privatumo sutikimas' => get_post_meta($post->ID, '_koops_enquiry_consent_at', true),
+    ]);
+    echo '<table class="widefat striped"><tbody>';
+    foreach ($rows as $label => $value) {
+        if ((string) $value === '') continue;
+        echo '<tr><th style="width:190px">' . esc_html($label) . '</th><td>' . esc_html((string) $value) . '</td></tr>';
+    }
+    echo '</tbody></table>';
+    echo '<h3>Žinutė</h3><p style="white-space:pre-wrap">' . esc_html((string) get_post_meta($post->ID, '_koops_enquiry_message', true)) . '</p>';
+}
+
+add_filter('manage_koops_enquiry_posts_columns', static function (array $columns): array {
+    return [
+        'cb' => $columns['cb'],
+        'title' => 'Užklausa',
+        'koops_type' => 'Tipas',
+        'koops_contact' => 'Kontaktas',
+        'koops_mail' => 'Laiškas',
+        'date' => 'Gauta',
+    ];
+});
+
+add_action('manage_koops_enquiry_posts_custom_column', static function (string $column, int $post_id): void {
+    if ($column === 'koops_type') {
+        $labels = koops_enquiry_type_labels();
+        $type = (string) get_post_meta($post_id, '_koops_enquiry_type', true);
+        echo esc_html($labels[$type] ?? $type);
+    } elseif ($column === 'koops_contact') {
+        echo esc_html((string) get_post_meta($post_id, '_koops_enquiry_email', true));
+    } elseif ($column === 'koops_mail') {
+        echo get_post_meta($post_id, '_koops_enquiry_mail_status', true) === 'sent' ? 'Perduotas siųsti' : 'Klaida';
+    }
+}, 10, 2);
+
 function koops_form_shortcode(array $atts = []): string
 {
     $atts = shortcode_atts(['type' => 'contact'], $atts, 'koops_form');
@@ -589,12 +771,15 @@ function koops_handle_form_submission(): void
     if (!$name || !is_email($email) || !$message) {
         koops_redirect_form_status('error');
     }
-    $labels = ['contact' => 'Kontaktų', 'supplier' => 'Tiekėjo', 'restaurant' => 'Restorano', 'job' => 'Karjeros'];
-    $subject = sprintf('[KOOPS] %s užklausa – %s', $labels[$type] ?? 'Svetainės', $name);
-    $body = "Vardas: {$name}\nEl. paštas: {$email}\nTelefonas: {$phone}\n\n{$message}";
-    $headers = ['Reply-To: ' . $name . ' <' . $email . '>'];
-    $sent = wp_mail(koops_get_option('form_recipient'), $subject, $body, $headers);
-    koops_redirect_form_status($sent ? 'success' : 'error');
+    $result = koops_create_enquiry([
+        'type' => $type,
+        'name' => $name,
+        'email' => $email,
+        'phone' => $phone,
+        'message' => $message,
+        'consent' => true,
+    ]);
+    koops_redirect_form_status(is_wp_error($result) ? 'error' : 'success');
 }
 add_action('template_redirect', 'koops_handle_form_submission');
 
@@ -710,6 +895,47 @@ function koops_rest_can_edit_pages(): bool
     return current_user_can('edit_pages');
 }
 
+function koops_rest_submit_enquiry(WP_REST_Request $request)
+{
+    if ((string) $request->get_param('website') !== '') {
+        return new WP_REST_Response(['success' => true], 201);
+    }
+
+    $client_key = preg_replace('/[^a-f0-9]/', '', strtolower((string) $request->get_param('client_key')));
+    if (strlen($client_key) < 32) {
+        $client_key = hash('sha256', (string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
+    }
+    $rate_key = 'koops_enquiry_' . substr($client_key, 0, 32);
+    $attempts = (int) get_transient($rate_key);
+    if ($attempts >= 8) {
+        return new WP_Error('koops_enquiry_rate_limit', 'Per daug bandymų. Pabandykite po 10 minučių.', ['status' => 429]);
+    }
+    set_transient($rate_key, $attempts + 1, 10 * MINUTE_IN_SECONDS);
+
+    $result = koops_create_enquiry([
+        'type' => $request->get_param('type'),
+        'name' => $request->get_param('name'),
+        'email' => $request->get_param('email'),
+        'phone' => $request->get_param('phone'),
+        'message' => $request->get_param('message'),
+        'consent' => $request->get_param('consent'),
+        'sveciai' => $request->get_param('sveciai'),
+        'data' => $request->get_param('data'),
+        'tipas' => $request->get_param('tipas'),
+    ], $request->get_file_params());
+    if (is_wp_error($result)) {
+        return $result;
+    }
+
+    $response = new WP_REST_Response([
+        'success' => true,
+        'id' => $result['id'],
+        'mailSent' => $result['mailSent'],
+    ], 201);
+    $response->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+    return $response;
+}
+
 function koops_rest_update_options(WP_REST_Request $request)
 {
     $payload = $request->get_json_params();
@@ -742,6 +968,11 @@ function koops_register_rest_routes(): void
     register_rest_route('koops/v1', '/site', [
         'methods' => WP_REST_Server::READABLE,
         'callback' => 'koops_rest_site_data',
+        'permission_callback' => '__return_true',
+    ]);
+    register_rest_route('koops/v1', '/enquiries', [
+        'methods' => WP_REST_Server::CREATABLE,
+        'callback' => 'koops_rest_submit_enquiry',
         'permission_callback' => '__return_true',
     ]);
     register_rest_route('koops/v1', '/manage/options', [
