@@ -539,8 +539,9 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 .footer-grid nav { display: flex; justify-content: space-between; gap: 64px; }
 .footer-grid nav > div { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
 .footer-grid nav .section-label { margin-bottom: 10px; color: var(--color-moss-veil); }
-.footer-grid nav a { font-size: 14px; }
-.footer-grid nav a:hover { text-decoration: underline; }
+.footer-grid nav a, .footer-cookie-settings { font-size: 14px; }
+.footer-grid nav a:hover, .footer-cookie-settings:hover { text-decoration: underline; }
+.footer-cookie-settings { padding: 0; color: inherit; background: none; border: 0; cursor: pointer; text-align: left; }
 .footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 96px; padding-block: 32px; border-top: 1px solid var(--color-moss-edge); border-bottom: 1px solid var(--color-moss-edge); font-size: 14px; }
 .footer-back-to-top { min-height: 52px; display: inline-flex; align-items: center; gap: 14px; font-size: 15px; font-weight: 500; }
 .footer-back-to-top-icon { width: 52px; height: 52px; display: grid; flex: 0 0 auto; place-items: center; color: var(--color-midnight-moss); background: var(--color-honey-pollen); border-radius: 50%; font-size: 24px; line-height: 1; transition: transform .3s cubic-bezier(.22,1,.36,1), background-color .25s ease; }
@@ -548,6 +549,100 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
 @media (hover: hover) and (pointer: fine) {
   .footer-back-to-top:hover .footer-back-to-top-icon { background: var(--color-sprout-green); transform: translateY(-4px); }
 }
+
+/* Privatumo pasirinkimas */
+.cookie-banner {
+  position: fixed;
+  z-index: 1000;
+  right: 24px;
+  bottom: 24px;
+  left: 24px;
+  width: min(calc(100% - 48px), 1320px);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) minmax(420px, auto);
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  color: white;
+  background: rgba(21, 25, 13, .98);
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 24px;
+  box-shadow: 0 24px 80px rgba(8, 10, 5, .28);
+  animation: cookie-banner-in .55s cubic-bezier(.22, 1, .36, 1) both;
+}
+.cookie-banner-mark { width: 64px; height: 64px; display: grid; place-items: center; position: relative; overflow: hidden; background: var(--color-honey-pollen); border-radius: 50%; }
+.cookie-banner-mark span { position: absolute; left: 16px; width: 38px; height: 8px; border: 2px solid var(--color-midnight-moss); border-width: 2px 0 0; border-radius: 50%; transform: rotate(-18deg); }
+.cookie-banner-mark span:nth-child(1) { top: 19px; }
+.cookie-banner-mark span:nth-child(2) { top: 29px; }
+.cookie-banner-mark span:nth-child(3) { top: 39px; }
+.cookie-banner-copy { min-width: 0; display: grid; gap: 8px; }
+.cookie-banner-copy h2 { font-size: 28px; line-height: 1.05; letter-spacing: -.03em; }
+.cookie-banner-copy > p:last-child { max-width: 68ch; color: rgba(255,255,255,.72); font-size: 14px; line-height: 1.5; }
+.cookie-banner-copy a, .cookie-policy-link { text-decoration: underline; text-decoration-color: rgba(246,217,135,.65); text-underline-offset: 3px; }
+.cookie-banner-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.cookie-action-button { min-height: 48px; padding: 10px 18px; color: white; background: transparent; border: 1px solid rgba(255,255,255,.54); border-radius: 999px; cursor: pointer; font-size: 14px; font-weight: 600; transition: color .2s ease, background-color .2s ease, border-color .2s ease; }
+.cookie-settings-button { grid-column: 1 / -1; justify-self: center; padding: 4px 8px; color: rgba(255,255,255,.78); background: transparent; border: 0; cursor: pointer; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+.cookie-action-button:focus-visible, .cookie-settings-button:focus-visible, .cookie-dialog-close:focus-visible, .footer-cookie-settings:focus-visible { outline: 3px solid var(--color-honey-pollen); outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  .cookie-action-button:hover { color: var(--color-midnight-moss); background: var(--color-honey-pollen); border-color: var(--color-honey-pollen); }
+  .cookie-settings-button:hover { color: white; }
+}
+@keyframes cookie-banner-in { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+.cookie-dialog-backdrop { position: fixed; z-index: 1100; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(10,13,7,.64); backdrop-filter: blur(8px); animation: cookie-backdrop-in .25s ease both; }
+.cookie-dialog { width: min(100%, 680px); max-height: min(760px, calc(100svh - 48px)); overflow-y: auto; display: grid; gap: 24px; padding: 32px; background: white; border: 1px solid var(--color-moss-edge); border-radius: 24px; box-shadow: 0 32px 100px rgba(8,10,5,.3); animation: cookie-dialog-in .4s cubic-bezier(.22,1,.36,1) both; }
+.cookie-dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+.cookie-dialog-head > div { display: grid; gap: 10px; }
+.cookie-dialog-head h2 { max-width: 12ch; font-size: 40px; line-height: .96; letter-spacing: -.04em; }
+.cookie-dialog-close { width: 44px; height: 44px; display: grid; flex: 0 0 auto; place-items: center; padding: 0; color: var(--color-midnight-moss); background: var(--color-bone-canvas); border: 0; border-radius: 50%; cursor: pointer; font-size: 28px; line-height: 1; }
+.cookie-dialog-intro { max-width: 58ch; color: var(--color-moss-veil); }
+.cookie-category-list { display: grid; border-top: 1px solid var(--color-moss-edge); }
+.cookie-category { min-height: 104px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 20px; border-bottom: 1px solid var(--color-moss-edge); cursor: pointer; }
+.cookie-category > span:first-child { min-width: 0; display: grid; gap: 5px; }
+.cookie-category strong { font-size: 17px; }
+.cookie-category small { max-width: 48ch; color: var(--color-moss-veil); font-size: 14px; line-height: 1.45; }
+.cookie-switch { position: relative; width: 52px; height: 30px; flex: 0 0 auto; }
+.cookie-switch input { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.cookie-switch i { position: absolute; inset: 0; display: block; background: #d7d9d1; border-radius: 999px; transition: background-color .2s ease; }
+.cookie-switch i::after { content: ""; position: absolute; width: 22px; height: 22px; left: 4px; top: 4px; background: white; border-radius: 50%; box-shadow: 0 2px 8px rgba(8,10,5,.2); transition: transform .25s cubic-bezier(.22,1,.36,1); }
+.cookie-switch input:checked + i { background: var(--color-midnight-moss); }
+.cookie-switch input:checked + i::after { transform: translateX(22px); }
+.cookie-switch input:focus-visible + i { outline: 3px solid var(--color-honey-pollen); outline-offset: 3px; }
+.cookie-category.is-required .cookie-switch { opacity: .58; }
+.cookie-category.is-required { cursor: default; }
+.cookie-dialog-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.cookie-dialog .cookie-action-button { color: var(--color-midnight-moss); border-color: var(--color-moss-veil); }
+.cookie-dialog .cookie-action-button:last-child { background: var(--color-honey-pollen); border-color: var(--color-honey-pollen); }
+.cookie-policy-link { width: fit-content; font-size: 14px; font-weight: 600; }
+@keyframes cookie-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cookie-dialog-in { from { opacity: 0; transform: translateY(20px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+/* Privatumo informacijos puslapis */
+.privacy-page { background: white; }
+.privacy-hero { padding: 180px 0 104px; color: white; background: var(--color-midnight-moss); }
+.privacy-hero-inner { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, .6fr); align-items: end; gap: 48px; }
+.privacy-hero .section-label { grid-column: 1 / -1; }
+.privacy-hero h1 { max-width: 980px; font-size: clamp(64px, 7vw, 112px); line-height: .92; letter-spacing: -.05em; }
+.privacy-hero-inner > p:last-child { max-width: 46ch; color: rgba(255,255,255,.72); font-size: 18px; }
+.privacy-content { padding-block: 112px; }
+.privacy-layout { display: grid; grid-template-columns: minmax(220px, .34fr) minmax(0, 1fr); gap: 80px; }
+.privacy-summary { position: sticky; top: 112px; height: fit-content; display: grid; gap: 20px; }
+.privacy-summary > p:last-child { max-width: 32ch; color: var(--color-moss-veil); }
+.privacy-sections { display: grid; }
+.privacy-sections article { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 24px; padding-block: 40px; border-top: 1px solid var(--color-moss-edge); }
+.privacy-sections article:first-child { padding-top: 0; border-top: 0; }
+.privacy-sections article > span { color: var(--color-moss-veil); font-size: 13px; }
+.privacy-sections article > div { display: grid; gap: 18px; }
+.privacy-sections h2 { font-size: 40px; line-height: 1; letter-spacing: -.035em; }
+.privacy-sections p { max-width: 72ch; color: var(--color-moss-veil); font-size: 17px; line-height: 1.55; }
+.privacy-sections a { color: var(--color-midnight-moss); text-decoration: underline; text-underline-offset: 3px; }
+.cookie-table-wrap { max-width: 100%; overflow-x: auto; }
+.cookie-table { width: 100%; min-width: 640px; border-collapse: collapse; text-align: left; }
+.cookie-table th, .cookie-table td { padding: 16px 14px; border-bottom: 1px solid var(--color-moss-edge); vertical-align: top; }
+.cookie-table th { color: var(--color-moss-veil); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+.cookie-table td { font-size: 14px; }
+.privacy-note { font-size: 14px !important; }
 
 @media (min-width: 992px) and (min-height: 720px) {
   :root { --footer-reveal-height: min(620px, calc(100svh - 80px)); }
@@ -824,6 +919,41 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   .footer-grid nav { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 8px; }
   .footer-bottom { align-items: flex-start; flex-direction: column-reverse; margin-top: 64px; }
   .footer-back-to-top { width: 100%; justify-content: space-between; }
+}
+
+@media (max-width: 900px) {
+  .cookie-banner { grid-template-columns: 52px minmax(0, 1fr); }
+  .cookie-banner-mark { width: 52px; height: 52px; }
+  .cookie-banner-mark span { left: 13px; width: 32px; }
+  .cookie-banner-mark span:nth-child(1) { top: 14px; }
+  .cookie-banner-mark span:nth-child(2) { top: 23px; }
+  .cookie-banner-mark span:nth-child(3) { top: 32px; }
+  .cookie-banner-actions { grid-column: 1 / -1; }
+  .privacy-hero-inner, .privacy-layout { grid-template-columns: 1fr; }
+  .privacy-hero .section-label { grid-column: auto; }
+  .privacy-summary { position: static; }
+}
+
+@media (max-width: 600px) {
+  .cookie-banner { right: 10px; bottom: 10px; left: 10px; width: auto; max-height: calc(100svh - 20px); overflow-y: auto; grid-template-columns: 1fr; gap: 18px; padding: 18px; border-radius: 20px; }
+  .cookie-banner-mark { display: none; }
+  .cookie-banner-copy h2 { font-size: 24px; }
+  .cookie-banner-actions { grid-column: auto; grid-template-columns: 1fr; }
+  .cookie-settings-button { grid-column: auto; }
+  .cookie-dialog-backdrop { align-items: end; padding: 0; }
+  .cookie-dialog { width: 100%; max-height: calc(100svh - 20px); gap: 20px; padding: 24px 18px max(24px, env(safe-area-inset-bottom)); border-radius: 24px 24px 0 0; }
+  .cookie-dialog-head h2 { font-size: 34px; }
+  .cookie-category { min-height: 92px; gap: 16px; padding-block: 16px; }
+  .cookie-dialog-actions { grid-template-columns: 1fr; }
+  .privacy-hero { padding: 132px 0 72px; }
+  .privacy-hero-inner { gap: 24px; }
+  .privacy-hero h1 { font-size: 48px; }
+  .privacy-hero-inner > p:last-child { font-size: 16px; }
+  .privacy-content { padding-block: 72px; }
+  .privacy-layout { gap: 56px; }
+  .privacy-sections article { grid-template-columns: 32px minmax(0, 1fr); gap: 12px; padding-block: 32px; }
+  .privacy-sections h2 { font-size: 32px; }
+  .privacy-sections p { font-size: 15px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

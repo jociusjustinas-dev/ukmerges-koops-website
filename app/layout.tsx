@@ -3,6 +3,7 @@ import "lenis/dist/lenis.css";
 import "./globals.css";
 import { SmoothScroll } from "../components/SmoothScroll";
 import { CmsProvider } from "../components/CmsProvider";
+import { CookieConsent } from "../components/CookieConsent";
 import { getKoopsCmsData } from "../lib/wordpress";
 
 export const metadata: Metadata = {
@@ -37,6 +38,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <CmsProvider options={options}>
           <SmoothScroll />
           {children}
+          <CookieConsent />
         </CmsProvider>
       </body>
     </html>

@@ -4,6 +4,7 @@ import * as React from "react";
 import { socialLinks } from "../lib/site";
 import { RollingLabel } from "./RollingLabel";
 import { useCmsOptions } from "./CmsProvider";
+import { CookieSettingsButton } from "./CookieSettingsButton";
 
 function phoneHref(phone: string) {
   return `tel:${phone.replace(/[^\d+]/g, "").replace(/^0/, "+370")}`;
@@ -165,6 +166,7 @@ export function SiteFooter({
                 <a href={phoneHref(phone)}>{phone}</a>
                 <a href={`mailto:${email}`}>{email}</a>
                 <a href={cms.privacy_url || "/privatumo-politika"}>Privatumo politika</a>
+                <CookieSettingsButton />
               </div>
             </nav>
           </div>
