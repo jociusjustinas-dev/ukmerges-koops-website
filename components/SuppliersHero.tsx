@@ -7,8 +7,8 @@ import { RollingLabel } from "./RollingLabel";
 
 const gallery = [
   {
-    src: "/local-produce-tomatoes.jpg",
-    alt: "Vietos pomidorai KOOPS pasiūloje",
+    src: "/ukmerge-fields-3.jpg",
+    alt: "Ukmergės krašto laukai",
   },
   {
     src: "/ukmerge-fields-2.jpg",

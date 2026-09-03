@@ -83,7 +83,7 @@ export const newsItems: NewsItem[] = [
     excerpt: "Kooperatyvo parduotuvėse – Ukmergės krašto daržovių sezono startas.",
     category: "Vietos produkcija",
     date: "2026-07-18",
-    image: "/local-produce-tomatoes.jpg",
+    image: "/local-produce-shopper.jpg",
     tone: "muted",
     body: [
       {

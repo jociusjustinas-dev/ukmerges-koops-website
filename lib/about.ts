@@ -21,8 +21,8 @@ export const aboutHeroGallery = [
     alt: "Ukmergės krašto laukai",
   },
   {
-    src: "/local-produce-tomatoes.jpg",
-    alt: "Vietos produkcija KOOPS pasiūloje",
+    src: "/ukmerge-fields-6.jpg",
+    alt: "Ukmergės krašto rytmečio laukai",
   },
   {
     src: "/ukmerge-fields-1.jpg",

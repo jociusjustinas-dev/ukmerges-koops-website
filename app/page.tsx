@@ -15,7 +15,7 @@ const heroUpdates = [
   {
     label: "NAUJIENOS",
     title: "Švieži vietos pomidorai – sezono pradžia",
-    image: "/local-produce-tomatoes.jpg",
+    image: "/local-produce-shopper.jpg",
     href: "/naujienos/vietos-pomidorai",
   },
   {
