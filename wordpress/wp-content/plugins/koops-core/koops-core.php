@@ -2,7 +2,7 @@
 /**
  * Plugin Name: KOOPS Core
  * Description: KOOPS turinio tipai, valdymo laukai, bendri duomenys ir formos.
- * Version: 0.9.2
+ * Version: 0.10.0
  * Author: KOOPS
  * Text Domain: koops
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('KOOPS_CORE_VERSION', '0.9.2');
+define('KOOPS_CORE_VERSION', '0.10.0');
 define('KOOPS_CORE_PATH', plugin_dir_path(__FILE__));
 define('KOOPS_CORE_URL', plugin_dir_url(__FILE__));
 
@@ -700,12 +700,64 @@ function koops_rest_site_data(): WP_REST_Response
     return $response;
 }
 
+function koops_rest_can_manage_options(): bool
+{
+    return current_user_can('manage_options');
+}
+
+function koops_rest_can_edit_pages(): bool
+{
+    return current_user_can('edit_pages');
+}
+
+function koops_rest_update_options(WP_REST_Request $request)
+{
+    $payload = $request->get_json_params();
+    $changes = is_array($payload) ? ($payload['changes'] ?? null) : null;
+    if (!is_array($changes)) {
+        return new WP_Error('koops_invalid_changes', 'Laukas „changes“ turi būti objektas.', ['status' => 400]);
+    }
+
+    $blocked = ['frontend_url', 'form_recipient'];
+    $defaults = koops_default_options();
+    $current = wp_parse_args((array) get_option('koops_options', []), $defaults);
+    foreach ($changes as $key => $value) {
+        if (!array_key_exists($key, $defaults) || in_array($key, $blocked, true)) {
+            return new WP_Error('koops_option_not_allowed', 'Šio bendro lauko negalima keisti per turinio API: ' . sanitize_key((string) $key), ['status' => 400]);
+        }
+        if (!is_scalar($value) && $value !== null) {
+            return new WP_Error('koops_option_value_invalid', 'Bendro lauko reikšmė turi būti tekstas arba skaičius.', ['status' => 400]);
+        }
+        $current[$key] = $value;
+    }
+
+    $clean = koops_sanitize_options($current);
+    update_option('koops_options', $clean);
+    unset($clean['form_recipient'], $clean['frontend_url']);
+    return rest_ensure_response(['updated' => array_keys($changes), 'options' => $clean]);
+}
+
 function koops_register_rest_routes(): void
 {
     register_rest_route('koops/v1', '/site', [
         'methods' => WP_REST_Server::READABLE,
         'callback' => 'koops_rest_site_data',
         'permission_callback' => '__return_true',
+    ]);
+    register_rest_route('koops/v1', '/manage/options', [
+        'methods' => WP_REST_Server::EDITABLE,
+        'callback' => 'koops_rest_update_options',
+        'permission_callback' => 'koops_rest_can_manage_options',
+    ]);
+    register_rest_route('koops/v1', '/manage/pages/(?P<slug>[a-z0-9-]+)', [
+        'methods' => WP_REST_Server::EDITABLE,
+        'callback' => 'koops_rest_replace_page_sections',
+        'permission_callback' => 'koops_rest_can_edit_pages',
+    ]);
+    register_rest_route('koops/v1', '/manage/pages/(?P<slug>[a-z0-9-]+)/sections/(?P<section>[a-z0-9-]+)', [
+        'methods' => WP_REST_Server::EDITABLE,
+        'callback' => 'koops_rest_update_page_section',
+        'permission_callback' => 'koops_rest_can_edit_pages',
     ]);
 }
 add_action('rest_api_init', 'koops_register_rest_routes');

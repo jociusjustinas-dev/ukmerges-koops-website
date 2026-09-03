@@ -335,6 +335,128 @@ function koops_rest_pages(): array
     return $result;
 }
 
+function koops_rest_replace_page_sections(WP_REST_Request $request)
+{
+    $slug = sanitize_key((string) $request['slug']);
+    $page = get_page_by_path($slug, OBJECT, 'page');
+    if (!$page) {
+        return new WP_Error('koops_page_not_found', 'Puslapis nerastas.', ['status' => 404]);
+    }
+
+    $payload = $request->get_json_params();
+    $submitted = is_array($payload) ? ($payload['sections'] ?? null) : null;
+    if (!is_array($submitted)) {
+        return new WP_Error('koops_invalid_sections', 'Laukas „sections“ turi būti masyvas.', ['status' => 400]);
+    }
+
+    $catalog = koops_section_catalog_for_page($slug);
+    $sections = [];
+    $seen = [];
+    foreach ($submitted as $input) {
+        if (!is_array($input)) {
+            continue;
+        }
+        $section = koops_sanitize_builder_section($input);
+        $type = $section['sectionType'];
+        if (!$type || !isset($catalog[$type]) || isset($seen[$type])) {
+            return new WP_Error('koops_invalid_section', 'Neleistinas arba pasikartojantis sekcijos tipas.', ['status' => 400]);
+        }
+        $seen[$type] = true;
+        $sections[] = $section;
+    }
+
+    $updated = wp_update_post([
+        'ID' => (int) $page->ID,
+        'post_content' => koops_serialize_builder_sections($sections),
+    ], true);
+    if (is_wp_error($updated)) {
+        return $updated;
+    }
+    clean_post_cache((int) $page->ID);
+    $page = get_post((int) $page->ID);
+    return rest_ensure_response([
+        'id' => (int) $page->ID,
+        'slug' => $slug,
+        'sections' => koops_normalize_page_sections($page),
+    ]);
+}
+
+function koops_rest_update_page_section(WP_REST_Request $request)
+{
+    $slug = sanitize_key((string) $request['slug']);
+    $section_type = sanitize_key((string) $request['section']);
+    $page = get_page_by_path($slug, OBJECT, 'page');
+    if (!$page) {
+        return new WP_Error('koops_page_not_found', 'Puslapis nerastas.', ['status' => 404]);
+    }
+    $catalog = koops_section_catalog_for_page($slug);
+    if (!isset($catalog[$section_type])) {
+        return new WP_Error('koops_section_not_allowed', 'Ši sekcija nepriklauso pasirinktam puslapiui.', ['status' => 400]);
+    }
+
+    $payload = $request->get_json_params();
+    $changes = is_array($payload) ? ($payload['changes'] ?? null) : null;
+    if (!is_array($changes)) {
+        return new WP_Error('koops_invalid_changes', 'Laukas „changes“ turi būti objektas.', ['status' => 400]);
+    }
+    $allowed = ['enabled', 'eyebrow', 'title', 'description', 'primaryLabel', 'primaryUrl', 'imageUrl'];
+    foreach (array_keys($changes) as $key) {
+        if (!in_array($key, $allowed, true)) {
+            return new WP_Error('koops_section_field_not_allowed', 'Neleistinas sekcijos laukas: ' . sanitize_key((string) $key), ['status' => 400]);
+        }
+    }
+    foreach ($changes as $key => $value) {
+        if ($key === 'enabled') {
+            if (!is_bool($value) && !in_array($value, [0, 1, '0', '1'], true)) {
+                return new WP_Error('koops_section_value_invalid', 'Laukas „enabled“ turi būti loginė reikšmė.', ['status' => 400]);
+            }
+            continue;
+        }
+        if (!is_scalar($value) && $value !== null) {
+            return new WP_Error('koops_section_value_invalid', 'Sekcijos lauko reikšmė turi būti tekstas.', ['status' => 400]);
+        }
+    }
+
+    $blocks = parse_blocks($page->post_content);
+    $found = false;
+    foreach ($blocks as &$block) {
+        if (($block['blockName'] ?? '') !== 'koops/section') {
+            continue;
+        }
+        $attrs = is_array($block['attrs'] ?? null) ? $block['attrs'] : [];
+        if (sanitize_key((string) ($attrs['sectionType'] ?? '')) !== $section_type) {
+            continue;
+        }
+        $merged = array_merge(koops_section_default($section_type), $attrs, $changes, ['sectionType' => $section_type]);
+        $block['attrs'] = koops_sanitize_builder_section($merged);
+        $found = true;
+        break;
+    }
+    unset($block);
+    if (!$found) {
+        return new WP_Error('koops_section_not_found', 'Sekcija puslapyje nerasta.', ['status' => 404]);
+    }
+
+    $updated = wp_update_post([
+        'ID' => (int) $page->ID,
+        'post_content' => serialize_blocks($blocks),
+    ], true);
+    if (is_wp_error($updated)) {
+        return $updated;
+    }
+    clean_post_cache((int) $page->ID);
+    $page = get_post((int) $page->ID);
+    $section = array_values(array_filter(
+        koops_normalize_page_sections($page),
+        static fn(array $item): bool => ($item['type'] ?? '') === $section_type
+    ));
+    return rest_ensure_response([
+        'id' => (int) $page->ID,
+        'slug' => $slug,
+        'section' => $section[0] ?? null,
+    ]);
+}
+
 function koops_modular_pages_menu(): void
 {
     add_submenu_page(

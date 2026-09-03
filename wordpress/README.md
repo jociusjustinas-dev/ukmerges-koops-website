@@ -57,6 +57,18 @@ o ne dubliuojami.
 - **KOOPS bendri duomenys** – organizacijos kontaktai, socialiniai tinklai,
   privatumo nuoroda ir formų gavėjas.
 
+## Saugus redagavimas per REST API
+
+Automatizuotam turinio redagavimui naudojamas atskiras „WordPress Application
+Password“, o ne pagrindinis administratoriaus slaptažodis. `KOOPS Core` turi
+apsaugotus rašymo adresus bendriems duomenims ir puslapių sekcijoms. Įrašai,
+parduotuvės, skelbimai ir darbo pasiūlymai redaguojami per standartinį
+`/wp-json/wp/v2/` API. Visi rašymo veiksmai reikalauja autentifikavimo ir
+atitinkamų „WordPress“ teisių.
+
+Lokaliam darbui skirtas `scripts/koops-wp.mjs` įrankis. Programos slaptažodis
+laikomas sistemos raktinėje, o ne projekto faile ar Git saugykloje.
+
 ## Prieš gamybinį paleidimą
 
 - pakeisti demonstracines naujienas ir darbo pasiūlymus galutiniu turiniu;

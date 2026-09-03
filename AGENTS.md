@@ -148,6 +148,15 @@ Prieš sakant, kad pataisyta, padaryk screenshot arba inspect realias `getBoundi
   pasiekiami.
 - Next.js turinį gauna iš `/wp-json/koops/v1/site`; integracijos ir atsarginiai
   statiniai duomenys yra `lib/wordpress.ts`.
+- Automatiniam redagavimui naudojamas atskiras „WordPress Application Password“,
+  o ne pagrindinis administratoriaus slaptažodis. Raktas laikomas „macOS
+  Keychain“ (`koops-wordpress-api`, vartotojas `admin`) ir negali būti rašomas į
+  `.env`, dokumentaciją, Git istoriją ar pokalbį.
+- `scripts/koops-wp.mjs` yra vienintelis lokalus REST redagavimo įrankis. Jis
+  valdo bendrus duomenis bei Gutenberg sekcijas per autentifikuotus
+  `/wp-json/koops/v1/manage/` adresus, o naujienas, parduotuves, skelbimus ir
+  darbo pasiūlymus – per standartinį `/wp-json/wp/v2/` API. Prieš rašymą
+  autentifikavimą tikrinti komanda `node scripts/koops-wp.mjs me`.
 - Puslapių struktūra valdoma Gutenberg bloku `koops/section`. Administracijoje
   ji pasiekiama per **KOOPS → Puslapių sekcijos**. Bloko seka valdo sekcijų
   eiliškumą, `enabled` – matomumą. Gutenberg drobėje įterpiamas tikras Vercel
