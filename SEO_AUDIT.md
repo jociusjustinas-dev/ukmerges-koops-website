@@ -7,7 +7,7 @@ Audituota versija: <https://ukmerges-koops-website.vercel.app/>
 Domeno kandidatas: <https://ukmergeskoops.lt/> — klientas dar nepatvirtino, todėl
 SEO konfigūracijoje jis nenaudojamas.
 
-Kodo būsena po P1: `b40ae56`
+Kodo būsena po P1: `90ebb82`
 
 ## P0 įgyvendinimo būsena
 
