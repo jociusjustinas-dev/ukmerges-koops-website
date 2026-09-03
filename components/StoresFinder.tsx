@@ -2,15 +2,31 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { createPortal } from "react-dom";
-import type { Map as LeafletMap, Marker } from "leaflet";
+import type { Map as MapboxMap, Marker, StyleSpecification } from "mapbox-gl";
 import type { Store, StoreArea } from "../lib/stores";
 import { RollingLabel } from "./RollingLabel";
-import "leaflet/dist/leaflet.css";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 type AreaFilter = "visos" | StoreArea;
 
 const MOBILE_BATCH = 10;
 const MOBILE_MQ = "(max-width: 767px)";
+const FALLBACK_MAP_STYLE: StyleSpecification = {
+  version: 8,
+  sources: {
+    carto: {
+      type: "raster",
+      tiles: [
+        "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        "https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        "https://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+      ],
+      tileSize: 256,
+      attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+    },
+  },
+  layers: [{ id: "carto", type: "raster", source: "carto" }],
+};
 
 function matchesQuery(store: Store, query: string) {
   if (!query) return true;
@@ -34,7 +50,7 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
   );
   const [shownCount, setShownCount] = useState(MOBILE_BATCH);
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstance = useRef<LeafletMap | null>(null);
+  const mapInstance = useRef<MapboxMap | null>(null);
   const markers = useRef<Record<string, Marker>>({});
   const listRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -87,51 +103,56 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
     let cancelled = false;
     let resizeObserver: ResizeObserver | null = null;
     const retryTimers: number[] = [];
-    const invalidateRetries = [0, 50, 150, 400, 800];
+    const resizeRetries = [0, 50, 150, 400, 800];
 
-    const scheduleInvalidate = (map: LeafletMap) => {
+    const scheduleResize = (map: MapboxMap) => {
       const run = () => {
         if (cancelled || mapInstance.current !== map) return;
-        map.invalidateSize();
+        map.resize();
       };
       requestAnimationFrame(() => {
         run();
         requestAnimationFrame(run);
       });
-      invalidateRetries.forEach((ms) => {
+      resizeRetries.forEach((ms) => {
         retryTimers.push(window.setTimeout(run, ms));
       });
     };
 
     const onViewportChange = () => {
-      mapInstance.current?.invalidateSize();
+      mapInstance.current?.resize();
     };
 
-    void import("leaflet").then((leaflet) => {
+    void import("mapbox-gl").then((mapboxgl) => {
       if (cancelled || !mapRef.current || mapInstance.current) return;
-      const L = leaflet.default;
-
-      const map = L.map(mapRef.current, {
-        scrollWheelZoom: false,
-        zoomControl: true,
-      }).setView([55.25, 24.76], 10);
-
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OSM</a> · <a href="https://carto.com/attributions" target="_blank" rel="noreferrer">CARTO</a>',
-        subdomains: "abcd",
-        maxZoom: 19,
-      }).addTo(map);
-
-      const zoomIn = mapRef.current.querySelector(".leaflet-control-zoom-in");
-      const zoomOut = mapRef.current.querySelector(".leaflet-control-zoom-out");
-      if (zoomIn) {
-        zoomIn.innerHTML =
-          '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1v12M1 7h12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+      const accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+      if (!accessToken) {
+        console.error("Trūksta NEXT_PUBLIC_MAPBOX_TOKEN aplinkos kintamojo.");
+        return;
       }
-      if (zoomOut) {
-        zoomOut.innerHTML =
-          '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7h12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
-      }
+
+      const map = new mapboxgl.Map({
+        container: mapRef.current,
+        style: "mapbox://styles/mapbox/light-v11",
+        center: [24.76, 55.25],
+        zoom: 9.5,
+        accessToken,
+        scrollZoom: false,
+        attributionControl: true,
+      });
+      let fallbackApplied = false;
+      map.on("error", (event) => {
+        const mapError = event.error as Error & { status?: number };
+        if (mapError.status === 401 || mapError.status === 403) {
+          if (!fallbackApplied) {
+            fallbackApplied = true;
+            map.setStyle(FALLBACK_MAP_STYLE);
+          }
+          return;
+        }
+        console.error("Mapbox:", mapError.message || `HTTP ${mapError.status ?? "klaida"}`);
+      });
+      map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-right");
 
       mapInstance.current = map;
 
@@ -139,35 +160,46 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
         '<svg class="store-pin-icon" viewBox="0 0 24 32" aria-hidden="true"><path d="M12 1C6.48 1 2 5.48 2 11c0 7.28 8.4 18.62 9.05 19.48a1.2 1.2 0 0 0 1.9 0C13.6 29.62 22 18.28 22 11 22 5.48 17.52 1 12 1z"/><circle cx="12" cy="11" r="3.25"/></svg>';
 
       stores.forEach((store) => {
-        const label = store.name.replace(/"/g, "&quot;");
-        const marker = L.marker([store.lat, store.lng], {
-          icon: L.divIcon({
-            className: "store-pin",
-            html: `<button type="button" class="store-pin-btn" aria-label="${label}">${pinSvg}</button>`,
-            iconSize: [28, 38],
-            iconAnchor: [14, 36],
-          }),
-        }).addTo(map);
+        const markerElement = document.createElement("div");
+        markerElement.className = "store-pin";
+        const markerButton = document.createElement("button");
+        markerButton.type = "button";
+        markerButton.className = "store-pin-btn";
+        markerButton.setAttribute("aria-label", store.name);
+        markerButton.innerHTML = pinSvg;
+        markerButton.addEventListener("click", () => openPreview(store.slug));
+        markerElement.append(markerButton);
 
-        marker.on("click", () => openPreview(store.slug));
+        const marker = new mapboxgl.Marker({ element: markerElement, anchor: "bottom" })
+          .setLngLat([store.lng, store.lat])
+          .addTo(map);
         markers.current[store.slug] = marker;
       });
 
-      const bounds = L.latLngBounds(stores.map((store) => [store.lat, store.lng]));
-      map.fitBounds(bounds, { padding: [32, 32], maxZoom: 12 });
+      const lngs = stores.map((store) => store.lng);
+      const lats = stores.map((store) => store.lat);
+      map.fitBounds(
+        [
+          [Math.min(...lngs), Math.min(...lats)],
+          [Math.max(...lngs), Math.max(...lats)],
+        ],
+        { padding: 32, maxZoom: 12, duration: 0 },
+      );
 
       const container = mapRef.current;
       if (typeof ResizeObserver !== "undefined" && container) {
         resizeObserver = new ResizeObserver(() => {
-          map.invalidateSize();
+          map.resize();
         });
         resizeObserver.observe(container);
       }
 
       window.addEventListener("resize", onViewportChange);
       window.addEventListener("orientationchange", onViewportChange);
-      scheduleInvalidate(map);
-      setMapReady(true);
+      scheduleResize(map);
+      map.once("load", () => {
+        if (!cancelled) setMapReady(true);
+      });
 
       if (cancelled) {
         window.removeEventListener("resize", onViewportChange);
@@ -208,10 +240,19 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
     });
 
     if (visible.length > 0) {
-      void import("leaflet").then((leaflet) => {
-        const bounds = leaflet.default.latLngBounds(visible.map((store) => [store.lat, store.lng]));
-        map.fitBounds(bounds, { padding: [40, 40], maxZoom: visible.length === 1 ? 14 : 12 });
-      });
+      if (visible.length === 1) {
+        map.easeTo({ center: [visible[0].lng, visible[0].lat], zoom: 14, duration: 500 });
+      } else {
+        const lngs = visible.map((store) => store.lng);
+        const lats = visible.map((store) => store.lat);
+        map.fitBounds(
+          [
+            [Math.min(...lngs), Math.min(...lats)],
+            [Math.max(...lngs), Math.max(...lats)],
+          ],
+          { padding: 40, maxZoom: 12, duration: 500 },
+        );
+      }
     }
   }, [visible, mapReady]);
 
@@ -222,7 +263,7 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
     const map = mapInstance.current;
     const store = stores.find((item) => item.slug === activeSlug);
     if (map && store) {
-      map.flyTo([store.lat, store.lng], 13, { duration: 0.45 });
+      map.flyTo({ center: [store.lng, store.lat], zoom: 13, duration: 450, essential: true });
       if (window.matchMedia("(max-width: 991px)").matches && !previewSlug) {
         mapRef.current?.closest(".stores-finder-map-col")?.scrollIntoView({ block: "nearest", behavior: "smooth" });
       }

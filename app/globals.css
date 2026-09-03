@@ -1641,58 +1641,41 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   border: 1px solid rgba(255,255,255,.1);
 }
 .stores-finder-map { width: 100%; height: 100%; background: #f2efe9; }
-.stores-finder-map .leaflet-pane,
-.stores-finder-map .leaflet-control { z-index: 1; }
-.stores-finder-map .leaflet-control-zoom,
-.stores-finder-map.leaflet-touch .leaflet-control-zoom {
-  border: 0;
-  margin: 16px;
-  box-shadow: none;
+.stores-finder-map .mapboxgl-canvas,
+.stores-finder-map .mapboxgl-control-container { z-index: 1; }
+.stores-finder-map .mapboxgl-ctrl-top-right .mapboxgl-ctrl { margin: 16px; }
+.stores-finder-map .mapboxgl-ctrl-group {
+  display: grid;
+  gap: 8px;
   background: transparent;
+  box-shadow: none;
 }
-.stores-finder-map .leaflet-control-zoom a,
-.stores-finder-map.leaflet-touch .leaflet-bar a {
-  width: 40px !important;
-  height: 40px !important;
-  margin: 0;
-  padding: 0 !important;
-  display: grid !important;
-  place-items: center !important;
-  line-height: 0 !important;
-  font-size: 0 !important;
+.stores-finder-map .mapboxgl-ctrl-group button {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
   color: var(--color-midnight-moss);
   background: white;
-  border: 0 !important;
-  border-radius: 50% !important;
-  box-shadow: 0 8px 20px rgba(10, 13, 7, 0.16);
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(10, 13, 7, .16);
 }
-.stores-finder-map .leaflet-control-zoom a svg {
-  display: block;
-  width: 14px;
-  height: 14px;
-}
-.stores-finder-map .leaflet-control-zoom-in::before,
-.stores-finder-map .leaflet-control-zoom-in::after,
-.stores-finder-map .leaflet-control-zoom-out::before {
-  content: none !important;
-  display: none !important;
-}
-.stores-finder-map .leaflet-control-zoom a + a,
-.stores-finder-map.leaflet-touch .leaflet-bar a + a {
-  margin-top: 8px;
-  border-top: 0 !important;
-}
-.stores-finder-map .leaflet-control-zoom a:hover,
-.stores-finder-map.leaflet-touch .leaflet-bar a:hover {
-  color: var(--color-midnight-moss);
-  background: var(--color-honey-pollen);
-}
-.stores-finder-map .leaflet-control-zoom a:focus-visible {
+.stores-finder-map .mapboxgl-ctrl-group button + button { border-top: 0; }
+.stores-finder-map .mapboxgl-ctrl-group button:hover { background: var(--color-honey-pollen); }
+.stores-finder-map .mapboxgl-ctrl-group button:focus-visible {
   outline: 2px solid var(--color-honey-pollen);
   outline-offset: 2px;
 }
-.stores-finder-map .leaflet-control-attribution { max-width: 70%; padding: 6px 10px; background: rgba(15,18,12,.72); color: rgba(255,255,255,.42); border-radius: 10px 0 0 0; font-size: 11px; }
-.stores-finder-map .leaflet-control-attribution a { color: rgba(246,217,135,.82); }
+.stores-finder-map .mapboxgl-ctrl-attrib {
+  max-width: 70%;
+  padding: 6px 10px;
+  background: rgba(15,18,12,.72);
+  color: rgba(255,255,255,.52);
+  border-radius: 10px 0 0;
+  font-size: 11px;
+}
+.stores-finder-map .mapboxgl-ctrl-attrib a { color: rgba(246,217,135,.9); }
 
 html.store-drawer-open { overflow: hidden; }
 .store-drawer-root {
