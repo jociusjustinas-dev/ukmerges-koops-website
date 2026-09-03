@@ -1,0 +1,34 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": true,
+    "layout": { "contentSize": "820px", "wideSize": "1440px" },
+    "color": {
+      "defaultPalette": false,
+      "palette": [
+        { "slug": "moss", "name": "Samanų žalia", "color": "#15190d" },
+        { "slug": "honey", "name": "Medaus geltona", "color": "#f6d987" },
+        { "slug": "sprout", "name": "Švelni žalia", "color": "#aedcb9" },
+        { "slug": "bone", "name": "Šviesi pilka", "color": "#eaece4" },
+        { "slug": "white", "name": "Balta", "color": "#ffffff" }
+      ]
+    },
+    "typography": {
+      "fluid": true,
+      "fontFamilies": [
+        { "slug": "koops-sans", "name": "KOOPS Sans", "fontFamily": "Inter, Arial, sans-serif" }
+      ]
+    },
+    "spacing": { "units": ["px", "rem", "vw", "%"] }
+  },
+  "styles": {
+    "color": { "background": "#ffffff", "text": "#15190d" },
+    "typography": { "fontFamily": "var(--wp--preset--font-family--koops-sans)", "lineHeight": "1.45" },
+    "elements": {
+      "link": { "color": { "text": "#15190d" } },
+      "heading": { "typography": { "fontWeight": "400", "lineHeight": "1.02" } }
+    }
+  }
+}
+

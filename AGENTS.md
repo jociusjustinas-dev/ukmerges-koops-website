@@ -134,6 +134,32 @@ Prieš sakant, kad pataisyta, padaryk screenshot arba inspect realias `getBoundi
 - `components/sections/` – išskirtos bento / feature sekcijos.
 - `public/` – logo ir nuotraukos. Hero nekeisti be aiškaus vartotojo prašymo.
 - `.openai/hosting.json` – Sites projekto identifikatorius. Nekeisti ir nekurti naujo Sites projekto.
+- `wordpress/` – gamybinė WordPress realizacija. Joje yra atskira pasirinktinė
+  tema `wp-content/themes/koops` ir nuo temos nepriklausantis turinio įskiepis
+  `wp-content/plugins/koops-core`.
+
+## WordPress architektūra
+
+- Nenaudoti „Elementor“ ar kito vizualinio puslapių konstruktoriaus. Dizaino
+  sistema ir šablonai priklauso `koops` temai, o verslo duomenys – `koops-core`
+  įskiepiui.
+- `koops_store`, `koops_classified` ir `koops_job` yra atskiri vieši turinio
+  tipai su REST API palaikymu. Naujienoms naudojami standartiniai WordPress
+  įrašai.
+- Bendri kontaktai, socialinės nuorodos ir patvirtinti restorano duomenys
+  saugomi vienoje `koops_options` parinktyje ir redaguojami per
+  **KOOPS → Bendri duomenys**. Nedubliuoti šių reikšmių šablonuose.
+- Patvirtintos 34 parduotuvės saugomos `koops-core/data/stores.json`. Pradinis
+  importas paleidžiamas administracijoje per **KOOPS → Pradinis paruošimas**;
+  jis gali būti kartojamas, nes įrašus atnaujina pagal slug.
+- Turinys redaguojamas Gutenberg redaktoriuje ir native KOOPS laukeliuose.
+  Tema neturi mokamos ACF Pro priklausomybės. Jei ACF Pro bus naudojamas
+  vėliau, laukų raktus ir esamą duomenų modelį išlaikyti.
+- Formos siunčiamos per `wp_mail`; prieš gamybinį paleidimą būtina prijungti
+  SMTP, patikrinti pristatymą ir privatumo sutikimą.
+- WordPress paketo diegimo bei paleidimo eiga aprašyta `wordpress/README.md`.
+- Dabartinė Sites koncepcija nėra automatiškai WordPress talpinimas. WordPress
+  diegimui reikės atskiros hostingo aplinkos su PHP, duomenų baze ir WP admin.
 
 ## Turinio būsena ir patvirtinti duomenys
 
