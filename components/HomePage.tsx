@@ -19,7 +19,7 @@ const heroUpdates = [
     label: "NAUJIENOS",
     title: "Švieži vietos pomidorai – sezono pradžia",
     image: "/koops-bento-local-shopping.jpg",
-    href: "/naujienos/vietos-pomidorai",
+    href: "/naujienos",
   },
   {
     label: "RESTORANAS",
@@ -838,7 +838,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
               <nav aria-label="Poraštės navigacija">
                 <div><p className="section-label">PAGRINDINIAI</p><a href="/parduotuves">Parduotuvės</a><a href="/naujienos">Naujienos</a><a href="/skelbimai">Skelbimai</a><a href="/restoranas">Restoranas</a><a href="/karjera">Karjera</a></div>
                 <div><p className="section-label">KOOPERATYVAS</p><a href="/apie">Apie KOOPS</a><a href="/tiekejams">Tiekėjams</a><a href="/kontaktai">Kontaktai</a></div>
-                <div><p className="section-label">KONTAKTAI</p><a href="tel:+37034053235">0 340 53235</a><a href="mailto:direktore@urvk.lt">direktore@urvk.lt</a><a href="https://ukmergeskoops.lt/privatumo-politika/">Privatumo politika</a></div>
+                <div><p className="section-label">KONTAKTAI</p><a href="tel:+37034053235">0 340 53235</a><a href="mailto:direktore@urvk.lt">direktore@urvk.lt</a><a href="/privatumo-politika">Privatumo politika</a></div>
               </nav>
             </div>
             <div className="footer-bottom">

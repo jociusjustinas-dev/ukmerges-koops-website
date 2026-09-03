@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   title: "Tiekėjams | KOOPS Ukmergė",
   description:
     "Pasiūlykite produkciją KOOPS: ko ieškome, ką pateikti, kam rašyti ir paprasta forma vietos gamintojams.",
+  alternates: { canonical: "/tiekejams" },
 };
 
 export default async function SuppliersPage() {

@@ -9,11 +9,13 @@ import { careersContact } from "../../lib/jobs";
 import { getKoopsCmsData } from "../../lib/wordpress";
 import { RollingLabel } from "../../components/RollingLabel";
 import { CmsPageController } from "../../components/CmsPageController";
+import { absoluteUrl } from "../../lib/site-url";
 
 export const metadata: Metadata = {
   title: "Karjera | KOOPS Ukmergėje ir rajone",
   description:
     "Darbo pasiūlymai KOOPS: parduotuvės, restoranas „Vilkmergė“ ir logistika. Aiški pozicija, vieta ir paprastas kandidatavimas.",
+  alternates: { canonical: "/karjera" },
 };
 
 export default async function CareersPage() {
@@ -28,7 +30,7 @@ export default async function CareersPage() {
       hiringOrganization: {
         "@type": "Organization",
         name: "Ukmergės rajono vartotojų kooperatyvas",
-        sameAs: "https://ukmergeskoops.lt",
+        url: absoluteUrl("/"),
       },
       jobLocation: {
         "@type": "Place",

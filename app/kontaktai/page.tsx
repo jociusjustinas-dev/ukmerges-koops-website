@@ -8,11 +8,13 @@ import { SiteHeader } from "../../components/SiteHeader";
 import { contactsOrg, socialLinks } from "../../lib/contacts";
 import { getKoopsCmsData } from "../../lib/wordpress";
 import { CmsPageController } from "../../components/CmsPageController";
+import { absoluteUrl } from "../../lib/site-url";
 
 export const metadata: Metadata = {
   title: "Kontaktai | KOOPS Ukmergė",
   description:
     "KOOPS kontaktai Ukmergėje: adresas, telefonas, el. paštas ir forma. Parduotuvės, restoranas, tiekėjai ir karjera — aiškūs keliai.",
+  alternates: { canonical: "/kontaktai" },
 };
 
 function phoneHref(phone: string) {
@@ -52,7 +54,7 @@ export default async function ContactsPage() {
       postalCode: "LT-20130",
       addressCountry: "LT",
     },
-    url: "https://ukmerges-koops-koncepcija.jociusj.chatgpt.site/kontaktai",
+    url: absoluteUrl("/kontaktai"),
     sameAs: socials.map((item) => item.href),
   };
 

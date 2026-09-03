@@ -9,11 +9,13 @@ import {
 } from "../../lib/restaurant";
 import { getKoopsCmsData } from "../../lib/wordpress";
 import { CmsPageController } from "../../components/CmsPageController";
+import { absoluteUrl } from "../../lib/site-url";
 
 export const metadata: Metadata = {
   title: "Restoranas „Vilkmergė“ | KOOPS",
   description:
     "Restoranas „Vilkmergė“ Ukmergėje — 3 salės, iki 154 svečių. Užklausa šventei, renginiui ar vakarienei ir tiesioginis skambutis.",
+  alternates: { canonical: "/restoranas" },
 };
 
 function phoneHref(phone: string) {
@@ -49,7 +51,7 @@ export default async function RestaurantPage() {
       addressLocality: "Ukmergė",
       addressCountry: "LT",
     },
-    url: "https://ukmerges-koops-koncepcija.jociusj.chatgpt.site/restoranas",
+    url: absoluteUrl("/restoranas"),
   };
 
   return (

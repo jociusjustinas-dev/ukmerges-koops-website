@@ -10,8 +10,7 @@ import {
   type NewsBodyBlock,
 } from "../../../lib/news";
 import { getKoopsCmsData } from "../../../lib/wordpress";
-
-const siteOrigin = "https://ukmerges-koops-website.vercel.app";
+import { absoluteUrl } from "../../../lib/site-url";
 
 type NewsPageProps = {
   params: Promise<{ slug: string }>;
@@ -30,6 +29,7 @@ export async function generateMetadata({ params }: NewsPageProps): Promise<Metad
   return {
     title: `${item.title} | KOOPS`,
     description: item.excerpt ?? item.title,
+    alternates: { canonical: newsHref(item.slug) },
   };
 }
 
@@ -84,7 +84,7 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
     ...news.filter((entry) => entry.slug !== item.slug && entry.category === item.category),
     ...news.filter((entry) => entry.slug !== item.slug && entry.category !== item.category),
   ].slice(0, 3);
-  const shareUrl = `${siteOrigin}${newsHref(item.slug)}`;
+  const shareUrl = absoluteUrl(newsHref(item.slug));
 
   const schema = {
     "@context": "https://schema.org",
@@ -93,6 +93,8 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
     description: item.excerpt,
     datePublished: item.date,
     image: item.image,
+    url: shareUrl,
+    mainEntityOfPage: shareUrl,
     articleSection: item.category,
     publisher: {
       "@type": "Organization",

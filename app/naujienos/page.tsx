@@ -9,6 +9,7 @@ import { CmsPageController } from "../../components/CmsPageController";
 export const metadata: Metadata = {
   title: "Naujienos ir akcijos | KOOPS",
   description: "KOOPS naujienos, akcijos ir Ukmergės krašto aktualijos — vietos produkcija, parduotuvės ir restoranas „Vilkmergė“.",
+  alternates: { canonical: "/naujienos" },
 };
 
 export default async function NewsArchivePage() {

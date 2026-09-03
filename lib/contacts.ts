@@ -10,7 +10,7 @@ export const contactsOrg = {
   administrationPhoneDisplay: "0 340 51049",
   administrationPhoneHref: "tel:+37034051049",
   officeHours: "I–IV 8:00–16:45 · V 8:00–15:30 · VI–VII nedirbame",
-  privacyUrl: "https://ukmergeskoops.lt/privatumo-politika/",
+  privacyUrl: "/privatumo-politika",
   note: "",
 };
 

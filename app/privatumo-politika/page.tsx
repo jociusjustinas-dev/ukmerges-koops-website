@@ -6,6 +6,7 @@ import { getKoopsCmsData } from "../../lib/wordpress";
 export const metadata: Metadata = {
   title: "Privatumas ir slapukai | KOOPS",
   description: "Informacija apie KOOPS svetainėje naudojamus slapukus, jų paskirtį ir lankytojo pasirinkimų valdymą.",
+  alternates: { canonical: "/privatumo-politika" },
 };
 
 export default async function PrivacyPage() {

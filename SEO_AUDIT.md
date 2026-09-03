@@ -4,9 +4,28 @@ Audito data: 2026-09-03
 
 Audituota versija: <https://ukmerges-koops-website.vercel.app/>
 
-Galutinis numatytas domenas: <https://ukmergeskoops.lt/>
+Domeno kandidatas: <https://ukmergeskoops.lt/> — klientas dar nepatvirtino, todėl
+SEO konfigūracijoje jis nenaudojamas.
 
 Kodo būsena audito metu: `92e2816`
+
+## P0 įgyvendinimo būsena
+
+Po audito sutvarkyta visa nuo galutinio domeno ir nepatvirtinto seno turinio
+nepriklausanti P0 dalis:
+
+- vienas konfigūruojamas `SITE_URL` su laikinu Vercel adresu;
+- savireferenciniai canonical visuose 50 viešų URL;
+- veikiantys dinaminiai `robots.txt` ir `sitemap.xml` iš WordPress turinio;
+- JSON-LD bei naujienų dalinimosi URL generuojami iš `SITE_URL`;
+- `/strategija` turi `noindex, nofollow` ir nėra sitemap;
+- pašalinta vidinė 404 nuoroda;
+- `/restoranas-vilkmerge` ir `/apie-mus` nuolat peradresuojami į patvirtintus
+  naujus taikinius.
+
+Vietinė kontrolinė patikra: 50 URL, 50 atsakymų `200`, 0 vidinių klaidų,
+0 trūkstamų canonical, 0 pasikartojančių title ir meta aprašymų. Likę seni URL
+neperadresuojami, kol nepatvirtinta, kur turi keliauti jų turinys.
 
 ## Apimtis ir metodika
 

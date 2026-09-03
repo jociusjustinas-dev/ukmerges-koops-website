@@ -9,6 +9,7 @@ import { CmsPageController } from "../../components/CmsPageController";
 export const metadata: Metadata = {
   title: "Skelbimai | KOOPS Ukmergė",
   description: "KOOPS skelbimai: nuomojamos patalpos, turto pasiūlymai ir kita aktuali informacija Ukmergėje bei rajone.",
+  alternates: { canonical: "/skelbimai" },
 };
 
 export default async function ClassifiedsPage() {

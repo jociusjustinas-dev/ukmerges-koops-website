@@ -4,6 +4,8 @@ import { RollingLabel } from "../../components/RollingLabel";
 export const metadata: Metadata = {
   title: "KOOPS | Svetainės atnaujinimo strategija",
   description: "Ukmergės rajono vartotojų kooperatyvo svetainės atnaujinimo strategija.",
+  alternates: { canonical: "/strategija" },
+  robots: { index: false, follow: false },
 };
 
 const goals = [

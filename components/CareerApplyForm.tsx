@@ -211,7 +211,7 @@ export function CareerApplyForm() {
         />
         <span>
           Patvirtinu, kad susipažinau su{" "}
-          <a href="https://ukmergeskoops.lt/privatumo-politika/">privatumo politika</a>.
+          <a href="/privatumo-politika">privatumo politika</a>.
         </span>
       </label>
       {errors.privatumas ? <small className="field-error">{errors.privatumas}</small> : null}

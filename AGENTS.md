@@ -6,8 +6,8 @@
 
 - Organizacija: Ukmergės rajono vartotojų kooperatyvas (KOOPS).
 - Dabartinis tikslas: sukurti šiuolaikišką, klientui pristatomą svetainės koncepciją ir vėliau perkelti ją į WordPress.
-- Gyva koncepcija: `https://ukmerges-koops-koncepcija.jociusj.chatgpt.site`
-- Strategijos puslapis: `https://ukmerges-koops-koncepcija.jociusj.chatgpt.site/strategija`
+- Gyvas frontendas: `https://ukmerges-koops-website.vercel.app`
+- Strategijos puslapis: `https://ukmerges-koops-website.vercel.app/strategija`
 - GitHub: `https://github.com/jociusjustinas-dev/ukmerges-koops-website` (privatus).
 - Sprendimų priėmėjas / kontaktas: Laurynas.
 
@@ -46,7 +46,15 @@ Numatyti pagrindiniai puslapiai:
 - Apie KOOPS
 - Kontaktai / privatumo politika
 
-Paleidžiant naują struktūrą reikia paruošti seno puslapio URL → naujo URL `301` peradresavimų lentelę. Tai dar nėra padaryta, nes galutinė struktūra ir turinys dar nepatvirtinti.
+Paleidžiant naują struktūrą reikia užbaigti seno puslapio URL → naujo URL `301`
+peradresavimų lentelę. Aiškūs `/restoranas-vilkmerge` ir `/apie-mus` peradresavimai
+jau įgyvendinti; likę taikiniai laukiami, nes galutinė struktūra ir turinys dar
+nepatvirtinti.
+
+Galutinis domenas dar nepatvirtintas. SEO URL generuojami per `lib/site-url.ts`:
+naudoti `NEXT_PUBLIC_SITE_URL` arba `SITE_URL`, o kol kas palikti esamą Vercel
+adresą. Neįrašyti `ukmergeskoops.lt` kaip canonical ar sitemap domeno be aiškaus
+kliento patvirtinimo.
 
 ### SEO, AEO ir accessibility principai
 

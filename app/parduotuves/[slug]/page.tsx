@@ -4,6 +4,7 @@ import { SiteFooter } from "../../../components/SiteFooter";
 import { SiteHeader } from "../../../components/SiteHeader";
 import { RollingLabel } from "../../../components/RollingLabel";
 import { getKoopsCmsData } from "../../../lib/wordpress";
+import { absoluteUrl } from "../../../lib/site-url";
 
 type StorePageProps = {
   params: Promise<{ slug: string }>;
@@ -22,6 +23,7 @@ export async function generateMetadata({ params }: StorePageProps): Promise<Meta
   return {
     title: `Parduotuvė „${store.name}“ | KOOPS`,
     description: `${store.address}. Darbo laikas: ${store.hours}. Telefonas ${store.phone}.`,
+    alternates: { canonical: `/parduotuves/${store.slug}` },
   };
 }
 
@@ -43,7 +45,7 @@ export default async function StoreDetailPage({ params }: StorePageProps) {
       addressLocality: store.city,
       addressCountry: "LT",
     },
-    url: `https://ukmerges-koops-koncepcija.jociusj.chatgpt.site/parduotuves/${store.slug}`,
+    url: absoluteUrl(`/parduotuves/${store.slug}`),
   };
 
   return (

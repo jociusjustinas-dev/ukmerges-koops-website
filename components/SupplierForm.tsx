@@ -183,7 +183,7 @@ export function SupplierForm({ idSuffix = "" }: Props) {
         </span>
         <div className="privacy-consent-copy">
           <label htmlFor={`${uid}-privacy`}>Patvirtinu, kad susipažinau su </label>
-          <a className="privacy-link" href="https://ukmergeskoops.lt/privatumo-politika/">
+          <a className="privacy-link" href="/privatumo-politika">
             privatumo politika
           </a>
           .

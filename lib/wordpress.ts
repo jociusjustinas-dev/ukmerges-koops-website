@@ -206,6 +206,16 @@ const fallback: KoopsCmsData = {
   pages: {},
 };
 
+function normalizeOptions(options: WordPressOptions): WordPressOptions {
+  const privacyUrl = options.privacy_url;
+  const isKoopsPrivacyPage = privacyUrl && /\/privatumo-politika\/?(?:[?#].*)?$/.test(privacyUrl);
+
+  return {
+    ...options,
+    privacy_url: isKoopsPrivacyPage ? "/privatumo-politika" : privacyUrl,
+  };
+}
+
 export async function getKoopsCmsData(): Promise<KoopsCmsData> {
   const baseUrl = (process.env.WORDPRESS_API_URL || DEFAULT_WORDPRESS_URL).replace(/\/$/, "");
 
@@ -223,7 +233,7 @@ export async function getKoopsCmsData(): Promise<KoopsCmsData> {
     const liveJobs = mapJobs(raw.jobs || []);
 
     return {
-      options: raw.options || {},
+      options: normalizeOptions(raw.options || {}),
       stores: liveStores.length ? liveStores : fallback.stores,
       news: liveNews.length ? liveNews : fallback.news,
       classifieds: liveClassifieds,

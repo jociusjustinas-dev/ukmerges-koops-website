@@ -9,6 +9,7 @@ import { CmsPageController } from "../../components/CmsPageController";
 export const metadata: Metadata = {
   title: "Parduotuvės | KOOPS Ukmergėje ir rajone",
   description: "Raskite artimiausią KOOPS parduotuvę: adresą, darbo laiką, telefoną ir maršrutą Ukmergėje bei rajone.",
+  alternates: { canonical: "/parduotuves" },
 };
 
 const faqs = [

@@ -8,11 +8,13 @@ import { SiteHeader } from "../../components/SiteHeader";
 import { aboutOrg } from "../../lib/about";
 import { getKoopsCmsData } from "../../lib/wordpress";
 import { CmsPageController } from "../../components/CmsPageController";
+import { absoluteUrl } from "../../lib/site-url";
 
 export const metadata: Metadata = {
   title: "Apie KOOPS | Ukmergės rajono vartotojų kooperatyvas",
   description:
     "Ukmergės rajono vartotojų kooperatyvas: žmonės, vieta ir istorija. Parduotuvės, restoranas „Vilkmergė“ ir vietos partnerystė.",
+  alternates: { canonical: "/apie" },
 };
 
 export default async function AboutPage() {
@@ -31,7 +33,7 @@ export default async function AboutPage() {
       postalCode: "LT-20130",
       addressCountry: "LT",
     },
-    url: "https://ukmerges-koops-koncepcija.jociusj.chatgpt.site/apie",
+    url: absoluteUrl("/apie"),
   };
 
   return (
