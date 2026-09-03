@@ -177,7 +177,7 @@ export function ContactEnquiryForm({ idSuffix = "" }: Props) {
         </span>
         <div className="privacy-consent-copy">
           <label htmlFor={`${uid}-privacy`}>Patvirtinu, kad susipažinau su </label>
-          <a className="privacy-link" href={contactsOrg.privacyUrl}>
+          <a className="privacy-link" href={cms.privacy_url || "/privatumo-politika"}>
             privatumo politika
           </a>
           .
