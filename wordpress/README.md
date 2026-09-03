@@ -42,6 +42,8 @@ o ne dubliuojami.
   keisti mažąją antraštę, antraštę, aprašymą, pagrindinį mygtuką bei nuotrauką.
   Gutenberg drobėje rodoma tikra Vercel puslapio versija, ne ekrano nuotraukos.
   Paspaudus bet kurią sekciją, jos laukai atsiveria dešinėje redaktoriaus pusėje.
+  Mygtuko nuoroda pasirenkama standartiniame „WordPress“ nuorodų valdiklyje iš
+  esamų puslapių ir įrašų arba įvedant pasirinktinį adresą.
   Viešame puslapyje taikomi tik nuo numatytųjų reikšmių pakeisti laukai, todėl
   sudėtingas dizaino žymėjimas ir animacijos lieka nepažeisti.
 

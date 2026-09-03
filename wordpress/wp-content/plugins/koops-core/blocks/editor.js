@@ -5,6 +5,7 @@
   const el = element.createElement;
   const { InspectorControls, MediaUpload, MediaUploadCheck, useBlockProps } = blockEditor;
   const { PanelBody, SelectControl, TextControl, TextareaControl, ToggleControl, Button } = components;
+  const LinkControl = blockEditor.__experimentalLinkControl;
   const catalog = (window.koopsSectionEditor && window.koopsSectionEditor.catalog) || {};
   const defaults = (window.koopsSectionEditor && window.koopsSectionEditor.defaults) || {};
   const frontendUrl = ((window.koopsSectionEditor && window.koopsSectionEditor.frontendUrl) || '').replace(/\/$/, '');
@@ -12,6 +13,28 @@
   const options = [{ label: 'Pasirinkite sekciją', value: '' }].concat(
     Object.entries(catalog).map(([value, item]) => ({ label: item.label, value }))
   );
+
+  function KoopsLinkControl(props) {
+    if (!LinkControl) {
+      return el(TextControl, {
+        label: props.label,
+        value: props.value,
+        onChange: props.onChange
+      });
+    }
+
+    return el(
+      'div',
+      { className: 'koops-link-control' },
+      el('span', { className: 'koops-link-control__label' }, props.label),
+      el(LinkControl, {
+        value: props.value ? { url: props.value } : {},
+        onChange: (link) => props.onChange((link && link.url) || ''),
+        onRemove: () => props.onChange(''),
+        settings: []
+      })
+    );
+  }
 
   function KoopsSectionEdit(props) {
     const a = props.attributes;
@@ -50,7 +73,7 @@
           el(TextareaControl, { label: 'Antraštė', help: 'Naują eilutę įrašykite Enter klavišu.', value: a.title, onChange: (title) => set({ title }) }),
           el(TextareaControl, { label: 'Aprašymas', value: a.description, onChange: (description) => set({ description }) }),
           el(TextControl, { label: 'Pagrindinio mygtuko tekstas', value: a.primaryLabel, onChange: (primaryLabel) => set({ primaryLabel }) }),
-          el(TextControl, { label: 'Pagrindinio mygtuko nuoroda', value: a.primaryUrl, onChange: (primaryUrl) => set({ primaryUrl }) }),
+          el(KoopsLinkControl, { label: 'Pagrindinio mygtuko nuoroda', value: a.primaryUrl, onChange: (primaryUrl) => set({ primaryUrl }) }),
           el(
             MediaUploadCheck,
             null,
@@ -138,7 +161,7 @@
         el(TextareaControl, { label: 'Antraštė', help: 'Naują eilutę įrašykite Enter klavišu.', value: a.title, onChange: (title) => set({ title }) }),
         el(TextareaControl, { label: 'Aprašymas', value: a.description, onChange: (description) => set({ description }) }),
         el(TextControl, { label: 'Pagrindinio mygtuko tekstas', value: a.primaryLabel, onChange: (primaryLabel) => set({ primaryLabel }) }),
-        el(TextControl, { label: 'Pagrindinio mygtuko nuoroda', value: a.primaryUrl, onChange: (primaryUrl) => set({ primaryUrl }) }),
+        el(KoopsLinkControl, { label: 'Pagrindinio mygtuko nuoroda', value: a.primaryUrl, onChange: (primaryUrl) => set({ primaryUrl }) }),
         el(
           MediaUploadCheck,
           null,
@@ -227,6 +250,29 @@
     return input;
   }
 
+  function addSidebarLinkField(panel, block, labelText, key) {
+    const mount = document.createElement('div');
+    mount.className = 'koops-live-link-control';
+    panel.appendChild(mount);
+
+    const control = el(KoopsLinkControl, {
+      label: labelText,
+      value: block.attributes[key] || '',
+      onChange: (value) => {
+        const changes = {};
+        changes[key] = value;
+        updateSection(block, changes);
+      }
+    });
+
+    if (element.createRoot) {
+      mount.__koopsRoot = element.createRoot(mount);
+      mount.__koopsRoot.render(control);
+    } else if (element.render) {
+      element.render(control, mount);
+    }
+  }
+
   function renderSidebar(block) {
     const inspector = document.querySelector('.block-editor-block-inspector');
     if (!inspector) return;
@@ -254,6 +300,11 @@
         '.koops-live-field{display:grid;gap:7px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.035em;}',
         '.koops-live-field input,.koops-live-field textarea{box-sizing:border-box;width:100%;padding:9px 10px;border:1px solid #949494;border-radius:4px;background:#fff;color:#1e1e1e;font:400 14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;text-transform:none;letter-spacing:normal;}',
         '.koops-live-field textarea{resize:vertical;}',
+        '.koops-link-control{display:grid;gap:7px;}',
+        '.koops-link-control__label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.035em;}',
+        '.koops-live-link-control .block-editor-link-control{min-width:0;width:100%;}',
+        '.koops-live-link-control .block-editor-link-control__search-input-wrapper{margin:0;}',
+        '.koops-live-link-control .block-editor-link-control__search-item{padding-left:0;padding-right:0;}',
         '.koops-live-media{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;}',
         '.koops-live-media .button{height:38px;align-self:end;}',
         '.koops-live-sidebar__type{margin:0;color:#757575;font-size:12px;text-transform:uppercase;letter-spacing:.06em;}'
@@ -284,7 +335,7 @@
     addSidebarField(panel, block, 'Antraštė', 'title', 'textarea');
     addSidebarField(panel, block, 'Aprašymas', 'description', 'textarea');
     addSidebarField(panel, block, 'Mygtuko tekstas', 'primaryLabel', 'input');
-    addSidebarField(panel, block, 'Mygtuko nuoroda', 'primaryUrl', 'input');
+    addSidebarLinkField(panel, block, 'Mygtuko nuoroda', 'primaryUrl');
 
     const media = document.createElement('div');
     media.className = 'koops-live-media';
