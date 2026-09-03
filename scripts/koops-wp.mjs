@@ -54,6 +54,14 @@ const resources = {
 let result;
 if (command === "me") {
   result = await request("/wp-json/wp/v2/users/me?context=edit&_fields=id,name,roles");
+} else if (command === "keys") {
+  result = await request("/wp-json/wp/v2/users/me/application-passwords?_fields=uuid,name,created,last_used,last_ip");
+} else if (command === "revoke-key") {
+  if (!args[0]) throw new Error("Naudojimas: revoke-key <uuid>");
+  const currentUser = await request("/wp-json/wp/v2/users/me?_fields=id");
+  result = await request(`/wp-json/wp/v2/users/${currentUser.id}/application-passwords/${encodeURIComponent(args[0])}`, {
+    method: "DELETE",
+  });
 } else if (command === "site") {
   result = await request("/wp-json/koops/v1/site");
 } else if (command === "options") {
@@ -92,7 +100,7 @@ if (command === "me") {
     body: JSON.stringify(parseJson(changes, "Pakeitimai")),
   });
 } else {
-  throw new Error("Komandos: me, site, options, section, page, list, item.");
+  throw new Error("Komandos: me, keys, revoke-key, site, options, section, page, list, item.");
 }
 
 process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
