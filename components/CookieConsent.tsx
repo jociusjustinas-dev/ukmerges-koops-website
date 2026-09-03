@@ -154,9 +154,7 @@ export function CookieConsent() {
     <>
       {!consent && !settingsOpen ? (
         <section className="cookie-banner" aria-labelledby="cookie-banner-title" aria-describedby="cookie-banner-copy">
-          <div className="cookie-banner-mark" aria-hidden="true"><span /><span /><span /></div>
           <div className="cookie-banner-copy">
-            <p className="section-label light-label">JŪSŲ PASIRINKIMAS</p>
             <h2 id="cookie-banner-title">Slapukai — tik su jūsų leidimu.</h2>
             <p id="cookie-banner-copy">
               Būtinieji slapukai užtikrina svetainės veikimą. Statistikos ir rinkodaros priemones naudosime tik jums sutikus.{' '}
