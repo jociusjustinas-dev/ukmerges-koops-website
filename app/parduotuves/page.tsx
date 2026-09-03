@@ -48,14 +48,14 @@ export default async function StoresPage() {
           <div className="tt-container">
             <p className="section-label light-label">PARDUOTUVĖS</p>
             <h1 className="location-headline" id="stores-list-title">
-              <span>Raskite</span>
-              <span>artimiausią</span>
+              <span>Raskite </span>
+              <span>artimiausią </span>
               <i
                 className="title-push-line"
                 style={{ transform: "scaleX(0)", transformOrigin: "left center" }}
                 aria-hidden="true"
               />
-              <span>KOOPS</span>
+              <span>KOOPS </span>
               <span>parduotuvę</span>
             </h1>
             <p className="stores-directory-lead">{stores.length} parduotuvės Ukmergėje ir rajone.</p>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { NewsArticleShare } from "../../../components/NewsArticleShare";
 import { RollingLabel } from "../../../components/RollingLabel";
@@ -48,7 +49,13 @@ function ArticleBlocks({ blocks }: { blocks: NewsBodyBlock[] }) {
         if (block.type === "figure") {
           return (
             <figure className="news-article-figure" key={`fig-${index}`}>
-              <img src={block.src} alt={block.alt} loading="lazy" />
+              <Image
+                src={block.src}
+                alt={block.alt}
+                width={1200}
+                height={800}
+                sizes="(max-width: 767px) calc(100vw - 32px), 760px"
+              />
               {block.caption ? <figcaption>{block.caption}</figcaption> : null}
             </figure>
           );
@@ -129,7 +136,14 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
             <div className="tt-container">
               {item.image ? (
                 <div className="news-article-cover-media">
-                  <img src={item.image} alt="" />
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    width={1600}
+                    height={1000}
+                    sizes="(max-width: 767px) calc(100vw - 32px), 1200px"
+                    priority
+                  />
                 </div>
               ) : (
                 <div className="news-article-cover-media is-placeholder" aria-hidden="true">
@@ -173,7 +187,13 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
                 <a className="news-list-card" href={newsHref(relatedItem.slug)} key={relatedItem.slug}>
                   <div className={`news-list-media${relatedItem.image ? "" : " is-placeholder"}`}>
                     {relatedItem.image ? (
-                      <img loading="lazy" src={relatedItem.image} alt="" />
+                      <Image
+                        src={relatedItem.image}
+                        alt={relatedItem.title}
+                        width={1200}
+                        height={800}
+                        sizes="(max-width: 767px) calc(100vw - 32px), 33vw"
+                      />
                     ) : (
                       <img className="store-cover-logo" src="/koops-logo.png" alt="" />
                     )}

@@ -35,13 +35,19 @@ neperadresuojami, kol nepatvirtinta, kur turi keliauti jų turinys.
   animacijos;
 - hero bei restorano vaizdai optimizuoti per `next/image`, žemiau esantys vaizdai
   kraunami atidėtai;
+- WordPress valdomos parduotuvių ir naujienų nuotraukos pateikiamos per
+  `next/image`, todėl generuojami modernūs formatai ir responsive `srcset`;
+- `sitemap.xml` turi realias WordPress `modified_gmt` datas puslapiams,
+  parduotuvėms ir naujienoms;
+- turiningos parduotuvių bei naujienų nuotraukos turi aprašomuosius `alt`, o H1
+  teksto mazguose išsaugoti tarpai tarp vizualiai atskirtų eilučių;
 - visi vieši šablonai turi canonical, `og:url`, `og:image` ir didelę Twitter
   dalinimosi kortelę;
 - pridėti bendri `Organization` ir `WebSite`, patikslinti parduotuvių,
   restorano bei naujienų struktūriniai duomenys;
 - pašalinti automatiškai aptikti prieinamumo pažeidimai penkiuose pagrindiniuose
   šablonuose;
-- build, TypeScript ir testai praeina; ESLint turi 0 klaidų (lieka 37 vaizdų
+- build, TypeScript ir testai praeina; ESLint turi 0 klaidų (lieka 28 vaizdų
   optimizavimo perspėjimai).
 
 ## Apimtis ir metodika

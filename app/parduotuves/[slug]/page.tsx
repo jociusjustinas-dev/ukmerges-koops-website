@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { SiteFooter } from "../../../components/SiteFooter";
 import { SiteHeader } from "../../../components/SiteHeader";
@@ -102,7 +103,14 @@ export default async function StoreDetailPage({ params }: StorePageProps) {
           <div className="store-detail-split">
             <div className="store-detail-media">
               {store.image ? (
-                <img src={store.image} alt={`Parduotuvė „${store.name}“`} />
+                <Image
+                  src={store.image}
+                  alt={`Parduotuvė „${store.name}“`}
+                  width={1400}
+                  height={1050}
+                  sizes="(max-width: 767px) 100vw, 50vw"
+                  priority
+                />
               ) : (
                 <div className="store-detail-media-placeholder" aria-hidden="true">
                   <img className="store-cover-logo" src="/koops-logo.png" alt="" />

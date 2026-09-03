@@ -498,8 +498,8 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
               <div className="tt-hero-top">
                 <p className="section-label light-label">UKMERGĖJE IR RAJONE</p>
                 <h1>
-                  <span>KOOPS</span>
-                  <span>parduotuvės</span>
+                  <span>KOOPS </span>
+                  <span>parduotuvės </span>
                   <span className="hero-title-break" aria-hidden="true" />
                   <i
                     ref={heroLineRef}
@@ -507,7 +507,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                     style={{ transform: "scaleX(0)", transformOrigin: "left center" }}
                     aria-hidden="true"
                   />
-                  <span>arčiau</span>
+                  <span>arčiau </span>
                   <span>jūsų.</span>
                 </h1>
                 <p className="body-large">Raskite artimiausią parduotuvę, jos darbo laiką ir maršrutą.</p>
@@ -566,7 +566,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
         <section className="tt-locations" id="parduotuves" aria-labelledby="parduotuviu-antraste" data-byq-component="terra-tory-team-1" data-cms-section="home-stores">
           <div className="tt-container">
             <div className="location-headline" id="parduotuviu-antraste">
-              <span>Raskite</span><span>artimiausią</span><i className="title-push-line" style={{ transform: "scaleX(0)", transformOrigin: "left center" }} aria-hidden="true" /><span>KOOPS</span><span>parduotuvę</span>
+              <span>Raskite </span><span>artimiausią </span><i className="title-push-line" style={{ transform: "scaleX(0)", transformOrigin: "left center" }} aria-hidden="true" /><span>KOOPS </span><span>parduotuvę</span>
             </div>
             <div className="location-carousel" role="region" aria-roledescription="karuselė" aria-label="KOOPS parduotuvės">
               <div className="location-grid" ref={locationCarouselRef} onScroll={handleLocationScroll}>
@@ -578,7 +578,13 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                     aria-label={`Parduotuvė „${store.name}“ – atverti puslapį`}
                   >
                     {store.image ? (
-                      <img loading="lazy" src={store.image} alt={`Parduotuvė „${store.name}“`} />
+                      <Image
+                        src={store.image}
+                        alt={`Parduotuvė „${store.name}“`}
+                        width={960}
+                        height={720}
+                        sizes="(max-width: 767px) 82vw, 30vw"
+                      />
                     ) : (
                       <img className="store-cover-logo" loading="lazy" src="/koops-logo.png" alt="" />
                     )}
@@ -650,7 +656,15 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                 if (item.tone === "featured") {
                   return (
                     <a className="news-card news-card-large" href={newsHref(item.slug)} key={item.slug}>
-                      {item.image ? <img loading="lazy" src={item.image} alt="" /> : null}
+                      {item.image ? (
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          width={1200}
+                          height={800}
+                          sizes="(max-width: 767px) calc(100vw - 32px), 50vw"
+                        />
+                      ) : null}
                       <div>
                         <span className="section-label light-label">{item.category.toUpperCase()}</span>
                         <h3>{item.title}</h3>

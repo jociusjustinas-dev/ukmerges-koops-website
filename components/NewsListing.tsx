@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { useMemo, useState } from "react";
 import {
   newsDateLabel,
@@ -16,13 +17,13 @@ function ListCard({ item, priority = false }: { item: NewsItem; priority?: boole
     <a className="news-list-card" href={newsHref(item.slug)}>
       <div className={`news-list-media${item.image ? "" : " is-placeholder"}`}>
         {item.image ? (
-          <img
-            loading={priority ? "eager" : "lazy"}
-            fetchPriority={priority ? "high" : "auto"}
-            width="1200"
-            height="800"
+          <Image
+            width={1200}
+            height={800}
             src={item.image}
-            alt=""
+            alt={item.title}
+            sizes="(max-width: 767px) calc(100vw - 32px), 50vw"
+            priority={priority}
           />
         ) : (
           <img className="store-cover-logo" src="/koops-logo.png" alt="" />

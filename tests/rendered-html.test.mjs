@@ -33,7 +33,7 @@ test("server-renders the KOOPS homepage and SEO metadata", async () => {
   assert.match(html, /<link rel="canonical" href="https:\/\/ukmerges-koops-website\.vercel\.app"/i);
   assert.match(html, /property="og:image"/i);
   assert.match(html, /property="og:url" content="https:\/\/ukmerges-koops-website\.vercel\.app"/i);
-  assert.match(html, /KOOPS[\s\S]*parduotuvės[\s\S]*arčiau[\s\S]*jūsų\./i);
+  assert.match(html, /<h1><span>KOOPS <\/span><span>parduotuvės <\/span>[\s\S]*<span>arčiau <\/span><span>jūsų\.<\/span><\/h1>/i);
   assert.match(html, /"@type":"Organization"/i);
   assert.match(html, /"@type":"WebSite"/i);
   assert.doesNotMatch(html, /Your site is taking shape|codex-preview/i);
@@ -47,5 +47,5 @@ test("keeps the primary hero visible and prioritizes only its background", async
   assert.equal(highPriorityImages.length, 2);
   assert.match(html, /class="tt-hero-background"[\s\S]*fetchPriority="high"/i);
   assert.doesNotMatch(html, /tt-hero-top h1[^>]*style="[^"]*opacity:\s*0/i);
-  assert.match(html, /loading="lazy"[^>]*Parduotuvė/i);
+  assert.match(html, /<img(?=[^>]*loading="lazy")(?=[^>]*alt="Parduotuvė)[^>]*>/i);
 });

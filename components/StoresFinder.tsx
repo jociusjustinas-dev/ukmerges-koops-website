@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type MouseEvent } from "react";
 import { createPortal } from "react-dom";
+import Image from "next/image";
 import type { Map as MapboxMap, Marker, StyleSpecification } from "mapbox-gl";
 import type { Store, StoreArea } from "../lib/stores";
 import { RollingLabel } from "./RollingLabel";
@@ -386,7 +387,13 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
                     onClick={(event) => handleStoreLinkClick(event, store.slug)}
                   >
                     {store.image ? (
-                      <img src={store.image} alt={`Parduotuvė „${store.name}“`} />
+                      <Image
+                        src={store.image}
+                        alt={`Parduotuvė „${store.name}“`}
+                        width={960}
+                        height={720}
+                        sizes="(max-width: 767px) calc(100vw - 32px), 360px"
+                      />
                     ) : (
                       <img className="store-cover-logo" src="/koops-logo.png" alt="" />
                     )}
@@ -519,7 +526,13 @@ export function StoresFinder({ stores }: { stores: Store[] }) {
 
                     <div className={`store-drawer-media${previewStore.image ? "" : " is-placeholder"}`}>
                       {previewStore.image ? (
-                        <img src={previewStore.image} alt={`Parduotuvė „${previewStore.name}“`} />
+                        <Image
+                          src={previewStore.image}
+                          alt={`Parduotuvė „${previewStore.name}“`}
+                          width={960}
+                          height={720}
+                          sizes="(max-width: 767px) calc(100vw - 32px), 460px"
+                        />
                       ) : (
                         <img className="store-cover-logo" src="/koops-logo.png" alt="" />
                       )}
