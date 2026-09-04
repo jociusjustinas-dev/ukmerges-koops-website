@@ -192,10 +192,10 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
 
           if (line) {
             line.style.removeProperty("width");
+            line.style.removeProperty("transform");
           }
-          if (line) {
-            gsap.set(line, { scaleX: 0, transformOrigin: "left center" });
-          }
+          const targetWidth = line?.getBoundingClientRect().width ?? 0;
+          if (line) line.style.width = "0px";
 
           const heroTimeline = gsap.timeline({
             defaults: { duration: 0.8, ease: "power3.out" },
@@ -212,19 +212,19 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
             0.16,
           );
 
-          if (line && isDesktop && window.innerWidth > 1100) {
+          if (line && isDesktop && window.innerWidth > 1100 && targetWidth) {
             heroTimeline.to(
               line,
               {
-                scaleX: 1,
+                width: targetWidth,
                 duration: 0.82,
                 ease: "power3.inOut",
-                clearProps: "transform,transformOrigin",
+                clearProps: "width",
               },
               0.68,
             );
           } else if (line) {
-            gsap.set(line, { scaleX: 1, clearProps: "transform,transformOrigin" });
+            line.style.removeProperty("width");
           }
 
           if (heroBody) {
@@ -304,9 +304,12 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
             const pushLineElements = pushLine
               ? Array.from(section.querySelectorAll<HTMLElement>(pushLine))
               : [];
-            pushLineElements.forEach((pushLineElement) => {
+            const pushLineTargets = pushLineElements.map((pushLineElement) => {
               pushLineElement.style.removeProperty("width");
-              gsap.set(pushLineElement, { scaleX: 0, transformOrigin: "left center" });
+              pushLineElement.style.removeProperty("transform");
+              const width = pushLineElement.getBoundingClientRect().width;
+              pushLineElement.style.width = "0px";
+              return { element: pushLineElement, width };
             });
             const itemElements = items ? section.querySelectorAll<HTMLElement>(items) : [];
             const timeline = gsap.timeline({
@@ -336,14 +339,14 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
               );
             }
 
-            pushLineElements.forEach((element) => {
+            pushLineTargets.forEach(({ element, width }) => {
               timeline.to(
                 element,
                 {
-                  scaleX: 1,
+                  width,
                   duration: 0.82,
                   ease: "power3.inOut",
-                  clearProps: "transform,transformOrigin",
+                  clearProps: "width",
                 },
                 0.55,
               );
@@ -361,7 +364,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                   stagger: 0.1,
                   ...(isLocationItems ? { clearProps: "transform" } : { scale: 1 }),
                 },
-                pushLineElements.length ? 0.58 : headingElements.length ? 0.34 : 0,
+                pushLineTargets.length ? 0.58 : headingElements.length ? 0.34 : 0,
               );
             }
           });
@@ -504,7 +507,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                   <i
                     ref={heroLineRef}
                     className="hero-headline-line title-push-line"
-                    style={{ transform: "scaleX(0)", transformOrigin: "left center" }}
+                    style={{ width: 0 }}
                     aria-hidden="true"
                   />
                   <span>arčiau </span>
@@ -566,7 +569,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
         <section className="tt-locations" id="parduotuves" aria-labelledby="parduotuviu-antraste" data-byq-component="terra-tory-team-1" data-cms-section="home-stores">
           <div className="tt-container">
             <div className="location-headline" id="parduotuviu-antraste">
-              <span>Raskite </span><span>artimiausią </span><i className="title-push-line" style={{ transform: "scaleX(0)", transformOrigin: "left center" }} aria-hidden="true" /><span>KOOPS </span><span>parduotuvę</span>
+              <span>Raskite </span><span>artimiausią </span><i className="title-push-line" style={{ width: 0 }} aria-hidden="true" /><span>KOOPS </span><span>parduotuvę</span>
             </div>
             <div className="location-carousel" role="region" aria-roledescription="karuselė" aria-label="KOOPS parduotuvės">
               <div className="location-grid" ref={locationCarouselRef} onScroll={handleLocationScroll}>

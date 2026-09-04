@@ -52,7 +52,7 @@ export default async function StoresPage() {
               <span>artimiausią </span>
               <i
                 className="title-push-line"
-                style={{ transform: "scaleX(0)", transformOrigin: "left center" }}
+                style={{ width: 0 }}
                 aria-hidden="true"
               />
               <span>KOOPS </span>

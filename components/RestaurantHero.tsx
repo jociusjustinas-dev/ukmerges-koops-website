@@ -52,6 +52,7 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
           const actions = root.querySelector<HTMLElement>(".restaurant-hero-actions");
 
           if (reduceMotion) {
+            pushLine?.style.removeProperty("width");
             pushLine?.style.removeProperty("transform");
             revealIntroImmediately(root);
             return;
@@ -64,8 +65,13 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
             gsap.set(introTargets, { autoAlpha: 0 });
           }
 
+          let pushTarget: { element: HTMLElement; width: number } | null = null;
           if (pushLine) {
-            gsap.set(pushLine, { scaleX: 0, transformOrigin: "left center" });
+            pushLine.style.removeProperty("width");
+            pushLine.style.removeProperty("transform");
+            const width = pushLine.getBoundingClientRect().width;
+            pushLine.style.width = "0px";
+            pushTarget = { element: pushLine, width };
           }
 
           const intro = gsap.timeline({
@@ -94,19 +100,19 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
             );
           }
 
-          if (pushLine && isDesktop && window.innerWidth > 991) {
+          if (pushTarget && isDesktop && window.innerWidth > 991) {
             intro.to(
-              pushLine,
+              pushTarget.element,
               {
-                scaleX: 1,
+                width: pushTarget.width,
                 duration: 0.82,
                 ease: "power3.inOut",
-                clearProps: "transform,transformOrigin",
+                clearProps: "width",
               },
               0.52,
             );
           } else if (pushLine) {
-            gsap.set(pushLine, { scaleX: 1, clearProps: "transform,transformOrigin" });
+            pushLine.style.removeProperty("width");
           }
 
           if (closingWordsEls.length) {
@@ -154,7 +160,7 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
                 <span className="restaurant-hero-title-row">
                   <i
                     className="restaurant-hero-title-rule title-push-line"
-                    style={{ transform: "scaleX(0)", transformOrigin: "left center" }}
+                    style={{ width: 0 }}
                     aria-hidden="true"
                   />
                   {inlineWords.map((word) => (

@@ -37,7 +37,10 @@ export function StoresPageMotion() {
           const pushLines = root.querySelectorAll<HTMLElement>(".title-push-line");
 
           if (reduceMotion) {
-            pushLines.forEach((line) => line.style.removeProperty("transform"));
+            pushLines.forEach((line) => {
+              line.style.removeProperty("width");
+              line.style.removeProperty("transform");
+            });
             if (directory) revealIntroImmediately(directory);
             window.dispatchEvent(new Event("resize"));
             return;
@@ -49,8 +52,13 @@ export function StoresPageMotion() {
             const lead = directory.querySelector<HTMLElement>(".stores-directory-lead");
             const finder = directory.querySelector<HTMLElement>(".stores-finder");
 
+            let pushTarget: { element: HTMLElement; width: number } | null = null;
             if (pushLine) {
-              gsap.set(pushLine, { scaleX: 0, transformOrigin: "left center" });
+              pushLine.style.removeProperty("width");
+              pushLine.style.removeProperty("transform");
+              const width = pushLine.getBoundingClientRect().width;
+              pushLine.style.width = "0px";
+              pushTarget = { element: pushLine, width };
             }
 
             const finishIntro = () => {
@@ -68,19 +76,19 @@ export function StoresPageMotion() {
               intro.fromTo(label, { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.08);
             }
 
-            if (pushLine && isDesktop && window.innerWidth > 1100) {
+            if (pushTarget && isDesktop && window.innerWidth > 1100) {
               intro.to(
-                pushLine,
+                pushTarget.element,
                 {
-                  scaleX: 1,
+                  width: pushTarget.width,
                   duration: 0.82,
                   ease: "power3.inOut",
-                  clearProps: "transform,transformOrigin",
+                  clearProps: "width",
                 },
                 0.68,
               );
             } else if (pushLine) {
-              gsap.set(pushLine, { scaleX: 1, clearProps: "transform,transformOrigin" });
+              pushLine.style.removeProperty("width");
             }
 
             if (lead) {
