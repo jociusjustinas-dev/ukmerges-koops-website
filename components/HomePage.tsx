@@ -173,6 +173,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
             titlePushLines.forEach((pushLine) => {
               pushLine.style.removeProperty("width");
               pushLine.style.removeProperty("transform");
+              pushLine.style.removeProperty("transform-origin");
             });
             const hero = root.querySelector<HTMLElement>(".tt-hero");
             if (hero) revealIntroImmediately(hero);
@@ -195,7 +196,13 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
             line.style.removeProperty("transform");
           }
           const targetWidth = line?.getBoundingClientRect().width ?? 0;
-          if (line) line.style.width = "0px";
+          if (line) {
+            line.style.width = "0px";
+            if (isMobile) {
+              line.style.removeProperty("width");
+              gsap.set(line, { scaleX: 0, transformOrigin: "left center" });
+            }
+          }
 
           const heroTimeline = gsap.timeline({
             defaults: { duration: 0.8, ease: "power3.out" },
@@ -220,6 +227,17 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                 duration: 0.82,
                 ease: "power3.inOut",
                 clearProps: "width",
+              },
+              0.68,
+            );
+          } else if (line && isMobile) {
+            heroTimeline.to(
+              line,
+              {
+                scaleX: 1,
+                duration: 0.82,
+                ease: "power3.inOut",
+                clearProps: "transform,transformOrigin",
               },
               0.68,
             );
@@ -307,9 +325,14 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
             const pushLineTargets = pushLineElements.map((pushLineElement) => {
               pushLineElement.style.removeProperty("width");
               pushLineElement.style.removeProperty("transform");
+              pushLineElement.style.removeProperty("transform-origin");
               const width = pushLineElement.getBoundingClientRect().width;
-              pushLineElement.style.width = "0px";
-              return { element: pushLineElement, width };
+              if (isMobile) {
+                gsap.set(pushLineElement, { scaleX: 0, transformOrigin: "left center" });
+              } else {
+                pushLineElement.style.width = "0px";
+              }
+              return { element: pushLineElement, width, useScale: isMobile };
             });
             const itemElements = items ? section.querySelectorAll<HTMLElement>(items) : [];
             const timeline = gsap.timeline({
@@ -339,15 +362,22 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
               );
             }
 
-            pushLineTargets.forEach(({ element, width }) => {
+            pushLineTargets.forEach(({ element, width, useScale }) => {
               timeline.to(
                 element,
-                {
-                  width,
-                  duration: 0.82,
-                  ease: "power3.inOut",
-                  clearProps: "width",
-                },
+                useScale
+                  ? {
+                      scaleX: 1,
+                      duration: 0.82,
+                      ease: "power3.inOut",
+                      clearProps: "transform,transformOrigin",
+                    }
+                  : {
+                      width,
+                      duration: 0.82,
+                      ease: "power3.inOut",
+                      clearProps: "width",
+                    },
                 0.55,
               );
             });

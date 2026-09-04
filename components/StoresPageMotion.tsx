@@ -40,6 +40,7 @@ export function StoresPageMotion() {
             pushLines.forEach((line) => {
               line.style.removeProperty("width");
               line.style.removeProperty("transform");
+              line.style.removeProperty("transform-origin");
             });
             if (directory) revealIntroImmediately(directory);
             window.dispatchEvent(new Event("resize"));
@@ -58,6 +59,10 @@ export function StoresPageMotion() {
               pushLine.style.removeProperty("transform");
               const width = pushLine.getBoundingClientRect().width;
               pushLine.style.width = "0px";
+              if (isMobile) {
+                pushLine.style.removeProperty("width");
+                gsap.set(pushLine, { scaleX: 0, transformOrigin: "left center" });
+              }
               pushTarget = { element: pushLine, width };
             }
 
@@ -84,6 +89,17 @@ export function StoresPageMotion() {
                   duration: 0.82,
                   ease: "power3.inOut",
                   clearProps: "width",
+                },
+                0.68,
+              );
+            } else if (pushLine && isMobile) {
+              intro.to(
+                pushLine,
+                {
+                  scaleX: 1,
+                  duration: 0.82,
+                  ease: "power3.inOut",
+                  clearProps: "transform,transformOrigin",
                 },
                 0.68,
               );

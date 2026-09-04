@@ -54,6 +54,7 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
           if (reduceMotion) {
             pushLine?.style.removeProperty("width");
             pushLine?.style.removeProperty("transform");
+            pushLine?.style.removeProperty("transform-origin");
             revealIntroImmediately(root);
             return;
           }
@@ -71,6 +72,10 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
             pushLine.style.removeProperty("transform");
             const width = pushLine.getBoundingClientRect().width;
             pushLine.style.width = "0px";
+            if (isMobile) {
+              pushLine.style.removeProperty("width");
+              gsap.set(pushLine, { scaleX: 0, transformOrigin: "left center" });
+            }
             pushTarget = { element: pushLine, width };
           }
 
@@ -108,6 +113,17 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
                 duration: 0.82,
                 ease: "power3.inOut",
                 clearProps: "width",
+              },
+              0.52,
+            );
+          } else if (pushLine && isMobile) {
+            intro.to(
+              pushLine,
+              {
+                scaleX: 1,
+                duration: 0.82,
+                ease: "power3.inOut",
+                clearProps: "transform,transformOrigin",
               },
               0.52,
             );
