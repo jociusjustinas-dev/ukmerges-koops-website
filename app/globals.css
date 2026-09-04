@@ -3529,3 +3529,28 @@ body.koops-cms-preview .koops-cms-editable-section textarea,
 body.koops-cms-preview .koops-cms-editable-section select {
   pointer-events: none !important;
 }
+
+/* Reserve the final rule width before hydration so mobile headings never reflow. */
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .hero-headline-line {
+    width: 80px !important;
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  .location-headline .title-push-line {
+    width: 80px !important;
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  .stores-directory .location-headline .title-push-line {
+    width: 88px !important;
+  }
+
+  .restaurant-hero-title-rule {
+    width: 72px !important;
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+}

@@ -237,7 +237,6 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                 scaleX: 1,
                 duration: 0.82,
                 ease: "power3.inOut",
-                clearProps: "transform,transformOrigin",
               },
               0.68,
             );
@@ -370,7 +369,6 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                       scaleX: 1,
                       duration: 0.82,
                       ease: "power3.inOut",
-                      clearProps: "transform,transformOrigin",
                     }
                   : {
                       width,

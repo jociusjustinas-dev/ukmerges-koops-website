@@ -99,7 +99,6 @@ export function StoresPageMotion() {
                   scaleX: 1,
                   duration: 0.82,
                   ease: "power3.inOut",
-                  clearProps: "transform,transformOrigin",
                 },
                 0.68,
               );
