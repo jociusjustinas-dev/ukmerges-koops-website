@@ -26,6 +26,7 @@ export function NewsPageHeading() {
       (context) => {
         const { reduceMotion } = context.conditions as { reduceMotion: boolean };
         if (reduceMotion) {
+          root.querySelector<HTMLElement>(".news-heading-title-rule")?.style.removeProperty("width");
           revealIntroImmediately(root);
           return;
         }
@@ -35,8 +36,13 @@ export function NewsPageHeading() {
         const title = root.querySelector<HTMLElement>(".news-heading-title");
         const pushLine = root.querySelector<HTMLElement>(".news-heading-title-rule");
 
+        let pushWidth = 0;
         if (pushLine) {
-          gsap.set(pushLine, { scaleX: 0, transformOrigin: "left center" });
+          pushLine.style.removeProperty("width");
+          pushLine.style.removeProperty("transform");
+          pushLine.style.removeProperty("transform-origin");
+          pushWidth = pushLine.getBoundingClientRect().width;
+          pushLine.style.width = "0px";
         }
 
         const intro = gsap.timeline({
@@ -44,8 +50,8 @@ export function NewsPageHeading() {
           onComplete: () => revealIntroImmediately(root),
         });
         if (title) intro.fromTo(title, { y: 20 }, { y: 0 }, 0.12);
-        if (pushLine) {
-          intro.to(pushLine, { scaleX: 1, duration: 0.7, ease: "power2.out", clearProps: "transform,transformOrigin" }, 0.28);
+        if (pushLine && pushWidth) {
+          intro.to(pushLine, { width: pushWidth, duration: 0.7, ease: "power2.out", clearProps: "width" }, 0.28);
         }
       },
     );
@@ -66,7 +72,7 @@ export function NewsPageHeading() {
         <span className="careers-hero-title-row">
           <i
             className="careers-hero-title-rule news-heading-title-rule"
-            style={{ transform: "scaleX(0)", transformOrigin: "left center" }}
+            style={{ width: 0 }}
             aria-hidden="true"
           />
           <span>ir akcijos</span>

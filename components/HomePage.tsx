@@ -194,15 +194,10 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
           if (line) {
             line.style.removeProperty("width");
             line.style.removeProperty("transform");
+            line.style.removeProperty("transform-origin");
           }
           const targetWidth = line?.getBoundingClientRect().width ?? 0;
-          if (line) {
-            line.style.width = "0px";
-            if (isMobile) {
-              line.style.removeProperty("width");
-              gsap.set(line, { scaleX: 0, transformOrigin: "left center" });
-            }
-          }
+          if (line) line.style.width = "0px";
 
           const heroTimeline = gsap.timeline({
             defaults: { duration: 0.8, ease: "power3.out" },
@@ -219,7 +214,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
             0.16,
           );
 
-          if (line && isDesktop && window.innerWidth > 1100 && targetWidth) {
+          if (line && targetWidth) {
             heroTimeline.to(
               line,
               {
@@ -227,16 +222,6 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
                 duration: 0.82,
                 ease: "power3.inOut",
                 clearProps: "width",
-              },
-              0.68,
-            );
-          } else if (line && isMobile) {
-            heroTimeline.to(
-              line,
-              {
-                scaleX: 1,
-                duration: 0.82,
-                ease: "power3.inOut",
               },
               0.68,
             );
@@ -270,7 +255,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
             },
             {
               trigger: ".tt-locations",
-              headings: ".location-headline > :not(.title-push-line)",
+              headings: ".location-headline > :not(.title-push-line):not(.title-push-break)",
               pushLine: ".location-headline > .title-push-line",
               items: ".location-grid > *, .section-cta",
             },
@@ -326,12 +311,8 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
               pushLineElement.style.removeProperty("transform");
               pushLineElement.style.removeProperty("transform-origin");
               const width = pushLineElement.getBoundingClientRect().width;
-              if (isMobile) {
-                gsap.set(pushLineElement, { scaleX: 0, transformOrigin: "left center" });
-              } else {
-                pushLineElement.style.width = "0px";
-              }
-              return { element: pushLineElement, width, useScale: isMobile };
+              pushLineElement.style.width = "0px";
+              return { element: pushLineElement, width };
             });
             const itemElements = items ? section.querySelectorAll<HTMLElement>(items) : [];
             const timeline = gsap.timeline({
@@ -361,21 +342,15 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
               );
             }
 
-            pushLineTargets.forEach(({ element, width, useScale }) => {
+            pushLineTargets.forEach(({ element, width }) => {
               timeline.to(
                 element,
-                useScale
-                  ? {
-                      scaleX: 1,
-                      duration: 0.82,
-                      ease: "power3.inOut",
-                    }
-                  : {
-                      width,
-                      duration: 0.82,
-                      ease: "power3.inOut",
-                      clearProps: "width",
-                    },
+                {
+                  width,
+                  duration: 0.82,
+                  ease: "power3.inOut",
+                  clearProps: "width",
+                },
                 0.55,
               );
             });
@@ -597,7 +572,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
         <section className="tt-locations" id="parduotuves" aria-labelledby="parduotuviu-antraste" data-byq-component="terra-tory-team-1" data-cms-section="home-stores">
           <div className="tt-container">
             <div className="location-headline" id="parduotuviu-antraste">
-              <span>Raskite </span><span>artimiausią </span><i className="title-push-line" style={{ width: 0 }} aria-hidden="true" /><span>KOOPS </span><span>parduotuvę</span>
+              <span>Raskite </span><span>artimiausią </span><span className="title-push-break" aria-hidden="true" /><i className="title-push-line" style={{ width: 0 }} aria-hidden="true" /><span>KOOPS </span><span>parduotuvę</span>
             </div>
             <div className="location-carousel" role="region" aria-roledescription="karuselė" aria-label="KOOPS parduotuvės">
               <div className="location-grid" ref={locationCarouselRef} onScroll={handleLocationScroll}>

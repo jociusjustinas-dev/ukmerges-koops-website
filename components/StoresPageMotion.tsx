@@ -23,13 +23,11 @@ export function StoresPageMotion() {
 
       media.add(
         {
-          isDesktop: "(min-width: 768px)",
           isMobile: "(max-width: 767px)",
           reduceMotion: "(prefers-reduced-motion: reduce)",
         },
         (context) => {
-          const { isDesktop, isMobile, reduceMotion } = context.conditions as {
-            isDesktop: boolean;
+          const { isMobile, reduceMotion } = context.conditions as {
             isMobile: boolean;
             reduceMotion: boolean;
           };
@@ -57,12 +55,9 @@ export function StoresPageMotion() {
             if (pushLine) {
               pushLine.style.removeProperty("width");
               pushLine.style.removeProperty("transform");
+              pushLine.style.removeProperty("transform-origin");
               const width = pushLine.getBoundingClientRect().width;
               pushLine.style.width = "0px";
-              if (isMobile) {
-                pushLine.style.removeProperty("width");
-                gsap.set(pushLine, { scaleX: 0, transformOrigin: "left center" });
-              }
               pushTarget = { element: pushLine, width };
             }
 
@@ -81,7 +76,7 @@ export function StoresPageMotion() {
               intro.fromTo(label, { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.08);
             }
 
-            if (pushTarget && isDesktop && window.innerWidth > 1100) {
+            if (pushTarget?.width) {
               intro.to(
                 pushTarget.element,
                 {
@@ -89,16 +84,6 @@ export function StoresPageMotion() {
                   duration: 0.82,
                   ease: "power3.inOut",
                   clearProps: "width",
-                },
-                0.68,
-              );
-            } else if (pushLine && isMobile) {
-              intro.to(
-                pushLine,
-                {
-                  scaleX: 1,
-                  duration: 0.82,
-                  ease: "power3.inOut",
                 },
                 0.68,
               );

@@ -50,6 +50,7 @@ export default async function StoresPage() {
             <h1 className="location-headline" id="stores-list-title">
               <span>Raskite </span>
               <span>artimiausią </span>
+              <span className="title-push-break" aria-hidden="true" />
               <i
                 className="title-push-line"
                 style={{ width: 0 }}

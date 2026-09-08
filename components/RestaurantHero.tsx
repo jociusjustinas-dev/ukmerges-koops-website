@@ -29,13 +29,11 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
 
       media.add(
         {
-          isDesktop: "(min-width: 768px)",
           isMobile: "(max-width: 767px)",
           reduceMotion: "(prefers-reduced-motion: reduce)",
         },
         (context) => {
-          const { isDesktop, isMobile, reduceMotion } = context.conditions as {
-            isDesktop: boolean;
+          const { isMobile, reduceMotion } = context.conditions as {
             isMobile: boolean;
             reduceMotion: boolean;
           };
@@ -70,12 +68,9 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
           if (pushLine) {
             pushLine.style.removeProperty("width");
             pushLine.style.removeProperty("transform");
+            pushLine.style.removeProperty("transform-origin");
             const width = pushLine.getBoundingClientRect().width;
             pushLine.style.width = "0px";
-            if (isMobile) {
-              pushLine.style.removeProperty("width");
-              gsap.set(pushLine, { scaleX: 0, transformOrigin: "left center" });
-            }
             pushTarget = { element: pushLine, width };
           }
 
@@ -105,7 +100,7 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
             );
           }
 
-          if (pushTarget && isDesktop && window.innerWidth > 991) {
+          if (pushTarget?.width) {
             intro.to(
               pushTarget.element,
               {
@@ -113,16 +108,6 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
                 duration: 0.82,
                 ease: "power3.inOut",
                 clearProps: "width",
-              },
-              0.52,
-            );
-          } else if (pushLine && isMobile) {
-            intro.to(
-              pushLine,
-              {
-                scaleX: 1,
-                duration: 0.82,
-                ease: "power3.inOut",
               },
               0.52,
             );
