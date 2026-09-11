@@ -46,6 +46,7 @@ export function AboutPillars() {
   return (
     <section data-cms-section="about-pillars"
       className="restaurant-features about-pillars"
+      id="about-pillars"
       aria-labelledby="about-pillars-title"
       data-byq-component="terra-tory-value-features"
     >

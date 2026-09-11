@@ -74,6 +74,7 @@ export default async function RestaurantPage() {
         {/* BYQ: terra-tory-bento-1 — halls as bento */}
         <section
           className="koops-bento-section restaurant-halls"
+          id="restaurant-halls"
           aria-labelledby="restaurant-halls-title"
           data-byq-component="terra-tory-bento-1"
           data-cms-section="restaurant-halls"
@@ -97,7 +98,7 @@ export default async function RestaurantPage() {
               </article>
 
               <div className="koops-bento-media koops-bento-media-tall" aria-hidden="true">
-                <img loading="lazy" src="/vilkmerge-hall.jpg" alt="" />
+                <img loading="lazy" src="/vilkmerge-hall.jpg" alt="" data-cms-field="gallery-item" />
               </div>
 
               <article className="koops-bento-card">
@@ -111,11 +112,11 @@ export default async function RestaurantPage() {
               </article>
 
               <div className="koops-bento-media" aria-hidden="true">
-                <img loading="lazy" src="/vilkmerge-table.jpg" alt="" />
+                <img loading="lazy" src="/vilkmerge-table.jpg" alt="" data-cms-field="gallery-item" />
               </div>
 
               <div className="koops-bento-media" aria-hidden="true">
-                <img loading="lazy" src="/vilkmerge-menu.jpg" alt="" />
+                <img loading="lazy" src="/vilkmerge-menu.jpg" alt="" data-cms-field="gallery-item" />
               </div>
 
               <div className="koops-bento-card koops-bento-card-accent">

@@ -30,12 +30,16 @@ export type CmsPageSection = {
   id: string;
   type: string;
   enabled: boolean;
+  anchor?: string;
   eyebrow?: string;
   title?: string;
   description?: string;
   primaryLabel?: string;
   primaryUrl?: string;
   imageUrl?: string;
+  imageId?: number;
+  galleryUrls?: string[];
+  galleryIds?: number[];
   overrides?: string[];
 };
 

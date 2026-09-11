@@ -77,7 +77,9 @@ export function CookieConsent() {
   const returnFocusRef = React.useRef<HTMLElement | null>(null);
 
   React.useEffect(() => {
+    const editorMode = new URLSearchParams(window.location.search).get("koops-editor") === "1";
     const openSettings = () => {
+      if (editorMode) return;
       const latest = readConsent();
       returnFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       setDraft(latest ? { analytics: latest.analytics, marketing: latest.marketing } : emptyPreferences);
@@ -86,7 +88,7 @@ export function CookieConsent() {
     window.addEventListener("koops:open-cookie-settings", openSettings);
 
     const initialize = window.setTimeout(() => {
-      if (new URLSearchParams(window.location.search).get("koops-editor") === "1") {
+      if (editorMode) {
         setReady(true);
         return;
       }
@@ -148,7 +150,10 @@ export function CookieConsent() {
     setSettingsOpen(false);
   };
 
-  if (!ready) return null;
+  const cmsEditor =
+    typeof window !== "undefined" && new URLSearchParams(window.location.search).get("koops-editor") === "1";
+
+  if (!ready || cmsEditor) return null;
 
   return (
     <>

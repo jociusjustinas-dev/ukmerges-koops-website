@@ -76,6 +76,7 @@ export function CareersValueFeatures() {
   return (
     <section data-cms-section="careers-features"
       className="restaurant-features careers-features"
+      id="careers-features"
       aria-labelledby="careers-features-title"
       data-byq-component="terra-tory-value-features"
     >

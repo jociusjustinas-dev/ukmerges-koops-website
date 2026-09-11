@@ -16,6 +16,7 @@ function ImageStrip() {
             priority
             sizes="(max-width: 767px) 240px, (max-width: 1199px) 46vw, 560px"
             quality={78}
+            data-cms-field="gallery-item"
           />
         </div>
       ))}

@@ -12,7 +12,6 @@ function koops_theme_setup(): void
     add_theme_support('editor-styles');
     add_theme_support('responsive-embeds');
     add_theme_support('align-wide');
-    add_editor_style('assets/css/theme.css');
     register_nav_menus(['primary' => 'Pagrindinė navigacija', 'footer' => 'Poraštės navigacija']);
     add_image_size('koops-card', 900, 720, true);
     add_image_size('koops-hero', 1920, 1200, true);

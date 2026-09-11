@@ -1,0 +1,148 @@
+.koops-url-picker {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+.koops-url-picker input {
+  flex: 1;
+  min-width: 0;
+}
+.koops-url-picker .koops-open-wplink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  flex: 0 0 auto;
+}
+.koops-url-picker .koops-open-wplink .dashicons {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 1;
+}
+
+.koops-link-control {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  max-width: 100%;
+}
+.koops-link-control__label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: normal;
+  word-spacing: normal;
+}
+.koops-link-control__row {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) 36px;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 6px 6px 6px 8px;
+  border: 1px solid #949494;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+}
+.koops-link-control__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  background: #f0f0f0;
+  color: #1e1e1e;
+}
+.koops-link-control__preview {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+.koops-link-control__preview a,
+.koops-link-control__preview span,
+.koops-link-control__preview small {
+  display: block;
+  overflow: hidden;
+  color: #2271b1;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: none;
+  letter-spacing: normal;
+  word-spacing: normal;
+}
+.koops-link-control__empty {
+  color: #757575 !important;
+  font-weight: 400 !important;
+  text-decoration: none !important;
+}
+
+.koops-media-control {
+  display: grid;
+  gap: 8px;
+}
+.koops-media-control__label {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.koops-media-control__previews {
+  overflow: hidden;
+  border: 1px solid #949494;
+  border-radius: 4px;
+  background: #f0f0f0;
+}
+.koops-media-control__previews img {
+  display: block;
+  width: 100%;
+  height: 168px;
+  object-fit: cover;
+}
+.koops-media-control__previews.is-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+}
+.koops-media-control__previews.is-gallery img {
+  height: 92px;
+}
+.koops-media-control__empty {
+  padding: 18px 12px;
+  border: 1px dashed #949494;
+  border-radius: 4px;
+  color: #757575;
+  font-size: 13px;
+  font-weight: 400;
+  text-align: center;
+}
+.koops-media-control__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+body.koops-wplink-open #wp-link-backdrop {
+  z-index: 1001000 !important;
+}
+body.koops-wplink-open #wp-link-wrap {
+  z-index: 1001001 !important;
+}
+body.koops-wplink-url-only #wp-link-text-field,
+body.koops-wplink-url-only .wp-link-text-field,
+body.koops-wplink-url-only #link-options {
+  display: none !important;
+}

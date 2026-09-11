@@ -146,7 +146,7 @@ export function RestaurantHero({ restaurant }: { restaurant: typeof restaurantDe
   }, []);
 
   return (
-    <div ref={rootRef} className="restaurant-hero" data-byq-component="terra-tory-hero-5" data-cms-section="restaurant-hero">
+    <div ref={rootRef} className="restaurant-hero" id="restaurant-hero" data-byq-component="terra-tory-hero-5" data-cms-section="restaurant-hero">
       <section className="restaurant-hero-top" aria-labelledby="restaurant-hero-title">
         <div className="tt-container">
           <div className="restaurant-hero-heading">

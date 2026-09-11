@@ -21,7 +21,7 @@ export default async function NewsArchivePage() {
 
       <main id="turinys">
         {/* BYQ: terra-tory-blog-grid-1 card language adapted to archive list */}
-        <section className="tt-news news-page-main" aria-labelledby="news-archive-title" data-byq-component="terra-tory-blog-grid-1" data-cms-section="news-listing">
+        <section className="tt-news news-page-main" id="news-listing" aria-labelledby="news-archive-title" data-byq-component="terra-tory-blog-grid-1" data-cms-section="news-listing">
           <div className="tt-container">
             <NewsPageHeading />
             <NewsListing items={news} />

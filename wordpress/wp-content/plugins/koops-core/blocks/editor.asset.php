@@ -1,5 +1,5 @@
 <?php
 return [
-    'dependencies' => ['wp-blocks', 'wp-block-editor', 'wp-components', 'wp-data', 'wp-element', 'wp-hooks', 'wp-plugins'],
-    'version' => '0.9.2',
+    'dependencies' => ['wp-blocks', 'wp-block-editor', 'wp-components', 'wp-data', 'wp-element', 'jquery', 'wplink', 'media-models', 'media-views', 'media-editor', 'koops-admin-link-picker'],
+    'version' => '0.19.4',
 ];

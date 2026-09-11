@@ -126,6 +126,7 @@ export default async function ContactsPage() {
                 loading="eager"
                 src="/ukmerge-fields-1.jpg"
                 alt="Ukmergės krašto laukai"
+                data-cms-field="image"
               />
             </div>
           </div>

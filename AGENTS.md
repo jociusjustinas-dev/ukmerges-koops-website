@@ -51,10 +51,10 @@ peradresavimų lentelę. Aiškūs `/restoranas-vilkmerge` ir `/apie-mus` peradre
 jau įgyvendinti; likę taikiniai laukiami, nes galutinė struktūra ir turinys dar
 nepatvirtinti.
 
-Galutinis domenas dar nepatvirtintas. SEO URL generuojami per `lib/site-url.ts`:
-naudoti `NEXT_PUBLIC_SITE_URL` arba `SITE_URL`, o kol kas palikti esamą Vercel
-adresą. Neįrašyti `ukmergeskoops.lt` kaip canonical ar sitemap domeno be aiškaus
-kliento patvirtinimo.
+Numatytas gyvas domenas: `ukmergeskoops.lt`. SEO URL generuojami per
+`lib/site-url.ts`: naudoti `NEXT_PUBLIC_SITE_URL` arba `SITE_URL`. Kol domenas
+neprijungtas prie Vercel, palikti esamą Vercel adresą ir nenaudoti
+`ukmergeskoops.lt` kaip canonical ar sitemap.
 
 ### SEO, AEO ir accessibility principai
 
@@ -166,7 +166,10 @@ Prieš sakant, kad pataisyta, padaryk screenshot arba inspect realias `getBoundi
   darbo pasiūlymus – per standartinį `/wp-json/wp/v2/` API. Prieš rašymą
   autentifikavimą tikrinti komanda `node scripts/koops-wp.mjs me`.
 - Puslapių struktūra valdoma Gutenberg bloku `koops/section`. Administracijoje
-  ji pasiekiama per **KOOPS → Puslapių sekcijos**. Bloko seka valdo sekcijų
+  ji pasiekiama per **KOOPS → Puslapių sekcijos**. Nuorodų laukai visur
+  atidaro native WordPress `wpLink` langą (pieštukas): paieška tarp puslapių,
+  įrašų ir KOOPS turinio arba tiesioginis URL, be trečiųjų šalių įskiepių.
+  Bloko seka valdo sekcijų
   eiliškumą, `enabled` – matomumą. Gutenberg drobėje įterpiamas tikras Vercel
   puslapis, todėl redaktorius mato realų dizainą, šriftus ir animacijas. Paspaudus
   sekciją parenkamas atitinkamas Gutenberg blokas, o jo laukai rodomi dešinėje.
@@ -214,6 +217,26 @@ skelbiant, kad projektas baigtas, ir dar kartą prieš galutinį svetainės pale
 - Patikrinti laiškų žurnalą, gavėjo „Inbox“ ir „Spam“, SPF/DKIM rezultatą bei
   klaidų nebuvimą. Kol šie testai nebaigti, SMTP ir formų pristatymo negalima
   žymėti kaip užbaigto.
+
+### Privalomas gyvo domeno URL kontrolinis punktas
+
+Tai yra **paleidimą blokuojantis darbas**, kurį būtina priminti naudotojui prieš
+skelbiant, kad projektas baigtas, ir dar kartą prieš galutinį svetainės paleidimą.
+
+Sekcijų, mygtukų ir inkarų nuorodos saugomos santykinai (`/parduotuves`,
+`/restoranas#uzklausa`) — jų taisyti nereikia, jos veiks bet kuriame domene.
+
+Numatytas adresas: `https://ukmergeskoops.lt`. Pakeisti reikia tik du
+nustatymus, kai domenas bus prijungtas prie Vercel (ne anksčiau — kitaip
+lūš Gutenberg peržiūra):
+
+1. WordPress **KOOPS → Bendri duomenys → Viešos svetainės adresas**
+   (`frontend_url`) → `https://ukmergeskoops.lt`
+2. Vercel `NEXT_PUBLIC_SITE_URL` / `SITE_URL` → `https://ukmergeskoops.lt`
+
+Sekcijų nuorodų ir FluentSMTP tada liesti nereikia. Kol šie du laukai
+nenustatyti į gyvą domeną, paleidimo į `ukmergeskoops.lt` negalima žymėti
+kaip užbaigto.
 
 ## Turinio būsena ir patvirtinti duomenys
 

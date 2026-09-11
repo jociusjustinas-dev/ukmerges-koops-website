@@ -103,6 +103,7 @@ export function SuppliersHero() {
   return (
     <section
       data-cms-section="suppliers-hero"
+      id="suppliers-hero"
       ref={rootRef}
       className="careers-hero suppliers-hero"
       aria-labelledby="suppliers-hero-title"
@@ -140,7 +141,7 @@ export function SuppliersHero() {
               key={item.src}
               className="careers-hero-frame suppliers-hero-frame"
             >
-              <img src={item.src} alt={item.alt} loading={index === 0 ? "eager" : "lazy"} />
+              <img src={item.src} alt={item.alt} loading={index === 0 ? "eager" : "lazy"} data-cms-field="gallery-item" />
             </figure>
           ))}
         </div>

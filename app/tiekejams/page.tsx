@@ -78,6 +78,7 @@ export default async function SuppliersPage() {
                 loading="lazy"
                 src="/local-produce-couple.jpg"
                 alt="Vietos produkcija ir kasdienis pirkėjo krepšelis"
+                data-cms-field="image"
               />
             </div>
           </div>

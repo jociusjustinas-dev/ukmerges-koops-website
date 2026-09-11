@@ -103,6 +103,7 @@ export function CareersHero() {
   return (
     <section
       data-cms-section="careers-hero"
+      id="careers-hero"
       ref={rootRef}
       className="careers-hero"
       aria-labelledby="careers-hero-title"
@@ -140,7 +141,7 @@ export function CareersHero() {
               key={item.src}
               className="careers-hero-frame"
             >
-              <img src={item.src} alt={item.alt} loading={index < 2 ? "eager" : "lazy"} />
+              <img src={item.src} alt={item.alt} loading={index < 2 ? "eager" : "lazy"} data-cms-field="gallery-item" />
             </figure>
           ))}
         </div>

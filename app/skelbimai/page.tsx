@@ -21,7 +21,7 @@ export default async function ClassifiedsPage() {
       <SiteHeader />
 
       <main id="turinys">
-        <section className="classifieds-directory" aria-labelledby="classifieds-title" data-cms-section="classifieds-listing">
+        <section className="classifieds-directory" id="classifieds-listing" aria-labelledby="classifieds-title" data-cms-section="classifieds-listing">
           <div className="tt-container classifieds-directory-inner">
             <p className="section-label light-label">KOOPS SKELBIMAI</p>
             <h1 id="classifieds-title">Skelbimai</h1>

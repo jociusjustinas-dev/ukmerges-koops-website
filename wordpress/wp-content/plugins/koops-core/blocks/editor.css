@@ -1,4 +1,62 @@
 .wp-block-koops-section { margin-block: 16px; }
+
+/* Hide the generic parent; only named section variations stay visible. */
+.editor-block-list-item-koops-section,
+.block-editor-block-types-list-item-koops-section {
+  display: none !important;
+}
+
+.koops-section-variation-icon {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #15190d;
+}
+
+.koops-section-inserter-preview-wrap {
+  margin: 0;
+}
+.koops-section-inserter-preview {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+[class*="editor-block-list-item-koops-section/"] .block-editor-block-icon,
+[class*="editor-block-list-item-koops-section-"] .block-editor-block-icon,
+.block-editor-block-types-list-item-icon:has(.koops-section-variation-icon),
+.block-editor-block-icon:has(.koops-section-variation-icon) {
+  width: 100% !important;
+  height: auto !important;
+  min-width: 140px !important;
+  padding: 0 !important;
+}
+
+.block-editor-block-types-list:has(.koops-section-variation-icon) {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+}
+
+.block-editor-block-types-list:has(.koops-section-variation-icon) .block-editor-block-types-list__list-item,
+.block-editor-block-types-list:has(.koops-section-variation-icon) .block-editor-block-types-list-item {
+  width: 100% !important;
+}
+
+.block-editor-block-types-list:has(.koops-section-variation-icon) .block-editor-block-types-list-item {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  background: #fff;
+}
 .koops-section-preview {
   overflow: hidden;
   padding: 24px;
@@ -34,3 +92,28 @@
   color: #c9cec5;
   font-size: 15px;
 }
+.koops-link-control__row {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) 36px;
+  gap: 8px;
+  align-items: center;
+  min-height: 52px;
+  padding: 6px 6px 6px 8px;
+  border: 1px solid #949494;
+  border-radius: 4px;
+  background: #fff;
+}
+.koops-media-control {
+  display: grid;
+  gap: 8px;
+}
+.koops-link-control__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  background: #f0f0f0;
+}
+

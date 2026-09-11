@@ -6,6 +6,7 @@ export function AboutStory() {
   return (
     <section data-cms-section="about-story"
       className="tt-story about-story"
+      id="about-story"
       aria-labelledby="about-story-title"
       data-byq-component="terra-tory-combo-6"
     >
@@ -16,7 +17,7 @@ export function AboutStory() {
         </div>
         <div className="story-grid">
           <div className="story-image">
-            <img src={aboutStory.image.src} alt={aboutStory.image.alt} loading="lazy" />
+            <img src={aboutStory.image.src} alt={aboutStory.image.alt} loading="lazy" data-cms-field="image" />
           </div>
           <div className="story-copy">
             <p>{aboutStory.body}</p>

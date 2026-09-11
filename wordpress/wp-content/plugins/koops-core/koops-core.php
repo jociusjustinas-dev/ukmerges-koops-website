@@ -2,7 +2,7 @@
 /**
  * Plugin Name: KOOPS Core
  * Description: KOOPS turinio tipai, valdymo laukai, bendri duomenys ir formos.
- * Version: 0.11.0
+ * Version: 0.19.4
  * Author: KOOPS
  * Text Domain: koops
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('KOOPS_CORE_VERSION', '0.11.0');
+define('KOOPS_CORE_VERSION', '0.19.4');
 define('KOOPS_CORE_PATH', plugin_dir_path(__FILE__));
 define('KOOPS_CORE_URL', plugin_dir_url(__FILE__));
 
@@ -176,7 +176,15 @@ add_action('init', 'koops_register_meta_fields', 20);
 function koops_add_meta_boxes(): void
 {
     foreach (array_keys(koops_meta_schema()) as $post_type) {
-        add_meta_box('koops_details', 'KOOPS informacija', 'koops_render_meta_box', $post_type, 'normal', 'high');
+        add_meta_box(
+            'koops_details',
+            'KOOPS duomenys',
+            'koops_render_meta_box',
+            $post_type,
+            'side',
+            'high',
+            ['__back_compat_meta_box' => true]
+        );
     }
 }
 add_action('add_meta_boxes', 'koops_add_meta_boxes');
@@ -185,11 +193,11 @@ function koops_render_meta_box(WP_Post $post): void
 {
     wp_nonce_field('koops_save_meta', 'koops_meta_nonce');
     $fields = koops_meta_schema()[$post->post_type] ?? [];
-    echo '<div class="koops-admin-fields" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px">';
+    echo '<div class="koops-admin-fields">';
 
     foreach ($fields as $key => $field) {
         $value = get_post_meta($post->ID, $key, true);
-        echo '<label style="display:flex;flex-direction:column;gap:6px;font-weight:600">';
+        echo '<label>';
 
         if ($field['type'] === 'checkbox') {
             printf(
@@ -216,6 +224,9 @@ function koops_render_meta_box(WP_Post $post): void
                 );
             }
             echo '</select>';
+        } elseif ($field['type'] === 'url') {
+            echo '<span>' . esc_html($field['label']) . '</span>';
+            koops_render_url_picker($key, (string) $value, $key);
         } else {
             printf(
                 '<span>%1$s</span><input type="%2$s" name="%3$s" value="%4$s" %5$s style="width:100%%">',
@@ -301,6 +312,227 @@ function koops_get_option(string $key, string $fallback = ''): string
     return isset($options[$key]) ? (string) $options[$key] : $fallback;
 }
 
+function koops_register_link_picker_assets(): void
+{
+    wp_register_style(
+        'koops-admin-link-picker',
+        KOOPS_CORE_URL . 'assets/admin-link-picker.css',
+        ['editor'],
+        KOOPS_CORE_VERSION
+    );
+    wp_register_script(
+        'koops-admin-link-picker',
+        KOOPS_CORE_URL . 'assets/admin-link-picker.js',
+        ['jquery', 'wplink'],
+        KOOPS_CORE_VERSION,
+        true
+    );
+}
+add_action('init', 'koops_register_link_picker_assets');
+
+function koops_register_entry_sidebar_assets(): void
+{
+    wp_register_style(
+        'koops-entry-sidebar',
+        KOOPS_CORE_URL . 'assets/entry-sidebar.css',
+        ['koops-admin-link-picker'],
+        KOOPS_CORE_VERSION
+    );
+    wp_register_script(
+        'koops-entry-sidebar',
+        KOOPS_CORE_URL . 'assets/entry-sidebar.js',
+        ['wp-plugins', 'wp-edit-post', 'wp-editor', 'wp-element', 'wp-components', 'wp-data', 'wp-core-data', 'wp-block-editor', 'koops-admin-link-picker'],
+        KOOPS_CORE_VERSION,
+        true
+    );
+}
+add_action('init', 'koops_register_entry_sidebar_assets');
+
+function koops_enqueue_entry_sidebar(): void
+{
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || !isset(koops_meta_schema()[$screen->post_type ?? ''])) {
+        return;
+    }
+
+    wp_enqueue_style('koops-entry-sidebar');
+    wp_enqueue_script('koops-entry-sidebar');
+    wp_localize_script('koops-entry-sidebar', 'koopsEntrySidebar', [
+        'schema' => koops_meta_schema(),
+        'taxonomies' => [
+            'koops_store' => ['name' => 'koops_store_area', 'label' => 'Teritorija'],
+            'koops_classified' => ['name' => 'koops_classified_category', 'label' => 'Tipas'],
+        ],
+        'titles' => [
+            'koops_store' => 'Parduotuvės duomenys',
+            'koops_classified' => 'Skelbimo duomenys',
+            'koops_job' => 'Darbo pasiūlymo duomenys',
+        ],
+    ]);
+}
+add_action('enqueue_block_editor_assets', 'koops_enqueue_entry_sidebar');
+add_action('admin_enqueue_scripts', static function (): void {
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if ($screen && isset(koops_meta_schema()[$screen->post_type ?? ''])) {
+        wp_enqueue_style('koops-entry-sidebar');
+    }
+});
+
+function koops_editor_chrome_font_fix(): void
+{
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || !isset(koops_meta_schema()[$screen->post_type ?? ''])) {
+        return;
+    }
+
+    echo '<style id="koops-editor-chrome-font-fix">
+@font-face{font-family:Inter;src:local("Arial"),local("Helvetica Neue"),local("Helvetica");unicode-range:U+0000-00FF,U+0020}
+body.block-editor-page .interface-interface-skeleton__sidebar,
+body.block-editor-page .interface-interface-skeleton__sidebar input,
+body.block-editor-page .interface-interface-skeleton__sidebar textarea,
+body.block-editor-page .interface-interface-skeleton__sidebar select,
+body.block-editor-page .interface-interface-skeleton__sidebar button,
+body.block-editor-page .editor-sidebar,
+body.block-editor-page .edit-post-sidebar{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",Arial,sans-serif!important;
+  letter-spacing:0!important;
+  word-spacing:.12em!important;
+}
+</style>';
+}
+add_action('admin_head', 'koops_editor_chrome_font_fix');
+
+function koops_enqueue_link_picker(): void
+{
+    if (!is_admin()) {
+        return;
+    }
+
+    wp_enqueue_media();
+    wp_enqueue_script('wplink');
+    wp_enqueue_style('editor');
+    wp_enqueue_style('dashicons');
+    wp_enqueue_style('koops-admin-link-picker');
+    wp_enqueue_script('koops-admin-link-picker');
+    wp_localize_script('koops-admin-link-picker', 'koopsLinkPicker', [
+        'frontendUrl' => untrailingslashit(koops_get_option('frontend_url')),
+    ]);
+}
+add_action('admin_enqueue_scripts', 'koops_enqueue_link_picker');
+add_action('enqueue_block_editor_assets', 'koops_enqueue_link_picker');
+
+function koops_print_link_dialog(): void
+{
+    if (!is_admin()) {
+        return;
+    }
+    if (!wp_script_is('koops-admin-link-picker', 'enqueued') && !wp_script_is('koops-admin-link-picker', 'done')) {
+        return;
+    }
+    if (!class_exists('_WP_Editors')) {
+        require_once ABSPATH . WPINC . '/class-wp-editor.php';
+    }
+    _WP_Editors::wp_link_dialog();
+}
+add_action('admin_footer', 'koops_print_link_dialog');
+
+function koops_link_query_site_pages(array $results, array $query): array
+{
+    $term = isset($query['s']) ? mb_strtolower((string) $query['s']) : '';
+    $pages = [
+        ['Pradinis', home_url('/')],
+        ['Parduotuvės', home_url('/parduotuves/')],
+        ['Naujienos', home_url('/naujienos/')],
+        ['Restoranas „Vilkmergė“', home_url('/restoranas/')],
+        ['Karjera', home_url('/karjera/')],
+        ['Tiekėjams', home_url('/tiekejams/')],
+        ['Apie KOOPS', home_url('/apie/')],
+        ['Kontaktai', home_url('/kontaktai/')],
+        ['Skelbimai', home_url('/skelbimai/')],
+        ['Privatumo politika', home_url('/privatumo-politika/')],
+    ];
+
+    $extra = [];
+    $fake_id = -1;
+    foreach ($pages as [$title, $permalink]) {
+        $haystack = mb_strtolower($title . ' ' . $permalink);
+        if ($term !== '' && !str_contains($haystack, $term)) {
+            continue;
+        }
+        $extra[] = [
+            'ID' => $fake_id--,
+            'title' => $title,
+            'permalink' => $permalink,
+            'info' => 'Puslapis',
+        ];
+    }
+
+    $catalog = koops_section_catalog();
+    $section_items = [];
+    foreach (koops_default_page_sections() as $slug => $types) {
+        foreach ($types as $type) {
+            $section_items[$slug . ':' . $type] = [
+                'slug' => $slug,
+                'type' => $type,
+                'anchor' => koops_default_section_anchor($type),
+                'label' => $catalog[$type]['label'] ?? $type,
+            ];
+        }
+    }
+    foreach (koops_rest_pages() as $slug => $page) {
+        foreach ($page['sections'] as $section) {
+            $type = (string) ($section['type'] ?? '');
+            if ($type === '') {
+                continue;
+            }
+            $section_items[$slug . ':' . $type] = [
+                'slug' => $slug,
+                'type' => $type,
+                'anchor' => (string) ($section['anchor'] ?: koops_default_section_anchor($type)),
+                'label' => $catalog[$type]['label'] ?? $type,
+            ];
+        }
+    }
+
+    foreach ($section_items as $item) {
+        $path = koops_page_public_path($item['slug']);
+        $permalink = $path === '/'
+            ? home_url('/#' . $item['anchor'])
+            : home_url($path . '/#' . $item['anchor']);
+        $haystack = mb_strtolower($item['label'] . ' ' . $item['type'] . ' ' . $item['anchor'] . ' ' . $path);
+        if ($term !== '' && !str_contains($haystack, $term)) {
+            continue;
+        }
+        $extra[] = [
+            'ID' => $fake_id--,
+            'title' => $item['label'] . ' (#' . $item['anchor'] . ')',
+            'permalink' => $permalink,
+            'info' => 'Sekcija',
+        ];
+    }
+
+    return array_merge($extra, $results);
+}
+add_filter('wp_link_query', 'koops_link_query_site_pages', 10, 2);
+
+function koops_render_url_picker(string $name, string $value, string $id = '', string $class = 'regular-text'): void
+{
+    $id = $id !== '' ? $id : sanitize_html_class(str_replace(['[', ']'], '-', $name));
+    echo '<span class="koops-url-picker">';
+    printf(
+        '<input type="text" class="koops-url-input %1$s" id="%2$s" name="%3$s" value="%4$s" placeholder="/parduotuves">',
+        esc_attr($class),
+        esc_attr($id),
+        esc_attr($name),
+        esc_attr($value)
+    );
+    printf(
+        '<button type="button" class="button koops-open-wplink" data-target="#%1$s" aria-label="Ieškoti nuorodos"><span class="dashicons dashicons-edit" aria-hidden="true"></span></button>',
+        esc_attr($id)
+    );
+    echo '</span>';
+}
+
 function koops_register_settings(): void
 {
     register_setting('koops_options_group', 'koops_options', [
@@ -370,7 +602,13 @@ function koops_options_page(): void
                 <?php foreach ($keys as $key) : ?>
                     <tr>
                         <th scope="row"><label for="koops-<?php echo esc_attr($key); ?>"><?php echo esc_html($labels[$key]); ?></label></th>
-                        <td><input class="regular-text" id="koops-<?php echo esc_attr($key); ?>" name="koops_options[<?php echo esc_attr($key); ?>]" value="<?php echo esc_attr($options[$key]); ?>"></td>
+                        <td>
+                            <?php if (str_ends_with($key, '_url') && $key !== 'frontend_url') : ?>
+                                <?php koops_render_url_picker('koops_options[' . $key . ']', (string) $options[$key], 'koops-' . $key); ?>
+                            <?php else : ?>
+                                <input class="regular-text" id="koops-<?php echo esc_attr($key); ?>" name="koops_options[<?php echo esc_attr($key); ?>]" value="<?php echo esc_attr($options[$key]); ?>">
+                            <?php endif; ?>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody></table>
@@ -866,7 +1104,7 @@ function koops_rest_site_data(): WP_REST_Response
 {
     do_action('litespeed_control_set_nocache', 'KOOPS headless API');
     $options = wp_parse_args((array) get_option('koops_options', []), koops_default_options());
-    unset($options['form_recipient']);
+    unset($options['form_recipient'], $options['frontend_url']);
 
     $response = new WP_REST_Response([
         'version' => KOOPS_CORE_VERSION,
@@ -989,6 +1227,11 @@ function koops_register_rest_routes(): void
         'methods' => WP_REST_Server::EDITABLE,
         'callback' => 'koops_rest_update_page_section',
         'permission_callback' => 'koops_rest_can_edit_pages',
+    ]);
+    register_rest_route('koops/v1', '/manage/media/ensure', [
+        'methods' => WP_REST_Server::CREATABLE,
+        'callback' => 'koops_rest_ensure_media',
+        'permission_callback' => static fn(): bool => current_user_can('upload_files'),
     ]);
 }
 add_action('rest_api_init', 'koops_register_rest_routes');

@@ -15,6 +15,7 @@ export function KoopsBentoSection({
 }: KoopsBentoSectionProps) {
   return (
     <section
+      id={cmsSection}
       data-cms-section={cmsSection}
       className="koops-bento-section"
       aria-labelledby="koops-bento-title"
@@ -48,6 +49,7 @@ export function KoopsBentoSection({
               src="/koops-hero.jpg"
               alt="KOOPS parduotuvė Ukmergės rajone"
               loading="lazy"
+              data-cms-field="gallery-item"
             />
           </a>
 
@@ -82,6 +84,7 @@ export function KoopsBentoSection({
               src={wideImage.src}
               alt={wideImage.alt}
               loading="lazy"
+              data-cms-field="gallery-item"
             />
           </a>
 

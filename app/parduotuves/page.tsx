@@ -64,7 +64,7 @@ export default async function StoresPage() {
           </div>
         </section>
 
-        <section className="stores-faq" aria-labelledby="stores-faq-title" data-cms-section="stores-faq">
+        <section className="stores-faq" id="stores-faq" aria-labelledby="stores-faq-title" data-cms-section="stores-faq">
           <div className="tt-container stores-faq-layout">
             <div>
               <p className="section-label">GREITI ATSAKYMAI</p>

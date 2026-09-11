@@ -42,8 +42,33 @@ function applyContent(root: HTMLElement, section: CmsPageSection) {
     label.textContent = section.primaryLabel.trim();
   }
 
-  const image = root.querySelector<HTMLImageElement>("[data-cms-field='image'], img");
-  if (image && overrides.has("imageUrl") && section.imageUrl?.trim()) image.src = section.imageUrl.trim();
+  if (overrides.has("imageUrl") && section.imageUrl?.trim()) {
+    applyImage(root.querySelector<HTMLImageElement>("[data-cms-field='image']"), section.imageUrl.trim());
+  }
+
+  if (overrides.has("galleryUrls") && section.galleryUrls?.length) {
+    root.querySelectorAll<HTMLImageElement>("[data-cms-field='gallery-item']").forEach((image, index) => {
+      if (section.galleryUrls?.[index]) applyImage(image, section.galleryUrls[index]);
+    });
+  }
+}
+
+function applyAnchor(root: HTMLElement, section: CmsPageSection) {
+  if (root.classList.contains("tt-hero-spacer")) {
+    root.removeAttribute("id");
+    return;
+  }
+  const id = (section.anchor || "").trim();
+  if (id) root.id = id;
+}
+
+function applyImage(image: HTMLImageElement | null, url?: string) {
+  if (!image || !url?.trim()) return;
+  const next = url.trim();
+  image.src = next;
+  image.removeAttribute("srcset");
+  image.removeAttribute("sizes");
+  image.srcset = "";
 }
 
 type PreviewMessage = {
@@ -76,6 +101,7 @@ export function CmsPageController({ page, sections }: Props) {
       node.hidden = !entry || (!entry.section.enabled && !editorMode);
       if (entry) {
         node.style.order = String(entry.index);
+        applyAnchor(node, entry.section);
         applyContent(node, entry.section);
         if (editorMode && !node.classList.contains("tt-hero-spacer")) {
           node.classList.add("koops-cms-editable-section");
@@ -144,13 +170,15 @@ export function CmsPageController({ page, sections }: Props) {
       const targets = editableNodes.filter((node) => node.dataset.cmsSection === message.sectionType);
       const changedFields = Object.keys(message.changes);
       targets.forEach((node) => {
-        applyContent(node, {
+        const next = {
           id: message.sectionType || "preview",
           type: message.sectionType || "",
           enabled: message.changes?.enabled !== false,
           ...message.changes,
           overrides: changedFields,
-        });
+        };
+        applyAnchor(node, next);
+        applyContent(node, next);
         if (Object.prototype.hasOwnProperty.call(message.changes, "enabled")) {
           node.classList.toggle("is-cms-disabled", message.changes?.enabled === false);
         }

@@ -423,6 +423,16 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
   }, [heroUpdatesPaused]);
 
   const activeHeroUpdate = heroUpdates[heroUpdateIndex];
+  const heroImage =
+    cmsSections?.find((section) => section.type === "home-hero")?.imageUrl?.trim() || "/koops-hero-market.jpg";
+  const restaurantGallery = (() => {
+    const urls = cmsSections?.find((section) => section.type === "home-restaurant")?.galleryUrls?.filter(Boolean);
+    if (!urls?.length) return restaurantSlides;
+    return urls.map((src, index) => ({
+      src,
+      alt: restaurantSlides[index]?.alt || `Restorano nuotrauka ${index + 1}`,
+    }));
+  })();
 
   return (
     <div className="site-shell" ref={pageRef} data-cms-page="pradinis">
@@ -490,12 +500,13 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
         <section className="tt-hero" id="pradzia" data-byq-component="terra-tory-hero-1" data-cms-section="home-hero">
           <div className="tt-hero-background" aria-hidden="true">
             <Image
-              src="/koops-hero-market.jpg"
+              src={heroImage}
               alt=""
               fill
               priority
               sizes="100vw"
               quality={78}
+              data-cms-field="image"
             />
           </div>
           <div className="tt-hero-overlay" aria-hidden="true" />
@@ -714,43 +725,47 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
             </div>
             <div className="story-grid">
               <div className="story-image" role="region" aria-roledescription="karuselė" aria-label="Restorano „Vilkmergė“ nuotraukų galerija">
-                <img
-                  key={restaurantSlides[restaurantSlide].src}
-                  src={restaurantSlides[restaurantSlide].src}
-                  alt={restaurantSlides[restaurantSlide].alt}
-                  loading="lazy"
-                />
+                {restaurantGallery.map((slide, index) => (
+                  <img
+                    key={index}
+                    data-cms-field="gallery-item"
+                    src={slide.src}
+                    alt={slide.alt}
+                    loading="lazy"
+                    hidden={index !== restaurantSlide}
+                  />
+                ))}
                 <div className="story-gallery-controls">
                   <div className="story-gallery-dots" aria-label="Pasirinkti galerijos nuotrauką">
-                    {restaurantSlides.map((slide, index) => (
+                    {restaurantGallery.map((slide, index) => (
                       <button
                         type="button"
                         className={index === restaurantSlide ? "is-active" : ""}
                         onClick={() => setRestaurantSlide(index)}
                         aria-label={`Rodyti ${index + 1} nuotrauką: ${slide.alt}`}
                         aria-pressed={index === restaurantSlide}
-                        key={slide.src}
+                        key={`${slide.src}-${index}`}
                       />
                     ))}
                   </div>
                   <div className="story-gallery-arrows">
                     <button
                       type="button"
-                      onClick={() => setRestaurantSlide((slide) => (slide - 1 + restaurantSlides.length) % restaurantSlides.length)}
+                      onClick={() => setRestaurantSlide((slide) => (slide - 1 + restaurantGallery.length) % restaurantGallery.length)}
                       aria-label="Ankstesnė restorano nuotrauka"
                     >
                       <span className="control-arrow is-left"><ByqChevron /></span>
                     </button>
                     <button
                       type="button"
-                      onClick={() => setRestaurantSlide((slide) => (slide + 1) % restaurantSlides.length)}
+                      onClick={() => setRestaurantSlide((slide) => (slide + 1) % restaurantGallery.length)}
                       aria-label="Kita restorano nuotrauka"
                     >
                       <span className="control-arrow"><ByqChevron /></span>
                     </button>
                   </div>
                 </div>
-                <p className="sr-only" aria-live="polite">Nuotrauka {restaurantSlide + 1} iš {restaurantSlides.length}</p>
+                <p className="sr-only" aria-live="polite">Nuotrauka {restaurantSlide + 1} iš {restaurantGallery.length}</p>
               </div>
               <div className="story-copy">
                 <p>Miesto širdyje įsikūręs restoranas laukia Jūsų.</p>
@@ -837,7 +852,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
               <SupplierForm />
             </div>
             <div className="contact-image">
-              <img className="contact-image-main" loading="lazy" src="/ukmerge-fields-2.jpg" alt="Lietuvos laukai ir kaimo sodybos" />
+              <img className="contact-image-main" loading="lazy" src="/ukmerge-fields-2.jpg" alt="Lietuvos laukai ir kaimo sodybos" data-cms-field="image" />
             </div>
           </div>
         </section>
@@ -846,7 +861,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
 
         {/* BYQ: terra-tory-footer-1 */}
       <footer className="tt-footer" id="kontaktai" data-byq-component="terra-tory-footer-1">
-        <section className="footer-cta" aria-labelledby="footer-cta-title" data-cms-section="footer-cta">
+        <section className="footer-cta" id="footer-cta" aria-labelledby="footer-cta-title" data-cms-section="footer-cta">
           <div className="orbit footer-orbit-one" aria-hidden="true" /><div className="orbit footer-orbit-two" aria-hidden="true" />
           <p className="section-label light-label">KOOPS</p>
           <h2 id="footer-cta-title"><span className="footer-title-desktop"><span>Parduotuvė gali būti</span><span>arčiau, nei manote</span></span><span className="footer-title-mobile"><span>Parduotuvė gali</span><span>būti arčiau,</span><span>nei manote</span></span></h2>

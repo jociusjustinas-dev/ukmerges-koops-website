@@ -1,0 +1,87 @@
+/* Temos Inter failas yra tik latin-ext ir neturi tarpo glifo.
+   Šis @font-face grąžina tarpą ir kitą bazinę lotynų abėcėlę. */
+@font-face {
+  font-family: Inter;
+  src: local("Arial"), local("Helvetica Neue"), local("Helvetica");
+  unicode-range: U+0000-00FF, U+0020;
+}
+
+.koops-entry-sidebar,
+.koops-entry-sidebar-panel,
+.koops-entry-sidebar *,
+.koops-admin-fields,
+.koops-admin-fields * {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif !important;
+  letter-spacing: 0 !important;
+  word-spacing: 0.12em !important;
+}
+
+.koops-entry-sidebar {
+  display: grid;
+  gap: 28px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 4px 0 12px;
+}
+
+.koops-entry-sidebar__hint {
+  margin: 0;
+  color: #757575;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.koops-entry-sidebar .components-base-control,
+.koops-entry-sidebar .koops-link-control,
+.koops-entry-sidebar .koops-media-control,
+.koops-entry-sidebar .components-checkbox-control {
+  margin: 0 !important;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.koops-entry-sidebar .components-base-control__label,
+.koops-entry-sidebar .components-input-control__label,
+.koops-entry-sidebar .components-checkbox-control__label,
+.koops-entry-sidebar .koops-link-control__label,
+.koops-entry-sidebar .koops-media-control__label {
+  display: block;
+  margin: 0 0 8px;
+  text-transform: none !important;
+}
+
+.koops-entry-sidebar .koops-media-control__empty,
+.koops-entry-sidebar input,
+.koops-entry-sidebar textarea,
+.koops-entry-sidebar select {
+  letter-spacing: 0 !important;
+  word-spacing: 0.12em !important;
+}
+
+.koops-admin-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.koops-admin-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.koops-admin-fields input[type='text'],
+.koops-admin-fields input[type='number'],
+.koops-admin-fields input[type='email'],
+.koops-admin-fields input[type='date'],
+.koops-admin-fields input[type='url'],
+.koops-admin-fields textarea,
+.koops-admin-fields select {
+  width: 100%;
+  max-width: 100%;
+}
+
+body.post-type-koops_store .edit-post-visual-editor .block-editor-block-list__layout {
+  min-height: 0;
+}

@@ -80,6 +80,7 @@ export function RestaurantValueFeatures({ restaurant }: { restaurant: typeof res
   return (
     <section data-cms-section="restaurant-features"
       className="restaurant-features"
+      id="restaurant-features"
       aria-labelledby="restaurant-features-title"
       data-byq-component="terra-tory-value-features"
     >

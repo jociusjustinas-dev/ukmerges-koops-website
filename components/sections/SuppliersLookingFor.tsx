@@ -30,7 +30,7 @@ export function SuppliersLookingFor() {
           </article>
 
           <div className="koops-bento-media koops-bento-media-tall" aria-hidden="true">
-            <img loading="lazy" src="/ukmerge-fields-4.jpg" alt="" />
+            <img loading="lazy" src="/ukmerge-fields-4.jpg" alt="" data-cms-field="gallery-item" />
           </div>
 
           <article className="koops-bento-card koops-bento-card-career">
@@ -44,7 +44,7 @@ export function SuppliersLookingFor() {
           </article>
 
           <div className="koops-bento-media" aria-hidden="true">
-            <img loading="lazy" src="/ukmerge-fields-5.jpg" alt="" />
+            <img loading="lazy" src="/ukmerge-fields-5.jpg" alt="" data-cms-field="gallery-item" />
           </div>
 
           <article className="koops-bento-card">

@@ -1,4 +1,4 @@
-@font-face{font-family:Inter;src:url('../fonts/inter-latin-ext-wght-normal.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap}
+@font-face{font-family:Inter;src:url('../fonts/inter-latin-ext-wght-normal.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 :root{--moss:#15190d;--honey:#f6d987;--green:#aedcb9;--bone:#eaece4;--white:#fff;--muted:#777b71;--line:rgba(21,25,13,.18);--radius:18px;--radius-lg:32px;--shell:1640px;--gutter:clamp(20px,3.1vw,56px);--section:clamp(92px,10vw,180px);--ease:cubic-bezier(.22,1,.36,1)}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}

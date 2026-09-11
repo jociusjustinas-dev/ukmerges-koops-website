@@ -85,6 +85,7 @@ export function AboutHero() {
   return (
     <section
       data-cms-section="about-hero"
+      id="about-hero"
       ref={rootRef}
       className="careers-hero about-hero"
       aria-labelledby="about-hero-title"
@@ -121,7 +122,7 @@ export function AboutHero() {
               key={item.src}
               className="careers-hero-frame about-hero-frame"
             >
-              <img src={item.src} alt={item.alt} loading={index === 0 ? "eager" : "lazy"} />
+              <img src={item.src} alt={item.alt} loading={index === 0 ? "eager" : "lazy"} data-cms-field="gallery-item" />
             </figure>
           ))}
         </div>

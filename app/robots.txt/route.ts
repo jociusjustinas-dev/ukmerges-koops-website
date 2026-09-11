@@ -5,6 +5,8 @@ export function GET() {
     "User-agent: *",
     "Allow: /",
     "Disallow: /api/",
+    "Disallow: /instrukcijos",
+    "Disallow: /strategija",
     `Sitemap: ${absoluteUrl("/sitemap.xml")}`,
     "",
   ].join("\n");
