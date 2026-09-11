@@ -23,9 +23,19 @@
   const frontendUrl = ((window.koopsSectionEditor && window.koopsSectionEditor.frontendUrl) || '').replace(/\/$/, '');
   const previewBase = (window.koopsSectionEditor && window.koopsSectionEditor.previewBase) || '';
   const previewVersion = (window.koopsSectionEditor && window.koopsSectionEditor.previewVersion) || '';
-  const options = [{ label: 'Pasirinkite sekciją', value: '' }].concat(
-    Object.entries(catalog).map(([value, item]) => ({ label: item.label, value }))
-  );
+  function sectionTypeOptions(currentType) {
+    const slug = (window.koopsSectionEditor && window.koopsSectionEditor.pageSlug) || '';
+    return [{ label: 'Pasirinkite sekciją', value: '' }].concat(
+      Object.entries(catalog)
+        .filter(function ([value, item]) {
+          return !slug || item.page === slug || item.page === 'global' || value === currentType;
+        })
+        .map(function ([value, item]) {
+          const foreign = Boolean(slug && item.page !== slug && item.page !== 'global');
+          return { label: foreign ? item.label + ' (ne šio puslapio)' : item.label, value };
+        })
+    );
+  }
 
   function previewLinkLabel(value) {
     if (!value) return '';
@@ -308,7 +318,7 @@
       el(SelectControl, {
         label: 'Sekcijos tipas',
         value: a.sectionType,
-        options,
+        options: sectionTypeOptions(a.sectionType),
         onChange: (sectionType) => set(Object.assign({ sectionType, imageId: 0, galleryIds: [], galleryUrls: [] }, defaults[sectionType] || {}))
       }),
       el(TextControl, {
@@ -555,9 +565,10 @@
     if (event.origin !== expectedOrigin) return;
     if (message.type === 'select-section' && message.sectionType) selectPreviewSection(message.sectionType);
     if (message.type === 'ready') {
+      syncPreviewSections('', true);
       const selected = data.select('core/block-editor').getSelectedBlock();
       if (selected && selected.name === 'koops/section') {
-        postToPreview({ type: 'select-section', sectionType: selected.attributes.sectionType });
+        postToPreview({ type: 'select-section', sectionType: selected.attributes.sectionType, scroll: true });
       }
     }
   });
@@ -568,6 +579,7 @@
       return {
         type: a.sectionType,
         enabled: a.enabled !== false,
+        label: (catalog[a.sectionType] && catalog[a.sectionType].label) || a.sectionType,
         anchor: a.anchor,
         eyebrow: a.eyebrow,
         title: a.title,
@@ -582,10 +594,11 @@
   }
 
   let lastSync = '';
-  function syncPreviewSections(selectType) {
+  function syncPreviewSections(selectType, force) {
+    if (!liveFrame()) return;
     const payload = editorSectionsPayload();
     const encoded = JSON.stringify(payload);
-    if (encoded === lastSync && !selectType) return;
+    if (!force && encoded === lastSync && !selectType) return;
     lastSync = encoded;
     postToPreview({
       type: 'sync-sections',

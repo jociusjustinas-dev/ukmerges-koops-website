@@ -30,6 +30,7 @@ export type CmsPageSection = {
   id: string;
   type: string;
   enabled: boolean;
+  label?: string;
   anchor?: string;
   eyebrow?: string;
   title?: string;

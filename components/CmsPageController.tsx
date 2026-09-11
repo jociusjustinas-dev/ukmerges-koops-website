@@ -123,6 +123,63 @@ export function CmsPageController({ page, sections }: Props) {
           .sort((a, b) => Number(a.style.order || 999) - Number(b.style.order || 999))
           .forEach((node) => parent.appendChild(node));
       });
+
+      if (!editorMode) return;
+
+      const main = shell.querySelector("main") || shell;
+      const nativeInMain = nodes.filter(
+        (node) => main.contains(node) && !node.classList.contains("tt-hero-spacer"),
+      );
+
+      shell.querySelectorAll<HTMLElement>(".koops-cms-missing-section").forEach((card) => {
+        const type = card.dataset.cmsSection || "";
+        const hasNative = nativeInMain.some((node) => node.dataset.cmsSection === type);
+        if (!type || hasNative || !list.some((section) => section.type === type)) card.remove();
+      });
+
+      list.forEach((section, index) => {
+        const hasNative = nodes.some(
+          (node) => node.dataset.cmsSection === section.type && !node.classList.contains("tt-hero-spacer"),
+        );
+        if (hasNative) return;
+
+        let card = shell.querySelector<HTMLElement>(
+          `.koops-cms-missing-section[data-cms-section="${section.type}"]`,
+        );
+        if (!card) {
+          card = document.createElement("article");
+          card.className = "koops-cms-missing-section koops-cms-editable-section";
+          card.dataset.cmsSection = section.type;
+          const kicker = document.createElement("p");
+          kicker.className = "koops-cms-missing-section__kicker";
+          const title = document.createElement("h2");
+          title.className = "koops-cms-missing-section__title";
+          title.setAttribute("data-cms-field", "title");
+          const hint = document.createElement("p");
+          hint.className = "koops-cms-missing-section__hint";
+          hint.textContent = "Pakeiskite sekcijos tipą dešinėje į šio puslapio sekciją arba pašalinkite bloką.";
+          card.append(kicker, title, hint);
+        }
+
+        const kicker = card.querySelector(".koops-cms-missing-section__kicker");
+        if (kicker) kicker.textContent = section.label || section.type;
+        const title = card.querySelector(".koops-cms-missing-section__title");
+        if (title) {
+          title.textContent = section.title?.trim() || "Šiame puslapyje ši sekcija nevaizduojama";
+        }
+        card.classList.toggle("is-cms-disabled", section.enabled === false);
+        card.dataset.cmsEditorLabel = section.type;
+
+        let before: HTMLElement | null = null;
+        for (let i = index + 1; i < list.length; i += 1) {
+          const next = nativeInMain.find((node) => node.dataset.cmsSection === list[i].type);
+          if (next) {
+            before = next;
+            break;
+          }
+        }
+        main.insertBefore(card, before);
+      });
     };
 
     applySectionState(sections);
@@ -132,7 +189,8 @@ export function CmsPageController({ page, sections }: Props) {
     document.documentElement.classList.add("koops-cms-preview");
     document.body.classList.add("koops-cms-preview");
 
-    const editableNodes = () => nodes.filter((node) => node.classList.contains("koops-cms-editable-section"));
+    const editableNodes = () =>
+      Array.from(shell.querySelectorAll<HTMLElement>(".koops-cms-editable-section"));
     let selectedType = "";
 
     const selectType = (sectionType: string, scroll = false) => {
@@ -206,6 +264,7 @@ export function CmsPageController({ page, sections }: Props) {
       window.removeEventListener("message", onMessage);
       document.documentElement.classList.remove("koops-cms-preview");
       document.body.classList.remove("koops-cms-preview");
+      shell.querySelectorAll(".koops-cms-missing-section").forEach((node) => node.remove());
       editableNodes().forEach((node) => {
         node.classList.remove("koops-cms-editable-section", "is-cms-selected", "is-cms-disabled");
         delete node.dataset.cmsEditorLabel;
