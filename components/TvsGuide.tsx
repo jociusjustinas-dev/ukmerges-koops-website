@@ -20,8 +20,14 @@ const sections = [
   { id: "daznos", title: "Dažnos užduotys" },
 ] as const;
 
+type SectionId = (typeof sections)[number]["id"];
+
+function isSectionId(id: string): id is SectionId {
+  return sections.some((section) => section.id === id);
+}
+
 export function TvsGuide() {
-  const [active, setActive] = useState(sections[0].id);
+  const [active, setActive] = useState<SectionId>(sections[0].id);
 
   useEffect(() => {
     const nodes = sections
@@ -34,7 +40,9 @@ export function TvsGuide() {
         const visible = entries
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible?.target.id) setActive(visible.target.id);
+        if (visible?.target.id && isSectionId(visible.target.id)) {
+          setActive(visible.target.id);
+        }
       },
       { rootMargin: "-20% 0px -60% 0px", threshold: [0.1, 0.35, 0.6] },
     );
