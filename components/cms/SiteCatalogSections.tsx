@@ -2,7 +2,7 @@ import { AvenirButtonArrow } from "../../app/byq-icons";
 import type { Classified } from "../../lib/classifieds";
 import { contactsOrg, socialLinks as defaultSocials } from "../../lib/contacts";
 import { careersContact, type Job } from "../../lib/jobs";
-import type { restaurant as Restaurant } from "../../lib/restaurant";
+import { restaurant as restaurantDefaults } from "../../lib/restaurant";
 import type { Store } from "../../lib/stores";
 import { suppliersContact } from "../../lib/suppliers";
 import type { NewsItem } from "../../lib/news";
@@ -123,7 +123,7 @@ export function ClassifiedsListing({ items }: { items: Classified[] }) {
   );
 }
 
-export function RestaurantHalls({ restaurant }: { restaurant: Restaurant }) {
+export function RestaurantHalls({ restaurant }: { restaurant: typeof restaurantDefaults }) {
   return (
     <section className="koops-bento-section restaurant-halls" id="restaurant-halls" aria-labelledby="restaurant-halls-title" data-byq-component="terra-tory-bento-1" data-cms-section="restaurant-halls">
       <div className="tt-container">
@@ -177,7 +177,7 @@ export function RestaurantHalls({ restaurant }: { restaurant: Restaurant }) {
   );
 }
 
-export function RestaurantEnquiry({ restaurant }: { restaurant: Restaurant }) {
+export function RestaurantEnquiry({ restaurant }: { restaurant: typeof restaurantDefaults }) {
   return (
     <section className="restaurant-enquiry" id="uzklausa" aria-labelledby="restaurant-enquiry-title" data-byq-component="terra-tory-contact-1" data-cms-section="restaurant-enquiry">
       <div className="tt-container restaurant-enquiry-grid">

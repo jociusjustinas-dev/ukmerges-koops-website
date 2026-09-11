@@ -1,4 +1,4 @@
-import { restaurant as restaurantDefaults, type restaurant as Restaurant } from "./restaurant";
+import { restaurant as restaurantDefaults } from "./restaurant";
 import type { Classified } from "./classifieds";
 import type { Job } from "./jobs";
 import type { NewsItem } from "./news";
@@ -31,7 +31,7 @@ export type CmsRenderContext = {
   jobs: Job[];
   featuredStores: Store[];
   featuredNews: NewsItem[];
-  restaurant: Restaurant;
+  restaurant: typeof restaurantDefaults;
 };
 
 export function createCmsRenderContext(cms: KoopsCmsData): CmsRenderContext {

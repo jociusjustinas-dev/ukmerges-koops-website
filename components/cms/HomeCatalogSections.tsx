@@ -4,7 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import type { Job } from "../../lib/jobs";
 import { newsHref, type NewsItem } from "../../lib/news";
-import type { restaurant as Restaurant } from "../../lib/restaurant";
+import { restaurant as restaurantDefaults } from "../../lib/restaurant";
 import type { Store } from "../../lib/stores";
 import { AvenirButtonArrow, ByqChevron } from "../../app/byq-icons";
 import { RollingLabel } from "../RollingLabel";
@@ -249,7 +249,7 @@ export function HomeNews({ items }: { items: NewsItem[] }) {
   );
 }
 
-export function HomeRestaurant({ restaurant, galleryUrls }: { restaurant: Restaurant; galleryUrls?: string[] }) {
+export function HomeRestaurant({ restaurant, galleryUrls }: { restaurant: typeof restaurantDefaults; galleryUrls?: string[] }) {
   const [restaurantSlide, setRestaurantSlide] = React.useState(0);
   const restaurantGallery = galleryUrls?.filter(Boolean).length
     ? galleryUrls.filter(Boolean).map((src, index) => ({ src, alt: restaurantSlides[index]?.alt || `Restorano nuotrauka ${index + 1}` }))
