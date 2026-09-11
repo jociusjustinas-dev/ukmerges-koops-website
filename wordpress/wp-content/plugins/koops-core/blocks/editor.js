@@ -381,7 +381,13 @@
   }
 
   function KoopsSectionEdit(props) {
-    if (props.attributes.isPreview) {
+    element.useEffect(function () {
+      if (!props.isPreview && props.attributes.isPreview) {
+        props.setAttributes({ isPreview: false });
+      }
+    }, [props.isPreview, props.attributes.isPreview]);
+
+    if (props.isPreview) {
       return el(KoopsSectionPreviewImage, props);
     }
     return el(KoopsSectionCanvas, props);
@@ -392,7 +398,6 @@
     example: {
       attributes: {
         sectionType: 'home-hero',
-        isPreview: true,
         imageUrl: sectionPreviewSrc('home-hero')
       },
       viewportWidth: 1280
@@ -415,7 +420,6 @@
         example: {
           attributes: {
             sectionType: type,
-            isPreview: true,
             imageUrl: preview
           },
           viewportWidth: 1280
@@ -429,6 +433,28 @@
     });
   }
   registerSectionVariations();
+
+  function usedSectionTypes() {
+    return new Set(sectionBlocks().map((block) => block.attributes.sectionType).filter(Boolean));
+  }
+
+  if (wp.hooks && wp.hooks.addFilter) {
+    wp.hooks.addFilter(
+      'blocks.getBlockVariations',
+      'koops/page-section-variations',
+      function (variations, blockName) {
+        if (blockName !== 'koops/section') return variations;
+        const slug = (window.koopsSectionEditor && window.koopsSectionEditor.pageSlug) || currentSlug() || '';
+        const used = usedSectionTypes();
+        return (variations || []).filter(function (variation) {
+          const item = catalog[variation.name];
+          if (!item || used.has(variation.name)) return false;
+          if (!slug) return true;
+          return item.page === slug || item.page === 'global';
+        });
+      }
+    );
+  }
 
   // Render the real Next.js page inside Gutenberg. The public frontend remains
   // the only source of layout, fonts and animation; WordPress only selects and
@@ -536,11 +562,67 @@
     }
   });
 
+  function editorSectionsPayload() {
+    return sectionBlocks().map(function (block) {
+      const a = block.attributes || {};
+      return {
+        type: a.sectionType,
+        enabled: a.enabled !== false,
+        anchor: a.anchor,
+        eyebrow: a.eyebrow,
+        title: a.title,
+        description: a.description,
+        primaryLabel: a.primaryLabel,
+        primaryUrl: a.primaryUrl,
+        imageUrl: a.imageUrl,
+        galleryUrls: a.galleryUrls,
+        overrides: ['eyebrow', 'title', 'description', 'primaryLabel', 'primaryUrl', 'imageUrl', 'galleryUrls']
+      };
+    }).filter(function (section) { return Boolean(section.type); });
+  }
+
+  let lastSync = '';
+  function syncPreviewSections(selectType) {
+    const payload = editorSectionsPayload();
+    const encoded = JSON.stringify(payload);
+    if (encoded === lastSync && !selectType) return;
+    lastSync = encoded;
+    postToPreview({
+      type: 'sync-sections',
+      sections: payload,
+      sectionType: selectType || '',
+      scroll: Boolean(selectType)
+    });
+  }
+
+  function dedupeSectionBlocks() {
+    const seen = new Map();
+    const duplicates = [];
+    let lastDuplicateType = '';
+    sectionBlocks().forEach(function (block) {
+      const type = block.attributes.sectionType;
+      if (!type) return;
+      if (seen.has(type)) {
+        duplicates.push(block.clientId);
+        lastDuplicateType = type;
+      } else {
+        seen.set(type, block.clientId);
+      }
+    });
+    if (!duplicates.length) return '';
+    data.dispatch('core/block-editor').removeBlocks(duplicates, false);
+    const keepId = seen.get(lastDuplicateType);
+    if (keepId) data.dispatch('core/block-editor').selectBlock(keepId);
+    return lastDuplicateType;
+  }
+
   function refreshEditor() {
+    const insertedType = dedupeSectionBlocks();
     renderLiveCanvas();
+    syncPreviewSections(insertedType);
     const selected = data.select('core/block-editor')?.getSelectedBlock();
     if (selected && selected.name === 'koops/section') {
-      postToPreview({ type: 'select-section', sectionType: selected.attributes.sectionType });
+      postToPreview({ type: 'select-section', sectionType: selected.attributes.sectionType, scroll: Boolean(insertedType) });
     }
   }
 

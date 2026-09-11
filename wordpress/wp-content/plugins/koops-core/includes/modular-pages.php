@@ -395,7 +395,6 @@ function koops_section_block_variations(): array
             'example' => [
                 'attributes' => [
                     'sectionType' => $type,
-                    'isPreview' => true,
                     'imageUrl' => $preview,
                 ],
                 'viewportWidth' => 1280,
@@ -428,9 +427,26 @@ function koops_register_section_block(): void
         'previewVersion' => KOOPS_CORE_VERSION,
         'restNonce' => wp_create_nonce('wp_rest'),
         'ensureMediaUrl' => rest_url('koops/v1/manage/media/ensure'),
+        'pageSlug' => '',
     ]);
 }
 add_action('init', 'koops_register_section_block', 30);
+
+function koops_localize_editor_page_slug(): void
+{
+    $slug = '';
+    $post = get_post();
+    if ($post instanceof WP_Post && $post->post_type === 'page') {
+        $slug = (string) $post->post_name;
+    }
+
+    wp_add_inline_script(
+        'koops-section-editor-script',
+        'window.koopsSectionEditor=Object.assign({},window.koopsSectionEditor||{},{pageSlug:'.wp_json_encode($slug).'});',
+        'after'
+    );
+}
+add_action('enqueue_block_editor_assets', 'koops_localize_editor_page_slug', 40);
 
 function koops_section_inserter_preview_css(): string
 {
@@ -446,7 +462,7 @@ function koops_section_inserter_preview_css(): string
         . $item . ' .block-editor-block-icon svg,'
         . $item . ' .dashicon{opacity:0!important;}'
         . '.block-editor-block-types-list:has([class*="editor-block-list-item-koops-section"]){display:grid!important;grid-template-columns:1fr!important;gap:10px!important;}'
-        . '.koops-section-inserter-thumb,.koops-section-inserter-preview{display:block;width:100%;height:100%;object-fit:cover;border-radius:8px;}'
+        . '.koops-section-inserter-thumb,.koops-section-inserter-preview{display:block;width:100%;height:100%;object-fit:cover;border-radius:8px;pointer-events:none;}'
         . '.block-editor-inserter__preview-content-missing:has(img){padding:0;background:transparent;color:transparent;font-size:0;min-height:0;}';
 
     foreach (koops_section_catalog() as $type => $item_data) {

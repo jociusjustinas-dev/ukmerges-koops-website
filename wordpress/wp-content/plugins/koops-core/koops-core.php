@@ -2,7 +2,7 @@
 /**
  * Plugin Name: KOOPS Core
  * Description: KOOPS turinio tipai, valdymo laukai, bendri duomenys ir formos.
- * Version: 0.19.4
+ * Version: 0.19.6
  * Author: KOOPS
  * Text Domain: koops
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('KOOPS_CORE_VERSION', '0.19.4');
+define('KOOPS_CORE_VERSION', '0.19.6');
 define('KOOPS_CORE_PATH', plugin_dir_path(__FILE__));
 define('KOOPS_CORE_URL', plugin_dir_url(__FILE__));
 
@@ -329,6 +329,25 @@ function koops_register_link_picker_assets(): void
     );
 }
 add_action('init', 'koops_register_link_picker_assets');
+
+function koops_register_admin_colors(): void
+{
+    wp_register_style(
+        'koops-admin-colors',
+        KOOPS_CORE_URL . 'assets/admin-colors.css',
+        [],
+        KOOPS_CORE_VERSION
+    );
+}
+add_action('init', 'koops_register_admin_colors');
+
+function koops_enqueue_admin_colors(): void
+{
+    wp_enqueue_style('koops-admin-colors');
+}
+add_action('admin_enqueue_scripts', 'koops_enqueue_admin_colors', 100);
+add_action('enqueue_block_editor_assets', 'koops_enqueue_admin_colors', 100);
+add_action('login_enqueue_scripts', 'koops_enqueue_admin_colors', 100);
 
 function koops_register_entry_sidebar_assets(): void
 {

@@ -75,6 +75,7 @@ type PreviewMessage = {
   source?: string;
   type?: string;
   sectionType?: string;
+  sections?: CmsPageSection[];
   changes?: Partial<CmsPageSection>;
   scroll?: boolean;
 };
@@ -93,13 +94,14 @@ export function CmsPageController({ page, sections }: Props) {
 
     const editorMode = new URLSearchParams(window.location.search).get("koops-editor") === "1";
 
-    const byType = new Map(sections.map((section, index) => [section.type, { section, index }]));
     const nodes = Array.from(shell.querySelectorAll<HTMLElement>("[data-cms-section]"));
 
-    nodes.forEach((node) => {
-      const entry = byType.get(node.dataset.cmsSection || "");
-      node.hidden = !entry || (!entry.section.enabled && !editorMode);
-      if (entry) {
+    const applySectionState = (list: CmsPageSection[]) => {
+      const byType = new Map(list.map((section, index) => [section.type, { section, index }]));
+      nodes.forEach((node) => {
+        const entry = byType.get(node.dataset.cmsSection || "");
+        node.hidden = !entry || (!entry.section.enabled && !editorMode);
+        if (!entry) return;
         node.style.order = String(entry.index);
         applyAnchor(node, entry.section);
         applyContent(node, entry.section);
@@ -108,36 +110,39 @@ export function CmsPageController({ page, sections }: Props) {
           node.classList.toggle("is-cms-disabled", !entry.section.enabled);
           node.dataset.cmsEditorLabel = entry.section.type;
         }
-      }
-    });
+      });
 
-    const parents = new Set(nodes.map((node) => node.parentElement).filter(Boolean));
-    parents.forEach((parent) => {
-      if (!parent) return;
-      const direct = Array.from(parent.children).filter(
-        (child): child is HTMLElement => child instanceof HTMLElement && child.hasAttribute("data-cms-section"),
-      );
-      if (direct.length < 2) return;
-      direct
-        .sort((a, b) => Number(a.style.order || 999) - Number(b.style.order || 999))
-        .forEach((node) => parent.appendChild(node));
-    });
+      const parents = new Set(nodes.map((node) => node.parentElement).filter(Boolean));
+      parents.forEach((parent) => {
+        if (!parent) return;
+        const direct = Array.from(parent.children).filter(
+          (child): child is HTMLElement => child instanceof HTMLElement && child.hasAttribute("data-cms-section"),
+        );
+        if (direct.length < 2) return;
+        direct
+          .sort((a, b) => Number(a.style.order || 999) - Number(b.style.order || 999))
+          .forEach((node) => parent.appendChild(node));
+      });
+    };
+
+    applySectionState(sections);
 
     if (!editorMode) return;
 
     document.documentElement.classList.add("koops-cms-preview");
     document.body.classList.add("koops-cms-preview");
 
-    const editableNodes = nodes.filter((node) => node.classList.contains("koops-cms-editable-section"));
+    const editableNodes = () => nodes.filter((node) => node.classList.contains("koops-cms-editable-section"));
     let selectedType = "";
 
     const selectType = (sectionType: string, scroll = false) => {
       if (!sectionType) return;
       selectedType = sectionType;
-      editableNodes.forEach((node) => {
+      const current = editableNodes();
+      current.forEach((node) => {
         node.classList.toggle("is-cms-selected", node.dataset.cmsSection === sectionType);
       });
-      const target = editableNodes.find((node) => node.dataset.cmsSection === sectionType);
+      const target = current.find((node) => node.dataset.cmsSection === sectionType);
       if (scroll && target) target.scrollIntoView({ behavior: "smooth", block: "center" });
     };
 
@@ -166,8 +171,14 @@ export function CmsPageController({ page, sections }: Props) {
         return;
       }
 
+      if (message.type === "sync-sections" && Array.isArray(message.sections)) {
+        applySectionState(message.sections);
+        if (message.sectionType) selectType(message.sectionType, Boolean(message.scroll));
+        return;
+      }
+
       if (message.type !== "update-section" || !message.sectionType || !message.changes) return;
-      const targets = editableNodes.filter((node) => node.dataset.cmsSection === message.sectionType);
+      const targets = editableNodes().filter((node) => node.dataset.cmsSection === message.sectionType);
       const changedFields = Object.keys(message.changes);
       targets.forEach((node) => {
         const next = {
@@ -195,7 +206,7 @@ export function CmsPageController({ page, sections }: Props) {
       window.removeEventListener("message", onMessage);
       document.documentElement.classList.remove("koops-cms-preview");
       document.body.classList.remove("koops-cms-preview");
-      editableNodes.forEach((node) => {
+      editableNodes().forEach((node) => {
         node.classList.remove("koops-cms-editable-section", "is-cms-selected", "is-cms-disabled");
         delete node.dataset.cmsEditorLabel;
       });

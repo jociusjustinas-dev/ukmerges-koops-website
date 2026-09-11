@@ -77,6 +77,10 @@ if (!entryCss.includes('unicode-range: U+0000-00FF')) throw new Error('Admin Int
 if (!entrySidebar.includes('function wrapField')) throw new Error('Kiekvienas sidebar laukas turi turėti atskirą tarpą');
 if (!entrySidebar.includes('koops-entry-field')) throw new Error('Sidebar laukai turi būti atskirti koops-entry-field');
 if (!pluginPhp.includes('koops-editor-chrome-font-fix')) throw new Error('Gutenberg sidebar turi priverstinai naudoti sisteminį šriftą');
+if (!pluginPhp.includes('koops-admin-colors')) throw new Error('Admin turi krauti KOOPS akcento spalvas');
+const adminColors = fs.readFileSync(path.join(plugin, 'assets/admin-colors.css'), 'utf8');
+if (!adminColors.includes('--wp-admin-theme-color: #15190d')) throw new Error('Admin akcentas turi būti KOOPS samanų žalia, ne WP mėlyna');
+if (!adminColors.includes('#f6d987')) throw new Error('Admin primary mygtukai turi naudoti KOOPS medaus geltoną');
 if (!editor.includes('function previewLinkLabel')) throw new Error('Ilgos nuorodos Gutenberg turi būti sutrumpintos');
 if (!editor.includes('registerBlockVariation')) throw new Error('Gutenberg inserteryje turi būti atskiros KOOPS sekcijos');
 if (!editor.includes('sectionPreviewSrc')) throw new Error('Sekcijų inserteris turi rodyti screenshotus');
@@ -86,6 +90,10 @@ if (!modular.includes("'example'")) throw new Error('PHP variations turi turėti
 if (!modular.includes('koops_section_inserter_preview_css')) throw new Error('Inserterio kortelės turi turėti screenshotų CSS');
 if (!editor.includes('enhanceInserterPreviews')) throw new Error('Inserteris turi įterpti sekcijų screenshotus į korteles');
 if (!editor.includes('getBlockMenuDefaultClassName')) throw new Error('Inserterio klasės turi veikti su visomis sekcijomis');
+if (!editor.includes('blocks.getBlockVariations')) throw new Error('Inserteris turi rodyti tik to puslapio trūkstamas sekcijas');
+if (!editor.includes('sync-sections')) throw new Error('Nauja sekcija turi iškart atsirasti gyvoje peržiūroje');
+if (!editor.includes('dedupeSectionBlocks')) throw new Error('Ta pati sekcija neturi dubliuotis inserteryje');
+if (!modular.includes('pageSlug')) throw new Error('Gutenberg turi žinoti redaguojamo puslapio slug');
 if (!modular.includes('koops-section/')) throw new Error('Inserterio CSS turi palaikyti Gutenberg klases su slash');
 const blockJson = JSON.parse(fs.readFileSync(path.join(plugin, 'blocks/block.json'), 'utf8'));
 if (blockJson.supports?.inserter === false) throw new Error('KOOPS sekcijų variations turi būti matomos inserteryje');
