@@ -65,15 +65,8 @@ export function TvsGuide() {
       <section className="strategy-hero guide-hero">
         <div className="strategy-orbit strategy-orbit-one" aria-hidden="true" />
         <div className="strategy-orbit strategy-orbit-two" aria-hidden="true" />
-        <div className="strategy-wrap strategy-hero-grid">
-          <div>
-            <p className="strategy-kicker">Vidaus vadovas · noindex</p>
-            <h1>Kaip naudotis<br />KOOPS TVS</h1>
-          </div>
-          <div className="strategy-hero-note">
-            <p>Turinį keičiate WordPress administracijoje. Viešą svetainę lankytojai mato atskirai — dizaino čia liesti nereikia.</p>
-            <span>WordPress · headless</span>
-          </div>
+        <div className="strategy-wrap">
+          <h1>Kaip naudotis<br />KOOPS TVS</h1>
         </div>
       </section>
 

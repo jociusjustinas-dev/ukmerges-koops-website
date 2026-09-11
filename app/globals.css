@@ -3544,7 +3544,7 @@ body.koops-cms-preview .koops-cms-editable-section select {
 
 .guide-page { min-height: 100svh; background: var(--color-bone-canvas); color: var(--color-midnight-moss); }
 .guide-hero { padding-block: clamp(72px, 8vw, 120px); }
-.guide-hero h1 { font-size: clamp(44px, 6vw, 80px); }
+.guide-hero h1 { margin-top: 0; font-size: clamp(44px, 6vw, 80px); }
 .guide-shell {
   display: grid;
   grid-template-columns: 260px minmax(0, 1fr);
