@@ -192,7 +192,7 @@ export function TvsGuide() {
             <ol>
               <li>Atidarykite <strong>Puslapiai</strong> ir reikiamą puslapį, arba eikite per <strong>KOOPS → Puslapių sekcijos</strong>.</li>
               <li>Spauskite <strong>+</strong> → <strong>Blokai</strong> → <strong>KOOPS sekcijos</strong>.</li>
-              <li>Pasirinkite sekciją pagal nuotrauką ir pavadinimą, pvz. „Pradinis · Hero“.</li>
+              <li>Pasirinkite sekciją pagal nuotrauką ir pavadinimą, pvz. „Pradinis · Hero“. Bet kurią sekciją galima įdėti į bet kurį puslapį.</li>
               <li>Paspaudę bloką dešinėje rasite laukus: antraštė, aprašymas, mygtukas, nuoroda, nuotrauka ar galerija.</li>
               <li>Jei sekcijos laikinai nereikia — išjunkite „Rodyti svetainėje“, netrinkite viso bloko.</li>
             </ol>

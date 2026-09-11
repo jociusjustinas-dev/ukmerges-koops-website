@@ -86,10 +86,8 @@ function koops_section_catalog(): array
 
 function koops_section_catalog_for_page(string $slug): array
 {
-    return array_filter(
-        koops_section_catalog(),
-        static fn(array $item): bool => ($item['page'] ?? '') === $slug || ($item['page'] ?? '') === 'global'
-    );
+    unset($slug);
+    return koops_section_catalog();
 }
 
 function koops_page_public_path(string $slug): string
@@ -381,7 +379,7 @@ function koops_section_block_variations(): array
         $variations[] = [
             'name' => $type,
             'title' => (string) $item['label'],
-            'description' => $page === 'global' ? 'Naudojama visuose puslapiuose' : 'Puslapis: ' . $page,
+            'description' => 'Galima įterpti į bet kurį puslapį',
             'category' => 'koops',
             'icon' => 'layout',
             'keywords' => array_values(array_filter([$page, $type, 'koops', 'sekcija'])),
@@ -731,7 +729,7 @@ function koops_rest_replace_page_sections(WP_REST_Request $request)
         $section = koops_sanitize_builder_section($input);
         $type = $section['sectionType'];
         if (!$type || !isset($catalog[$type]) || isset($seen[$type])) {
-            return new WP_Error('koops_invalid_section', 'Neleistinas arba pasikartojantis sekcijos tipas.', ['status' => 400]);
+            return new WP_Error('koops_invalid_section', 'Nežinomas arba pasikartojantis sekcijos tipas.', ['status' => 400]);
         }
         $seen[$type] = true;
         $sections[] = $section;
@@ -763,7 +761,7 @@ function koops_rest_update_page_section(WP_REST_Request $request)
     }
     $catalog = koops_section_catalog_for_page($slug);
     if (!isset($catalog[$section_type])) {
-        return new WP_Error('koops_section_not_allowed', 'Ši sekcija nepriklauso pasirinktam puslapiui.', ['status' => 400]);
+        return new WP_Error('koops_section_not_found', 'Nežinoma sekcija.', ['status' => 400]);
     }
 
     $payload = $request->get_json_params();

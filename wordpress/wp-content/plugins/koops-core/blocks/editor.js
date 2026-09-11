@@ -23,17 +23,11 @@
   const frontendUrl = ((window.koopsSectionEditor && window.koopsSectionEditor.frontendUrl) || '').replace(/\/$/, '');
   const previewBase = (window.koopsSectionEditor && window.koopsSectionEditor.previewBase) || '';
   const previewVersion = (window.koopsSectionEditor && window.koopsSectionEditor.previewVersion) || '';
-  function sectionTypeOptions(currentType) {
-    const slug = (window.koopsSectionEditor && window.koopsSectionEditor.pageSlug) || '';
+  function sectionTypeOptions() {
     return [{ label: 'Pasirinkite sekciją', value: '' }].concat(
-      Object.entries(catalog)
-        .filter(function ([value, item]) {
-          return !slug || item.page === slug || item.page === 'global' || value === currentType;
-        })
-        .map(function ([value, item]) {
-          const foreign = Boolean(slug && item.page !== slug && item.page !== 'global');
-          return { label: foreign ? item.label + ' (ne šio puslapio)' : item.label, value };
-        })
+      Object.entries(catalog).map(function ([value, item]) {
+        return { label: item.label, value };
+      })
     );
   }
 
@@ -318,7 +312,7 @@
       el(SelectControl, {
         label: 'Sekcijos tipas',
         value: a.sectionType,
-        options: sectionTypeOptions(a.sectionType),
+        options: sectionTypeOptions(),
         onChange: (sectionType) => set(Object.assign({ sectionType, imageId: 0, galleryIds: [], galleryUrls: [] }, defaults[sectionType] || {}))
       }),
       el(TextControl, {
@@ -424,7 +418,7 @@
       blocks.registerBlockVariation('koops/section', {
         name: type,
         title: item.label,
-        description: item.page === 'global' ? 'Naudojama visuose puslapiuose' : 'Puslapis: ' + item.page,
+        description: 'Galima įterpti į bet kurį puslapį',
         category: 'koops',
         attributes: Object.assign({ sectionType: type, enabled: true }, fallback),
         example: {
@@ -454,13 +448,10 @@
       'koops/page-section-variations',
       function (variations, blockName) {
         if (blockName !== 'koops/section') return variations;
-        const slug = (window.koopsSectionEditor && window.koopsSectionEditor.pageSlug) || currentSlug() || '';
         const used = usedSectionTypes();
         return (variations || []).filter(function (variation) {
           const item = catalog[variation.name];
-          if (!item || used.has(variation.name)) return false;
-          if (!slug) return true;
-          return item.page === slug || item.page === 'global';
+          return Boolean(item) && !used.has(variation.name);
         });
       }
     );

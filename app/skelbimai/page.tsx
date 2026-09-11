@@ -1,10 +1,11 @@
 import { ClassifiedsPageMotion } from "../../components/ClassifiedsPageMotion";
-import { RollingLabel } from "../../components/RollingLabel";
+import { CmsPageController } from "../../components/CmsPageController";
+import { CmsPageSections } from "../../components/CmsPageSections";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
-import { getKoopsCmsData } from "../../lib/wordpress";
-import { CmsPageController } from "../../components/CmsPageController";
+import { getCmsPageView } from "../../lib/cms-render";
 import { createPageMetadata } from "../../lib/metadata";
+import { getKoopsCmsData } from "../../lib/wordpress";
 
 export const metadata = createPageMetadata({
   title: "Skelbimai | KOOPS Ukmergė",
@@ -13,7 +14,9 @@ export const metadata = createPageMetadata({
 });
 
 export default async function ClassifiedsPage() {
-  const { classifieds, pages } = await getKoopsCmsData();
+  const cms = await getKoopsCmsData();
+  const { context, sections, hasFooterCta } = getCmsPageView(cms, "skelbimai");
+
   return (
     <div className="site-shell classifieds-page" id="pradzia" data-cms-page="skelbimai">
       <a className="skip-link" href="#turinys">Pereiti prie turinio</a>
@@ -21,51 +24,11 @@ export default async function ClassifiedsPage() {
       <SiteHeader />
 
       <main id="turinys">
-        <section className="classifieds-directory" id="classifieds-listing" aria-labelledby="classifieds-title" data-cms-section="classifieds-listing">
-          <div className="tt-container classifieds-directory-inner">
-            <p className="section-label light-label">KOOPS SKELBIMAI</p>
-            <h1 id="classifieds-title">Skelbimai</h1>
-            <p className="classifieds-directory-lead">
-              Nuomojamos patalpos, turto pasiūlymai ir kita aktuali KOOPS informacija vienoje vietoje.
-            </p>
-
-            <div className="classifieds-listing">
-              {classifieds.length ? (
-                <div className="classifieds-grid">
-                  {classifieds.map((item) => (
-                    <article className="classified-card" key={item.slug}>
-                      <div className="classified-card-top">
-                        <span>{item.category}</span>
-                        <span>{item.status}</span>
-                      </div>
-                      <div>
-                        <h2>{item.title}</h2>
-                        <p>{item.excerpt}</p>
-                      </div>
-                      <dl>
-                        <div><dt>Vieta</dt><dd>{item.location}</dd></div>
-                        {item.area ? <div><dt>Plotas</dt><dd>{item.area}</dd></div> : null}
-                        {item.price ? <div><dt>Kaina</dt><dd>{item.price}</dd></div> : null}
-                      </dl>
-                    </article>
-                  ))}
-                </div>
-              ) : (
-                <div className="classifieds-empty">
-                  <h2>Naujų skelbimų šiuo metu nėra</h2>
-                  <p>Jei domina KOOPS nuomojamos patalpos ar kitas turtas, susisiekite su administracija.</p>
-                  <a className="pill-button accent" href="/kontaktai">
-                    <RollingLabel>Susisiekti</RollingLabel>
-                  </a>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
+        <CmsPageSections sections={sections} context={context} skipFooterCta />
       </main>
-      <CmsPageController page="skelbimai" sections={pages.skelbimai?.sections} />
+      <CmsPageController page="skelbimai" sections={sections} />
 
-      <SiteFooter showCta={false} />
+      <SiteFooter showCta={hasFooterCta} />
     </div>
   );
 }

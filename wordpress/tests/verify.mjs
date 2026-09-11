@@ -90,10 +90,11 @@ if (!modular.includes("'example'")) throw new Error('PHP variations turi turėti
 if (!modular.includes('koops_section_inserter_preview_css')) throw new Error('Inserterio kortelės turi turėti screenshotų CSS');
 if (!editor.includes('enhanceInserterPreviews')) throw new Error('Inserteris turi įterpti sekcijų screenshotus į korteles');
 if (!editor.includes('getBlockMenuDefaultClassName')) throw new Error('Inserterio klasės turi veikti su visomis sekcijomis');
-if (!editor.includes('blocks.getBlockVariations')) throw new Error('Inserteris turi rodyti tik to puslapio trūkstamas sekcijas');
+if (!editor.includes('blocks.getBlockVariations')) throw new Error('Inserteris turi slėpti jau įdėtas sekcijas');
+if (editor.includes('item.page === slug || item.page === \'global\'')) throw new Error('Inserteris nebeturi riboti sekcijų pagal puslapį');
 if (!editor.includes('sync-sections')) throw new Error('Nauja sekcija turi iškart atsirasti gyvoje peržiūroje');
 if (!editor.includes('dedupeSectionBlocks')) throw new Error('Ta pati sekcija neturi dubliuotis inserteryje');
-if (!editor.includes('sectionTypeOptions')) throw new Error('Sekcijos tipo sąrašas turi būti filtruojamas pagal puslapį');
+if (!editor.includes('sectionTypeOptions')) throw new Error('Sekcijos tipo sąrašas turi rodyti visas svetainės sekcijas');
 if (!editor.includes('syncPreviewSections(\'\', true)')) throw new Error('Gyva peržiūra turi sinchronizuoti sekcijas kai iframe pasiruošusi');
 if (!modular.includes('pageSlug')) throw new Error('Gutenberg turi žinoti redaguojamo puslapio slug');
 if (!modular.includes('koops-section/')) throw new Error('Inserterio CSS turi palaikyti Gutenberg klases su slash');

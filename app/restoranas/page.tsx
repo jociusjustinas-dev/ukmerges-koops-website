@@ -1,15 +1,11 @@
-import { RestaurantEnquiryForm } from "../../components/RestaurantEnquiryForm";
-import { RestaurantHero } from "../../components/RestaurantHero";
-import { RestaurantValueFeatures } from "../../components/sections/RestaurantValueFeatures";
+import { CmsPageController } from "../../components/CmsPageController";
+import { CmsPageSections } from "../../components/CmsPageSections";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
-import {
-  restaurant as restaurantDefaults,
-} from "../../lib/restaurant";
-import { getKoopsCmsData } from "../../lib/wordpress";
-import { CmsPageController } from "../../components/CmsPageController";
-import { absoluteUrl } from "../../lib/site-url";
+import { getCmsPageView } from "../../lib/cms-render";
 import { createPageMetadata } from "../../lib/metadata";
+import { absoluteUrl } from "../../lib/site-url";
+import { getKoopsCmsData } from "../../lib/wordpress";
 
 export const metadata = createPageMetadata({
   title: "Restoranas „Vilkmergė“ | KOOPS",
@@ -18,27 +14,10 @@ export const metadata = createPageMetadata({
   image: "/vilkmerge.jpg",
 });
 
-function phoneHref(phone: string) {
-  return `tel:${phone.replace(/[^\d+]/g, "").replace(/^0/, "+370")}`;
-}
-
 export default async function RestaurantPage() {
-  const { options, pages } = await getKoopsCmsData();
-  const restaurant = {
-    ...restaurantDefaults,
-    since: Number(options.restaurant_since) || restaurantDefaults.since,
-    phoneDisplay: options.restaurant_phone || restaurantDefaults.phoneDisplay,
-    phoneHref: phoneHref(options.restaurant_phone || restaurantDefaults.phoneDisplay),
-    mobileDisplay: options.restaurant_mobile || restaurantDefaults.mobileDisplay,
-    mobileHref: phoneHref(options.restaurant_mobile || restaurantDefaults.mobileDisplay),
-    email: options.restaurant_email || restaurantDefaults.email,
-    address: options.restaurant_address || restaurantDefaults.address,
-    mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-      options.restaurant_address || restaurantDefaults.address,
-    )}`,
-    hallsCount: Number(options.restaurant_halls) || restaurantDefaults.hallsCount,
-    maxGuests: Number(options.restaurant_capacity) || restaurantDefaults.maxGuests,
-  };
+  const cms = await getKoopsCmsData();
+  const { context, sections, hasFooterCta } = getCmsPageView(cms, "restoranas");
+  const restaurant = context.restaurant;
   const schema = {
     "@context": "https://schema.org",
     "@type": "Restaurant",
@@ -67,122 +46,11 @@ export default async function RestaurantPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 
       <main id="turinys">
-        <RestaurantHero restaurant={restaurant} />
-
-        <RestaurantValueFeatures restaurant={restaurant} />
-
-        {/* BYQ: terra-tory-bento-1 — halls as bento */}
-        <section
-          className="koops-bento-section restaurant-halls"
-          id="restaurant-halls"
-          aria-labelledby="restaurant-halls-title"
-          data-byq-component="terra-tory-bento-1"
-          data-cms-section="restaurant-halls"
-        >
-          <div className="tt-container">
-            <header className="koops-bento-header">
-              <div className="dashed-divider" aria-hidden="true" />
-              <p className="section-label">SALĖS</p>
-              <h2 id="restaurant-halls-title">Salės ir talpa</h2>
-            </header>
-
-            <div className="koops-bento-grid">
-              <article className="koops-bento-card">
-                <p className="section-label">DIDŽIOJI SALĖ</p>
-                <div className="koops-bento-card-bottom">
-                  <div className="koops-bento-card-content">
-                    <h3>Iki 90</h3>
-                    <p>Vestuvės, jubiliejai, įmonių vakarai.</p>
-                  </div>
-                </div>
-              </article>
-
-              <div className="koops-bento-media koops-bento-media-tall" aria-hidden="true">
-                <img loading="lazy" src="/vilkmerge-hall.jpg" alt="" data-cms-field="gallery-item" />
-              </div>
-
-              <article className="koops-bento-card">
-                <p className="section-label">BARAS</p>
-                <div className="koops-bento-card-bottom">
-                  <div className="koops-bento-card-content">
-                    <h3>Iki 40</h3>
-                    <p>Krikštynos, šeimos šventės, oficialūs susitikimai.</p>
-                  </div>
-                </div>
-              </article>
-
-              <div className="koops-bento-media" aria-hidden="true">
-                <img loading="lazy" src="/vilkmerge-table.jpg" alt="" data-cms-field="gallery-item" />
-              </div>
-
-              <div className="koops-bento-media" aria-hidden="true">
-                <img loading="lazy" src="/vilkmerge-menu.jpg" alt="" data-cms-field="gallery-item" />
-              </div>
-
-              <div className="koops-bento-card koops-bento-card-accent">
-                <p className="section-label">MAŽOJI · BENDRA TALPA</p>
-                <div className="koops-bento-card-content">
-                  <h3>Iki {restaurant.maxGuests}</h3>
-                  <p>Mažoji salė — iki 8 svečių. Visas erdves suderinsime pagal renginį.</p>
-                </div>
-                <div className="koops-bento-actions">
-                  <a className="text-link" href="#uzklausa">
-                    Siųsti užklausą <span aria-hidden="true">→</span>
-                  </a>
-                </div>
-                <span className="koops-bento-circle" aria-hidden="true" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* BYQ: terra-tory-contact-1 + contact-2 — contacts left, form right */}
-        <section
-          className="restaurant-enquiry"
-          id="uzklausa"
-          aria-labelledby="restaurant-enquiry-title"
-          data-byq-component="terra-tory-contact-1"
-          data-cms-section="restaurant-enquiry"
-        >
-          <div className="tt-container restaurant-enquiry-grid">
-            <div className="restaurant-enquiry-intro">
-              <p className="section-label">KONTAKTAI IR UŽKLAUSA</p>
-              <h2 id="restaurant-enquiry-title">Susisiekite arba parašykite</h2>
-              <p>
-                Skambinkite tiesiogiai arba užpildykite trumpą formą — suderinsime salę, datą ir meniu.
-              </p>
-              <div className="contact-details">
-                <div>
-                  <strong>Telefonai</strong>
-                  <p>
-                    <a href={restaurant.phoneHref}>{restaurant.phoneDisplay}</a>
-                    <br />
-                    <a href={restaurant.mobileHref}>{restaurant.mobileDisplay}</a>
-                  </p>
-                </div>
-                <div>
-                  <strong>El. paštas</strong>
-                  <p>
-                    <a href={`mailto:${restaurant.email}`}>{restaurant.email}</a>
-                  </p>
-                </div>
-                <div>
-                  <strong>Adresas</strong>
-                  <p>
-                    <a href={restaurant.mapUrl} target="_blank" rel="noreferrer">
-                      {restaurant.address}
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <RestaurantEnquiryForm />
-          </div>
-        </section>
+        <CmsPageSections sections={sections} context={context} skipFooterCta />
       </main>
-      <CmsPageController page="restoranas" sections={pages.restoranas?.sections} />
+      <CmsPageController page="restoranas" sections={sections} />
 
-      <SiteFooter showCta={false} />
+      <SiteFooter showCta={hasFooterCta} />
     </div>
   );
 }

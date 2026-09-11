@@ -1,10 +1,12 @@
+import { CmsPageController } from "../../components/CmsPageController";
+import { CmsPageSections } from "../../components/CmsPageSections";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
-import { StoresFinder } from "../../components/StoresFinder";
 import { StoresPageMotion } from "../../components/StoresPageMotion";
-import { getKoopsCmsData } from "../../lib/wordpress";
-import { CmsPageController } from "../../components/CmsPageController";
+import { storeFaqs } from "../../components/cms/SiteCatalogSections";
+import { getCmsPageView } from "../../lib/cms-render";
 import { createPageMetadata } from "../../lib/metadata";
+import { getKoopsCmsData } from "../../lib/wordpress";
 
 export const metadata = createPageMetadata({
   title: "Parduotuvės | KOOPS Ukmergėje ir rajone",
@@ -12,31 +14,10 @@ export const metadata = createPageMetadata({
   path: "/parduotuves",
 });
 
-const faqs = [
-  {
-    question: "Kur rasti artimiausią KOOPS parduotuvę?",
-    answer: "Sąraše arba žemėlapyje pasirinkite vietą. Ukmergės miestą ir rajoną galima atskirti filtru.",
-  },
-  {
-    question: "Ar visos parduotuvės dirba vienodu laiku?",
-    answer: "Ne. Mieste dažniausiai dirbama iki 20 val., dalis kaimo parduotuvių sekmadieniais nedirba. Laikas nurodytas prie kiekvienos vietos.",
-  },
-  {
-    question: "Kaip gauti kelią iki parduotuvės?",
-    answer: "Kortelėje spauskite „Rodyti žemėlapyje“ — žemėlapis dešinėje priartins pasirinktą parduotuvę.",
-  },
-  {
-    question: "Kaip paskambinti pasirinktai parduotuvei?",
-    answer: "Telefonas rodomas kortelėje ir greitoje peržiūroje. Spauskite numerį — skambutis prasidės iš karto.",
-  },
-  {
-    question: "Ar KOOPS parduotuvės yra tik Ukmergės mieste?",
-    answer: "Ne. Tinklas apima Ukmergę ir rajoną — kaimus bei miestelius. Sąraše naudokite filtrą „Ukmergė“ arba „Rajonas“.",
-  },
-];
-
 export default async function StoresPage() {
-  const { stores, pages } = await getKoopsCmsData();
+  const cms = await getKoopsCmsData();
+  const { context, sections, hasFooterCta } = getCmsPageView(cms, "parduotuves");
+
   return (
     <div className="site-shell stores-page" id="pradzia" data-cms-page="parduotuves">
       <a className="skip-link" href="#turinys">Pereiti prie turinio</a>
@@ -44,52 +25,14 @@ export default async function StoresPage() {
       <StoresPageMotion />
 
       <main id="turinys">
-        <section className="stores-directory" id="sarasas" aria-labelledby="stores-list-title" data-cms-section="stores-directory">
-          <div className="tt-container">
-            <p className="section-label light-label">PARDUOTUVĖS</p>
-            <h1 className="location-headline" id="stores-list-title">
-              <span>Raskite </span>
-              <span>artimiausią </span>
-              <span className="title-push-break" aria-hidden="true" />
-              <i
-                className="title-push-line"
-                style={{ width: 0 }}
-                aria-hidden="true"
-              />
-              <span>KOOPS </span>
-              <span>parduotuvę</span>
-            </h1>
-            <p className="stores-directory-lead">{stores.length} parduotuvės Ukmergėje ir rajone.</p>
-            <StoresFinder stores={stores} />
-          </div>
-        </section>
-
-        <section className="stores-faq" id="stores-faq" aria-labelledby="stores-faq-title" data-cms-section="stores-faq">
-          <div className="tt-container stores-faq-layout">
-            <div>
-              <p className="section-label">GREITI ATSAKYMAI</p>
-              <h2 id="stores-faq-title">Kur, kada ir kaip — be spėliojimo.</h2>
-            </div>
-            <div className="stores-faq-list">
-              {faqs.map((item, index) => (
-                <details key={item.question} open={index === 0 ? true : undefined}>
-                  <summary>
-                    <span>{item.question}</span>
-                    <span className="stores-faq-toggle" aria-hidden="true" />
-                  </summary>
-                  <p>{item.answer}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </section>
+        <CmsPageSections sections={sections} context={context} skipFooterCta />
       </main>
-      <CmsPageController page="parduotuves" sections={pages.parduotuves?.sections} />
+      <CmsPageController page="parduotuves" sections={sections} />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        mainEntity: faqs.map((item) => (
+        mainEntity: storeFaqs.map((item) => (
           {
             "@type": "Question",
             name: item.question,
@@ -98,6 +41,7 @@ export default async function StoresPage() {
         )),
       }) }} />
       <SiteFooter
+        showCta={hasFooterCta}
         ctaHref="/restoranas"
         ctaLabel="Apie restoraną"
         ctaAriaLabel="Apie restoraną Vilkmergė"

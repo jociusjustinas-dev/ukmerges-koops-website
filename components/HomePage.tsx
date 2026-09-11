@@ -1,46 +1,12 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { FaFacebookF, FaInstagram } from "react-icons/fa6";
-import { KoopsBentoSection } from "./sections/KoopsBentoSection";
-import { KoopsValueFeaturesSection } from "./sections/KoopsValueFeaturesSection";
-import type { Store } from "../lib/stores";
-import { newsHref, type NewsItem } from "../lib/news";
-import type { Job } from "../lib/jobs";
-import type { restaurant as restaurantDefaults } from "../lib/restaurant";
-import { AvenirButtonArrow, ByqChevron } from "../app/byq-icons";
-import { SupplierForm } from "./SupplierForm";
+import { AvenirButtonArrow } from "../app/byq-icons";
+import type { CmsPageSection, CmsRenderContext } from "../lib/cms-render";
 import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
 import { CmsPageController } from "./CmsPageController";
-import type { CmsPageSection } from "../lib/wordpress";
-
-const heroUpdates = [
-  {
-    label: "NAUJIENOS",
-    title: "Švieži vietos pomidorai – sezono pradžia",
-    image: "/koops-bento-local-shopping.jpg",
-    href: "/naujienos",
-  },
-  {
-    label: "RESTORANAS",
-    title: "Planuojate šventę „Vilkmergėje“?",
-    image: "/vilkmerge.jpg",
-    href: "/restoranas",
-  },
-  {
-    label: "KARJERA",
-    title: "Nauji darbo pasiūlymai Ukmergėje",
-    image: "/local-produce-customer.jpg",
-    href: "/karjera",
-  },
-];
-
-const restaurantSlides = [
-  { src: "/vilkmerge-hall.jpg", alt: "Šventei paruošta restorano „Vilkmergė“ pokylių salė" },
-  { src: "/vilkmerge-table.jpg", alt: "Šventiškai serviruotas restorano stalas" },
-  { src: "/vilkmerge-menu.jpg", alt: "Restorano „Vilkmergė“ ruošiami užkandžiai" },
-];
+import { CmsPageSections } from "./CmsPageSections";
 
 const socialLinks = [
   { label: "Facebook", icon: FaFacebookF, href: "https://www.facebook.com/ukmergeskoops" },
@@ -60,47 +26,16 @@ function RollingLabel({ children }: { children: React.ReactNode }) {
 }
 
 type HomePageProps = {
-  featuredStores: Store[];
-  featuredNews: NewsItem[];
-  jobs: Job[];
-  restaurant: typeof restaurantDefaults;
-  cmsSections?: CmsPageSection[];
+  context: CmsRenderContext;
+  sections: CmsPageSection[];
 };
 
-export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSections }: HomePageProps) {
-  const [heroUpdateIndex, setHeroUpdateIndex] = React.useState(0);
-  const [heroUpdatesPaused, setHeroUpdatesPaused] = React.useState(false);
-  const [restaurantSlide, setRestaurantSlide] = React.useState(0);
-  const [locationSlide, setLocationSlide] = React.useState(0);
+export function HomePage({ context, sections }: HomePageProps) {
   const pageRef = React.useRef<HTMLDivElement>(null);
-  const heroLineRef = React.useRef<HTMLElement>(null);
-  const locationCarouselRef = React.useRef<HTMLDivElement>(null);
-
-  const showLocationSlide = (index: number) => {
-    const track = locationCarouselRef.current;
-    if (!track) return;
-    const card = track.querySelector<HTMLElement>(`[data-location-index="${index}"]`);
-    if (!card) return;
-    const left = card.getBoundingClientRect().left - track.getBoundingClientRect().left + track.scrollLeft;
-    track.scrollTo({ left, behavior: "smooth" });
-    setLocationSlide(index);
-  };
-
-  const handleLocationScroll = (event: React.UIEvent<HTMLDivElement>) => {
-    const track = event.currentTarget;
-    const cards = Array.from(track.querySelectorAll<HTMLElement>("[data-location-index]"));
-    const nearest = cards.reduce((closest, card, index) => {
-      const left = card.getBoundingClientRect().left - track.getBoundingClientRect().left;
-      const closestLeft = cards[closest].getBoundingClientRect().left - track.getBoundingClientRect().left;
-      return Math.abs(left) < Math.abs(closestLeft) ? index : closest;
-    }, 0);
-    setLocationSlide(nearest);
-  };
 
   React.useEffect(() => {
     const root = pageRef.current;
-    const line = heroLineRef.current;
-    if (!root || !line) return;
+    if (!root) return;
 
     let cancelled = false;
     let revertAnimation = () => {};
@@ -189,7 +124,7 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
           const heroBody = root.querySelector<HTMLElement>(".tt-hero-top > .body-large");
           const heroCta = root.querySelector<HTMLElement>(".tt-hero-top > .pill-button");
           const heroCard = root.querySelector<HTMLElement>(".hero-update-card");
-          const line = heroLineRef.current;
+          const line = root.querySelector<HTMLElement>(".tt-hero .hero-headline-line");
 
           if (line) {
             line.style.removeProperty("width");
@@ -412,28 +347,6 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
     };
   }, []);
 
-  React.useEffect(() => {
-    if (heroUpdatesPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const timer = window.setInterval(() => {
-      setHeroUpdateIndex((current) => (current + 1) % heroUpdates.length);
-    }, 6500);
-
-    return () => window.clearInterval(timer);
-  }, [heroUpdatesPaused]);
-
-  const activeHeroUpdate = heroUpdates[heroUpdateIndex];
-  const heroImage =
-    cmsSections?.find((section) => section.type === "home-hero")?.imageUrl?.trim() || "/koops-hero-market.jpg";
-  const restaurantGallery = (() => {
-    const urls = cmsSections?.find((section) => section.type === "home-restaurant")?.galleryUrls?.filter(Boolean);
-    if (!urls?.length) return restaurantSlides;
-    return urls.map((src, index) => ({
-      src,
-      alt: restaurantSlides[index]?.alt || `Restorano nuotrauka ${index + 1}`,
-    }));
-  })();
-
   return (
     <div className="site-shell" ref={pageRef} data-cms-page="pradinis">
       <a className="skip-link" href="#turinys">Pereiti prie turinio</a>
@@ -496,368 +409,9 @@ export function HomePage({ featuredStores, featuredNews, jobs, restaurant, cmsSe
       </header>
 
       <main id="turinys">
-        {/* BYQ: terra-tory-hero-1 adapted to KOOPS */}
-        <section className="tt-hero" id="pradzia" data-byq-component="terra-tory-hero-1" data-cms-section="home-hero">
-          <div className="tt-hero-background" aria-hidden="true">
-            <Image
-              src={heroImage}
-              alt=""
-              fill
-              priority
-              sizes="100vw"
-              quality={78}
-              data-cms-field="image"
-            />
-          </div>
-          <div className="tt-hero-overlay" aria-hidden="true" />
-          <div className="tt-container tt-hero-stage">
-            <div className="tt-hero-content">
-              <div className="tt-hero-top">
-                <p className="section-label light-label">UKMERGĖJE IR RAJONE</p>
-                <h1>
-                  <span>KOOPS </span>
-                  <span>parduotuvės </span>
-                  <span className="hero-title-break" aria-hidden="true" />
-                  <i
-                    ref={heroLineRef}
-                    className="hero-headline-line title-push-line"
-                    style={{ width: 0 }}
-                    aria-hidden="true"
-                  />
-                  <span>arčiau </span>
-                  <span>jūsų.</span>
-                </h1>
-                <p className="body-large">Raskite artimiausią parduotuvę, jos darbo laiką ir maršrutą.</p>
-                <a className="pill-button accent" href="/parduotuves" aria-label="Rasti artimiausią parduotuvę">
-                  <RollingLabel>Rasti parduotuvę</RollingLabel>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <aside
-            className="hero-update-card"
-            aria-label="Aktualios KOOPS naujienos"
-            onMouseEnter={() => setHeroUpdatesPaused(true)}
-            onMouseLeave={() => setHeroUpdatesPaused(false)}
-            onFocusCapture={() => setHeroUpdatesPaused(true)}
-            onBlurCapture={() => setHeroUpdatesPaused(false)}
-          >
-            <a className="hero-update-link" href={activeHeroUpdate.href} key={activeHeroUpdate.title}>
-              <span className="hero-update-media">
-                <Image
-                  src={activeHeroUpdate.image}
-                  alt=""
-                  fill
-                  sizes="(max-width: 767px) calc(100vw - 48px), 284px"
-                  quality={76}
-                />
-                <span className="hero-update-kicker">Aktualu</span>
-              </span>
-              <span className="hero-update-copy">
-                <span className="section-label light-label">{activeHeroUpdate.label}</span>
-                <strong>{activeHeroUpdate.title}</strong>
-                <span className="hero-update-more text-link">Plačiau <span aria-hidden="true">→</span></span>
-              </span>
-            </a>
-            <div className="hero-update-dots" aria-label="Pasirinkti aktualiją">
-              {heroUpdates.map((item, index) => (
-                <button
-                  type="button"
-                  className={index === heroUpdateIndex ? "is-active" : ""}
-                  onClick={() => setHeroUpdateIndex(index)}
-                  aria-label={`Rodyti: ${item.title}`}
-                  aria-pressed={index === heroUpdateIndex}
-                  key={item.title}
-                />
-              ))}
-            </div>
-          </aside>
-        </section>
-
-        <div className="tt-hero-spacer" aria-hidden="true" data-cms-section="home-hero" />
-
-        <KoopsBentoSection />
-
-        {/* BYQ: terra-tory-team-1 adapted to location cards */}
-        <section className="tt-locations" id="parduotuves" aria-labelledby="parduotuviu-antraste" data-byq-component="terra-tory-team-1" data-cms-section="home-stores">
-          <div className="tt-container">
-            <div className="location-headline" id="parduotuviu-antraste">
-              <span>Raskite </span><span>artimiausią </span><span className="title-push-break" aria-hidden="true" /><i className="title-push-line" style={{ width: 0 }} aria-hidden="true" /><span>KOOPS </span><span>parduotuvę</span>
-            </div>
-            <div className="location-carousel" role="region" aria-roledescription="karuselė" aria-label="KOOPS parduotuvės">
-              <div className="location-grid" ref={locationCarouselRef} onScroll={handleLocationScroll}>
-              {featuredStores.map((store, index) => (
-                <article className="location-card" data-location-index={index} key={store.slug}>
-                  <a
-                    className={`location-image${store.image ? "" : " is-placeholder"}`}
-                    href={`/parduotuves/${store.slug}`}
-                    aria-label={`Parduotuvė „${store.name}“ – atverti puslapį`}
-                  >
-                    {store.image ? (
-                      <Image
-                        src={store.image}
-                        alt={`Parduotuvė „${store.name}“`}
-                        width={960}
-                        height={720}
-                        sizes="(max-width: 767px) 82vw, 30vw"
-                      />
-                    ) : (
-                      <img className="store-cover-logo" loading="lazy" src="/koops-logo.png" alt="" />
-                    )}
-                  </a>
-                  <div className="location-info">
-                    <div><h3>{store.name}</h3><p>{store.address}</p></div>
-                    <dl>
-                      <div><dt>Darbo laikas</dt><dd>{store.hours}</dd></div>
-                      <div>
-                        <dt>Telefonas</dt>
-                        <dd>
-                          <a href={`tel:${store.phoneHref}`}>{store.phone}</a>
-                          {store.extraPhone && store.extraPhoneHref ? (
-                            <>
-                              {" · "}
-                              <a href={`tel:${store.extraPhoneHref}`}>{store.extraPhone}</a>
-                            </>
-                          ) : null}
-                        </dd>
-                      </div>
-                    </dl>
-                    <a className="text-link" href={store.map} target="_blank" rel="noreferrer">
-                      Rodyti žemėlapyje <span aria-hidden="true">→</span>
-                    </a>
-                  </div>
-                </article>
-              ))}
-              </div>
-              <div className="location-carousel-controls">
-                <div className="location-carousel-dots" aria-label="Pasirinkti parduotuvę">
-                  {featuredStores.map((store, index) => (
-                    <button
-                      type="button"
-                      className={index === locationSlide ? "is-active" : ""}
-                      onClick={() => showLocationSlide(index)}
-                      aria-label={`Rodyti parduotuvę „${store.name}“`}
-                      aria-pressed={index === locationSlide}
-                      key={store.slug}
-                    />
-                  ))}
-                </div>
-                <div className="location-carousel-arrows">
-                  <button type="button" onClick={() => showLocationSlide(locationSlide - 1)} disabled={locationSlide === 0} aria-label="Ankstesnė parduotuvė">
-                    <span className="control-arrow is-left"><ByqChevron /></span>
-                  </button>
-                  <button type="button" onClick={() => showLocationSlide(locationSlide + 1)} disabled={locationSlide === featuredStores.length - 1} aria-label="Kita parduotuvė">
-                    <span className="control-arrow"><ByqChevron /></span>
-                  </button>
-                </div>
-              </div>
-              <p className="sr-only" aria-live="polite">Parduotuvė {locationSlide + 1} iš {featuredStores.length}</p>
-            </div>
-            <a className="pill-button accent section-cta" href="/parduotuves">
-              <RollingLabel>Visos parduotuvės</RollingLabel>
-            </a>
-          </div>
-        </section>
-
-        {/* BYQ: terra-tory-blog-grid-1 */}
-        <section className="tt-news" id="naujienos" aria-labelledby="naujienu-antraste" data-byq-component="terra-tory-blog-grid-1" data-cms-section="home-news">
-          <div className="tt-container">
-            <div className="tt-section-header">
-              <div className="dashed-divider" />
-              <p className="section-label">AKTUALU</p>
-              <h2 id="naujienu-antraste">Naujienos ir akcijos</h2>
-            </div>
-            <div className="news-bento">
-              {featuredNews.map((item) => {
-                if (item.tone === "featured") {
-                  return (
-                    <a className="news-card news-card-large" href={newsHref(item.slug)} key={item.slug}>
-                      {item.image ? (
-                        <Image
-                          src={item.image}
-                          alt={item.title}
-                          width={1200}
-                          height={800}
-                          sizes="(max-width: 767px) calc(100vw - 32px), 50vw"
-                        />
-                      ) : null}
-                      <div>
-                        <span className="section-label light-label">{item.category.toUpperCase()}</span>
-                        <h3>{item.title}</h3>
-                        {item.excerpt ? <p>{item.excerpt}</p> : null}
-                        <span className="text-link">Skaityti <span aria-hidden="true">→</span></span>
-                      </div>
-                    </a>
-                  );
-                }
-
-                const cardClass =
-                  item.tone === "accent"
-                    ? "news-card news-card-accent"
-                    : item.tone === "wide"
-                      ? "news-card news-card-wide"
-                      : "news-card news-card-muted";
-                const cta = item.tone === "accent" ? "Peržiūrėti" : item.tone === "muted" && item.slug === "kas-naujo-parduotuvese" ? "Sužinoti" : "Skaityti";
-
-                return (
-                  <a className={cardClass} href={newsHref(item.slug)} key={item.slug}>
-                    <div className="news-card-copy">
-                      <h3>{item.title}</h3>
-                      <span className="text-link">{cta} <span aria-hidden="true">→</span></span>
-                    </div>
-                  </a>
-                );
-              })}
-            </div>
-            <a className="pill-button dark section-cta" href="/naujienos">
-              <RollingLabel>Visos naujienos</RollingLabel>
-            </a>
-          </div>
-        </section>
-
-        {/* BYQ: terra-tory-combo-6 */}
-        <section className="tt-story" id="restoranas" aria-labelledby="restorano-antraste" data-byq-component="terra-tory-combo-6" data-cms-section="home-restaurant">
-          <div className="tt-container">
-            <div className="story-headline">
-              <p className="section-label light-label">RESTORANAS „VILKMERGĖ“ · NUO 1965 METŲ</p>
-              <h2 id="restorano-antraste"><span className="story-title-desktop">Restoranas „Vilkmergė“ – vieta, kur gyvena atsiminimai.</span><span className="story-title-mobile"><span>Restoranas „Vilkmergė“ –</span><span>vieta, kur gyvena</span><span>atsiminimai.</span></span></h2>
-            </div>
-            <div className="story-grid">
-              <div className="story-image" role="region" aria-roledescription="karuselė" aria-label="Restorano „Vilkmergė“ nuotraukų galerija">
-                {restaurantGallery.map((slide, index) => (
-                  <img
-                    key={index}
-                    data-cms-field="gallery-item"
-                    src={slide.src}
-                    alt={slide.alt}
-                    loading="lazy"
-                    hidden={index !== restaurantSlide}
-                  />
-                ))}
-                <div className="story-gallery-controls">
-                  <div className="story-gallery-dots" aria-label="Pasirinkti galerijos nuotrauką">
-                    {restaurantGallery.map((slide, index) => (
-                      <button
-                        type="button"
-                        className={index === restaurantSlide ? "is-active" : ""}
-                        onClick={() => setRestaurantSlide(index)}
-                        aria-label={`Rodyti ${index + 1} nuotrauką: ${slide.alt}`}
-                        aria-pressed={index === restaurantSlide}
-                        key={`${slide.src}-${index}`}
-                      />
-                    ))}
-                  </div>
-                  <div className="story-gallery-arrows">
-                    <button
-                      type="button"
-                      onClick={() => setRestaurantSlide((slide) => (slide - 1 + restaurantGallery.length) % restaurantGallery.length)}
-                      aria-label="Ankstesnė restorano nuotrauka"
-                    >
-                      <span className="control-arrow is-left"><ByqChevron /></span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setRestaurantSlide((slide) => (slide + 1) % restaurantGallery.length)}
-                      aria-label="Kita restorano nuotrauka"
-                    >
-                      <span className="control-arrow"><ByqChevron /></span>
-                    </button>
-                  </div>
-                </div>
-                <p className="sr-only" aria-live="polite">Nuotrauka {restaurantSlide + 1} iš {restaurantGallery.length}</p>
-              </div>
-              <div className="story-copy">
-                <p>Miesto širdyje įsikūręs restoranas laukia Jūsų.</p>
-                <p className="story-summary">Restorane galime priimti iki {restaurant.maxGuests} svečių. Siūlome 3 skirtingo dydžio sales: Didžiąją, barą ir mažąją.</p>
-                <dl>
-                  <div><dt>Pokylių salės</dt><dd>3 salės</dd></div>
-                  <div><dt>Talpa</dt><dd>Iki {restaurant.maxGuests} svečių</dd></div>
-                  <div><dt>Adresas</dt><dd>{restaurant.address}</dd></div>
-                  <div><dt>Mažoji salė</dt><dd>Iki 8 svečių</dd></div>
-                </dl>
-                <p className="story-note">Visas erdves suderinsime pagal renginį.</p>
-                <div className="story-reservation story-contact-card">
-                  <dl className="story-contact-list">
-                    <div>
-                      <dt>Telefonas</dt>
-                      <dd><a href={restaurant.mobileHref}>{restaurant.mobileDisplay}</a></dd>
-                    </div>
-                    <div>
-                      <dt>El. paštas</dt>
-                      <dd><a href={`mailto:${restaurant.email}`}>{restaurant.email}</a></dd>
-                    </div>
-                  </dl>
-                </div>
-                <div className="story-actions">
-                  <a className="pill-button accent" href="/restoranas#uzklausa">
-                    <RollingLabel>Siųsti užklausą</RollingLabel>
-                  </a>
-                  <a className="pill-button outline-light" href="/restoranas">
-                    <RollingLabel>Apie restoraną</RollingLabel>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* BYQ Supply: structured-data-2 careers list, adapted to KOOPS */}
-        <section className="tt-jobs" id="karjera" aria-labelledby="karjeros-antraste" data-byq-component="structured-data-2-careers" data-cms-section="home-jobs">
-          <div className="tt-container jobs-layout">
-            <div className="jobs-intro">
-              <p className="section-label light-label">KARJERA</p>
-              <h2 id="karjeros-antraste" className="jobs-title-with-rule">
-                Darbas arti
-                <i className="jobs-title-rule" aria-hidden="true" />
-                <span> namų</span>
-              </h2>
-              <p>Prisijunkite prie KOOPS komandos Ukmergėje ir rajone. Susipažinkite su šiuo metu siūlomomis darbo vietomis.</p>
-              <a className="pill-button accent" href="/karjera">
-                <RollingLabel>Visi darbo pasiūlymai</RollingLabel>
-              </a>
-            </div>
-            <div className="jobs-list" role="region" aria-label="Naujausi darbo pasiūlymai">
-              {jobs.slice(0, 3).map((job) => (
-                <a
-                  className="job-row"
-                  href={job.applyUrl}
-                  key={job.id}
-                  aria-label={`${job.title} — kandidatuoti`}
-                >
-                  <div className="job-row-copy">
-                    <h3>{job.title}</h3>
-                    <div className="job-row-meta">
-                      <span>{job.type}</span><span aria-hidden="true">•</span><span>{job.location}</span>
-                    </div>
-                  </div>
-                  <span className="job-row-arrow" aria-hidden="true"><AvenirButtonArrow /></span>
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <KoopsValueFeaturesSection />
-
-        {/* BYQ: terra-tory-contact-1 */}
-        <section className="tt-contact" id="tiekejams" aria-labelledby="tiekeju-antraste" data-byq-component="terra-tory-contact-1" data-cms-section="home-suppliers">
-          <div className="tt-container contact-grid">
-            <div className="contact-content">
-              <div className="contact-heading"><p className="section-label">TIEKĖJAMS</p><h2 id="tiekeju-antraste">Auginkime vietos pasiūlą kartu</h2><p>Ieškome patikimų gamintojų ir tiekėjų, norinčių pasiūlyti savo produkciją KOOPS pirkėjams.</p></div>
-              <div className="contact-details">
-                <div><strong>Adresas</strong><p>Vasario 16-osios g. 30<br />LT-20130 Ukmergė</p></div>
-                <div><strong>El. paštas</strong><p><a href="mailto:direktore@urvk.lt">direktore@urvk.lt</a></p></div>
-              </div>
-              <SupplierForm />
-            </div>
-            <div className="contact-image">
-              <img className="contact-image-main" loading="lazy" src="/ukmerge-fields-2.jpg" alt="Lietuvos laukai ir kaimo sodybos" data-cms-field="image" />
-            </div>
-          </div>
-        </section>
+        <CmsPageSections sections={sections} context={context} skipFooterCta />
       </main>
-      <CmsPageController page="pradinis" sections={cmsSections} />
+      <CmsPageController page="pradinis" sections={sections} />
 
         {/* BYQ: terra-tory-footer-1 */}
       <footer className="tt-footer" id="kontaktai" data-byq-component="terra-tory-footer-1">

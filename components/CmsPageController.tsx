@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayoutEffect } from "react";
-import type { CmsPageSection } from "../lib/wordpress";
+import type { CmsPageSection } from "../lib/cms-render";
 
 type Props = {
   page: string;
@@ -157,7 +157,7 @@ export function CmsPageController({ page, sections }: Props) {
           title.setAttribute("data-cms-field", "title");
           const hint = document.createElement("p");
           hint.className = "koops-cms-missing-section__hint";
-          hint.textContent = "Pakeiskite sekcijos tipą dešinėje į šio puslapio sekciją arba pašalinkite bloką.";
+          hint.textContent = "Ši sekcija dar neturi svetainės komponento. Pašalinkite bloką arba pasirinkite kitą tipą.";
           card.append(kicker, title, hint);
         }
 

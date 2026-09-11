@@ -1,14 +1,13 @@
-import { ContactEnquiryForm } from "../../components/ContactEnquiryForm";
-import { ContactsHeading } from "../../components/ContactsHeading";
+import { CmsPageController } from "../../components/CmsPageController";
+import { CmsPageSections } from "../../components/CmsPageSections";
 import { ContactsPageMotion } from "../../components/ContactsPageMotion";
-import { ContactChannels } from "../../components/sections/ContactChannels";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
 import { contactsOrg, socialLinks } from "../../lib/contacts";
-import { getKoopsCmsData } from "../../lib/wordpress";
-import { CmsPageController } from "../../components/CmsPageController";
-import { absoluteUrl } from "../../lib/site-url";
+import { getCmsPageView } from "../../lib/cms-render";
 import { createPageMetadata } from "../../lib/metadata";
+import { absoluteUrl } from "../../lib/site-url";
+import { getKoopsCmsData } from "../../lib/wordpress";
 
 export const metadata = createPageMetadata({
   title: "Kontaktai | KOOPS Ukmergė",
@@ -21,7 +20,9 @@ function phoneHref(phone: string) {
 }
 
 export default async function ContactsPage() {
-  const { options, pages } = await getKoopsCmsData();
+  const cms = await getKoopsCmsData();
+  const { context, sections, hasFooterCta } = getCmsPageView(cms, "kontaktai");
+  const options = cms.options;
   const addressLines = (options.address || contactsOrg.addressLines.join(", ")).split(/,\s*(?=LT-|\d{5}|Ukmergė)/, 2);
   const org = {
     ...contactsOrg,
@@ -67,76 +68,11 @@ export default async function ContactsPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 
       <main id="turinys">
-        {/* BYQ: terra-tory-contact-1 — pirmasis blokas, apvalintas */}
-        <section
-          className="tt-contact contacts-form-section"
-          id="forma"
-          aria-labelledby="contacts-form-title"
-          data-byq-component="terra-tory-contact-1"
-          data-cms-section="contact-form"
-        >
-          <div className="tt-container contact-grid">
-            <div className="contact-content">
-              <ContactsHeading />
-              <div className="contact-details">
-                <div>
-                  <strong>Adresas</strong>
-                  <p>
-                    {org.addressLines[0]}
-                    <br />
-                    {org.addressLines[1]}
-                  </p>
-                </div>
-                <div>
-                  <strong>El. paštas</strong>
-                  <p>
-                    <a href={`mailto:${org.email}`}>{org.email}</a>
-                  </p>
-                </div>
-                <div>
-                  <strong>Įmonės vadovas</strong>
-                  <p>
-                    <a href={org.phoneHref}>{org.phoneDisplay}</a>
-                  </p>
-                </div>
-                <div>
-                  <strong>Administracija</strong>
-                  <p>
-                    <a href={org.administrationPhoneHref}>{org.administrationPhoneDisplay}</a>
-                  </p>
-                </div>
-                <div>
-                  <strong>Darbo laikas</strong>
-                  <p>{org.officeHours}</p>
-                </div>
-                <div>
-                  <strong>Socialiniai</strong>
-                  <p className="contacts-social-links">
-                    {socials.map((item) => (
-                      <a key={item.href} href={item.href} target="_blank" rel="noreferrer">{item.label}</a>
-                    ))}
-                  </p>
-                </div>
-              </div>
-              <ContactEnquiryForm idSuffix="page" />
-            </div>
-            <div className="contact-image">
-              <img
-                className="contact-image-main"
-                loading="eager"
-                src="/ukmerge-fields-1.jpg"
-                alt="Ukmergės krašto laukai"
-                data-cms-field="image"
-              />
-            </div>
-          </div>
-        </section>
-
-        <ContactChannels />
+        <CmsPageSections sections={sections} context={context} skipFooterCta />
       </main>
-      <CmsPageController page="kontaktai" sections={pages.kontaktai?.sections} />
+      <CmsPageController page="kontaktai" sections={sections} />
 
-      <SiteFooter showCta={false} />
+      <SiteFooter showCta={hasFooterCta} />
     </div>
   );
 }

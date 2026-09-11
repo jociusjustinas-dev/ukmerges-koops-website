@@ -1,14 +1,12 @@
-import { AboutHero } from "../../components/AboutHero";
-import { AboutStory } from "../../components/AboutStory";
-import { AboutPillars } from "../../components/sections/AboutPillars";
-import { KoopsBentoSection } from "../../components/sections/KoopsBentoSection";
+import { CmsPageController } from "../../components/CmsPageController";
+import { CmsPageSections } from "../../components/CmsPageSections";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
 import { aboutOrg } from "../../lib/about";
-import { getKoopsCmsData } from "../../lib/wordpress";
-import { CmsPageController } from "../../components/CmsPageController";
-import { absoluteUrl } from "../../lib/site-url";
+import { getCmsPageView } from "../../lib/cms-render";
 import { createPageMetadata } from "../../lib/metadata";
+import { absoluteUrl } from "../../lib/site-url";
+import { getKoopsCmsData } from "../../lib/wordpress";
 
 export const metadata = createPageMetadata({
   title: "Apie KOOPS | Ukmergės rajono vartotojų kooperatyvas",
@@ -17,7 +15,8 @@ export const metadata = createPageMetadata({
 });
 
 export default async function AboutPage() {
-  const { pages } = await getKoopsCmsData();
+  const cms = await getKoopsCmsData();
+  const { context, sections, hasFooterCta } = getCmsPageView(cms, "apie");
   const schema = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -44,20 +43,11 @@ export default async function AboutPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 
       <main id="turinys">
-        <AboutHero />
-        <AboutStory />
-        <AboutPillars />
-        <KoopsBentoSection
-          cmsSection="about-bento"
-          wideImage={{
-            src: "/store-uosis.jpeg",
-            alt: "KOOPS parduotuvė „Uosis“",
-          }}
-        />
+        <CmsPageSections sections={sections} context={context} skipFooterCta />
       </main>
-      <CmsPageController page="apie" sections={pages.apie?.sections} />
+      <CmsPageController page="apie" sections={sections} />
 
-      <SiteFooter showCta={false} />
+      <SiteFooter showCta={hasFooterCta} />
     </div>
   );
 }
