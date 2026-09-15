@@ -74,19 +74,19 @@ export const defaultStoreFaqs: CmsFaqItem[] = [
 export const defaultRestaurantHalls: CmsHallItem[] = [
   {
     name: "Didžioji salė",
-    capacity: "Iki 90 svečių",
+    capacity: "Iki 90",
     description: "Vestuvės, jubiliejai, įmonių vakarai.",
     imageUrl: "/vilkmerge-hall.jpg",
   },
   {
     name: "Baras",
-    capacity: "Iki 40 svečių",
+    capacity: "Iki 40",
     description: "Krikštynos, šeimos šventės, oficialūs susitikimai.",
     imageUrl: "/vilkmerge-table.jpg",
   },
   {
     name: "Mažoji salė",
-    capacity: "Iki 8 svečių",
+    capacity: "Iki 8",
     description: "Jaukios vakarienės ir mažesnės progos.",
     imageUrl: "/vilkmerge-menu.jpg",
   },

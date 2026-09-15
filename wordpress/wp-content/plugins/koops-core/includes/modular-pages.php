@@ -176,9 +176,9 @@ function koops_section_content_defaults(): array
             ['title' => 'Aiški užklausa', 'body' => 'Forma arba skambutis — greitai suderinsime salę, datą ir meniu be spėliojimo.'],
         ]],
         'restaurant-halls' => ['eyebrow' => 'SALĖS', 'title' => 'Salės ir talpa', 'description' => 'Vestuvės, jubiliejai, įmonių vakarai.', 'primaryLabel' => 'Siųsti užklausą', 'primaryUrl' => '#uzklausa', 'imageUrl' => '/vilkmerge-hall.jpg', 'items' => [
-            ['name' => 'Didžioji salė', 'capacity' => 'Iki 90 svečių', 'description' => 'Vestuvės, jubiliejai, įmonių vakarai.', 'imageUrl' => '/vilkmerge-hall.jpg', 'imageId' => 0],
-            ['name' => 'Baras', 'capacity' => 'Iki 40 svečių', 'description' => 'Krikštynos, šeimos šventės, oficialūs susitikimai.', 'imageUrl' => '/vilkmerge-table.jpg', 'imageId' => 0],
-            ['name' => 'Mažoji salė', 'capacity' => 'Iki 8 svečių', 'description' => 'Jaukios vakarienės ir mažesnės progos.', 'imageUrl' => '/vilkmerge-menu.jpg', 'imageId' => 0],
+            ['name' => 'Didžioji salė', 'capacity' => 'Iki 90', 'description' => 'Vestuvės, jubiliejai, įmonių vakarai.', 'imageUrl' => '/vilkmerge-hall.jpg', 'imageId' => 0],
+            ['name' => 'Baras', 'capacity' => 'Iki 40', 'description' => 'Krikštynos, šeimos šventės, oficialūs susitikimai.', 'imageUrl' => '/vilkmerge-table.jpg', 'imageId' => 0],
+            ['name' => 'Mažoji salė', 'capacity' => 'Iki 8', 'description' => 'Jaukios vakarienės ir mažesnės progos.', 'imageUrl' => '/vilkmerge-menu.jpg', 'imageId' => 0],
         ]],
         'restaurant-enquiry' => ['eyebrow' => 'KONTAKTAI IR UŽKLAUSA', 'title' => 'Susisiekite arba parašykite', 'description' => 'Skambinkite tiesiogiai arba užpildykite trumpą formą — suderinsime salę, datą ir meniu.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
 

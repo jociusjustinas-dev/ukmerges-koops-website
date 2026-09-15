@@ -25,7 +25,6 @@ import { RestaurantEnquiryForm } from "../RestaurantEnquiryForm";
 import { RollingLabel } from "../RollingLabel";
 import { StoresFinder } from "../StoresFinder";
 import { SupplierForm } from "../SupplierForm";
-import { Fragment } from "react";
 
 export const storeFaqs = defaultStoreFaqs;
 
@@ -154,6 +153,11 @@ export function RestaurantHalls({
   primaryUrl?: string;
 }) {
   const halls = sectionItemsOrDefault(items, defaultRestaurantHalls);
+  const [large, bar, small] = [
+    halls[0] || defaultRestaurantHalls[0],
+    halls[1] || defaultRestaurantHalls[1],
+    halls[2] || defaultRestaurantHalls[2],
+  ];
   const ctaLabel = primaryLabel?.trim() || "Siųsti užklausą";
   const ctaHref = primaryUrl?.trim() || "#uzklausa";
 
@@ -166,41 +170,48 @@ export function RestaurantHalls({
           <h2 id="restaurant-halls-title" data-cms-field="title">Salės ir talpa</h2>
           <p data-cms-field="description" hidden>Vestuvės, jubiliejai, įmonių vakarai.</p>
         </header>
+        {/* Fixed 4×2 bento order: card · tall · card · media · media · accent(span 2) */}
         <div className="koops-bento-grid">
-          {halls.map((hall, index) => {
-            const isLast = index === halls.length - 1;
-            return (
-              <Fragment key={`${hall.name}-${index}`}>
-                <article className={isLast ? "koops-bento-card koops-bento-card-accent" : "koops-bento-card"}>
-                  <p className="section-label">{hall.name}</p>
-                  <div className={isLast ? "koops-bento-card-content" : "koops-bento-card-bottom"}>
-                    <div className="koops-bento-card-content">
-                      <h3>{hall.capacity}</h3>
-                      <p>{hall.description}</p>
-                    </div>
-                  </div>
-                  {isLast ? (
-                    <>
-                      <div className="koops-bento-actions">
-                        <a className="text-link" href={ctaHref} data-cms-field="primary-link">
-                          {ctaLabel} <span aria-hidden="true">→</span>
-                        </a>
-                      </div>
-                      <span className="koops-bento-circle" aria-hidden="true" />
-                    </>
-                  ) : null}
-                </article>
-                {hall.imageUrl ? (
-                  <div
-                    className={index === 0 ? "koops-bento-media koops-bento-media-tall" : "koops-bento-media"}
-                    aria-hidden="true"
-                  >
-                    <img loading="lazy" src={hall.imageUrl} alt="" data-cms-field="gallery-item" />
-                  </div>
-                ) : null}
-              </Fragment>
-            );
-          })}
+          <article className="koops-bento-card">
+            <p className="section-label">{large.name}</p>
+            <div className="koops-bento-card-bottom">
+              <div className="koops-bento-card-content">
+                <h3>{large.capacity}</h3>
+                <p>{large.description}</p>
+              </div>
+            </div>
+          </article>
+          <div className="koops-bento-media koops-bento-media-tall" aria-hidden="true">
+            <img loading="lazy" src={large.imageUrl || "/vilkmerge-hall.jpg"} alt="" data-cms-field="gallery-item" />
+          </div>
+          <article className="koops-bento-card">
+            <p className="section-label">{bar.name}</p>
+            <div className="koops-bento-card-bottom">
+              <div className="koops-bento-card-content">
+                <h3>{bar.capacity}</h3>
+                <p>{bar.description}</p>
+              </div>
+            </div>
+          </article>
+          <div className="koops-bento-media" aria-hidden="true">
+            <img loading="lazy" src={bar.imageUrl || "/vilkmerge-table.jpg"} alt="" data-cms-field="gallery-item" />
+          </div>
+          <div className="koops-bento-media" aria-hidden="true">
+            <img loading="lazy" src={small.imageUrl || "/vilkmerge-menu.jpg"} alt="" data-cms-field="gallery-item" />
+          </div>
+          <div className="koops-bento-card koops-bento-card-accent">
+            <p className="section-label">{small.name}</p>
+            <div className="koops-bento-card-content">
+              <h3>{small.capacity}</h3>
+              <p>{small.description}</p>
+            </div>
+            <div className="koops-bento-actions">
+              <a className="text-link" href={ctaHref} data-cms-field="primary-link">
+                {ctaLabel} <span aria-hidden="true">→</span>
+              </a>
+            </div>
+            <span className="koops-bento-circle" aria-hidden="true" />
+          </div>
         </div>
       </div>
     </section>
