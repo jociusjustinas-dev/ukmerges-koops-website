@@ -144,7 +144,7 @@ export function TvsGuide() {
                   </tr>
                   <tr>
                     <td><strong>Puslapiai</strong></td>
-                    <td>Pradinis, Parduotuvės, Restoranas ir kiti puslapiai — sekcijos su screenshotais</td>
+                    <td>Pradinis, Parduotuvės, Restoranas, Privatumo politika ir kiti — sekcijos su screenshotais</td>
                   </tr>
                   <tr>
                     <td><strong>Įrašai</strong></td>
@@ -198,8 +198,9 @@ export function TvsGuide() {
               <li>Atidarykite <strong>Puslapiai</strong> ir reikiamą puslapį, arba eikite per <strong>KOOPS → Puslapių sekcijos</strong>.</li>
               <li>Spauskite <strong>+</strong> → <strong>Blokai</strong> → <strong>KOOPS sekcijos</strong>.</li>
               <li>Pasirinkite sekciją pagal nuotrauką ir pavadinimą, pvz. „Pradinis · Hero“. Bet kurią sekciją galima įdėti į bet kurį puslapį.</li>
-              <li>Paspaudę bloką dešinėje rasite laukus: antraštė, aprašymas, mygtukas, nuoroda, nuotrauka ar galerija.</li>
-              <li>Kai kuriose sekcijose apačioje yra <strong>sąrašas</strong> — klausimai, salės, privalumų kortelės. Ten galite pridėti, pašalinti ir keisti eiliškumą (↑↓).</li>
+              <li>Paspaudę bloką dešinėje rasite tik tai sekcijai skirtus laukus: antraštė, aprašymas, mygtukas, nuoroda, nuotrauka ar galerija. Jei lauko nėra — jis šiame makete nenaudojamas.</li>
+              <li>Kai kuriose sekcijose apačioje yra <strong>sąrašas</strong> — klausimai, salės, kortelės, privatumo dalys. Ten galite pridėti, pašalinti ir keisti eiliškumą (↑↓). Pakeitimai iškart matomi drobės peržiūroje.</li>
+              <li><strong>Sekcijos ID</strong> — inkarui nuorodose, pvz. <code>/restoranas#uzklausa</code>. Jei tuščia, naudojamas numatytasis.</li>
               <li>Jei sekcijos laikinai nereikia — išjunkite „Rodyti svetainėje“, netrinkite viso bloko.</li>
             </ol>
             <div className="guide-table-wrap">
@@ -221,7 +222,7 @@ export function TvsGuide() {
                   </tr>
                   <tr>
                     <td>Restoranas · Privalumai, Karjera · Privalumai</td>
-                    <td>Kortelių antraštės ir tekstai (pvz. svečių skaičius)</td>
+                    <td>Kortelių antraštės ir tekstai</td>
                   </tr>
                   <tr>
                     <td>Tiekėjams · Ko ieškome / Procesas</td>
@@ -231,28 +232,40 @@ export function TvsGuide() {
                     <td>Apie · Trys atramos, Kontaktai · Kur kreiptis</td>
                     <td>Kortelių tekstai ir nuorodos</td>
                   </tr>
+                  <tr>
+                    <td>Pradinis / Apie · KOOPS paslaugos</td>
+                    <td>Keturių kortelių antraštės, tekstai, nuorodos ir CTA; nuotraukos — galerijoje</td>
+                  </tr>
+                  <tr>
+                    <td>Pradinis · KOOPS vertės</td>
+                    <td>Pasakojimo pastraipos (aprašyme, tuščia eilutė tarp jų) ir vertės kortelės</td>
+                  </tr>
+                  <tr>
+                    <td>Privatumo politika · Turinys</td>
+                    <td>Keturios informacijos dalys (numeris, antraštė, tekstas)</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
             <p>Bendrą restorano talpą (pvz. 154) keiskite <strong>KOOPS → Bendri duomenys</strong>. Atskirų salių skaičius — bloke „Restoranas · Salės“.</p>
-            <p>Drobėje matote tikrą svetainės vaizdą. Spustelėjus sekciją pažymimas atitinkamas blokas. Lauką WordPress laiko pakeitimu tik tada, kai jis skiriasi nuo numatytojo.</p>
+            <p>Drobėje matote tikrą svetainės vaizdą. Spustelėjus sekciją pažymimas atitinkamas blokas. Lauką WordPress laiko pakeitimu tik tada, kai jis skiriasi nuo numatytojo. „Atšaukti“ grąžina lauko reikšmę ir peržiūros vaizdą.</p>
           </section>
 
           <section id="naujienos" className="guide-section">
             <h2>Naujienos</h2>
-            <p>Kelias: <strong>Įrašai → Visi įrašai</strong> arba <strong>Pridėti naują</strong>.</p>
+            <p>Kelias: <strong>Įrašai → Visi įrašai</strong> arba <strong>Pridėti naują</strong>. Rodomos tik <code>/naujienos</code> ir pradinio naujienų sekcijoje — <strong>ne</strong> kartu su leidiniais.</p>
             <ul>
               <li>pavadinimas tampa naujienos antrašte;</li>
               <li>tekstą rašykite paprastai — paragrafas, antraštė, sąrašas;</li>
               <li>viršelio nuotrauką kelkite per <strong>Išskirtinis paveikslėlis</strong>;</li>
               <li>paskelbimui spauskite <strong>Publikuoti</strong>.</li>
             </ul>
-            <p>Komentarai svetainėje nenaudojami. Naują įrašą kurkite, seną archyvuokite arba ištrinkite, jei jis nebeaktualus.</p>
+            <p>Komentarai svetainėje nenaudojami. Naują įrašą kurkite, seną archyvuokite arba ištrinkite, jei jis nebeaktualus. Akcijų PDF kelkite per <strong>Leidiniai</strong>, ne čia.</p>
           </section>
 
           <section id="leidiniai" className="guide-section">
             <h2>Leidiniai</h2>
-            <p>Kelias: <strong>Leidiniai → Pridėti naują</strong>. Svetainėje jie rodomi <code>/leidiniai</code> ir naujienų puslapio viršuje. Visi laukai — dešinėje skydelyje <strong>Leidinio duomenys</strong>.</p>
+            <p>Kelias: <strong>Leidiniai → Pridėti naują</strong>. Svetainėje jie rodomi tik <code>/leidiniai</code> — į naujienas neįtraukiami. Visi laukai — dešinėje skydelyje <strong>Leidinio duomenys</strong>.</p>
             <ol>
               <li>Įrašykite pavadinimą ir santrauką (kortelės tekstas).</li>
               <li>Nustatykite <strong>Tipą</strong> (akcijų leidinys / TOP / kitas) ir datas <strong>Galioja nuo / iki</strong>.</li>
@@ -396,7 +409,15 @@ export function TvsGuide() {
                   </tr>
                   <tr>
                     <td>Įkelti akcijų leidinį</td>
-                    <td>Leidiniai → Pridėti naują → PDF + datos</td>
+                    <td>Leidiniai → Pridėti naują → PDF + datos (tik /leidiniai)</td>
+                  </tr>
+                  <tr>
+                    <td>Pakeisti privatumo tekstą</td>
+                    <td>Puslapiai → Privatumo politika → Hero / Turinys</td>
+                  </tr>
+                  <tr>
+                    <td>Pakeisti pradinio paslaugų korteles</td>
+                    <td>Puslapiai → Pradinis → KOOPS paslaugos → sąrašas</td>
                   </tr>
                   <tr>
                     <td>Pakeisti FAQ klausimus</td>
