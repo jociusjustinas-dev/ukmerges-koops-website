@@ -231,38 +231,38 @@ export function RestaurantHalls({
         </header>
         {/* Fixed 4×2 bento order: card · tall · card · media · media · accent(span 2) */}
         <div className="koops-bento-grid">
-          <article className="koops-bento-card">
-            <p className="section-label">{large.name}</p>
+          <article className="koops-bento-card" data-cms-item="0">
+            <p className="section-label" data-cms-item-field="name">{large.name}</p>
             <div className="koops-bento-card-bottom">
               <div className="koops-bento-card-content">
-                <h3>{large.capacity}</h3>
-                <p>{large.description}</p>
+                <h3 data-cms-item-field="capacity">{large.capacity}</h3>
+                <p data-cms-item-field="description">{large.description}</p>
               </div>
             </div>
           </article>
           <div className="koops-bento-media koops-bento-media-tall" aria-hidden="true">
-            <img loading="lazy" src={large.imageUrl || "/vilkmerge-hall.jpg"} alt="" data-cms-field="gallery-item" />
+            <img loading="lazy" src={large.imageUrl || "/vilkmerge-hall.jpg"} alt="" data-cms-field="gallery-item" data-cms-item-image="0" />
           </div>
-          <article className="koops-bento-card">
-            <p className="section-label">{bar.name}</p>
+          <article className="koops-bento-card" data-cms-item="1">
+            <p className="section-label" data-cms-item-field="name">{bar.name}</p>
             <div className="koops-bento-card-bottom">
               <div className="koops-bento-card-content">
-                <h3>{bar.capacity}</h3>
-                <p>{bar.description}</p>
+                <h3 data-cms-item-field="capacity">{bar.capacity}</h3>
+                <p data-cms-item-field="description">{bar.description}</p>
               </div>
             </div>
           </article>
           <div className="koops-bento-media" aria-hidden="true">
-            <img loading="lazy" src={bar.imageUrl || "/vilkmerge-table.jpg"} alt="" data-cms-field="gallery-item" />
+            <img loading="lazy" src={bar.imageUrl || "/vilkmerge-table.jpg"} alt="" data-cms-field="gallery-item" data-cms-item-image="1" />
           </div>
           <div className="koops-bento-media" aria-hidden="true">
-            <img loading="lazy" src={small.imageUrl || "/vilkmerge-menu.jpg"} alt="" data-cms-field="gallery-item" />
+            <img loading="lazy" src={small.imageUrl || "/vilkmerge-menu.jpg"} alt="" data-cms-field="gallery-item" data-cms-item-image="2" />
           </div>
-          <div className="koops-bento-card koops-bento-card-accent">
-            <p className="section-label">{small.name}</p>
+          <div className="koops-bento-card koops-bento-card-accent" data-cms-item="2">
+            <p className="section-label" data-cms-item-field="name">{small.name}</p>
             <div className="koops-bento-card-content">
-              <h3>{small.capacity}</h3>
-              <p>{small.description}</p>
+              <h3 data-cms-item-field="capacity">{small.capacity}</h3>
+              <p data-cms-item-field="description">{small.description}</p>
             </div>
             <div className="koops-bento-actions">
               <a className="text-link" href={ctaHref} data-cms-field="primary-link">

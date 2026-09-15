@@ -1,24 +1,92 @@
+import {
+  defaultBentoCards,
+  sectionItemsOrDefault,
+  type CmsBentoItem,
+} from "../../lib/cms-items";
+
 type KoopsBentoSectionProps = {
   cmsSection?: string;
   eyebrow?: string;
   title?: string;
   galleryUrls?: string[];
+  items?: CmsBentoItem[];
   wideImage?: {
     src: string;
     alt: string;
   };
 };
 
+function BentoTextCard({
+  item,
+  index,
+  className = "",
+}: {
+  item: CmsBentoItem;
+  index: number;
+  className?: string;
+}) {
+  const isAccent = className.includes("koops-bento-card-accent");
+
+  if (isAccent) {
+    return (
+      <div className={`koops-bento-card ${className}`.trim()} data-cms-item={index}>
+        <p className="section-label" data-cms-item-field="label">
+          {item.label}
+        </p>
+        <div className="koops-bento-card-content">
+          <h3 data-cms-item-field="title">{item.title}</h3>
+          <p data-cms-item-field="body">{item.body}</p>
+        </div>
+        <div className="koops-bento-actions">
+          <a className="text-link" href={item.href || "#"}>
+            <span data-cms-item-field="cta">{item.cta}</span> <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <span className="koops-bento-circle" aria-hidden="true" />
+      </div>
+    );
+  }
+
+  return (
+    <a
+      className={`koops-bento-card ${className}`.trim()}
+      href={item.href || "#"}
+      data-cms-item={index}
+    >
+      <p className="section-label" data-cms-item-field="label">
+        {item.label}
+      </p>
+      <div className="koops-bento-card-bottom">
+        <div className="koops-bento-card-content">
+          <h3 data-cms-item-field="title">{item.title}</h3>
+          <p data-cms-item-field="body">{item.body}</p>
+        </div>
+        <span className="text-link">
+          <span data-cms-item-field="cta">{item.cta}</span> <span aria-hidden="true">→</span>
+        </span>
+      </div>
+    </a>
+  );
+}
+
 export function KoopsBentoSection({
   cmsSection = "home-bento",
   eyebrow,
   title,
   galleryUrls,
+  items,
   wideImage = {
     src: "/local-produce-couple.jpg",
     alt: "Vietos produkcija KOOPS parduotuvėje",
   },
 }: KoopsBentoSectionProps) {
+  const cards = sectionItemsOrDefault(items, defaultBentoCards);
+  const stores = cards[0] || defaultBentoCards[0];
+  const careers = cards[1] || defaultBentoCards[1];
+  const suppliers = cards[2] || defaultBentoCards[2];
+  const restaurant = cards[3] || defaultBentoCards[3];
+  const mediaHref = stores.href || "/parduotuves";
+
   const tallImage = galleryUrls?.find(Boolean) || "/koops-hero.jpg";
   const wideSrc = galleryUrls?.filter(Boolean)[1] || wideImage.src;
 
@@ -42,20 +110,11 @@ export function KoopsBentoSection({
         </header>
 
         <div className="koops-bento-grid">
-          <a className="koops-bento-card" href="/parduotuves">
-            <p className="section-label">PARDUOTUVĖS</p>
-            <div className="koops-bento-card-bottom">
-              <div className="koops-bento-card-content">
-                <h3>Raskite</h3>
-                <p>Adresai, darbo laikas ir kelio nuorodos.</p>
-              </div>
-              <span className="text-link">Rasti parduotuvę <span aria-hidden="true">→</span></span>
-            </div>
-          </a>
+          <BentoTextCard item={stores} index={0} />
 
           <a
             className="koops-bento-media koops-bento-media-tall"
-            href="/parduotuves"
+            href={mediaHref}
             aria-label="Rasti artimiausią KOOPS parduotuvę"
           >
             <img
@@ -66,31 +125,12 @@ export function KoopsBentoSection({
             />
           </a>
 
-          <a className="koops-bento-card koops-bento-card-career" href="/karjera">
-            <p className="section-label">KARJERA</p>
-            <div className="koops-bento-card-bottom">
-              <div className="koops-bento-card-content">
-                <h3>Darbo pasiūlymai</h3>
-                <p>Galimybės Ukmergėje ir rajone.</p>
-              </div>
-              <span className="text-link">Peržiūrėti pasiūlymus <span aria-hidden="true">→</span></span>
-            </div>
-          </a>
-
-          <a className="koops-bento-card" href="/tiekejams">
-            <p className="section-label">TIEKĖJAMS</p>
-            <div className="koops-bento-card-bottom">
-              <div className="koops-bento-card-content">
-                <h3>Tapkite tiekėju</h3>
-                <p>Pasiūlykite savo produkciją KOOPS.</p>
-              </div>
-              <span className="text-link">Tapti tiekėju <span aria-hidden="true">→</span></span>
-            </div>
-          </a>
+          <BentoTextCard item={careers} index={1} className="koops-bento-card-career" />
+          <BentoTextCard item={suppliers} index={2} />
 
           <a
             className="koops-bento-media"
-            href="/parduotuves"
+            href={mediaHref}
             aria-label="Rasti artimiausią KOOPS parduotuvę"
           >
             <img
@@ -101,17 +141,7 @@ export function KoopsBentoSection({
             />
           </a>
 
-          <div className="koops-bento-card koops-bento-card-accent">
-            <p className="section-label">RESTORANAS</p>
-            <div className="koops-bento-card-content">
-              <h3>Restoranas „Vilkmergė“</h3>
-              <p>Šventėms, renginiams ir susitikimams.</p>
-            </div>
-            <div className="koops-bento-actions">
-              <a className="text-link" href="/restoranas">Sužinoti daugiau <span aria-hidden="true">→</span></a>
-            </div>
-            <span className="koops-bento-circle" aria-hidden="true" />
-          </div>
+          <BentoTextCard item={restaurant} index={3} className="koops-bento-card-accent" />
         </div>
       </div>
     </section>

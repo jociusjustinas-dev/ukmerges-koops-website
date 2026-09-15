@@ -19,6 +19,7 @@ export const defaultPageSections: Record<string, string[]> = {
   tiekejams: ["suppliers-hero", "suppliers-looking", "suppliers-process", "suppliers-enquiry"],
   apie: ["about-hero", "about-story", "about-pillars", "about-bento"],
   kontaktai: ["contact-form", "contact-channels"],
+  "privatumo-politika": ["privacy-hero", "privacy-body"],
 };
 
 function phoneHref(phone: string) {

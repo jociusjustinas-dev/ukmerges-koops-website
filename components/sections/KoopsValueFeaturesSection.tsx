@@ -1,47 +1,45 @@
 "use client";
 
 import * as React from "react";
+import {
+  defaultHomeValueFeatures,
+  defaultHomeValueParagraphs,
+  sectionItemsOrDefault,
+  type CmsFeatureItem,
+} from "../../lib/cms-items";
 
-const valueFeatures = [
-  {
-    title: "Parduotuvės",
-    icon: "https://byqsupply-components.netlify.app/Terra-Tory/images/ServiceIcon.svg",
-    body: "Kasdienės prekės ir vietos gamintojų produkcija Ukmergės mieste bei rajone.",
-  },
-  {
-    title: "Restoranas",
-    icon: "https://byqsupply-components.netlify.app/Terra-Tory/images/ServiceIcon-1.svg",
-    body: "„Vilkmergė“ – erdvė šventėms, renginiams ir jaukiems susitikimams.",
-  },
-  {
-    title: "Darbo vietos",
-    icon: "https://byqsupply-components.netlify.app/Terra-Tory/images/Service-Icon-2.svg",
-    body: "Galimybės dirbti arti namų parduotuvėse, restorane ir logistikoje.",
-  },
-  {
-    title: "Vietos tiekėjai",
-    icon: "https://byqsupply-components.netlify.app/Terra-Tory/images/ServiceIcon-3.svg",
-    body: "Bendradarbiaujame su gamintojais, norinčiais pasiekti KOOPS pirkėjus.",
-  },
-  {
-    title: "Bendruomenė",
-    icon: "https://byqsupply-components.netlify.app/Terra-Tory/images/ServiceIcon.svg",
-    body: "Esame šalia vietos žmonių, jų kasdienybės ir svarbiausių progų.",
-  },
-  {
-    title: "Kasdienės paslaugos",
-    icon: "https://byqsupply-components.netlify.app/Terra-Tory/images/Service-Icon-2.svg",
-    body: "Patogios paslaugos ir pažįstamas aptarnavimas ten, kur gyvenate.",
-  },
+const valueIcons = [
+  "https://byqsupply-components.netlify.app/Terra-Tory/images/ServiceIcon.svg",
+  "https://byqsupply-components.netlify.app/Terra-Tory/images/ServiceIcon-1.svg",
+  "https://byqsupply-components.netlify.app/Terra-Tory/images/Service-Icon-2.svg",
+  "https://byqsupply-components.netlify.app/Terra-Tory/images/ServiceIcon-3.svg",
+  "https://byqsupply-components.netlify.app/Terra-Tory/images/ServiceIcon.svg",
+  "https://byqsupply-components.netlify.app/Terra-Tory/images/Service-Icon-2.svg",
 ];
+
+function introParagraphs(description?: string): string[] {
+  const fromCms = (description || "")
+    .split(/\n{2,}/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+  // Vieno sakinio aprašymas neturi užgožti pilno pasakojimo (seni WP įrašai be \n\n).
+  if (fromCms.length >= 2) return fromCms;
+  return defaultHomeValueParagraphs;
+}
 
 export function KoopsValueFeaturesSection({
   eyebrow,
   title,
+  description,
+  items,
 }: {
   eyebrow?: string;
   title?: string;
+  description?: string;
+  items?: CmsFeatureItem[];
 } = {}) {
+  const features = sectionItemsOrDefault(items, defaultHomeValueFeatures);
+  const paragraphs = introParagraphs(description);
   const trackRef = React.useRef<HTMLDivElement>(null);
   const firstSetRef = React.useRef<HTMLDivElement>(null);
   const setWidthRef = React.useRef(0);
@@ -131,12 +129,15 @@ export function KoopsValueFeaturesSection({
             {title?.trim() || "Vietos žmonėms. Vietos verslui."}
           </h2>
         </div>
-        <div className="about-intro">
-          <p>Ukmergės rajono vartotojų kooperatyvas savo istoriją skaičiuoja nuo 1996 metų, kai buvo reorganizuota Ukmergės rajkoopsąjunga. Bendrovė vykdo mažmeninę prekybą, nuomoja nekilnojamąjį turtą ir teikia depozito surinkimo, Perlo, Olifejos, pinigų išgryninimo bei kitas paslaugas.</p>
-          <p>Pagrindinė veikla – mažmeninė prekyba 34 KOOPS tinklo parduotuvėse ir restorane „Vilkmergė“. Ukmergės RVK taip pat yra UAB „Ukmergės duona“ savininkas. Tinklas veikia Ukmergės mieste ir rajone, o jo stiprybės – ilgaamžiškumas, istorinė vertė, atnaujintos parduotuvės ir patogi lokacija.</p>
-          <p>Šūkis „Kartu mes jėga“ reiškia dėmesį patenkintam pirkėjui, atsakingam darbuotojui ir bendrystei. Remiame bendruomenių šventes, prisidedame prie darželių ir mokyklų maitinimo ekologiškais produktais bei rūpinamės darbuotojų poilsiu.</p>
-          <p>Pirkėjams siūlome akcijas, nuolaidas, žaidimus ir prekes, kurių nėra didžiuosiuose tinkluose. UAB „Ukmergės duona“ nuolat atnaujina asortimentą, o mūsų konditerių kepti baravykai jau tapo vietos skonių vizitine kortele.</p>
-          <p className="about-intro-closing">Visi mes esame viena didelė šeima, o Ukmergės KOOPS tinklas – mūsų namai.</p>
+        <div className="about-intro" data-cms-field="description" data-cms-format="paragraphs">
+          {paragraphs.map((paragraph, index) => (
+            <p
+              key={`${index}-${paragraph.slice(0, 24)}`}
+              className={index === paragraphs.length - 1 ? "about-intro-closing" : undefined}
+            >
+              {paragraph}
+            </p>
+          ))}
         </div>
       </div>
 
@@ -157,11 +158,15 @@ export function KoopsValueFeaturesSection({
               key={copyIndex}
               ref={copyIndex === 0 ? firstSetRef : undefined}
             >
-              {valueFeatures.map((feature) => (
-                <article className="about-feature-card" key={`${copyIndex}-${feature.title}`}>
-                  <h3>{feature.title}</h3>
-                  <img loading="lazy" src={feature.icon} alt="" />
-                  <p>{feature.body}</p>
+              {features.map((feature, index) => (
+                <article
+                  className="about-feature-card"
+                  key={`${copyIndex}-${feature.title}-${index}`}
+                  data-cms-item={index}
+                >
+                  <h3 data-cms-item-field="title">{feature.title}</h3>
+                  <img loading="lazy" src={valueIcons[index % valueIcons.length]} alt="" />
+                  <p data-cms-item-field="body">{feature.body}</p>
                 </article>
               ))}
             </div>

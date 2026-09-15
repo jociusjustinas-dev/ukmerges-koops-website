@@ -85,11 +85,12 @@ export function AboutPillars({
                 key={`${item.title}-${i}`}
                 className={`restaurant-feature-card is-tone-${tones[i % tones.length]}${visible ? " is-visible" : ""}`}
                 style={{ transitionDelay: visible ? `${i * 100}ms` : "0ms" }}
+                data-cms-item={i}
               >
                 <div className="restaurant-feature-icon">{icons[i % icons.length]}</div>
                 <div className="restaurant-feature-copy">
-                  <h3>{item.title}</h3>
-                  <p>{item.body}</p>
+                  <h3 data-cms-item-field="title">{item.title}</h3>
+                  <p data-cms-item-field="body">{item.body}</p>
                 </div>
               </article>
             ))}

@@ -27,12 +27,17 @@
   const previewVersion = (window.koopsSectionEditor && window.koopsSectionEditor.previewVersion) || '';
 
   function sectionAllowsField(sectionType, field) {
-    const schema = fieldSchemas[sectionType];
+    const live = (window.koopsSectionEditor && window.koopsSectionEditor.fieldSchemas) || fieldSchemas;
+    const schema = live[sectionType];
     if (!schema) {
       // Unknown type: keep legacy full form until schema is defined.
       return true;
     }
     return schema.indexOf(field) !== -1;
+  }
+  function sectionItemSchema(sectionType) {
+    const live = (window.koopsSectionEditor && window.koopsSectionEditor.itemSchemas) || itemSchemas;
+    return live[sectionType] || null;
   }
   function sectionTypeOptions() {
     return [{ label: 'Pasirinkite sekciją', value: '' }].concat(
@@ -312,7 +317,7 @@
   }
 
   function KoopsItemsControl(props) {
-    const schema = itemSchemas[props.sectionType];
+    const schema = sectionItemSchema(props.sectionType);
     if (!schema || !schema.fields || !schema.fields.length) return null;
 
     const fallback = (defaults[props.sectionType] && defaults[props.sectionType].items) || [];
@@ -526,7 +531,14 @@
         ? el(TextareaControl, { label: 'Antraštė', help: 'Naują eilutę įrašykite Enter klavišu.', value: a.title, onChange: (title) => set({ title }) })
         : null,
       allows('description')
-        ? el(TextareaControl, { label: 'Aprašymas', value: a.description, onChange: (description) => set({ description }) })
+        ? el(TextareaControl, {
+            label: 'Aprašymas',
+            help: a.sectionType === 'home-values'
+              ? 'Pastraipos atskiriamos tuščia eilute (Enter dukart).'
+              : undefined,
+            value: a.description,
+            onChange: (description) => set({ description })
+          })
         : null,
       allows('primary')
         ? el(TextControl, { label: 'Pagrindinio mygtuko tekstas', value: a.primaryLabel, onChange: (primaryLabel) => set({ primaryLabel }) })

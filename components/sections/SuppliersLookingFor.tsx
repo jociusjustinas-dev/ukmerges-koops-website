@@ -61,12 +61,13 @@ export function SuppliersLookingFor({
                         ? "koops-bento-card koops-bento-card-career"
                         : "koops-bento-card"
                   }
+                  data-cms-item={index}
                 >
-                  <p className="section-label">{item.label}</p>
+                  <p className="section-label" data-cms-item-field="label">{item.label}</p>
                   <div className={isLast ? "koops-bento-card-content" : "koops-bento-card-bottom"}>
                     <div className="koops-bento-card-content">
-                      <h3>{item.title}</h3>
-                      <p>{item.body}</p>
+                      <h3 data-cms-item-field="title">{item.title}</h3>
+                      <p data-cms-item-field="body">{item.body}</p>
                     </div>
                   </div>
                   {isLast ? (
@@ -85,7 +86,7 @@ export function SuppliersLookingFor({
                     className={index === 0 ? "koops-bento-media koops-bento-media-tall" : "koops-bento-media"}
                     aria-hidden="true"
                   >
-                    <img loading="lazy" src={images[index]} alt="" data-cms-field="gallery-item" />
+                    <img loading="lazy" src={images[index]} alt="" data-cms-field="gallery-item" data-cms-item-image={index} />
                   </div>
                 ) : null}
               </Fragment>

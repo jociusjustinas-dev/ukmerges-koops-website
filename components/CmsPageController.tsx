@@ -8,56 +8,192 @@ type Props = {
   sections?: CmsPageSection[];
 };
 
-function setText(target: Element | null, value?: string) {
-  if (!target || !value?.trim()) return;
-  target.textContent = value.trim();
+type ItemRecord = Record<string, unknown>;
+
+function setParagraphs(target: Element | null, value?: string | null, allowEmpty = false) {
+  if (!target) return;
+  const raw = value == null ? "" : String(value);
+  const trimmed = raw.trim();
+  if (!trimmed) {
+    const fallback = target.getAttribute("data-cms-default");
+    if (fallback != null && fallback.trim()) {
+      setParagraphs(target, fallback, true);
+      return;
+    }
+    if (allowEmpty) target.replaceChildren();
+    return;
+  }
+  const parts = trimmed
+    .split(/\n{2,}/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+  target.replaceChildren(
+    ...parts.map((paragraph, index) => {
+      const p = document.createElement("p");
+      if (index === parts.length - 1) p.className = "about-intro-closing";
+      p.textContent = paragraph;
+      return p;
+    }),
+  );
+}
+
+function setText(target: Element | null, value?: string | null, allowEmpty = false) {
+  if (!target) return;
+  if (target.getAttribute("data-cms-format") === "paragraphs") {
+    setParagraphs(target, value, allowEmpty);
+    return;
+  }
+  const raw = value == null ? "" : String(value);
+  const trimmed = raw.trim();
+  if (!trimmed) {
+    const fallback = target.getAttribute("data-cms-default");
+    if (fallback != null) {
+      target.textContent = fallback;
+      return;
+    }
+    if (allowEmpty) target.textContent = "";
+    return;
+  }
+  target.textContent = trimmed;
   if (target.matches("h1, h2, .location-headline")) {
     (target as HTMLElement).style.whiteSpace = "pre-line";
   }
 }
 
-function applyContent(root: HTMLElement, section: CmsPageSection) {
-  const overrides = new Set(section.overrides || []);
+function captureDefaults(root: HTMLElement) {
+  if (!root.hasAttribute("data-cms-default-anchor")) {
+    root.setAttribute("data-cms-default-anchor", root.id || "");
+  }
+
+  root.querySelectorAll<HTMLElement>("[data-cms-field]").forEach((el) => {
+    if (!el.hasAttribute("data-cms-default")) {
+      if (el.getAttribute("data-cms-format") === "paragraphs") {
+        const parts = Array.from(el.querySelectorAll("p"))
+          .map((p) => (p.textContent || "").trim())
+          .filter(Boolean);
+        el.setAttribute("data-cms-default", parts.join("\n\n"));
+      } else {
+        el.setAttribute("data-cms-default", el.textContent || "");
+      }
+    }
+  });
+
+  const button = root.querySelector<HTMLAnchorElement>("[data-cms-field='primary-link'], a.pill-button, a.text-link");
+  if (button) {
+    if (!button.hasAttribute("data-cms-default-href")) {
+      button.setAttribute("data-cms-default-href", button.getAttribute("href") || "");
+    }
+    const label = button.querySelector<HTMLElement>(".avenir-button-text") || button;
+    if (!label.hasAttribute("data-cms-default")) {
+      label.setAttribute("data-cms-default", label.textContent || "");
+    }
+  }
+
+  root.querySelectorAll<HTMLElement>("[data-cms-item-field]").forEach((el) => {
+    if (!el.hasAttribute("data-cms-default")) {
+      el.setAttribute("data-cms-default", el.textContent || "");
+    }
+  });
+
+  root.querySelectorAll<HTMLAnchorElement>("[data-cms-item][href], [data-cms-item] a[href]").forEach((el) => {
+    if (!el.hasAttribute("data-cms-default-href")) {
+      el.setAttribute("data-cms-default-href", el.getAttribute("href") || "");
+    }
+  });
+
+  root.querySelectorAll<HTMLImageElement>("[data-cms-item-image], [data-cms-field='image'], [data-cms-field='gallery-item']").forEach((el) => {
+    if (!el.hasAttribute("data-cms-default-src")) {
+      el.setAttribute("data-cms-default-src", el.getAttribute("src") || "");
+    }
+  });
+}
+
+function applyContent(root: HTMLElement, section: CmsPageSection, changed?: Set<string>) {
+  const overrides = changed || new Set(section.overrides || []);
+  const allowEmpty = Boolean(changed);
+
   if (overrides.has("eyebrow")) {
-    setText(root.querySelector("[data-cms-field='eyebrow'], .section-label"), section.eyebrow);
+    setText(root.querySelector("[data-cms-field='eyebrow']"), section.eyebrow, allowEmpty);
   }
   if (overrides.has("title")) {
-    setText(root.querySelector("[data-cms-field='title'], h1, h2, .location-headline"), section.title);
+    setText(root.querySelector("[data-cms-field='title']"), section.title, allowEmpty);
   }
   if (overrides.has("description")) {
-    setText(
-      root.querySelector(
-        "[data-cms-field='description'], .body-large, .stores-directory-lead, .classifieds-directory-lead, .flyers-lead, .careers-hero-lead, .about-hero-lead, .suppliers-hero-lead, .contacts-heading-lead",
-      ),
-      section.description,
-    );
+    setText(root.querySelector("[data-cms-field='description']"), section.description, allowEmpty);
   }
 
-  const button = root.querySelector<HTMLAnchorElement>(
-    "[data-cms-field='primary-link'], a.pill-button, a.text-link",
-  );
-  if (button && overrides.has("primaryUrl") && section.primaryUrl?.trim()) button.href = section.primaryUrl.trim();
-  if (button && overrides.has("primaryLabel") && section.primaryLabel?.trim()) {
+  const button = root.querySelector<HTMLAnchorElement>("[data-cms-field='primary-link']");
+  if (button && overrides.has("primaryUrl")) {
+    const next = section.primaryUrl?.trim();
+    if (next) button.href = next;
+    else button.href = button.getAttribute("data-cms-default-href") || button.href;
+  }
+  if (button && overrides.has("primaryLabel")) {
     const label = button.querySelector<HTMLElement>(".avenir-button-text") || button;
-    label.textContent = section.primaryLabel.trim();
+    setText(label, section.primaryLabel, allowEmpty);
   }
 
-  if (overrides.has("imageUrl") && section.imageUrl?.trim()) {
-    applyImage(root.querySelector<HTMLImageElement>("[data-cms-field='image']"), section.imageUrl.trim());
+  if (overrides.has("imageUrl")) {
+    const image = root.querySelector<HTMLImageElement>("[data-cms-field='image']");
+    const next = section.imageUrl?.trim();
+    if (next) applyImage(image, next);
+    else if (image) applyImage(image, image.getAttribute("data-cms-default-src") || undefined);
   }
 
-  if (overrides.has("galleryUrls") && section.galleryUrls?.length) {
+  if (overrides.has("galleryUrls")) {
     root.querySelectorAll<HTMLImageElement>("[data-cms-field='gallery-item']").forEach((image, index) => {
-      if (section.galleryUrls?.[index]) applyImage(image, section.galleryUrls[index]);
+      const next = section.galleryUrls?.[index]?.trim();
+      if (next) applyImage(image, next);
+      else applyImage(image, image.getAttribute("data-cms-default-src") || undefined);
     });
   }
 
   if (overrides.has("items") && Array.isArray(section.items)) {
-    applyFaqItems(root, section.items);
+    applySectionItems(root, section.items as ItemRecord[]);
   }
 }
 
-function applyFaqItems(root: HTMLElement, items: NonNullable<CmsPageSection["items"]>) {
+function applySectionItems(root: HTMLElement, items: ItemRecord[]) {
+  if (root.querySelector(".stores-faq-list")) {
+    applyFaqItems(root, items);
+    return;
+  }
+
+  const marked = root.querySelectorAll("[data-cms-item]");
+  if (!marked.length) return;
+
+  items.forEach((item, index) => {
+    const nodes = root.querySelectorAll<HTMLElement>(`[data-cms-item="${index}"]`);
+    nodes.forEach((node) => {
+      Object.entries(item).forEach(([key, value]) => {
+        if (key === "imageUrl" || key === "imageId") return;
+        if (key === "href") {
+          const next = String(value || "").trim();
+          const anchors =
+            node instanceof HTMLAnchorElement
+              ? [node]
+              : Array.from(node.querySelectorAll<HTMLAnchorElement>("a[href]"));
+          anchors.forEach((anchor) => {
+            anchor.href = next || anchor.getAttribute("data-cms-default-href") || anchor.href;
+          });
+          return;
+        }
+        const field = node.querySelector(`[data-cms-item-field="${key}"]`);
+        if (!field) return;
+        setText(field, value == null ? "" : String(value), true);
+      });
+    });
+
+    const image = root.querySelector<HTMLImageElement>(`[data-cms-item-image="${index}"]`);
+    if (image) {
+      const next = String(item.imageUrl || "").trim();
+      if (next) applyImage(image, next);
+      else applyImage(image, image.getAttribute("data-cms-default-src") || undefined);
+    }
+  });
+}
+
+function applyFaqItems(root: HTMLElement, items: ItemRecord[]) {
   const list = root.querySelector(".stores-faq-list");
   if (!list) return;
   list.replaceChildren();
@@ -67,27 +203,39 @@ function applyFaqItems(root: HTMLElement, items: NonNullable<CmsPageSection["ite
     if (!question && !answer) return;
     const details = document.createElement("details");
     if (index === 0) details.open = true;
+    details.setAttribute("data-cms-item", String(index));
     const summary = document.createElement("summary");
     const questionSpan = document.createElement("span");
+    questionSpan.setAttribute("data-cms-item-field", "question");
+    questionSpan.setAttribute("data-cms-default", question);
     questionSpan.textContent = question;
     const toggle = document.createElement("span");
     toggle.className = "stores-faq-toggle";
     toggle.setAttribute("aria-hidden", "true");
     summary.append(questionSpan, toggle);
     const paragraph = document.createElement("p");
+    paragraph.setAttribute("data-cms-item-field", "answer");
+    paragraph.setAttribute("data-cms-default", answer);
     paragraph.textContent = answer;
     details.append(summary, paragraph);
     list.appendChild(details);
   });
 }
 
-function applyAnchor(root: HTMLElement, section: CmsPageSection) {
+function applyAnchor(root: HTMLElement, section: CmsPageSection, allowEmpty = false) {
   if (root.classList.contains("tt-hero-spacer")) {
     root.removeAttribute("id");
     return;
   }
   const id = (section.anchor || "").trim();
-  if (id) root.id = id;
+  if (id) {
+    root.id = id;
+    return;
+  }
+  if (!allowEmpty && !("anchor" in (section as object))) return;
+  const fallback = root.getAttribute("data-cms-default-anchor") || "";
+  if (fallback) root.id = fallback;
+  else root.removeAttribute("id");
 }
 
 function applyImage(image: HTMLImageElement | null, url?: string) {
@@ -123,6 +271,7 @@ export function CmsPageController({ page, sections }: Props) {
     const editorMode = new URLSearchParams(window.location.search).get("koops-editor") === "1";
 
     const nodes = Array.from(shell.querySelectorAll<HTMLElement>("[data-cms-section]"));
+    nodes.forEach((node) => captureDefaults(node));
 
     const applySectionState = (list: CmsPageSection[]) => {
       const byType = new Map(list.map((section, index) => [section.type, { section, index }]));
@@ -131,8 +280,17 @@ export function CmsPageController({ page, sections }: Props) {
         node.hidden = !entry || (!entry.section.enabled && !editorMode);
         if (!entry) return;
         node.style.order = String(entry.index);
-        applyAnchor(node, entry.section);
-        applyContent(node, entry.section);
+        applyAnchor(node, entry.section, editorMode);
+        applyContent(node, entry.section, editorMode ? new Set(entry.section.overrides || [
+          "eyebrow",
+          "title",
+          "description",
+          "primaryLabel",
+          "primaryUrl",
+          "imageUrl",
+          "galleryUrls",
+          "items",
+        ]) : undefined);
         if (editorMode && !node.classList.contains("tt-hero-spacer")) {
           node.classList.add("koops-cms-editable-section");
           node.classList.toggle("is-cms-disabled", !entry.section.enabled);
@@ -265,17 +423,17 @@ export function CmsPageController({ page, sections }: Props) {
 
       if (message.type !== "update-section" || !message.sectionType || !message.changes) return;
       const targets = editableNodes().filter((node) => node.dataset.cmsSection === message.sectionType);
-      const changedFields = Object.keys(message.changes);
+      const changedFields = new Set(Object.keys(message.changes));
       targets.forEach((node) => {
         const next = {
           id: message.sectionType || "preview",
           type: message.sectionType || "",
           enabled: message.changes?.enabled !== false,
           ...message.changes,
-          overrides: changedFields,
+          overrides: Array.from(changedFields),
         };
-        applyAnchor(node, next);
-        applyContent(node, next);
+        applyAnchor(node, next, changedFields.has("anchor"));
+        applyContent(node, next, changedFields);
         if (Object.prototype.hasOwnProperty.call(message.changes, "enabled")) {
           node.classList.toggle("is-cms-disabled", message.changes?.enabled === false);
         }

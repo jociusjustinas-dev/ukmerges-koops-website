@@ -43,10 +43,15 @@ export function ContactChannels({
               href={item.href}
               key={`${item.href}-${index}`}
               aria-label={`${item.title} — ${item.cta}`}
+              data-cms-item={index}
             >
               <div className="job-row-copy">
-                <h3>{item.title}</h3>
-                <p className="job-row-summary">{item.body}</p>
+                <h3 data-cms-item-field="title">{item.title}</h3>
+                <p className="job-row-summary" data-cms-item-field="body">{item.body}</p>
+                <span className="text-link">
+                  <span data-cms-item-field="cta">{item.cta}</span>{" "}
+                  <span aria-hidden="true">→</span>
+                </span>
               </div>
               <span className="job-row-arrow" aria-hidden="true">
                 <AvenirButtonArrow />

@@ -47,13 +47,13 @@ export function SuppliersProcess({
 
         <ol className="jobs-list suppliers-process-list" aria-label="Tiekėjo kelio žingsniai">
           {steps.map((item, index) => (
-            <li className="job-row suppliers-process-step" key={`${item.step}-${index}`}>
+            <li className="job-row suppliers-process-step" key={`${item.step}-${index}`} data-cms-item={index}>
               <div className="job-row-copy">
                 <div className="job-row-meta">
-                  <span className="suppliers-process-num">{item.step}</span>
+                  <span className="suppliers-process-num" data-cms-item-field="step">{item.step}</span>
                 </div>
-                <h3>{item.title}</h3>
-                <p className="job-row-summary">{item.body}</p>
+                <h3 data-cms-item-field="title">{item.title}</h3>
+                <p className="job-row-summary" data-cms-item-field="body">{item.body}</p>
               </div>
             </li>
           ))}

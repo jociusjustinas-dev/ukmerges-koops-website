@@ -53,6 +53,9 @@ function koops_section_catalog(): array
 
         'contact-form' => ['page' => 'kontaktai', 'label' => 'Kontaktai · Forma ir rekvizitai'],
         'contact-channels' => ['page' => 'kontaktai', 'label' => 'Kontaktai · Kur kreiptis'],
+
+        'privacy-hero' => ['page' => 'privatumo-politika', 'label' => 'Privatumas · Hero'],
+        'privacy-body' => ['page' => 'privatumo-politika', 'label' => 'Privatumas · Turinys'],
     ];
 
     $media = [
@@ -127,6 +130,8 @@ function koops_section_anchor_defaults(): array
         'suppliers-process' => 'kaip-veikia',
         'contact-form' => 'forma',
         'contact-channels' => 'keliai',
+        'privacy-hero' => 'privatumas',
+        'privacy-body' => 'privatumo-turinys',
         'footer-cta' => 'footer-cta',
     ];
 }
@@ -147,12 +152,24 @@ function koops_section_content_defaults(): array
 {
     return [
         'home-hero' => ['eyebrow' => 'UKMERGĖJE IR RAJONE', 'title' => 'KOOPS parduotuvės arčiau jūsų.', 'description' => 'Raskite artimiausią parduotuvę, jos darbo laiką ir maršrutą.', 'primaryLabel' => 'Rasti parduotuvę', 'primaryUrl' => '/parduotuves', 'imageUrl' => '/koops-hero-market.jpg'],
-        'home-bento' => ['eyebrow' => 'KOOPS KASDIEN', 'title' => 'Viskas, ko reikia — arčiau jūsų', 'description' => 'Parduotuvės, restoranas, darbo pasiūlymai ir tiekėjų informacija vienoje vietoje.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/koops-hero.jpg', 'galleryUrls' => ['/koops-hero.jpg', '/local-produce-couple.jpg']],
+        'home-bento' => ['eyebrow' => 'KOOPS KASDIEN', 'title' => 'Viskas, ko reikia — arčiau jūsų', 'description' => '', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/koops-hero.jpg', 'galleryUrls' => ['/koops-hero.jpg', '/local-produce-couple.jpg'], 'items' => [
+            ['label' => 'PARDUOTUVĖS', 'title' => 'Raskite', 'body' => 'Adresai, darbo laikas ir kelio nuorodos.', 'href' => '/parduotuves', 'cta' => 'Rasti parduotuvę'],
+            ['label' => 'KARJERA', 'title' => 'Darbo pasiūlymai', 'body' => 'Galimybės Ukmergėje ir rajone.', 'href' => '/karjera', 'cta' => 'Peržiūrėti pasiūlymus'],
+            ['label' => 'TIEKĖJAMS', 'title' => 'Tapkite tiekėju', 'body' => 'Pasiūlykite savo produkciją KOOPS.', 'href' => '/tiekejams', 'cta' => 'Tapti tiekėju'],
+            ['label' => 'RESTORANAS', 'title' => 'Restoranas „Vilkmergė“', 'body' => 'Šventėms, renginiams ir susitikimams.', 'href' => '/restoranas', 'cta' => 'Sužinoti daugiau'],
+        ]],
         'home-stores' => ['eyebrow' => 'PARDUOTUVĖS', 'title' => 'Raskite artimiausią KOOPS parduotuvę', 'description' => 'Adresai, darbo laikas ir kelio nuorodos.', 'primaryLabel' => 'Visos parduotuvės', 'primaryUrl' => '/parduotuves', 'imageUrl' => ''],
         'home-news' => ['eyebrow' => 'AKTUALU', 'title' => 'Naujienos ir akcijos', 'description' => '', 'primaryLabel' => 'Visos naujienos', 'primaryUrl' => '/naujienos', 'imageUrl' => '/local-produce-couple.jpg'],
         'home-restaurant' => ['eyebrow' => 'RESTORANAS „VILKMERGĖ“ · NUO 1965 METŲ', 'title' => 'Restoranas „Vilkmergė“ – vieta, kur gyvena atsiminimai.', 'description' => 'Miesto širdyje įsikūręs restoranas laukia Jūsų.', 'primaryLabel' => 'Siųsti užklausą', 'primaryUrl' => '/restoranas#uzklausa', 'imageUrl' => '/vilkmerge-hall.jpg', 'galleryUrls' => ['/vilkmerge-hall.jpg', '/vilkmerge-table.jpg', '/vilkmerge-menu.jpg']],
         'home-jobs' => ['eyebrow' => 'KARJERA', 'title' => 'Darbas arti namų', 'description' => 'Prisijunkite prie KOOPS komandos Ukmergėje ir rajone. Susipažinkite su šiuo metu siūlomomis darbo vietomis.', 'primaryLabel' => 'Visi darbo pasiūlymai', 'primaryUrl' => '/karjera', 'imageUrl' => ''],
-        'home-values' => ['eyebrow' => 'APIE KOOPS', 'title' => 'Vietos žmonėms. Vietos verslui.', 'description' => 'Ukmergės rajono vartotojų kooperatyvas savo istoriją skaičiuoja nuo 1996 metų, kai buvo reorganizuota Ukmergės rajkoopsąjunga. Bendrovė vykdo mažmeninę prekybą, nuomoja nekilnojamąjį turtą ir teikia depozito surinkimo, Perlo, Olifejos, pinigų išgryninimo bei kitas paslaugas.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+        'home-values' => ['eyebrow' => 'APIE KOOPS', 'title' => 'Vietos žmonėms. Vietos verslui.', 'description' => 'Ukmergės rajono vartotojų kooperatyvas savo istoriją skaičiuoja nuo 1996 metų, kai buvo reorganizuota Ukmergės rajkoopsąjunga. Bendrovė vykdo mažmeninę prekybą, nuomoja nekilnojamąjį turtą ir teikia depozito surinkimo, Perlo, Olifejos, pinigų išgryninimo bei kitas paslaugas.\n\nPagrindinė veikla – mažmeninė prekyba 34 KOOPS tinklo parduotuvėse ir restorane „Vilkmergė“. Ukmergės RVK taip pat yra UAB „Ukmergės duona“ savininkas. Tinklas veikia Ukmergės mieste ir rajone, o jo stiprybės – ilgaamžiškumas, istorinė vertė, atnaujintos parduotuvės ir patogi lokacija.\n\nŠūkis „Kartu mes jėga“ reiškia dėmesį patenkintam pirkėjui, atsakingam darbuotojui ir bendrystei. Remiame bendruomenių šventes, prisidedame prie darželių ir mokyklų maitinimo ekologiškais produktais bei rūpinamės darbuotojų poilsiu.\n\nPirkėjams siūlome akcijas, nuolaidas, žaidimus ir prekes, kurių nėra didžiuosiuose tinkluose. UAB „Ukmergės duona“ nuolat atnaujina asortimentą, o mūsų konditerių kepti baravykai jau tapo vietos skonių vizitine kortele.\n\nVisi mes esame viena didelė šeima, o Ukmergės KOOPS tinklas – mūsų namai.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '', 'items' => [
+            ['title' => 'Parduotuvės', 'body' => 'Kasdienės prekės ir vietos gamintojų produkcija Ukmergės mieste bei rajone.'],
+            ['title' => 'Restoranas', 'body' => '„Vilkmergė“ – erdvė šventėms, renginiams ir jaukiems susitikimams.'],
+            ['title' => 'Darbo vietos', 'body' => 'Galimybės dirbti arti namų parduotuvėse, restorane ir logistikoje.'],
+            ['title' => 'Vietos tiekėjai', 'body' => 'Bendradarbiaujame su gamintojais, norinčiais pasiekti KOOPS pirkėjus.'],
+            ['title' => 'Bendruomenė', 'body' => 'Esame šalia vietos žmonių, jų kasdienybės ir svarbiausių progų.'],
+            ['title' => 'Kasdienės paslaugos', 'body' => 'Patogios paslaugos ir pažįstamas aptarnavimas ten, kur gyvenate.'],
+        ]],
         'home-suppliers' => ['eyebrow' => 'TIEKĖJAMS', 'title' => 'Auginkime vietos pasiūlą kartu', 'description' => 'Ieškome patikimų gamintojų ir tiekėjų, norinčių pasiūlyti savo produkciją KOOPS pirkėjams.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/ukmerge-fields-2.jpg'],
         'footer-cta' => ['eyebrow' => 'KOOPS', 'title' => 'Parduotuvė gali būti arčiau, nei manote', 'description' => '', 'primaryLabel' => 'Rasti parduotuvę', 'primaryUrl' => '/parduotuves', 'imageUrl' => ''],
 
@@ -213,7 +230,12 @@ function koops_section_content_defaults(): array
             ['title' => 'Vieta', 'body' => 'Parduotuvės mieste ir seniūnijose, restoranas centre — paslaugos ten, kur žmonės gyvena ir švenčia.'],
             ['title' => 'Istorija', 'body' => 'Ilgametė kooperatyvo patirtis ir „Vilkmergės“ tradicija — patikimas partneris krašto kasdienybei.'],
         ]],
-        'about-bento' => ['eyebrow' => 'KOOPS KASDIEN', 'title' => 'Viskas, ko reikia — arčiau jūsų', 'description' => 'Parduotuvės, restoranas, darbo pasiūlymai ir tiekėjų informacija vienoje vietoje.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/koops-hero.jpg', 'galleryUrls' => ['/koops-hero.jpg', '/store-uosis.jpeg']],
+        'about-bento' => ['eyebrow' => 'KOOPS KASDIEN', 'title' => 'Viskas, ko reikia — arčiau jūsų', 'description' => '', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/koops-hero.jpg', 'galleryUrls' => ['/koops-hero.jpg', '/store-uosis.jpeg'], 'items' => [
+            ['label' => 'PARDUOTUVĖS', 'title' => 'Raskite', 'body' => 'Adresai, darbo laikas ir kelio nuorodos.', 'href' => '/parduotuves', 'cta' => 'Rasti parduotuvę'],
+            ['label' => 'KARJERA', 'title' => 'Darbo pasiūlymai', 'body' => 'Galimybės Ukmergėje ir rajone.', 'href' => '/karjera', 'cta' => 'Peržiūrėti pasiūlymus'],
+            ['label' => 'TIEKĖJAMS', 'title' => 'Tapkite tiekėju', 'body' => 'Pasiūlykite savo produkciją KOOPS.', 'href' => '/tiekejams', 'cta' => 'Tapti tiekėju'],
+            ['label' => 'RESTORANAS', 'title' => 'Restoranas „Vilkmergė“', 'body' => 'Šventėms, renginiams ir susitikimams.', 'href' => '/restoranas', 'cta' => 'Sužinoti daugiau'],
+        ]],
 
         'contact-form' => ['eyebrow' => 'KONTAKTAI', 'title' => 'Susisiekite su KOOPS', 'description' => 'Adresas, telefonas ar trumpa žinutė — be spėliojimo.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/ukmerge-fields-1.jpg'],
         'contact-channels' => ['eyebrow' => 'KONTAKTŲ KELIAI', 'title' => 'Kur kreiptis', 'description' => 'Pasirinkite temą — greičiau rasite adresą, užklausą ar darbo pasiūlymą.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '', 'items' => [
@@ -221,6 +243,14 @@ function koops_section_content_defaults(): array
             ['title' => 'Restoranas „Vilkmergė“', 'body' => 'Šventės, renginiai, salės ir tiesioginė užklausa.', 'href' => '/restoranas', 'cta' => 'Apie restoraną'],
             ['title' => 'Tiekėjams', 'body' => 'Pasiūlykite produkciją — ką pateikti ir kam rašyti.', 'href' => '/tiekejams', 'cta' => 'Siųsti pasiūlymą'],
             ['title' => 'Karjera', 'body' => 'Darbo pasiūlymai Ukmergėje ir rajone.', 'href' => '/karjera', 'cta' => 'Darbo pasiūlymai'],
+        ]],
+
+        'privacy-hero' => ['eyebrow' => 'PRIVATUMAS', 'title' => "Jūsų pasirinkimas.\nAiškiai ir paprastai.", 'description' => 'Čia paaiškiname, kokias technologijas naudojame svetainėje ir kaip galite valdyti savo sutikimą.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+        'privacy-body' => ['eyebrow' => 'TRUMPAI', 'title' => 'Privatumo ir slapukų informacija', 'description' => 'Nebūtinieji slapukai neįjungiami, kol nepasirenkate jų leisti. Sutikimą bet kada galima pakeisti poraštėje.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '', 'items' => [
+            ['step' => '01', 'title' => 'Kas valdo duomenis', 'body' => 'Ukmergės rajono vartotojų kooperatyvas, Vasario 16-osios g. 30, LT-20130 Ukmergė. Klausimus galite siųsti adresu direktore@urvk.lt.'],
+            ['step' => '02', 'title' => 'Kokius slapukus naudojame', 'body' => 'Būtinieji slapukai reikalingi svetainės veikimui ir jūsų pasirinkimui įsiminti. Statistikos bei rinkodaros priemonės gali veikti tik gavus atskirą sutikimą.'],
+            ['step' => '03', 'title' => 'Šiuo metu saugomas pasirinkimas', 'body' => 'Šiuo metu nėra įjungtų statistikos ar rinkodaros sekimo priemonių.'],
+            ['step' => '04', 'title' => 'Kaip pakeisti pasirinkimą', 'body' => 'Poraštėje pasirinkite „Slapukų nustatymai“. Sutikimą atšaukti yra taip pat paprasta, kaip jį duoti.'],
         ]],
     ];
 }
@@ -241,7 +271,7 @@ function koops_section_editable_fields(): array
         'home-news' => ['eyebrow', 'title', 'primary'],
         'home-restaurant' => ['eyebrow', 'title', 'description', 'primary'],
         'home-jobs' => ['eyebrow', 'title', 'description', 'primary'],
-        'home-values' => ['eyebrow', 'title'],
+        'home-values' => ['eyebrow', 'title', 'description'],
         'home-suppliers' => ['eyebrow', 'title', 'description'],
         'footer-cta' => ['eyebrow', 'title', 'primary'],
 
@@ -273,6 +303,9 @@ function koops_section_editable_fields(): array
 
         'contact-form' => ['eyebrow', 'title', 'description'],
         'contact-channels' => ['title', 'description'],
+
+        'privacy-hero' => ['eyebrow', 'title', 'description'],
+        'privacy-body' => ['eyebrow', 'description'],
     ];
 }
 
@@ -337,6 +370,39 @@ function koops_section_item_schemas(): array
             ],
             'empty' => ['step' => '', 'title' => '', 'body' => ''],
         ],
+        'home-bento' => [
+            'label' => 'Paslaugų kortelės',
+            'addLabel' => 'Pridėti kortelę',
+            'fields' => [
+                ['key' => 'label', 'label' => 'Mažoji antraštė', 'type' => 'text'],
+                ['key' => 'title', 'label' => 'Antraštė', 'type' => 'text'],
+                ['key' => 'body', 'label' => 'Tekstas', 'type' => 'textarea'],
+                ['key' => 'href', 'label' => 'Nuoroda', 'type' => 'url'],
+                ['key' => 'cta', 'label' => 'Mygtuko tekstas', 'type' => 'text'],
+            ],
+            'empty' => ['label' => '', 'title' => '', 'body' => '', 'href' => '', 'cta' => ''],
+        ],
+        'about-bento' => [
+            'label' => 'Paslaugų kortelės',
+            'addLabel' => 'Pridėti kortelę',
+            'fields' => [
+                ['key' => 'label', 'label' => 'Mažoji antraštė', 'type' => 'text'],
+                ['key' => 'title', 'label' => 'Antraštė', 'type' => 'text'],
+                ['key' => 'body', 'label' => 'Tekstas', 'type' => 'textarea'],
+                ['key' => 'href', 'label' => 'Nuoroda', 'type' => 'url'],
+                ['key' => 'cta', 'label' => 'Mygtuko tekstas', 'type' => 'text'],
+            ],
+            'empty' => ['label' => '', 'title' => '', 'body' => '', 'href' => '', 'cta' => ''],
+        ],
+        'home-values' => [
+            'label' => 'Vertės kortelės',
+            'addLabel' => 'Pridėti kortelę',
+            'fields' => [
+                ['key' => 'title', 'label' => 'Antraštė', 'type' => 'text'],
+                ['key' => 'body', 'label' => 'Tekstas', 'type' => 'textarea'],
+            ],
+            'empty' => ['title' => '', 'body' => ''],
+        ],
         'about-pillars' => [
             'label' => 'Atramos',
             'addLabel' => 'Pridėti atramą',
@@ -356,6 +422,16 @@ function koops_section_item_schemas(): array
                 ['key' => 'cta', 'label' => 'Mygtuko tekstas', 'type' => 'text'],
             ],
             'empty' => ['title' => '', 'body' => '', 'href' => '', 'cta' => ''],
+        ],
+        'privacy-body' => [
+            'label' => 'Privatumo dalys',
+            'addLabel' => 'Pridėti dalį',
+            'fields' => [
+                ['key' => 'step', 'label' => 'Numeris', 'type' => 'text'],
+                ['key' => 'title', 'label' => 'Antraštė', 'type' => 'text'],
+                ['key' => 'body', 'label' => 'Tekstas', 'type' => 'textarea'],
+            ],
+            'empty' => ['step' => '', 'title' => '', 'body' => ''],
         ],
     ];
 }
@@ -657,10 +733,25 @@ function koops_localize_editor_page_slug(): void
         $slug = (string) $post->post_name;
     }
 
+    $options = get_option('koops_options', []);
+    $frontend_url = is_array($options) && !empty($options['frontend_url'])
+        ? esc_url_raw((string) $options['frontend_url'])
+        : 'https://ukmerges-koops-website.vercel.app';
+
+    // Reinject schemas on enqueue so Gutenberg always gets allowlists (init localize can miss).
     wp_add_inline_script(
         'koops-section-editor-script',
-        'window.koopsSectionEditor=Object.assign({},window.koopsSectionEditor||{},{pageSlug:'.wp_json_encode($slug).'});',
-        'after'
+        'window.koopsSectionEditor=Object.assign({},window.koopsSectionEditor||{},'
+        . wp_json_encode([
+            'pageSlug' => $slug,
+            'fieldSchemas' => koops_section_editable_fields(),
+            'itemSchemas' => koops_section_item_schemas(),
+            'defaults' => koops_defaults_for_editor(),
+            'catalog' => koops_section_catalog(),
+            'frontendUrl' => untrailingslashit($frontend_url),
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+        . ');',
+        'before'
     );
 }
 add_action('enqueue_block_editor_assets', 'koops_localize_editor_page_slug', 40);
@@ -732,6 +823,7 @@ function koops_default_page_sections(): array
         'tiekejams' => ['suppliers-hero', 'suppliers-looking', 'suppliers-process', 'suppliers-enquiry'],
         'apie' => ['about-hero', 'about-story', 'about-pillars', 'about-bento'],
         'kontaktai' => ['contact-form', 'contact-channels'],
+        'privatumo-politika' => ['privacy-hero', 'privacy-body'],
     ];
 }
 
@@ -793,12 +885,58 @@ function koops_backfill_section_content(): void
         }
         unset($block);
         if ($changed) {
-            wp_update_post(['ID' => $page->ID, 'post_content' => serialize_blocks($blocks)]);
+            wp_update_post(wp_slash(['ID' => $page->ID, 'post_content' => serialize_blocks($blocks)]));
         }
     }
     update_option('koops_section_content_seed_version', '2');
 }
 add_action('admin_init', 'koops_backfill_section_content', 30);
+
+function koops_backfill_section_items(): void
+{
+    if (get_option('koops_section_items_seed_version') === '1') {
+        return;
+    }
+
+    $types = ['home-bento', 'about-bento', 'home-values', 'privacy-body'];
+    foreach (array_keys(koops_default_page_sections()) as $slug) {
+        $page = get_page_by_path($slug, OBJECT, 'page');
+        if (!$page) {
+            continue;
+        }
+        $blocks = parse_blocks($page->post_content);
+        $changed = false;
+        foreach ($blocks as &$block) {
+            if (($block['blockName'] ?? '') !== 'koops/section') {
+                continue;
+            }
+            $type = sanitize_key((string) ($block['attrs']['sectionType'] ?? ''));
+            if (!in_array($type, $types, true)) {
+                continue;
+            }
+            $defaults = koops_section_default($type);
+            $current = $block['attrs']['items'] ?? null;
+            $has_items = is_array($current) && koops_sanitize_section_items($type, $current);
+            if ($has_items) {
+                continue;
+            }
+            if (!empty($defaults['items'])) {
+                $block['attrs']['items'] = $defaults['items'];
+                $changed = true;
+            }
+            if ($type === 'home-values' && empty(trim((string) ($block['attrs']['description'] ?? ''))) && !empty($defaults['description'])) {
+                $block['attrs']['description'] = $defaults['description'];
+                $changed = true;
+            }
+        }
+        unset($block);
+        if ($changed) {
+            wp_update_post(wp_slash(['ID' => $page->ID, 'post_content' => serialize_blocks($blocks)]));
+        }
+    }
+    update_option('koops_section_items_seed_version', '1');
+}
+add_action('admin_init', 'koops_backfill_section_items', 31);
 
 function koops_seed_modular_pages(): void
 {
@@ -817,6 +955,7 @@ function koops_seed_modular_pages(): void
         'tiekejams' => 'Tiekėjams',
         'apie' => 'Apie KOOPS',
         'kontaktai' => 'Kontaktai',
+        'privatumo-politika' => 'Privatumo politika',
     ];
 
     foreach (koops_default_page_sections() as $slug => $sections) {
@@ -824,7 +963,7 @@ function koops_seed_modular_pages(): void
         $post_id = $page ? (int) $page->ID : (int) wp_insert_post([
             'post_type' => 'page',
             'post_status' => 'publish',
-            'post_title' => $titles[$slug],
+            'post_title' => $titles[$slug] ?? $slug,
             'post_name' => $slug,
         ]);
         if (!$post_id) {
@@ -832,11 +971,16 @@ function koops_seed_modular_pages(): void
         }
 
         $content = (string) get_post_field('post_content', $post_id);
-        if (trim($content) === '') {
-            wp_update_post([
+        $needs_sections = trim($content) === '';
+        // Privacy page previously had no KOOPS sections — seed once when empty of koops/section.
+        if (!$needs_sections && $slug === 'privatumo-politika' && !str_contains($content, 'wp:koops/section')) {
+            $needs_sections = true;
+        }
+        if ($needs_sections) {
+            wp_update_post(wp_slash([
                 'ID' => $post_id,
                 'post_content' => koops_serialize_section_blocks($sections),
-            ]);
+            ]));
         }
     }
 
@@ -965,10 +1109,10 @@ function koops_rest_replace_page_sections(WP_REST_Request $request)
         $sections[] = $section;
     }
 
-    $updated = wp_update_post([
+    $updated = wp_update_post(wp_slash([
         'ID' => (int) $page->ID,
         'post_content' => koops_serialize_builder_sections($sections),
-    ], true);
+    ]), true);
     if (is_wp_error($updated)) {
         return $updated;
     }
@@ -1049,10 +1193,10 @@ function koops_rest_update_page_section(WP_REST_Request $request)
         return new WP_Error('koops_section_not_found', 'Sekcija puslapyje nerasta.', ['status' => 404]);
     }
 
-    $updated = wp_update_post([
+    $updated = wp_update_post(wp_slash([
         'ID' => (int) $page->ID,
-        'post_content' => serialize_blocks($blocks),
-    ], true);
+        'post_content' => koops_serialize_parsed_section_blocks($blocks),
+    ]), true);
     if (is_wp_error($updated)) {
         return $updated;
     }
@@ -1139,6 +1283,24 @@ function koops_serialize_builder_sections(array $sections): string
         $attrs = wp_json_encode($section, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         return '<!-- wp:koops/section ' . $attrs . ' /-->';
     }, $sections));
+}
+
+/**
+ * Serialize parsed Gutenberg blocks while preserving newlines in attributes
+ * (WordPress serialize_blocks can flatten multiline attribute strings).
+ */
+function koops_serialize_parsed_section_blocks(array $blocks): string
+{
+    $parts = [];
+    foreach ($blocks as $block) {
+        if (($block['blockName'] ?? '') !== 'koops/section') {
+            $parts[] = serialize_block($block);
+            continue;
+        }
+        $attrs = is_array($block['attrs'] ?? null) ? $block['attrs'] : [];
+        $parts[] = '<!-- wp:koops/section ' . wp_json_encode($attrs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . ' /-->';
+    }
+    return implode("\n\n", array_filter($parts, static fn($part): bool => trim((string) $part) !== ''));
 }
 
 function koops_page_builder_card(array $section, string $index, array $catalog): void
@@ -1265,10 +1427,10 @@ function koops_page_builder_screen(): void
             $seen[$type] = true;
             $sections[] = $section;
         }
-        wp_update_post([
+        wp_update_post(wp_slash([
             'ID' => $post_id,
             'post_content' => koops_serialize_builder_sections($sections),
-        ]);
+        ]));
         clean_post_cache($post_id);
         echo '<div class="notice notice-success is-dismissible"><p>Sekcijos išsaugotos.</p></div>';
         $page = get_post($post_id);

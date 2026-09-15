@@ -27,6 +27,7 @@ import {
   SuppliersEnquiry,
 } from "./cms/SiteCatalogSections";
 import { FlyersListing } from "./FlyersListing";
+import { PrivacyBody, PrivacyHero } from "./cms/PrivacySections";
 import { AboutPillars } from "./sections/AboutPillars";
 import { CareersValueFeatures } from "./sections/CareersValueFeatures";
 import { ContactChannels } from "./sections/ContactChannels";
@@ -62,6 +63,7 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
           eyebrow={section.eyebrow}
           title={section.title}
           galleryUrls={section.galleryUrls}
+          items={section.items as never}
         />
       );
     case "home-stores":
@@ -92,7 +94,14 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
     case "home-jobs":
       return <HomeJobs jobs={context.jobs} {...headingProps(section)} />;
     case "home-values":
-      return <KoopsValueFeaturesSection eyebrow={section.eyebrow} title={section.title} />;
+      return (
+        <KoopsValueFeaturesSection
+          eyebrow={section.eyebrow}
+          title={section.title}
+          description={section.description}
+          items={section.items as never}
+        />
+      );
     case "home-suppliers":
       return <HomeSuppliers imageUrl={section.imageUrl} {...headingProps(section)} />;
     case "footer-cta":
@@ -201,6 +210,7 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
           eyebrow={section.eyebrow}
           title={section.title}
           galleryUrls={section.galleryUrls}
+          items={section.items as never}
           wideImage={{
             src: section.imageUrl?.trim() || section.galleryUrls?.[1] || "/store-uosis.jpeg",
             alt: "KOOPS parduotuvė „Uosis“",
@@ -211,6 +221,16 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
       return <ContactForm options={context.options} imageUrl={section.imageUrl} {...headingProps(section)} />;
     case "contact-channels":
       return <ContactChannels items={section.items as never} title={section.title} description={section.description} />;
+    case "privacy-hero":
+      return <PrivacyHero eyebrow={section.eyebrow} title={section.title} description={section.description} />;
+    case "privacy-body":
+      return (
+        <PrivacyBody
+          eyebrow={section.eyebrow}
+          description={section.description}
+          items={section.items as never}
+        />
+      );
     default:
       return null;
   }

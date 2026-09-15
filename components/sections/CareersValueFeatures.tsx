@@ -88,11 +88,12 @@ export function CareersValueFeatures({
                 key={`${feature.title}-${i}`}
                 className={`restaurant-feature-card is-tone-${tones[i % tones.length]}${visible ? " is-visible" : ""}`}
                 style={{ transitionDelay: visible ? `${i * 100}ms` : "0ms" }}
+                data-cms-item={i}
               >
                 <div className="restaurant-feature-icon">{icons[i % icons.length]}</div>
                 <div className="restaurant-feature-copy">
-                  <h3>{feature.title}</h3>
-                  <p>{feature.body}</p>
+                  <h3 data-cms-item-field="title">{feature.title}</h3>
+                  <p data-cms-item-field="body">{feature.body}</p>
                 </div>
               </article>
             ))}

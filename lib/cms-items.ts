@@ -37,13 +37,22 @@ export type CmsChannelItem = {
   cta: string;
 };
 
+export type CmsBentoItem = {
+  label: string;
+  title: string;
+  body: string;
+  href: string;
+  cta: string;
+};
+
 export type CmsSectionItem =
   | CmsFaqItem
   | CmsHallItem
   | CmsFeatureItem
   | CmsLookingItem
   | CmsProcessItem
-  | CmsChannelItem;
+  | CmsChannelItem
+  | CmsBentoItem;
 
 export const defaultStoreFaqs: CmsFaqItem[] = [
   {
@@ -211,6 +220,72 @@ export const defaultContactChannels: CmsChannelItem[] = [
     href: "/karjera",
     cta: "Darbo pasiūlymai",
   },
+];
+
+export const defaultBentoCards: CmsBentoItem[] = [
+  {
+    label: "PARDUOTUVĖS",
+    title: "Raskite",
+    body: "Adresai, darbo laikas ir kelio nuorodos.",
+    href: "/parduotuves",
+    cta: "Rasti parduotuvę",
+  },
+  {
+    label: "KARJERA",
+    title: "Darbo pasiūlymai",
+    body: "Galimybės Ukmergėje ir rajone.",
+    href: "/karjera",
+    cta: "Peržiūrėti pasiūlymus",
+  },
+  {
+    label: "TIEKĖJAMS",
+    title: "Tapkite tiekėju",
+    body: "Pasiūlykite savo produkciją KOOPS.",
+    href: "/tiekejams",
+    cta: "Tapti tiekėju",
+  },
+  {
+    label: "RESTORANAS",
+    title: "Restoranas „Vilkmergė“",
+    body: "Šventėms, renginiams ir susitikimams.",
+    href: "/restoranas",
+    cta: "Sužinoti daugiau",
+  },
+];
+
+export const defaultHomeValueFeatures: CmsFeatureItem[] = [
+  {
+    title: "Parduotuvės",
+    body: "Kasdienės prekės ir vietos gamintojų produkcija Ukmergės mieste bei rajone.",
+  },
+  {
+    title: "Restoranas",
+    body: "„Vilkmergė“ – erdvė šventėms, renginiams ir jaukiems susitikimams.",
+  },
+  {
+    title: "Darbo vietos",
+    body: "Galimybės dirbti arti namų parduotuvėse, restorane ir logistikoje.",
+  },
+  {
+    title: "Vietos tiekėjai",
+    body: "Bendradarbiaujame su gamintojais, norinčiais pasiekti KOOPS pirkėjus.",
+  },
+  {
+    title: "Bendruomenė",
+    body: "Esame šalia vietos žmonių, jų kasdienybės ir svarbiausių progų.",
+  },
+  {
+    title: "Kasdienės paslaugos",
+    body: "Patogios paslaugos ir pažįstamas aptarnavimas ten, kur gyvenate.",
+  },
+];
+
+export const defaultHomeValueParagraphs: string[] = [
+  "Ukmergės rajono vartotojų kooperatyvas savo istoriją skaičiuoja nuo 1996 metų, kai buvo reorganizuota Ukmergės rajkoopsąjunga. Bendrovė vykdo mažmeninę prekybą, nuomoja nekilnojamąjį turtą ir teikia depozito surinkimo, Perlo, Olifejos, pinigų išgryninimo bei kitas paslaugas.",
+  "Pagrindinė veikla – mažmeninė prekyba 34 KOOPS tinklo parduotuvėse ir restorane „Vilkmergė“. Ukmergės RVK taip pat yra UAB „Ukmergės duona“ savininkas. Tinklas veikia Ukmergės mieste ir rajone, o jo stiprybės – ilgaamžiškumas, istorinė vertė, atnaujintos parduotuvės ir patogi lokacija.",
+  "Šūkis „Kartu mes jėga“ reiškia dėmesį patenkintam pirkėjui, atsakingam darbuotojui ir bendrystei. Remiame bendruomenių šventes, prisidedame prie darželių ir mokyklų maitinimo ekologiškais produktais bei rūpinamės darbuotojų poilsiu.",
+  "Pirkėjams siūlome akcijas, nuolaidas, žaidimus ir prekes, kurių nėra didžiuosiuose tinkluose. UAB „Ukmergės duona“ nuolat atnaujina asortimentą, o mūsų konditerių kepti baravykai jau tapo vietos skonių vizitine kortele.",
+  "Visi mes esame viena didelė šeima, o Ukmergės KOOPS tinklas – mūsų namai.",
 ];
 
 export function sectionItemsOrDefault<T extends CmsSectionItem>(
