@@ -10,6 +10,7 @@ const pages = {
   '/': ['home-hero', 'home-bento', 'home-stores', 'home-news', 'home-restaurant', 'home-jobs', 'home-values', 'home-suppliers', 'footer-cta'],
   '/parduotuves': ['stores-directory', 'stores-faq'],
   '/naujienos': ['news-listing'],
+  '/leidiniai': ['flyers-listing'],
   '/skelbimai': ['classifieds-listing'],
   '/restoranas': ['restaurant-hero', 'restaurant-features', 'restaurant-halls', 'restaurant-enquiry'],
   '/karjera': ['careers-hero', 'careers-features', 'careers-jobs', 'careers-enquiry'],

@@ -1,5 +1,6 @@
 import { restaurant as restaurantDefaults } from "./restaurant";
 import type { Classified } from "./classifieds";
+import type { Flyer } from "./flyers";
 import type { Job } from "./jobs";
 import type { NewsItem } from "./news";
 import type { Store } from "./stores";
@@ -11,6 +12,7 @@ export const defaultPageSections: Record<string, string[]> = {
   pradinis: ["home-hero", "home-bento", "home-stores", "home-news", "home-restaurant", "home-jobs", "home-values", "home-suppliers", "footer-cta"],
   parduotuves: ["stores-directory", "stores-faq", "footer-cta"],
   naujienos: ["news-listing", "footer-cta"],
+  leidiniai: ["flyers-listing", "footer-cta"],
   skelbimai: ["classifieds-listing"],
   restoranas: ["restaurant-hero", "restaurant-features", "restaurant-halls", "restaurant-enquiry"],
   karjera: ["careers-hero", "careers-features", "careers-jobs", "careers-enquiry"],
@@ -29,6 +31,7 @@ export type CmsRenderContext = {
   news: NewsItem[];
   classifieds: Classified[];
   jobs: Job[];
+  flyers: Flyer[];
   featuredStores: Store[];
   featuredNews: NewsItem[];
   restaurant: typeof restaurantDefaults;
@@ -64,6 +67,7 @@ export function createCmsRenderContext(cms: KoopsCmsData): CmsRenderContext {
     news: cms.news,
     classifieds: cms.classifieds,
     jobs: cms.jobs,
+    flyers: cms.flyers,
     featuredStores,
     featuredNews: cms.news.slice(0, 4),
     restaurant,

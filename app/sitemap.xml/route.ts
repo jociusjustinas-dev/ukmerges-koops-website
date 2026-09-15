@@ -6,6 +6,7 @@ const staticRoutes = [
   "/",
   "/parduotuves",
   "/naujienos",
+  "/leidiniai",
   "/skelbimai",
   "/restoranas",
   "/karjera",
@@ -68,15 +69,16 @@ function escapeXml(value: string) {
 }
 
 export async function GET() {
-  const [{ stores, news }, modified] = await Promise.all([getKoopsCmsData(), modificationDates()]);
+  const [{ stores, news, flyers }, modified] = await Promise.all([getKoopsCmsData(), modificationDates()]);
   const routes = [
     ...staticRoutes,
     ...stores.map((store) => `/parduotuves/${store.slug}`),
     ...news.map((item) => newsHref(item.slug)),
+    ...flyers.map((item) => `/leidiniai/${item.slug}`),
   ];
   const entries = [...new Set(routes)]
     .map((route) => {
-      const frequency = route.startsWith("/naujienos") ? "weekly" : "monthly";
+      const frequency = route.startsWith("/naujienos") || route.startsWith("/leidiniai") ? "weekly" : "monthly";
       const priority = route === "/" ? "1.0" : route === "/parduotuves" ? "0.9" : "0.7";
       const lastModified = modified.get(route);
       const lastmod = lastModified ? `<lastmod>${escapeXml(lastModified)}</lastmod>` : "";

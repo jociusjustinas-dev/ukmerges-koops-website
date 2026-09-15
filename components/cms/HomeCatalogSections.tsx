@@ -4,6 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import type { Job } from "../../lib/jobs";
 import { newsHref, type NewsItem } from "../../lib/news";
+import { flyerDateLabel, flyerHref, flyerKindLabel, isFlyerCurrent, sortFlyers, type Flyer } from "../../lib/flyers";
 import { restaurant as restaurantDefaults } from "../../lib/restaurant";
 import type { Store } from "../../lib/stores";
 import { AvenirButtonArrow, ByqChevron } from "../../app/byq-icons";
@@ -205,7 +206,10 @@ export function HomeStores({ stores }: { stores: Store[] }) {
   );
 }
 
-export function HomeNews({ items }: { items: NewsItem[] }) {
+export function HomeNews({ items, flyers = [] }: { items: NewsItem[]; flyers?: Flyer[] }) {
+  const featuredFlyer = sortFlyers(flyers).find((flyer) => isFlyerCurrent(flyer)) || sortFlyers(flyers)[0];
+  const newsCards = featuredFlyer ? items.filter((item) => item.tone !== "featured").slice(0, 3) : items;
+
   return (
     <section className="tt-news" id="naujienos" aria-labelledby="naujienu-antraste" data-byq-component="terra-tory-blog-grid-1" data-cms-section="home-news">
       <div className="tt-container">
@@ -215,8 +219,27 @@ export function HomeNews({ items }: { items: NewsItem[] }) {
           <h2 id="naujienu-antraste">Naujienos ir akcijos</h2>
         </div>
         <div className="news-bento">
-          {items.map((item) => {
-            if (item.tone === "featured") {
+          {featuredFlyer ? (
+            <a className="news-card news-card-large" href={flyerHref(featuredFlyer.slug)}>
+              {(featuredFlyer.image || featuredFlyer.pages[0]) ? (
+                <Image
+                  src={featuredFlyer.image || featuredFlyer.pages[0]}
+                  alt={featuredFlyer.title}
+                  width={1200}
+                  height={800}
+                  sizes="(max-width: 767px) calc(100vw - 32px), 50vw"
+                />
+              ) : null}
+              <div>
+                <span className="section-label light-label">{flyerKindLabel(featuredFlyer.kind).toUpperCase()}</span>
+                <h3>{featuredFlyer.title}</h3>
+                <p>{featuredFlyer.excerpt || flyerDateLabel(featuredFlyer) || "Peržiūrėti akcijų leidinį."}</p>
+                <span className="text-link">Peržiūrėti <span aria-hidden="true">→</span></span>
+              </div>
+            </a>
+          ) : null}
+          {newsCards.map((item) => {
+            if (!featuredFlyer && item.tone === "featured") {
               return (
                 <a className="news-card news-card-large" href={newsHref(item.slug)} key={item.slug}>
                   {item.image ? <Image src={item.image} alt={item.title} width={1200} height={800} sizes="(max-width: 767px) calc(100vw - 32px), 50vw" /> : null}

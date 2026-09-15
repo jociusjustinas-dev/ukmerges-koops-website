@@ -166,6 +166,7 @@ const resources = {
   stores: "koops_store",
   classifieds: "koops_classified",
   jobs: "koops_job",
+  flyers: "koops_flyer",
 };
 
 let result;

@@ -26,6 +26,7 @@ import {
   StoresFaq,
   SuppliersEnquiry,
 } from "./cms/SiteCatalogSections";
+import { FlyersListing } from "./FlyersListing";
 import { AboutPillars } from "./sections/AboutPillars";
 import { CareersValueFeatures } from "./sections/CareersValueFeatures";
 import { ContactChannels } from "./sections/ContactChannels";
@@ -50,7 +51,7 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
     case "home-stores":
       return <HomeStores stores={context.featuredStores} />;
     case "home-news":
-      return <HomeNews items={context.featuredNews} />;
+      return <HomeNews items={context.featuredNews} flyers={context.flyers} />;
     case "home-restaurant":
       return <HomeRestaurant restaurant={context.restaurant} galleryUrls={section.galleryUrls} />;
     case "home-jobs":
@@ -66,7 +67,9 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
     case "stores-faq":
       return <StoresFaq />;
     case "news-listing":
-      return <NewsListingSection items={context.news} />;
+      return <NewsListingSection items={context.news} flyers={context.flyers} />;
+    case "flyers-listing":
+      return <FlyersListing items={context.flyers} />;
     case "classifieds-listing":
       return <ClassifiedsListing items={context.classifieds} />;
     case "restaurant-hero":

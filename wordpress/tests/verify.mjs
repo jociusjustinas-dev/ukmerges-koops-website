@@ -23,6 +23,7 @@ const requiredFiles = [
   'style.css', 'theme.json', 'functions.php', 'header.php', 'footer.php', 'front-page.php',
   'archive-koops_store.php', 'single-koops_store.php', 'archive-koops_classified.php',
   'single-koops_classified.php', 'archive-koops_job.php', 'single-koops_job.php',
+  'archive-koops_flyer.php', 'single-koops_flyer.php',
   'page-restoranas.php', 'page-tiekejams.php', 'page-kontaktai.php', 'page-apie.php',
   'assets/css/theme.css', 'assets/js/theme.js', 'assets/images/koops-logo.png',
 ];

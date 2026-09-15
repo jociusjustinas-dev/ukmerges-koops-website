@@ -1,6 +1,7 @@
 import "server-only";
 
 import { classifieds as fallbackClassifieds, type Classified } from "./classifieds";
+import { flyers as fallbackFlyers, sortFlyers, type Flyer, type FlyerKind } from "./flyers";
 import { jobs as fallbackJobs, type Job } from "./jobs";
 import { newsItems as fallbackNews, type NewsItem } from "./news";
 import { stores as fallbackStores, type Store, type StoreArea } from "./stores";
@@ -79,6 +80,11 @@ type RawEntry = {
   employment?: string;
   department?: string;
   applyUrl?: string;
+  kind?: string;
+  validFrom?: string;
+  validUntil?: string;
+  pdfUrl?: string;
+  pages?: string[];
 };
 
 type RawSiteData = {
@@ -89,6 +95,7 @@ type RawSiteData = {
   news?: RawEntry[];
   classifieds?: RawEntry[];
   jobs?: RawEntry[];
+  flyers?: RawEntry[];
   pages?: Record<string, CmsPage>;
 };
 
@@ -98,6 +105,7 @@ export type KoopsCmsData = {
   news: NewsItem[];
   classifieds: Classified[];
   jobs: Job[];
+  flyers: Flyer[];
   pages: Record<string, CmsPage>;
 };
 
@@ -202,12 +210,36 @@ function mapJobs(entries: RawEntry[]): Job[] {
     }));
 }
 
+function flyerKind(value?: string): FlyerKind {
+  if (value === "top3" || value === "kitas") return value;
+  return "bendras";
+}
+
+function mapFlyers(entries: RawEntry[]): Flyer[] {
+  return sortFlyers(
+    entries
+      .filter((item) => item.slug && item.title)
+      .map((item) => ({
+        slug: item.slug!,
+        title: item.title!,
+        excerpt: item.excerpt || undefined,
+        kind: flyerKind(item.kind),
+        validFrom: item.validFrom || undefined,
+        validUntil: item.validUntil || undefined,
+        image: item.image || item.pages?.[0] || undefined,
+        pdfUrl: item.pdfUrl || undefined,
+        pages: (item.pages || []).filter(Boolean),
+      })),
+  );
+}
+
 const fallback: KoopsCmsData = {
   options: {},
   stores: fallbackStores,
   news: fallbackNews,
   classifieds: fallbackClassifieds,
   jobs: fallbackJobs,
+  flyers: fallbackFlyers,
   pages: {},
 };
 
@@ -236,6 +268,7 @@ export async function getKoopsCmsData(): Promise<KoopsCmsData> {
     const liveNews = mapNews(raw.news || []);
     const liveClassifieds = mapClassifieds(raw.classifieds || []);
     const liveJobs = mapJobs(raw.jobs || []);
+    const liveFlyers = mapFlyers(raw.flyers || []);
 
     return {
       options: normalizeOptions(raw.options || {}),
@@ -243,6 +276,7 @@ export async function getKoopsCmsData(): Promise<KoopsCmsData> {
       news: liveNews.length ? liveNews : fallback.news,
       classifieds: liveClassifieds,
       jobs: liveJobs.length ? liveJobs : fallback.jobs,
+      flyers: liveFlyers.length ? liveFlyers : fallback.flyers,
       pages: raw.pages || {},
     };
   } catch {

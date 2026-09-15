@@ -2,7 +2,7 @@
 /**
  * Plugin Name: KOOPS Core
  * Description: KOOPS turinio tipai, valdymo laukai, bendri duomenys ir formos.
- * Version: 0.19.8
+ * Version: 0.19.9
  * Author: KOOPS
  * Text Domain: koops
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('KOOPS_CORE_VERSION', '0.19.8');
+define('KOOPS_CORE_VERSION', '0.19.9');
 define('KOOPS_CORE_PATH', plugin_dir_path(__FILE__));
 define('KOOPS_CORE_URL', plugin_dir_url(__FILE__));
 
@@ -38,6 +38,12 @@ function koops_register_content_types(): void
             'slug' => 'karjera',
             'icon' => 'dashicons-businessperson',
         ],
+        'koops_flyer' => [
+            'single' => 'Leidinys',
+            'plural' => 'Leidiniai',
+            'slug' => 'leidiniai',
+            'icon' => 'dashicons-media-document',
+        ],
     ];
 
     foreach ($types as $type => $config) {
@@ -59,7 +65,9 @@ function koops_register_content_types(): void
             'rewrite' => ['slug' => $config['slug'], 'with_front' => false],
             'menu_icon' => $config['icon'],
             'menu_position' => 20,
-            'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'custom-fields'],
+            'supports' => $type === 'koops_flyer'
+                ? ['title', 'excerpt', 'thumbnail', 'revisions', 'custom-fields']
+                : ['title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'custom-fields'],
         ]);
     }
 
@@ -136,6 +144,21 @@ function koops_meta_schema(): array
             'koops_apply_url' => ['label' => 'Kandidatavimo nuoroda', 'type' => 'url'],
             'koops_deadline' => ['label' => 'Kandidatuoti iki', 'type' => 'date'],
         ],
+        'koops_flyer' => [
+            'koops_kind' => [
+                'label' => 'Tipas',
+                'type' => 'select',
+                'options' => [
+                    'bendras' => 'Akcijų leidinys',
+                    'top3' => 'TOP pasiūlymai',
+                    'kitas' => 'Kitas leidinys',
+                ],
+            ],
+            'koops_valid_from' => ['label' => 'Galioja nuo', 'type' => 'date'],
+            'koops_valid_until' => ['label' => 'Galioja iki', 'type' => 'date'],
+            'koops_pdf_id' => ['label' => 'PDF leidinys', 'type' => 'file'],
+            'koops_page_ids' => ['label' => 'Puslapių nuotraukos', 'type' => 'gallery_ids'],
+        ],
     ];
 }
 
@@ -143,7 +166,7 @@ function koops_register_meta_fields(): void
 {
     foreach (koops_meta_schema() as $post_type => $fields) {
         foreach ($fields as $key => $field) {
-            $data_type = $field['type'] === 'checkbox' ? 'boolean' : ($field['type'] === 'number' ? 'number' : 'string');
+            $data_type = $field['type'] === 'checkbox' ? 'boolean' : (in_array($field['type'], ['number', 'file'], true) ? 'number' : 'string');
             register_post_meta($post_type, $key, [
                 'single' => true,
                 'type' => $data_type,
@@ -152,8 +175,11 @@ function koops_register_meta_fields(): void
                     if ($field['type'] === 'checkbox') {
                         return (bool) $value;
                     }
-                    if ($field['type'] === 'number') {
+                    if ($field['type'] === 'number' || $field['type'] === 'file') {
                         return (float) $value;
+                    }
+                    if ($field['type'] === 'gallery_ids') {
+                        return implode(',', array_filter(array_map('absint', preg_split('/[,\s]+/', (string) $value) ?: [])));
                     }
                     if ($field['type'] === 'email') {
                         return sanitize_email($value);
@@ -272,8 +298,10 @@ function koops_save_meta_fields(int $post_id): void
             $value = esc_url_raw($value);
         } elseif ($field['type'] === 'textarea') {
             $value = sanitize_textarea_field($value);
-        } elseif ($field['type'] === 'number') {
-            $value = (float) $value;
+        } elseif ($field['type'] === 'number' || $field['type'] === 'file') {
+            $value = absint($value);
+        } elseif ($field['type'] === 'gallery_ids') {
+            $value = implode(',', array_filter(array_map('absint', preg_split('/[,\s]+/', (string) $value) ?: [])));
         } else {
             $value = sanitize_text_field($value);
         }
@@ -281,6 +309,103 @@ function koops_save_meta_fields(int $post_id): void
     }
 }
 add_action('save_post', 'koops_save_meta_fields');
+
+function koops_parse_id_list(string $value): array
+{
+    return array_values(array_filter(array_map('absint', preg_split('/[,\s]+/', $value) ?: [])));
+}
+
+function koops_flyer_after_save(int $post_id, WP_Post $post): void
+{
+    if ($post->post_type !== 'koops_flyer' || wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) {
+        return;
+    }
+    koops_flyer_generate_pages($post_id);
+}
+
+function koops_flyer_generate_pages(int $post_id): void
+{
+    $pdf_id = absint(get_post_meta($post_id, 'koops_pdf_id', true));
+    if (!$pdf_id) {
+        return;
+    }
+    $existing_pages = koops_parse_id_list((string) get_post_meta($post_id, 'koops_page_ids', true));
+    if ($existing_pages) {
+        if (!has_post_thumbnail($post_id)) {
+            set_post_thumbnail($post_id, $existing_pages[0]);
+        }
+        return;
+    }
+    if (!class_exists('Imagick')) {
+        return;
+    }
+    $file = get_attached_file($pdf_id);
+    if (!$file || !file_exists($file)) {
+        return;
+    }
+
+    require_once ABSPATH . 'wp-admin/includes/image.php';
+    $slug = sanitize_file_name((string) get_post_field('post_name', $post_id) ?: 'leidinys');
+
+    try {
+        $imagick = new Imagick();
+        $imagick->setResolution(144, 144);
+        $imagick->readImage($file);
+        $count = $imagick->getNumberImages();
+        $ids = [];
+        for ($index = 0; $index < $count; $index++) {
+            $imagick->setIteratorIndex($index);
+            $page = $imagick->getImage();
+            $page->setImageFormat('jpeg');
+            $page->setImageCompressionQuality(82);
+            $blob = $page->getImageBlob();
+            $page->clear();
+            $page->destroy();
+            if (!$blob) {
+                continue;
+            }
+            $upload = wp_upload_bits(sprintf('%s-p%02d.jpg', $slug, $index + 1), null, $blob);
+            if (!empty($upload['error']) || empty($upload['file'])) {
+                continue;
+            }
+            $attachment_id = wp_insert_attachment([
+                'post_mime_type' => 'image/jpeg',
+                'post_title' => sprintf('%s · p. %d', get_the_title($post_id), $index + 1),
+                'post_parent' => $post_id,
+                'post_status' => 'inherit',
+            ], $upload['file'], $post_id);
+            if (is_wp_error($attachment_id) || !$attachment_id) {
+                continue;
+            }
+            wp_update_attachment_metadata($attachment_id, wp_generate_attachment_metadata($attachment_id, $upload['file']));
+            $ids[] = $attachment_id;
+        }
+        $imagick->clear();
+        $imagick->destroy();
+    } catch (Throwable $error) {
+        return;
+    }
+
+    if (!$ids) {
+        return;
+    }
+    update_post_meta($post_id, 'koops_page_ids', implode(',', $ids));
+    update_post_meta($post_id, '_koops_pdf_converted', $pdf_id);
+    if (!has_post_thumbnail($post_id)) {
+        set_post_thumbnail($post_id, $ids[0]);
+    }
+}
+add_action('save_post_koops_flyer', 'koops_flyer_after_save', 20, 2);
+
+function koops_maybe_flush_rewrites(): void
+{
+    if (get_option('koops_rewrite_version') === KOOPS_CORE_VERSION) {
+        return;
+    }
+    flush_rewrite_rules(false);
+    update_option('koops_rewrite_version', KOOPS_CORE_VERSION);
+}
+add_action('init', 'koops_maybe_flush_rewrites', 99);
 
 function koops_default_options(): array
 {
@@ -386,6 +511,7 @@ function koops_enqueue_entry_sidebar(): void
             'koops_store' => 'Parduotuvės duomenys',
             'koops_classified' => 'Skelbimo duomenys',
             'koops_job' => 'Darbo pasiūlymo duomenys',
+            'koops_flyer' => 'Leidinio duomenys',
         ],
     ]);
 }
@@ -462,6 +588,7 @@ function koops_link_query_site_pages(array $results, array $query): array
         ['Pradinis', home_url('/')],
         ['Parduotuvės', home_url('/parduotuves/')],
         ['Naujienos', home_url('/naujienos/')],
+        ['Leidiniai', home_url('/leidiniai/')],
         ['Restoranas „Vilkmergė“', home_url('/restoranas/')],
         ['Karjera', home_url('/karjera/')],
         ['Tiekėjams', home_url('/tiekejams/')],
@@ -1110,6 +1237,17 @@ function koops_rest_posts(string $post_type): array
             $base['department'] = (string) get_post_meta($post->ID, 'koops_department', true);
             $base['applyUrl'] = (string) get_post_meta($post->ID, 'koops_apply_url', true);
             $base['deadline'] = (string) get_post_meta($post->ID, 'koops_deadline', true);
+        } elseif ($post_type === 'koops_flyer') {
+            $pdf_id = absint(get_post_meta($post->ID, 'koops_pdf_id', true));
+            $page_ids = array_filter(array_map('absint', explode(',', (string) get_post_meta($post->ID, 'koops_page_ids', true))));
+            $base['kind'] = (string) get_post_meta($post->ID, 'koops_kind', true) ?: 'bendras';
+            $base['validFrom'] = (string) get_post_meta($post->ID, 'koops_valid_from', true);
+            $base['validUntil'] = (string) get_post_meta($post->ID, 'koops_valid_until', true);
+            $base['pdfUrl'] = $pdf_id ? (string) wp_get_attachment_url($pdf_id) : '';
+            $base['pages'] = array_values(array_filter(array_map(
+                static fn(int $id): string => (string) (wp_get_attachment_image_url($id, 'full') ?: ''),
+                $page_ids
+            )));
         } elseif ($post_type === 'post') {
             $categories = get_the_category($post->ID);
             $base['category'] = $categories ? $categories[0]->name : 'Naujienos';
@@ -1136,6 +1274,7 @@ function koops_rest_site_data(): WP_REST_Response
         )),
         'classifieds' => koops_rest_posts('koops_classified'),
         'jobs' => koops_rest_posts('koops_job'),
+        'flyers' => koops_rest_posts('koops_flyer'),
         'pages' => koops_rest_pages(),
     ]);
     $response->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');

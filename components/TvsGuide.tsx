@@ -11,6 +11,7 @@ const sections = [
   { id: "bendri-duomenys", title: "Bendri duomenys" },
   { id: "sekcijos", title: "Puslapių sekcijos" },
   { id: "naujienos", title: "Naujienos" },
+  { id: "leidiniai", title: "Leidiniai" },
   { id: "parduotuves", title: "Parduotuvės" },
   { id: "karjera", title: "Darbo pasiūlymai" },
   { id: "skelbimai", title: "Skelbimai" },
@@ -154,6 +155,10 @@ export function TvsGuide() {
                     <td>34 parduotuvių adresai, darbo laikas, telefonas, žemėlapis</td>
                   </tr>
                   <tr>
+                    <td><strong>Leidiniai</strong></td>
+                    <td>Akcijų PDF, viršelis ir puslapių nuotraukos</td>
+                  </tr>
+                  <tr>
                     <td><strong>Darbo pasiūlymai</strong></td>
                     <td>Karjeros skelbimai</td>
                   </tr>
@@ -209,6 +214,20 @@ export function TvsGuide() {
               <li>paskelbimui spauskite <strong>Publikuoti</strong>.</li>
             </ul>
             <p>Komentarai svetainėje nenaudojami. Naują įrašą kurkite, seną archyvuokite arba ištrinkite, jei jis nebeaktualus.</p>
+          </section>
+
+          <section id="leidiniai" className="guide-section">
+            <h2>Leidiniai</h2>
+            <p>Kelias: <strong>Leidiniai → Pridėti naują</strong>. Svetainėje jie rodomi <code>/leidiniai</code> ir naujienų puslapio viršuje.</p>
+            <ul>
+              <li>pavadinimas ir santrauka — kortelės tekstas;</li>
+              <li><strong>Viršelis</strong> — katalogo nuotrauka;</li>
+              <li><strong>Tipas</strong> — akcijų leidinys arba TOP pasiūlymai;</li>
+              <li><strong>Galioja nuo / iki</strong> — datos kortelėje ir rikiavime;</li>
+              <li><strong>PDF leidinys</strong> — atsisiuntimui. Jei serveryje yra Imagick, puslapiai sugeneruojami automatiškai;</li>
+              <li><strong>Puslapių nuotraukos</strong> — jei automatinė konversija neveikia, įkelkite JPG iš eilės.</li>
+            </ul>
+            <p>Neperrinkite kiekvienos prekės atskirai. Lankytojas varto puslapius ir, jei reikia, atsisiunčia PDF.</p>
           </section>
 
           <section id="parduotuves" className="guide-section">

@@ -107,7 +107,7 @@
     );
   }
 
-  function KoopsFeaturedImage() {
+  function KoopsFeaturedImage(props) {
     const featuredId = useSelect(function (select) {
       return select('core/editor').getEditedPostAttribute('featured_media') || 0;
     }, []);
@@ -142,7 +142,7 @@
           return el(
             'div',
             { className: 'koops-media-control' },
-            el('span', { className: 'koops-media-control__label' }, 'Nuotrauka'),
+            el('span', { className: 'koops-media-control__label' }, props.label || 'Nuotrauka'),
             preview
               ? el('div', { className: 'koops-media-control__previews' }, el('img', { src: preview, alt: '' }))
               : el('div', { className: 'koops-media-control__empty' }, 'Nuotrauka nepasirinkta'),
@@ -253,7 +253,7 @@
       postType === 'koops_store'
         ? wrapField('hint', el('p', { className: 'koops-entry-sidebar__hint', style: { margin: 0 } }, 'Nuotrauka, teritorija ir kontaktai — visi šiame skydelyje.'))
         : null,
-      wrapField('photo', el(KoopsFeaturedImage)),
+      wrapField('photo', el(KoopsFeaturedImage, { label: postType === 'koops_flyer' ? 'Viršelis' : 'Nuotrauka' })),
       taxonomy
         ? wrapField('taxonomy', el(KoopsTaxonomyField, { taxonomy: taxonomy.name, label: taxonomy.label }))
         : null,
@@ -299,6 +299,72 @@
               updateMeta(key, next);
             }
           }));
+        }
+        if (field.type === 'file' && MediaUpload && MediaUploadCheck) {
+          const fileId = parseInt(value, 10) || 0;
+          const fileMedia = wp.data.select('core').getMedia(fileId);
+          return wrapField(key, el(MediaUploadCheck, null, el(MediaUpload, {
+            allowedTypes: ['application/pdf'],
+            value: fileId,
+            onSelect: function (item) {
+              updateMeta(key, item && item.id ? item.id : 0);
+            },
+            render: function (args) {
+              return el(
+                'div',
+                { className: 'koops-media-control' },
+                el('span', { className: 'koops-media-control__label' }, field.label),
+                fileMedia
+                  ? el('p', { style: { margin: '8px 0' } }, fileMedia.title || fileMedia.source_url || 'PDF')
+                  : el('div', { className: 'koops-media-control__empty' }, 'PDF nepasirinktas'),
+                el(
+                  'div',
+                  { className: 'koops-media-control__actions' },
+                  el(Button, { variant: 'secondary', onClick: args.open }, fileId ? 'Keisti PDF' : 'Įkelti PDF'),
+                  fileId
+                    ? el(Button, {
+                        variant: 'tertiary',
+                        isDestructive: true,
+                        onClick: function () {
+                          updateMeta(key, 0);
+                        }
+                      }, 'Pašalinti')
+                    : null
+                )
+              );
+            }
+          })));
+        }
+        if (field.type === 'gallery_ids' && MediaUpload && MediaUploadCheck) {
+          const ids = String(value || '')
+            .split(',')
+            .map(function (id) { return parseInt(id, 10) || 0; })
+            .filter(Boolean);
+          return wrapField(key, el(MediaUploadCheck, null, el(MediaUpload, {
+            allowedTypes: ['image'],
+            multiple: true,
+            gallery: true,
+            value: ids,
+            onSelect: function (items) {
+              const next = (Array.isArray(items) ? items : [items])
+                .map(function (item) { return item && item.id ? item.id : 0; })
+                .filter(Boolean);
+              updateMeta(key, next.join(','));
+            },
+            render: function (args) {
+              return el(
+                'div',
+                { className: 'koops-media-control' },
+                el('span', { className: 'koops-media-control__label' }, field.label),
+                el('p', { style: { margin: '8px 0' } }, ids.length ? ids.length + ' puslapiai' : 'Puslapiai nepasirinkti — įkėlus PDF jie sugeneruojami automatiškai, jei serveryje yra Imagick.'),
+                el(
+                  'div',
+                  { className: 'koops-media-control__actions' },
+                  el(Button, { variant: 'secondary', onClick: args.open }, ids.length ? 'Keisti puslapius' : 'Įkelti puslapius')
+                )
+              );
+            }
+          })));
         }
         return wrapField(key, el(TextControl, {
           label: field.label,

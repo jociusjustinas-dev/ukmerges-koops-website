@@ -1185,6 +1185,97 @@ main > section:not(.tt-hero), .tt-footer { position: relative; z-index: 1; }
   line-height: 1.45;
 }
 
+.flyers-page-main { padding-top: 140px; padding-bottom: 80px; background: white; }
+.flyers-lead {
+  margin: 0;
+  max-width: 46ch;
+  color: var(--color-moss-veil);
+  font-size: 18px;
+  line-height: 1.45;
+}
+.news-flyers-strip { display: grid; gap: 24px; margin-bottom: 48px; }
+.news-flyers-strip-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+.flyers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+.flyers-grid.is-compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.flyer-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.flyer-card-media {
+  aspect-ratio: 210 / 297;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: var(--color-bone-canvas);
+}
+.flyer-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.flyer-card-media.is-placeholder {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--color-moss-edge);
+}
+.flyer-card-copy { display: grid; gap: 8px; }
+.flyer-card-copy h2 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: -.03em;
+  font-weight: 400;
+}
+.flyer-card-dates { margin: 0; color: var(--color-moss-veil); }
+.flyer-detail { padding-top: 140px; padding-bottom: 80px; background: white; }
+.flyer-viewer { display: grid; gap: 32px; max-width: 760px; margin-inline: auto; }
+.flyer-viewer-head { display: grid; gap: 16px; text-align: center; justify-items: center; }
+.flyer-viewer-head h1 {
+  margin: 0;
+  font-size: clamp(40px, 5vw, 56px);
+  line-height: .95;
+  letter-spacing: -.04em;
+  font-weight: 400;
+}
+.flyer-viewer-dates,
+.flyer-viewer-lead { margin: 0; color: var(--color-moss-veil); }
+.flyer-viewer-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 16px; }
+.flyer-stage {
+  position: relative;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--color-bone-canvas);
+}
+.flyer-stage img { width: 100%; height: auto; display: block; }
+.flyer-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-linen-white);
+  color: var(--color-midnight-moss);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+.flyer-nav:disabled { opacity: .35; cursor: default; }
+.flyer-nav.is-prev { left: 12px; }
+.flyer-nav.is-next { right: 12px; }
+.flyer-pager { margin: 0; text-align: center; letter-spacing: .08em; }
+
 /* News article detail — centered header, cover, sticky back + share rails */
 .news-detail-page .news-article-hero {
   padding-top: 140px;
@@ -2186,6 +2277,10 @@ html.store-drawer-open { overflow: hidden; }
   }
 
   .news-page-main { padding-top: 120px; }
+  .flyers-page-main,
+  .flyer-detail { padding-top: 120px; }
+  .flyers-grid,
+  .flyers-grid.is-compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .news-list-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .news-list-media { height: 220px; }
   .news-article-layout {
@@ -2217,6 +2312,10 @@ html.store-drawer-open { overflow: hidden; }
 }
 @media (max-width: 767px) {
   .news-page-main { padding-top: 110px; }
+  .flyers-page-main,
+  .flyer-detail { padding-top: 110px; }
+  .flyers-grid,
+  .flyers-grid.is-compact { grid-template-columns: 1fr; }
   .news-page-header { margin-bottom: 32px; gap: 16px; }
   .news-card-large h2 { font-size: 40px; }
   .news-list-grid { grid-template-columns: 1fr; }
