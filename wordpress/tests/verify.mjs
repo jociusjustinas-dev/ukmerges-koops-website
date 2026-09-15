@@ -60,6 +60,8 @@ if (!pluginPhp.includes("unset($options['form_recipient'], $options['frontend_ur
 }
 const modular = fs.readFileSync(path.join(plugin, 'includes/modular-pages.php'), 'utf8');
 if (!modular.includes("'galleryUrls'") && !modular.includes('galleryUrls')) throw new Error('REST ir sekcijos turi saugoti galleryUrls');
+if (!modular.includes('koops_section_item_schemas') || !modular.includes("'items'")) throw new Error('Sekcijos turi palaikyti items sąrašus');
+if (!editor.includes('KoopsItemsControl') || !editor.includes('itemSchemas')) throw new Error('Gutenberg turi items redaktorių');
 if (!modular.includes("'media' =>") && !modular.includes("['media']")) throw new Error('Katalogas turi nurodyti, kuriose sekcijose yra nuotraukos');
 if (!modular.includes('function koops_default_section_anchor')) throw new Error('Kiekviena sekcija turi turėti numatytąjį HTML ID');
 if (!modular.includes("'anchor'")) throw new Error('REST ir sekcijos turi saugoti anchor');

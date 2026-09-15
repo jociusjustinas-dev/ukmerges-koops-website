@@ -1,10 +1,27 @@
 import { RollingLabel } from "../RollingLabel";
-import { supplierProcessSteps } from "../../lib/suppliers";
+import {
+  defaultSuppliersProcess,
+  sectionItemsOrDefault,
+  type CmsProcessItem,
+} from "../../lib/cms-items";
 
 /** BYQ: structured-data-2 / tt-jobs — process steps (kaip veikia) */
-export function SuppliersProcess() {
+export function SuppliersProcess({
+  items,
+  primaryLabel,
+  primaryUrl,
+}: {
+  items?: CmsProcessItem[];
+  primaryLabel?: string;
+  primaryUrl?: string;
+}) {
+  const steps = sectionItemsOrDefault(items, defaultSuppliersProcess);
+  const ctaLabel = primaryLabel?.trim() || "Siųsti pasiūlymą";
+  const ctaHref = primaryUrl?.trim() || "#forma";
+
   return (
-    <section data-cms-section="suppliers-process"
+    <section
+      data-cms-section="suppliers-process"
       className="tt-jobs suppliers-process"
       id="kaip-veikia"
       aria-labelledby="suppliers-process-title"
@@ -12,18 +29,20 @@ export function SuppliersProcess() {
     >
       <div className="tt-container jobs-layout">
         <div className="jobs-intro">
-          <h2 id="suppliers-process-title">Trys žingsniai iki kontakto</h2>
-          <p>
+          <h2 id="suppliers-process-title" data-cms-field="title">
+            Trys žingsniai iki kontakto
+          </h2>
+          <p data-cms-field="description">
             Aiškus kelias: ką pateikti, ką darome mes ir kas vyks po užklausos — be spėliojimo.
           </p>
-          <a className="pill-button accent" href="#forma" aria-label="Siųsti produkcijos pasiūlymą">
-            <RollingLabel>Siųsti pasiūlymą</RollingLabel>
+          <a className="pill-button accent" href={ctaHref} aria-label="Siųsti produkcijos pasiūlymą" data-cms-field="primary-link">
+            <RollingLabel>{ctaLabel}</RollingLabel>
           </a>
         </div>
 
         <ol className="jobs-list suppliers-process-list" aria-label="Tiekėjo kelio žingsniai">
-          {supplierProcessSteps.map((item) => (
-            <li className="job-row suppliers-process-step" key={item.step}>
+          {steps.map((item, index) => (
+            <li className="job-row suppliers-process-step" key={`${item.step}-${index}`}>
               <div className="job-row-copy">
                 <div className="job-row-meta">
                   <span className="suppliers-process-num">{item.step}</span>

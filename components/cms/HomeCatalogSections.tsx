@@ -312,12 +312,11 @@ export function HomeRestaurant({ restaurant, galleryUrls }: { restaurant: typeof
           </div>
           <div className="story-copy">
             <p>Miesto širdyje įsikūręs restoranas laukia Jūsų.</p>
-            <p className="story-summary">Restorane galime priimti iki {restaurant.maxGuests} svečių. Siūlome 3 skirtingo dydžio sales: Didžiąją, barą ir mažąją.</p>
+            <p className="story-summary">Restorane galime priimti iki {restaurant.maxGuests} svečių. Siūlome {restaurant.hallsCount} skirtingo dydžio sales: Didžiąją, barą ir mažąją.</p>
             <dl>
-              <div><dt>Pokylių salės</dt><dd>3 salės</dd></div>
+              <div><dt>Pokylių salės</dt><dd>{restaurant.hallsCount} salės</dd></div>
               <div><dt>Talpa</dt><dd>Iki {restaurant.maxGuests} svečių</dd></div>
               <div><dt>Adresas</dt><dd>{restaurant.address}</dd></div>
-              <div><dt>Mažoji salė</dt><dd>Iki 8 svečių</dd></div>
             </dl>
             <p className="story-note">Visas erdves suderinsime pagal renginį.</p>
             <div className="story-reservation story-contact-card">

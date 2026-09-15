@@ -61,7 +61,6 @@ function koops_section_catalog(): array
         'home-restaurant' => 'gallery',
         'home-suppliers' => 'image',
         'restaurant-hero' => 'gallery',
-        'restaurant-halls' => 'gallery',
         'careers-hero' => 'gallery',
         'suppliers-hero' => 'gallery',
         'suppliers-looking' => 'gallery',
@@ -158,34 +157,196 @@ function koops_section_content_defaults(): array
         'footer-cta' => ['eyebrow' => 'KOOPS', 'title' => 'Parduotuvė gali būti arčiau, nei manote', 'description' => '', 'primaryLabel' => 'Rasti parduotuvę', 'primaryUrl' => '/parduotuves', 'imageUrl' => ''],
 
         'stores-directory' => ['eyebrow' => 'PARDUOTUVĖS', 'title' => 'Raskite artimiausią KOOPS parduotuvę', 'description' => '34 parduotuvės Ukmergėje ir rajone.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
-        'stores-faq' => ['eyebrow' => 'GREITI ATSAKYMAI', 'title' => 'Kur, kada ir kaip — be spėliojimo.', 'description' => 'Atsakymai apie parduotuvių vietas, darbo laiką, maršrutą ir kontaktus.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+        'stores-faq' => ['eyebrow' => 'GREITI ATSAKYMAI', 'title' => 'Kur, kada ir kaip — be spėliojimo.', 'description' => 'Atsakymai apie parduotuvių vietas, darbo laiką, maršrutą ir kontaktus.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '', 'items' => [
+            ['question' => 'Kur rasti artimiausią KOOPS parduotuvę?', 'answer' => 'Sąraše arba žemėlapyje pasirinkite vietą. Ukmergės miestą ir rajoną galima atskirti filtru.'],
+            ['question' => 'Ar visos parduotuvės dirba vienodu laiku?', 'answer' => 'Ne. Mieste dažniausiai dirbama iki 20 val., dalis kaimo parduotuvių sekmadieniais nedirba. Laikas nurodytas prie kiekvienos vietos.'],
+            ['question' => 'Kaip gauti kelią iki parduotuvės?', 'answer' => 'Kortelėje spauskite „Rodyti žemėlapyje“ — žemėlapis dešinėje priartins pasirinktą parduotuvę.'],
+            ['question' => 'Kaip paskambinti pasirinktai parduotuvei?', 'answer' => 'Telefonas rodomas kortelėje ir greitoje peržiūroje. Spauskite numerį — skambutis prasidės iš karto.'],
+            ['question' => 'Ar KOOPS parduotuvės yra tik Ukmergės mieste?', 'answer' => 'Ne. Tinklas apima Ukmergę ir rajoną — kaimus bei miestelius. Sąraše naudokite filtrą „Ukmergė“ arba „Rajonas“.'],
+        ]],
         'news-listing' => ['eyebrow' => 'AKTUALU', 'title' => 'Naujienos ir akcijos', 'description' => 'KOOPS naujienos, akcijos ir Ukmergės krašto aktualijos.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/local-produce-couple.jpg'],
         'flyers-listing' => ['eyebrow' => 'AKCIJOS', 'title' => 'Leidiniai', 'description' => 'Aktualūs KOOPS akcijų leidiniai — viršelis, datos ir puslapių peržiūra.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/flyers/bendras-cover.jpg'],
         'classifieds-listing' => ['eyebrow' => 'KOOPS SKELBIMAI', 'title' => 'Skelbimai', 'description' => 'Nuomojamos patalpos, turto pasiūlymai ir kita aktuali KOOPS informacija vienoje vietoje.', 'primaryLabel' => 'Susisiekti', 'primaryUrl' => '/kontaktai', 'imageUrl' => ''],
 
         'restaurant-hero' => ['eyebrow' => 'RESTORANAS „VILKMERGĖ“ · NUO 1965 METŲ', 'title' => 'Restoranas „Vilkmergė“ – vieta, kur gyvena atsiminimai.', 'description' => 'Vieta šventėms, renginiams ir susitikimams Ukmergės centre.', 'primaryLabel' => 'Siųsti užklausą', 'primaryUrl' => '#uzklausa', 'imageUrl' => '/vilkmerge.jpg', 'galleryUrls' => ['/vilkmerge.jpg']],
-        'restaurant-features' => ['eyebrow' => 'ERDVĖ RENGINIUI', 'title' => 'Trys salės Ukmergės centre — viskas, ko reikia šventei', 'description' => 'Skirtingiems formatams — nuo jaukios vakarienės iki didesnės šventės ar įmonės vakaro.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
-        'restaurant-halls' => ['eyebrow' => 'SALĖS', 'title' => 'Salės ir talpa', 'description' => 'Vestuvės, jubiliejai, įmonių vakarai.', 'primaryLabel' => 'Siųsti užklausą', 'primaryUrl' => '#uzklausa', 'imageUrl' => '/vilkmerge-hall.jpg', 'galleryUrls' => ['/vilkmerge-hall.jpg', '/vilkmerge-table.jpg', '/vilkmerge-menu.jpg']],
+        'restaurant-features' => ['eyebrow' => 'ERDVĖ RENGINIUI', 'title' => 'Trys salės Ukmergės centre — viskas, ko reikia šventei', 'description' => 'Skirtingiems formatams — nuo jaukios vakarienės iki didesnės šventės ar įmonės vakaro.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '', 'items' => [
+            ['title' => 'Trys salės', 'body' => 'Skirtingiems formatams — nuo jaukios vakarienės iki didesnės šventės ar įmonės vakaro.'],
+            ['title' => 'Iki 154 svečių', 'body' => 'Restorane galime priimti iki 154 svečių. Siūlome Didžiąją salę, barą ir mažąją salę, kurioje telpa iki 8 svečių.'],
+            ['title' => 'Ukmergės centre', 'body' => 'Kauno g. 7, Ukmergė. Patogu svečiams ir organizatoriams — vieta, kurią lengva rasti.'],
+            ['title' => 'Aiški užklausa', 'body' => 'Forma arba skambutis — greitai suderinsime salę, datą ir meniu be spėliojimo.'],
+        ]],
+        'restaurant-halls' => ['eyebrow' => 'SALĖS', 'title' => 'Salės ir talpa', 'description' => 'Vestuvės, jubiliejai, įmonių vakarai.', 'primaryLabel' => 'Siųsti užklausą', 'primaryUrl' => '#uzklausa', 'imageUrl' => '/vilkmerge-hall.jpg', 'items' => [
+            ['name' => 'Didžioji salė', 'capacity' => 'Iki 90 svečių', 'description' => 'Vestuvės, jubiliejai, įmonių vakarai.', 'imageUrl' => '/vilkmerge-hall.jpg', 'imageId' => 0],
+            ['name' => 'Baras', 'capacity' => 'Iki 40 svečių', 'description' => 'Krikštynos, šeimos šventės, oficialūs susitikimai.', 'imageUrl' => '/vilkmerge-table.jpg', 'imageId' => 0],
+            ['name' => 'Mažoji salė', 'capacity' => 'Iki 8 svečių', 'description' => 'Jaukios vakarienės ir mažesnės progos.', 'imageUrl' => '/vilkmerge-menu.jpg', 'imageId' => 0],
+        ]],
         'restaurant-enquiry' => ['eyebrow' => 'KONTAKTAI IR UŽKLAUSA', 'title' => 'Susisiekite arba parašykite', 'description' => 'Skambinkite tiesiogiai arba užpildykite trumpą formą — suderinsime salę, datą ir meniu.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
 
         'careers-hero' => ['eyebrow' => 'KARJERA', 'title' => 'Darbas arti namų Ukmergėje ir rajone', 'description' => 'KOOPS ieško žmonių parduotuvėse, restorane „Vilkmergė“ ir logistikoje. Aiškus skelbimas, vieta ir paprastas kandidatavimo kelias — be spėliojimo.', 'primaryLabel' => 'Laisvos pozicijos', 'primaryUrl' => '#pozicijos', 'imageUrl' => '/local-produce-customer.jpg', 'galleryUrls' => ['/local-produce-customer.jpg', '/koops-community.jpg', '/store-pivonija.jpeg', '/local-produce-couple.jpg']],
-        'careers-features' => ['eyebrow' => 'KODĖL KOOPS', 'title' => 'Vietos darbas, aiškus kelias ir komanda šalia', 'description' => 'Darbas Ukmergėje ir rajone — be ilgos kelionės į didesnį miestą.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+        'careers-features' => ['eyebrow' => 'KODĖL KOOPS', 'title' => 'Vietos darbas, aiškus kelias ir komanda šalia', 'description' => 'Darbas Ukmergėje ir rajone — be ilgos kelionės į didesnį miestą.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '', 'items' => [
+            ['title' => 'Arti namų', 'body' => 'Darbas Ukmergėje ir rajone — be ilgos kelionės į didesnį miestą.'],
+            ['title' => 'Aiškios pozicijos', 'body' => 'Kiekviename skelbime — pavadinimas, vieta ir trumpas aprašymas, ką veiksite.'],
+            ['title' => 'Įvairūs keliai', 'body' => 'Parduotuvės, restoranas ir logistika — galite rinktis pagal patirtį ir ritmą.'],
+            ['title' => 'Paprastas kandidatavimas', 'body' => 'Pasirinkite skelbimą ir kandidatuokite išorinėje nuorodoje — arba parašykite, jei neradote tinkamos pozicijos.'],
+        ]],
         'careers-jobs' => ['eyebrow' => 'LAISVOS POZICIJOS', 'title' => 'Darbas arti namų', 'description' => 'Pasirinkite skelbimą — kandidatuosite išorinėje nuorodoje. Nerandate tinkamos pozicijos? Parašykite forma apačioje.', 'primaryLabel' => 'Neradau pozicijos', 'primaryUrl' => '#susisiekti', 'imageUrl' => ''],
         'careers-enquiry' => ['eyebrow' => 'NERADOTE POZICIJOS?', 'title' => 'Parašykite mums', 'description' => 'Jei sąraše nėra jums tinkamo skelbimo — palikite kontaktus ir trumpą žinutę. Galite prisegti CV. Arba paskambinkite.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
 
         'suppliers-hero' => ['eyebrow' => 'TIEKĖJAMS', 'title' => 'Auginkime vietos pasiūlą kartu', 'description' => 'Ieškome patikimų gamintojų ir tiekėjų. Aišku, ką pateikti, kam rašyti ir kas vyks po užklausos — be spėliojimo.', 'primaryLabel' => 'Siųsti pasiūlymą', 'primaryUrl' => '#forma', 'imageUrl' => '/ukmerge-fields-3.jpg', 'galleryUrls' => ['/ukmerge-fields-3.jpg', '/ukmerge-fields-2.jpg', '/ukmerge-fields-6.jpg', '/ukmerge-fields-1.jpg']],
-        'suppliers-looking' => ['eyebrow' => 'KO IEŠKOME', 'title' => 'Produkcija, kuri tinka KOOPS lentynoms', 'description' => 'Sezoninė produkcija iš Ukmergės krašto ir aplinkinių ūkių.', 'primaryLabel' => 'Siųsti pasiūlymą', 'primaryUrl' => '#forma', 'imageUrl' => '/ukmerge-fields-4.jpg', 'galleryUrls' => ['/ukmerge-fields-4.jpg', '/ukmerge-fields-5.jpg']],
-        'suppliers-process' => ['eyebrow' => 'KAIP VEIKIA', 'title' => 'Trys žingsniai iki kontakto', 'description' => 'Aiškus kelias: ką pateikti, ką darome mes ir kas vyks po užklausos — be spėliojimo.', 'primaryLabel' => 'Siųsti pasiūlymą', 'primaryUrl' => '#forma', 'imageUrl' => ''],
+        'suppliers-looking' => ['eyebrow' => 'KO IEŠKOME', 'title' => 'Produkcija, kuri tinka KOOPS lentynoms', 'description' => 'Sezoninė produkcija iš Ukmergės krašto ir aplinkinių ūkių.', 'primaryLabel' => 'Siųsti pasiūlymą', 'primaryUrl' => '#forma', 'imageUrl' => '/ukmerge-fields-4.jpg', 'galleryUrls' => ['/ukmerge-fields-4.jpg', '/ukmerge-fields-5.jpg'], 'items' => [
+            ['label' => 'ŠVIEŽIA', 'title' => 'Daržovės ir vaisiai', 'body' => 'Sezoninė produkcija iš Ukmergės krašto ir aplinkinių ūkių.'],
+            ['label' => 'PIENAS · KEPINIAI', 'title' => 'Kasdienė lentyna', 'body' => 'Pieno produktai, sūriai, duona ir kepiniai.'],
+            ['label' => 'MĖSA · ŽUVIS', 'title' => 'Pagrindinis asortimentas', 'body' => 'Šviežia ir apdorota mėsa, žuvies gaminiai.'],
+            ['label' => 'VIETOS GAMINIAI', 'title' => 'Aiški kilmė', 'body' => 'Medus, uogienės, konservai ir gėrimai.'],
+        ]],
+        'suppliers-process' => ['eyebrow' => 'KAIP VEIKIA', 'title' => 'Trys žingsniai iki kontakto', 'description' => 'Aiškus kelias: ką pateikti, ką darome mes ir kas vyks po užklausos — be spėliojimo.', 'primaryLabel' => 'Siųsti pasiūlymą', 'primaryUrl' => '#forma', 'imageUrl' => '', 'items' => [
+            ['step' => '01', 'title' => 'Pateikite pasiūlymą', 'body' => 'Produktą, kilmę, apytikslį kiekį ir kaip su jumis susisiekti. Trumpai pakanka pirmajam žingsniui.'],
+            ['step' => '02', 'title' => 'Peržiūrime', 'body' => 'Įvertiname, ar produkcija tinka KOOPS asortimentui ir pirkėjų poreikiams.'],
+            ['step' => '03', 'title' => 'Susisiekiame', 'body' => 'Grįžtame dėl tolesnių žingsnių — sąlygų, terminų ir bendradarbiavimo.'],
+        ]],
         'suppliers-enquiry' => ['eyebrow' => 'PASIŪLYMO FORMA', 'title' => 'Pasiūlykite savo produkciją', 'description' => 'Užpildykite trumpą formą — paruošime laišką.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/local-produce-couple.jpg'],
 
         'about-hero' => ['eyebrow' => 'APIE KOOPS', 'title' => 'Vietos žmonėms. Vietos verslui.', 'description' => 'Ukmergės rajono vartotojų kooperatyvas — parduotuvės, restoranas ir partnerystė su vietos žmonėmis kasdien.', 'primaryLabel' => 'Rasti parduotuvę', 'primaryUrl' => '/parduotuves', 'imageUrl' => '/koops-bento-local-shopping.jpg', 'galleryUrls' => ['/koops-bento-local-shopping.jpg', '/ukmerge-fields-2.jpg', '/ukmerge-fields-6.jpg', '/ukmerge-fields-1.jpg']],
         'about-story' => ['eyebrow' => 'ŽMONĖS · VIETA · ISTORIJA', 'title' => 'Kooperatyvas, augęs kartu su Ukmergės kraštu', 'description' => 'KOOPS jungia parduotuves, restoraną „Vilkmergė“ ir vietos partnerius. Dirbame tam, kad kasdienės prekės, darbas ir šventės būtų arčiau namų.', 'primaryLabel' => 'Rasti parduotuvę', 'primaryUrl' => '/parduotuves', 'imageUrl' => '/ukmerge-fields-5.jpg'],
-        'about-pillars' => ['eyebrow' => 'KAS ESAME', 'title' => 'Trys atramos, ant kurių stovi KOOPS', 'description' => 'Pirkėjai, komanda ir vietos gamintojai — kooperatyvas gyvas dėl kasdienių santykių Ukmergėje ir rajone.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+        'about-pillars' => ['eyebrow' => 'KAS ESAME', 'title' => 'Trys atramos, ant kurių stovi KOOPS', 'description' => 'Pirkėjai, komanda ir vietos gamintojai — kooperatyvas gyvas dėl kasdienių santykių Ukmergėje ir rajone.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '', 'items' => [
+            ['title' => 'Žmonės', 'body' => 'Pirkėjai, komanda ir vietos gamintojai — kooperatyvas gyvas dėl kasdienių santykių Ukmergėje ir rajone.'],
+            ['title' => 'Vieta', 'body' => 'Parduotuvės mieste ir seniūnijose, restoranas centre — paslaugos ten, kur žmonės gyvena ir švenčia.'],
+            ['title' => 'Istorija', 'body' => 'Ilgametė kooperatyvo patirtis ir „Vilkmergės“ tradicija — patikimas partneris krašto kasdienybei.'],
+        ]],
         'about-bento' => ['eyebrow' => 'KOOPS KASDIEN', 'title' => 'Viskas, ko reikia — arčiau jūsų', 'description' => 'Parduotuvės, restoranas, darbo pasiūlymai ir tiekėjų informacija vienoje vietoje.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/koops-hero.jpg', 'galleryUrls' => ['/koops-hero.jpg', '/store-uosis.jpeg']],
 
         'contact-form' => ['eyebrow' => 'KONTAKTAI', 'title' => 'Susisiekite su KOOPS', 'description' => 'Adresas, telefonas ar trumpa žinutė — be spėliojimo.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '/ukmerge-fields-1.jpg'],
-        'contact-channels' => ['eyebrow' => 'KONTAKTŲ KELIAI', 'title' => 'Kur kreiptis', 'description' => 'Pasirinkite temą — greičiau rasite adresą, užklausą ar darbo pasiūlymą.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => ''],
+        'contact-channels' => ['eyebrow' => 'KONTAKTŲ KELIAI', 'title' => 'Kur kreiptis', 'description' => 'Pasirinkite temą — greičiau rasite adresą, užklausą ar darbo pasiūlymą.', 'primaryLabel' => '', 'primaryUrl' => '', 'imageUrl' => '', 'items' => [
+            ['title' => 'Parduotuvės', 'body' => 'Adresai, darbo laikas ir maršrutas iki artimiausios KOOPS parduotuvės.', 'href' => '/parduotuves', 'cta' => 'Rasti parduotuvę'],
+            ['title' => 'Restoranas „Vilkmergė“', 'body' => 'Šventės, renginiai, salės ir tiesioginė užklausa.', 'href' => '/restoranas', 'cta' => 'Apie restoraną'],
+            ['title' => 'Tiekėjams', 'body' => 'Pasiūlykite produkciją — ką pateikti ir kam rašyti.', 'href' => '/tiekejams', 'cta' => 'Siųsti pasiūlymą'],
+            ['title' => 'Karjera', 'body' => 'Darbo pasiūlymai Ukmergėje ir rajone.', 'href' => '/karjera', 'cta' => 'Darbo pasiūlymai'],
+        ]],
     ];
+}
+
+function koops_section_item_schemas(): array
+{
+    return [
+        'stores-faq' => [
+            'label' => 'Klausimai ir atsakymai',
+            'addLabel' => 'Pridėti klausimą',
+            'fields' => [
+                ['key' => 'question', 'label' => 'Klausimas', 'type' => 'text'],
+                ['key' => 'answer', 'label' => 'Atsakymas', 'type' => 'textarea'],
+            ],
+            'empty' => ['question' => '', 'answer' => ''],
+        ],
+        'restaurant-halls' => [
+            'label' => 'Salės',
+            'addLabel' => 'Pridėti salę',
+            'fields' => [
+                ['key' => 'name', 'label' => 'Pavadinimas', 'type' => 'text'],
+                ['key' => 'capacity', 'label' => 'Talpa', 'type' => 'text'],
+                ['key' => 'description', 'label' => 'Aprašymas', 'type' => 'textarea'],
+                ['key' => 'imageUrl', 'label' => 'Nuotrauka', 'type' => 'image', 'idKey' => 'imageId'],
+            ],
+            'empty' => ['name' => '', 'capacity' => '', 'description' => '', 'imageUrl' => '', 'imageId' => 0],
+        ],
+        'restaurant-features' => [
+            'label' => 'Privalumų kortelės',
+            'addLabel' => 'Pridėti kortelę',
+            'fields' => [
+                ['key' => 'title', 'label' => 'Antraštė', 'type' => 'text'],
+                ['key' => 'body', 'label' => 'Tekstas', 'type' => 'textarea'],
+            ],
+            'empty' => ['title' => '', 'body' => ''],
+        ],
+        'careers-features' => [
+            'label' => 'Privalumų kortelės',
+            'addLabel' => 'Pridėti kortelę',
+            'fields' => [
+                ['key' => 'title', 'label' => 'Antraštė', 'type' => 'text'],
+                ['key' => 'body', 'label' => 'Tekstas', 'type' => 'textarea'],
+            ],
+            'empty' => ['title' => '', 'body' => ''],
+        ],
+        'suppliers-looking' => [
+            'label' => 'Kategorijos',
+            'addLabel' => 'Pridėti kategoriją',
+            'fields' => [
+                ['key' => 'label', 'label' => 'Mažoji antraštė', 'type' => 'text'],
+                ['key' => 'title', 'label' => 'Antraštė', 'type' => 'text'],
+                ['key' => 'body', 'label' => 'Tekstas', 'type' => 'textarea'],
+            ],
+            'empty' => ['label' => '', 'title' => '', 'body' => ''],
+        ],
+        'suppliers-process' => [
+            'label' => 'Žingsniai',
+            'addLabel' => 'Pridėti žingsnį',
+            'fields' => [
+                ['key' => 'step', 'label' => 'Numeris', 'type' => 'text'],
+                ['key' => 'title', 'label' => 'Antraštė', 'type' => 'text'],
+                ['key' => 'body', 'label' => 'Tekstas', 'type' => 'textarea'],
+            ],
+            'empty' => ['step' => '', 'title' => '', 'body' => ''],
+        ],
+        'about-pillars' => [
+            'label' => 'Atramos',
+            'addLabel' => 'Pridėti atramą',
+            'fields' => [
+                ['key' => 'title', 'label' => 'Antraštė', 'type' => 'text'],
+                ['key' => 'body', 'label' => 'Tekstas', 'type' => 'textarea'],
+            ],
+            'empty' => ['title' => '', 'body' => ''],
+        ],
+        'contact-channels' => [
+            'label' => 'Kontaktų keliai',
+            'addLabel' => 'Pridėti kelią',
+            'fields' => [
+                ['key' => 'title', 'label' => 'Antraštė', 'type' => 'text'],
+                ['key' => 'body', 'label' => 'Tekstas', 'type' => 'textarea'],
+                ['key' => 'href', 'label' => 'Nuoroda', 'type' => 'url'],
+                ['key' => 'cta', 'label' => 'Mygtuko tekstas', 'type' => 'text'],
+            ],
+            'empty' => ['title' => '', 'body' => '', 'href' => '', 'cta' => ''],
+        ],
+    ];
+}
+
+function koops_sanitize_section_items(string $type, $value): array
+{
+    $schemas = koops_section_item_schemas();
+    if (!isset($schemas[$type]) || !is_array($value)) {
+        return [];
+    }
+    $schema = $schemas[$type];
+    $fields = $schema['fields'];
+    $items = [];
+    foreach ($value as $row) {
+        if (!is_array($row)) {
+            continue;
+        }
+        $item = [];
+        $has_content = false;
+        foreach ($fields as $field) {
+            $key = $field['key'];
+            $raw = $row[$key] ?? '';
+            if (($field['type'] ?? '') === 'textarea') {
+                $item[$key] = sanitize_textarea_field((string) $raw);
+            } elseif (($field['type'] ?? '') === 'url') {
+                $item[$key] = esc_url_raw((string) $raw);
+            } elseif (($field['type'] ?? '') === 'image') {
+                $item[$key] = esc_url_raw((string) $raw);
+                $id_key = $field['idKey'] ?? 'imageId';
+                $item[$id_key] = absint($row[$id_key] ?? 0);
+            } else {
+                $item[$key] = sanitize_text_field((string) $raw);
+            }
+            if (trim((string) $item[$key]) !== '') {
+                $has_content = true;
+            }
+        }
+        if ($has_content) {
+            $items[] = $item;
+        }
+    }
+    return array_values($items);
 }
 
 function koops_sanitize_url_list($value): array
@@ -362,12 +523,14 @@ function koops_section_default(string $type): array
         'imageId' => 0,
         'galleryUrls' => [],
         'galleryIds' => [],
+        'items' => [],
     ];
     $defaults = array_merge($empty, koops_section_content_defaults()[$type] ?? []);
     $defaults['anchor'] = koops_sanitize_section_anchor((string) ($defaults['anchor'] ?? ''), $type);
     $defaults['imageId'] = absint($defaults['imageId'] ?? 0);
     $defaults['galleryUrls'] = koops_sanitize_url_list($defaults['galleryUrls'] ?? []);
     $defaults['galleryIds'] = koops_sanitize_id_list($defaults['galleryIds'] ?? []);
+    $defaults['items'] = koops_sanitize_section_items($type, $defaults['items'] ?? []);
     return $defaults;
 }
 
@@ -423,6 +586,7 @@ function koops_register_section_block(): void
     wp_localize_script('koops-section-editor-script', 'koopsSectionEditor', [
         'catalog' => koops_section_catalog(),
         'defaults' => koops_defaults_for_editor(),
+        'itemSchemas' => koops_section_item_schemas(),
         'frontendUrl' => untrailingslashit($frontend_url),
         'previewBase' => KOOPS_CORE_URL . 'assets/previews/',
         'previewVersion' => KOOPS_CORE_VERSION,
@@ -654,6 +818,11 @@ function koops_normalize_page_sections(WP_Post $page): array
             $gallery_urls = $defaults['galleryUrls'];
         }
 
+        $items = koops_sanitize_section_items($type, $attrs['items'] ?? null);
+        if (!$items) {
+            $items = $defaults['items'];
+        }
+
         $anchor = koops_sanitize_section_anchor((string) ($attrs['anchor'] ?? ''), $type);
 
         $override_fields = [];
@@ -665,6 +834,9 @@ function koops_normalize_page_sections(WP_Post $page): array
         }
         if ($gallery_urls && $gallery_urls !== $defaults['galleryUrls']) {
             $override_fields[] = 'galleryUrls';
+        }
+        if (isset($attrs['items']) && wp_json_encode($items) !== wp_json_encode($defaults['items'])) {
+            $override_fields[] = 'items';
         }
 
         $sections[] = [
@@ -681,6 +853,7 @@ function koops_normalize_page_sections(WP_Post $page): array
             'imageId' => absint($attrs['imageId'] ?? $defaults['imageId']),
             'galleryUrls' => $gallery_urls,
             'galleryIds' => koops_sanitize_id_list($attrs['galleryIds'] ?? $defaults['galleryIds']),
+            'items' => $items,
             'overrides' => $override_fields,
         ];
     }
@@ -774,7 +947,7 @@ function koops_rest_update_page_section(WP_REST_Request $request)
     if (!is_array($changes)) {
         return new WP_Error('koops_invalid_changes', 'Laukas „changes“ turi būti objektas.', ['status' => 400]);
     }
-    $allowed = ['enabled', 'anchor', 'eyebrow', 'title', 'description', 'primaryLabel', 'primaryUrl', 'imageUrl', 'imageId', 'galleryUrls', 'galleryIds'];
+    $allowed = ['enabled', 'anchor', 'eyebrow', 'title', 'description', 'primaryLabel', 'primaryUrl', 'imageUrl', 'imageId', 'galleryUrls', 'galleryIds', 'items'];
     foreach (array_keys($changes) as $key) {
         if (!in_array($key, $allowed, true)) {
             return new WP_Error('koops_section_field_not_allowed', 'Neleistinas sekcijos laukas: ' . sanitize_key((string) $key), ['status' => 400]);
@@ -793,9 +966,9 @@ function koops_rest_update_page_section(WP_REST_Request $request)
             }
             continue;
         }
-        if ($key === 'galleryIds' || $key === 'galleryUrls') {
+        if ($key === 'galleryIds' || $key === 'galleryUrls' || $key === 'items') {
             if (!is_array($value) && $value !== null) {
-                return new WP_Error('koops_section_value_invalid', 'Galerijos laukas turi būti masyvas.', ['status' => 400]);
+                return new WP_Error('koops_section_value_invalid', 'Sąrašo laukas turi būti masyvas.', ['status' => 400]);
             }
             continue;
         }
@@ -904,6 +1077,7 @@ function koops_sanitize_builder_section(array $input): array
         'imageId' => absint($input['imageId'] ?? 0),
         'galleryUrls' => koops_sanitize_url_list($input['galleryUrls'] ?? []),
         'galleryIds' => koops_sanitize_id_list($input['galleryIds'] ?? []),
+        'items' => koops_sanitize_section_items($type, $input['items'] ?? []),
     ];
 }
 

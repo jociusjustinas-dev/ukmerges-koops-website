@@ -1,7 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { aboutPillars } from "../../lib/about";
+import {
+  defaultAboutPillars,
+  sectionItemsOrDefault,
+  type CmsFeatureItem,
+} from "../../lib/cms-items";
+
+const tones = ["bone", "sprout", "moss"] as const;
 
 const icons = [
   <svg key="people" width="100%" height="100%" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
@@ -16,9 +22,10 @@ const icons = [
 ];
 
 /** BYQ: terra-tory value features — žmonės · vieta · istorija */
-export function AboutPillars() {
+export function AboutPillars({ items }: { items?: CmsFeatureItem[] }) {
   const gridRef = React.useRef<HTMLDivElement>(null);
   const [visible, setVisible] = React.useState(false);
+  const pillars = sectionItemsOrDefault(items, defaultAboutPillars);
 
   React.useEffect(() => {
     const el = gridRef.current;
@@ -44,7 +51,8 @@ export function AboutPillars() {
   }, []);
 
   return (
-    <section data-cms-section="about-pillars"
+    <section
+      data-cms-section="about-pillars"
       className="restaurant-features about-pillars"
       id="about-pillars"
       aria-labelledby="about-pillars-title"
@@ -55,18 +63,22 @@ export function AboutPillars() {
 
         <div className="restaurant-features-layout about-pillars-layout">
           <div className="restaurant-features-intro">
-            <p className="section-label">KAS ESAME</p>
-            <h2 id="about-pillars-title">Trys atramos, ant kurių stovi KOOPS</h2>
+            <p className="section-label" data-cms-field="eyebrow">
+              KAS ESAME
+            </p>
+            <h2 id="about-pillars-title" data-cms-field="title">
+              Trys atramos, ant kurių stovi KOOPS
+            </h2>
           </div>
 
           <div ref={gridRef} className="restaurant-features-grid about-pillars-grid">
-            {aboutPillars.map((item, i) => (
+            {pillars.map((item, i) => (
               <article
-                key={item.title}
-                className={`restaurant-feature-card is-tone-${item.tone}${visible ? " is-visible" : ""}`}
+                key={`${item.title}-${i}`}
+                className={`restaurant-feature-card is-tone-${tones[i % tones.length]}${visible ? " is-visible" : ""}`}
                 style={{ transitionDelay: visible ? `${i * 100}ms` : "0ms" }}
               >
-                <div className="restaurant-feature-icon">{icons[i]}</div>
+                <div className="restaurant-feature-icon">{icons[i % icons.length]}</div>
                 <div className="restaurant-feature-copy">
                   <h3>{item.title}</h3>
                   <p>{item.body}</p>

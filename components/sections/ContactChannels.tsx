@@ -1,10 +1,17 @@
 import { AvenirButtonArrow } from "../../app/byq-icons";
-import { contactChannels } from "../../lib/contacts";
+import {
+  defaultContactChannels,
+  sectionItemsOrDefault,
+  type CmsChannelItem,
+} from "../../lib/cms-items";
 
 /** BYQ: structured-data-2 — contact destination channels */
-export function ContactChannels() {
+export function ContactChannels({ items }: { items?: CmsChannelItem[] }) {
+  const channels = sectionItemsOrDefault(items, defaultContactChannels);
+
   return (
-    <section data-cms-section="contact-channels"
+    <section
+      data-cms-section="contact-channels"
       className="tt-jobs contacts-channels"
       id="keliai"
       aria-labelledby="contacts-channels-title"
@@ -12,18 +19,20 @@ export function ContactChannels() {
     >
       <div className="tt-container jobs-layout">
         <div className="jobs-intro">
-          <h2 id="contacts-channels-title">Kur kreiptis</h2>
-          <p>
+          <h2 id="contacts-channels-title" data-cms-field="title">
+            Kur kreiptis
+          </h2>
+          <p data-cms-field="description">
             Pasirinkite temą — greičiau rasite adresą, užklausą ar darbo pasiūlymą.
           </p>
         </div>
 
         <div className="jobs-list" role="region" aria-label="Kontaktų keliai">
-          {contactChannels.map((item) => (
+          {channels.map((item, index) => (
             <a
               className="job-row"
               href={item.href}
-              key={item.href}
+              key={`${item.href}-${index}`}
               aria-label={`${item.title} — ${item.cta}`}
             >
               <div className="job-row-copy">

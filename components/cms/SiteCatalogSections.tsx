@@ -7,6 +7,13 @@ import type { Store } from "../../lib/stores";
 import { suppliersContact } from "../../lib/suppliers";
 import type { NewsItem } from "../../lib/news";
 import type { Flyer } from "../../lib/flyers";
+import {
+  defaultStoreFaqs,
+  defaultRestaurantHalls,
+  sectionItemsOrDefault,
+  type CmsFaqItem,
+  type CmsHallItem,
+} from "../../lib/cms-items";
 import { FlyerCards } from "../FlyersListing";
 import type { WordPressOptions } from "../../lib/cms-render";
 import { CareerApplyForm } from "../CareerApplyForm";
@@ -18,14 +25,9 @@ import { RestaurantEnquiryForm } from "../RestaurantEnquiryForm";
 import { RollingLabel } from "../RollingLabel";
 import { StoresFinder } from "../StoresFinder";
 import { SupplierForm } from "../SupplierForm";
+import { Fragment } from "react";
 
-export const storeFaqs = [
-  { question: "Kur rasti artimiausią KOOPS parduotuvę?", answer: "Sąraše arba žemėlapyje pasirinkite vietą. Ukmergės miestą ir rajoną galima atskirti filtru." },
-  { question: "Ar visos parduotuvės dirba vienodu laiku?", answer: "Ne. Mieste dažniausiai dirbama iki 20 val., dalis kaimo parduotuvių sekmadieniais nedirba. Laikas nurodytas prie kiekvienos vietos." },
-  { question: "Kaip gauti kelią iki parduotuvės?", answer: "Kortelėje spauskite „Rodyti žemėlapyje“ — žemėlapis dešinėje priartins pasirinktą parduotuvę." },
-  { question: "Kaip paskambinti pasirinktai parduotuvei?", answer: "Telefonas rodomas kortelėje ir greitoje peržiūroje. Spauskite numerį — skambutis prasidės iš karto." },
-  { question: "Ar KOOPS parduotuvės yra tik Ukmergės mieste?", answer: "Ne. Tinklas apima Ukmergę ir rajoną — kaimus bei miestelius. Sąraše naudokite filtrą „Ukmergė“ arba „Rajonas“." },
-];
+export const storeFaqs = defaultStoreFaqs;
 
 export function StoresDirectory({ stores }: { stores: Store[] }) {
   return (
@@ -47,17 +49,22 @@ export function StoresDirectory({ stores }: { stores: Store[] }) {
   );
 }
 
-export function StoresFaq() {
+export function StoresFaq({ items }: { items?: CmsFaqItem[] }) {
+  const faqs = sectionItemsOrDefault(items, defaultStoreFaqs);
+
   return (
     <section className="stores-faq" id="stores-faq" aria-labelledby="stores-faq-title" data-cms-section="stores-faq">
       <div className="tt-container stores-faq-layout">
         <div>
-          <p className="section-label">GREITI ATSAKYMAI</p>
-          <h2 id="stores-faq-title">Kur, kada ir kaip — be spėliojimo.</h2>
+          <p className="section-label" data-cms-field="eyebrow">GREITI ATSAKYMAI</p>
+          <h2 id="stores-faq-title" data-cms-field="title">Kur, kada ir kaip — be spėliojimo.</h2>
+          <p className="stores-faq-lead" data-cms-field="description" hidden>
+            Atsakymai apie parduotuvių vietas, darbo laiką, maršrutą ir kontaktus.
+          </p>
         </div>
         <div className="stores-faq-list">
-          {storeFaqs.map((item, index) => (
-            <details key={item.question} open={index === 0 ? true : undefined}>
+          {faqs.map((item, index) => (
+            <details key={`${item.question}-${index}`} open={index === 0 ? true : undefined}>
               <summary>
                 <span>{item.question}</span>
                 <span className="stores-faq-toggle" aria-hidden="true" />
@@ -136,54 +143,64 @@ export function ClassifiedsListing({ items }: { items: Classified[] }) {
   );
 }
 
-export function RestaurantHalls({ restaurant }: { restaurant: typeof restaurantDefaults }) {
+export function RestaurantHalls({
+  items,
+  primaryLabel,
+  primaryUrl,
+}: {
+  restaurant?: typeof restaurantDefaults;
+  items?: CmsHallItem[];
+  primaryLabel?: string;
+  primaryUrl?: string;
+}) {
+  const halls = sectionItemsOrDefault(items, defaultRestaurantHalls);
+  const ctaLabel = primaryLabel?.trim() || "Siųsti užklausą";
+  const ctaHref = primaryUrl?.trim() || "#uzklausa";
+
   return (
     <section className="koops-bento-section restaurant-halls" id="restaurant-halls" aria-labelledby="restaurant-halls-title" data-byq-component="terra-tory-bento-1" data-cms-section="restaurant-halls">
       <div className="tt-container">
         <header className="koops-bento-header">
           <div className="dashed-divider" aria-hidden="true" />
-          <p className="section-label">SALĖS</p>
-          <h2 id="restaurant-halls-title">Salės ir talpa</h2>
+          <p className="section-label" data-cms-field="eyebrow">SALĖS</p>
+          <h2 id="restaurant-halls-title" data-cms-field="title">Salės ir talpa</h2>
+          <p data-cms-field="description" hidden>Vestuvės, jubiliejai, įmonių vakarai.</p>
         </header>
         <div className="koops-bento-grid">
-          <article className="koops-bento-card">
-            <p className="section-label">DIDŽIOJI SALĖ</p>
-            <div className="koops-bento-card-bottom">
-              <div className="koops-bento-card-content">
-                <h3>Iki 90</h3>
-                <p>Vestuvės, jubiliejai, įmonių vakarai.</p>
-              </div>
-            </div>
-          </article>
-          <div className="koops-bento-media koops-bento-media-tall" aria-hidden="true">
-            <img loading="lazy" src="/vilkmerge-hall.jpg" alt="" data-cms-field="gallery-item" />
-          </div>
-          <article className="koops-bento-card">
-            <p className="section-label">BARAS</p>
-            <div className="koops-bento-card-bottom">
-              <div className="koops-bento-card-content">
-                <h3>Iki 40</h3>
-                <p>Krikštynos, šeimos šventės, oficialūs susitikimai.</p>
-              </div>
-            </div>
-          </article>
-          <div className="koops-bento-media" aria-hidden="true">
-            <img loading="lazy" src="/vilkmerge-table.jpg" alt="" data-cms-field="gallery-item" />
-          </div>
-          <div className="koops-bento-media" aria-hidden="true">
-            <img loading="lazy" src="/vilkmerge-menu.jpg" alt="" data-cms-field="gallery-item" />
-          </div>
-          <div className="koops-bento-card koops-bento-card-accent">
-            <p className="section-label">MAŽOJI · BENDRA TALPA</p>
-            <div className="koops-bento-card-content">
-              <h3>Iki {restaurant.maxGuests}</h3>
-              <p>Mažoji salė — iki 8 svečių. Visas erdves suderinsime pagal renginį.</p>
-            </div>
-            <div className="koops-bento-actions">
-              <a className="text-link" href="#uzklausa">Siųsti užklausą <span aria-hidden="true">→</span></a>
-            </div>
-            <span className="koops-bento-circle" aria-hidden="true" />
-          </div>
+          {halls.map((hall, index) => {
+            const isLast = index === halls.length - 1;
+            return (
+              <Fragment key={`${hall.name}-${index}`}>
+                <article className={isLast ? "koops-bento-card koops-bento-card-accent" : "koops-bento-card"}>
+                  <p className="section-label">{hall.name}</p>
+                  <div className={isLast ? "koops-bento-card-content" : "koops-bento-card-bottom"}>
+                    <div className="koops-bento-card-content">
+                      <h3>{hall.capacity}</h3>
+                      <p>{hall.description}</p>
+                    </div>
+                  </div>
+                  {isLast ? (
+                    <>
+                      <div className="koops-bento-actions">
+                        <a className="text-link" href={ctaHref} data-cms-field="primary-link">
+                          {ctaLabel} <span aria-hidden="true">→</span>
+                        </a>
+                      </div>
+                      <span className="koops-bento-circle" aria-hidden="true" />
+                    </>
+                  ) : null}
+                </article>
+                {hall.imageUrl ? (
+                  <div
+                    className={index === 0 ? "koops-bento-media koops-bento-media-tall" : "koops-bento-media"}
+                    aria-hidden="true"
+                  >
+                    <img loading="lazy" src={hall.imageUrl} alt="" data-cms-field="gallery-item" />
+                  </div>
+                ) : null}
+              </Fragment>
+            );
+          })}
         </div>
       </div>
     </section>

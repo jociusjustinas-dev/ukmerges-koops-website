@@ -3,7 +3,7 @@ import { CmsPageSections } from "../../components/CmsPageSections";
 import { SiteFooter } from "../../components/SiteFooter";
 import { SiteHeader } from "../../components/SiteHeader";
 import { StoresPageMotion } from "../../components/StoresPageMotion";
-import { storeFaqs } from "../../components/cms/SiteCatalogSections";
+import { defaultStoreFaqs, sectionItemsOrDefault, type CmsFaqItem } from "../../lib/cms-items";
 import { getCmsPageView } from "../../lib/cms-render";
 import { createPageMetadata } from "../../lib/metadata";
 import { getKoopsCmsData } from "../../lib/wordpress";
@@ -17,6 +17,8 @@ export const metadata = createPageMetadata({
 export default async function StoresPage() {
   const cms = await getKoopsCmsData();
   const { context, sections, hasFooterCta } = getCmsPageView(cms, "parduotuves");
+  const faqSection = sections.find((section) => section.type === "stores-faq");
+  const faqs = sectionItemsOrDefault(faqSection?.items as CmsFaqItem[] | undefined, defaultStoreFaqs);
 
   return (
     <div className="site-shell stores-page" id="pradzia" data-cms-page="parduotuves">
@@ -32,7 +34,7 @@ export default async function StoresPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        mainEntity: storeFaqs.map((item) => (
+        mainEntity: faqs.map((item) => (
           {
             "@type": "Question",
             name: item.question,

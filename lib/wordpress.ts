@@ -42,6 +42,7 @@ export type CmsPageSection = {
   imageId?: number;
   galleryUrls?: string[];
   galleryIds?: number[];
+  items?: Record<string, string | number>[];
   overrides?: string[];
 };
 

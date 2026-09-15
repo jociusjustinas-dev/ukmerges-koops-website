@@ -20,6 +20,7 @@
   const { PanelBody, SelectControl, TextControl, TextareaControl, ToggleControl, Button } = components;
   const catalog = (window.koopsSectionEditor && window.koopsSectionEditor.catalog) || {};
   const defaults = (window.koopsSectionEditor && window.koopsSectionEditor.defaults) || {};
+  const itemSchemas = (window.koopsSectionEditor && window.koopsSectionEditor.itemSchemas) || {};
   const frontendUrl = ((window.koopsSectionEditor && window.koopsSectionEditor.frontendUrl) || '').replace(/\/$/, '');
   const previewBase = (window.koopsSectionEditor && window.koopsSectionEditor.previewBase) || '';
   const previewVersion = (window.koopsSectionEditor && window.koopsSectionEditor.previewVersion) || '';
@@ -296,6 +297,180 @@
     };
   }
 
+  function cloneItem(value) {
+    return JSON.parse(JSON.stringify(value || {}));
+  }
+
+  function KoopsItemsControl(props) {
+    const schema = itemSchemas[props.sectionType];
+    if (!schema || !schema.fields || !schema.fields.length) return null;
+
+    const fallback = (defaults[props.sectionType] && defaults[props.sectionType].items) || [];
+    const items = Array.isArray(props.items) && props.items.length ? props.items.map(cloneItem) : fallback.map(cloneItem);
+
+    function commit(next) {
+      props.onChange(next);
+    }
+
+    function updateItem(index, key, value) {
+      const next = items.map(cloneItem);
+      next[index] = Object.assign({}, next[index], { [key]: value });
+      commit(next);
+    }
+
+    function updateItemMedia(index, media) {
+      const next = items.map(cloneItem);
+      const selected = Array.isArray(media) ? media[0] : media;
+      next[index] = Object.assign({}, next[index], {
+        imageUrl: selected && selected.url ? selected.url : '',
+        imageId: selected && selected.id ? selected.id : 0
+      });
+      commit(next);
+    }
+
+    function moveItem(index, delta) {
+      const target = index + delta;
+      if (target < 0 || target >= items.length) return;
+      const next = items.map(cloneItem);
+      const temp = next[index];
+      next[index] = next[target];
+      next[target] = temp;
+      commit(next);
+    }
+
+    function removeItem(index) {
+      commit(items.filter(function (_item, itemIndex) {
+        return itemIndex !== index;
+      }));
+    }
+
+    function addItem() {
+      commit(items.concat([cloneItem(schema.empty || {})]));
+    }
+
+    return el(
+      'div',
+      { className: 'koops-items-control' },
+      el('span', { className: 'koops-items-control__label' }, schema.label || 'Sąrašas'),
+      items.map(function (item, index) {
+        return el(
+          'div',
+          { className: 'koops-items-control__item', key: 'item-' + index },
+          el(
+            'div',
+            { className: 'koops-items-control__item-head' },
+            el('strong', null, (schema.label || 'Įrašas') + ' ' + (index + 1)),
+            el(
+              'div',
+              { className: 'koops-items-control__item-actions' },
+              el(Button, {
+                variant: 'tertiary',
+                size: 'small',
+                disabled: index === 0,
+                onClick: function () {
+                  moveItem(index, -1);
+                },
+                label: 'Aukštyn'
+              }, '↑'),
+              el(Button, {
+                variant: 'tertiary',
+                size: 'small',
+                disabled: index === items.length - 1,
+                onClick: function () {
+                  moveItem(index, 1);
+                },
+                label: 'Žemyn'
+              }, '↓'),
+              el(Button, {
+                isDestructive: true,
+                variant: 'link',
+                onClick: function () {
+                  removeItem(index);
+                }
+              }, 'Šalinti')
+            )
+          ),
+          schema.fields.map(function (field) {
+            const key = field.key;
+            const value = item[key] || '';
+            if (field.type === 'textarea') {
+              return el(TextareaControl, {
+                key: key,
+                label: field.label,
+                value: value,
+                onChange: function (next) {
+                  updateItem(index, key, next);
+                }
+              });
+            }
+            if (field.type === 'url') {
+              return el(KoopsLinkControl, {
+                key: key,
+                label: field.label,
+                value: value,
+                onChange: function (next) {
+                  updateItem(index, key, next);
+                }
+              });
+            }
+            if (field.type === 'image') {
+              const idKey = field.idKey || 'imageId';
+              const preview = resolvePreviewUrl(item.imageUrl || '');
+              return el(
+                'div',
+                { className: 'koops-items-control__image', key: key },
+                el('span', { className: 'koops-media-control__label' }, field.label),
+                preview
+                  ? el('img', { src: preview, alt: '' })
+                  : el('div', { className: 'koops-media-control__empty' }, 'Nuotrauka nepasirinkta'),
+                el(
+                  'div',
+                  { className: 'koops-media-control__actions' },
+                  el(
+                    MediaUploadCheck,
+                    null,
+                    el(MediaUpload, {
+                      allowedTypes: ['image'],
+                      value: item[idKey] || 0,
+                      onSelect: function (media) {
+                        updateItemMedia(index, media);
+                      },
+                      render: function (args) {
+                        return el(
+                          Button,
+                          { variant: 'secondary', onClick: args.open },
+                          preview ? 'Keisti nuotrauką' : 'Pasirinkti nuotrauką'
+                        );
+                      }
+                    })
+                  ),
+                  preview
+                    ? el(Button, {
+                        isDestructive: true,
+                        variant: 'link',
+                        onClick: function () {
+                          updateItemMedia(index, null);
+                        }
+                      }, 'Pašalinti')
+                    : null
+                )
+              );
+            }
+            return el(TextControl, {
+              key: key,
+              label: field.label,
+              value: value,
+              onChange: function (next) {
+                updateItem(index, key, next);
+              }
+            });
+          })
+        );
+      }),
+      el(Button, { variant: 'secondary', onClick: addItem }, schema.addLabel || 'Pridėti')
+    );
+  }
+
   function KoopsSectionFields(props) {
     const a = props.attributes;
     const set = props.setAttributes;
@@ -313,7 +488,16 @@
         label: 'Sekcijos tipas',
         value: a.sectionType,
         options: sectionTypeOptions(),
-        onChange: (sectionType) => set(Object.assign({ sectionType, imageId: 0, galleryIds: [], galleryUrls: [] }, defaults[sectionType] || {}))
+        onChange: (sectionType) => {
+          const next = defaults[sectionType] || {};
+          set(Object.assign({
+            sectionType,
+            imageId: 0,
+            galleryIds: [],
+            galleryUrls: [],
+            items: next.items || []
+          }, next));
+        }
       }),
       el(TextControl, {
         label: 'Sekcijos ID',
@@ -327,7 +511,14 @@
       el(TextareaControl, { label: 'Aprašymas', value: a.description, onChange: (description) => set({ description }) }),
       el(TextControl, { label: 'Pagrindinio mygtuko tekstas', value: a.primaryLabel, onChange: (primaryLabel) => set({ primaryLabel }) }),
       el(KoopsLinkControl, { label: 'Pagrindinio mygtuko nuoroda', value: a.primaryUrl, onChange: (primaryUrl) => set({ primaryUrl }) }),
-      mediaControlFor(a, set)
+      mediaControlFor(a, set),
+      el(KoopsItemsControl, {
+        sectionType: a.sectionType,
+        items: a.items,
+        onChange: function (items) {
+          set({ items });
+        }
+      })
     );
   }
 
@@ -579,7 +770,8 @@
         primaryUrl: a.primaryUrl,
         imageUrl: a.imageUrl,
         galleryUrls: a.galleryUrls,
-        overrides: ['eyebrow', 'title', 'description', 'primaryLabel', 'primaryUrl', 'imageUrl', 'galleryUrls']
+        items: a.items,
+        overrides: ['eyebrow', 'title', 'description', 'primaryLabel', 'primaryUrl', 'imageUrl', 'galleryUrls', 'items']
       };
     }).filter(function (section) { return Boolean(section.type); });
   }

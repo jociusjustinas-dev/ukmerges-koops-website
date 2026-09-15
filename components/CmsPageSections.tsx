@@ -65,7 +65,7 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
     case "stores-directory":
       return <StoresDirectory stores={context.stores} />;
     case "stores-faq":
-      return <StoresFaq />;
+      return <StoresFaq items={section.items as never} />;
     case "news-listing":
       return <NewsListingSection items={context.news} flyers={context.flyers} />;
     case "flyers-listing":
@@ -75,15 +75,22 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
     case "restaurant-hero":
       return <RestaurantHero restaurant={context.restaurant} />;
     case "restaurant-features":
-      return <RestaurantValueFeatures restaurant={context.restaurant} />;
+      return <RestaurantValueFeatures items={section.items as never} />;
     case "restaurant-halls":
-      return <RestaurantHalls restaurant={context.restaurant} />;
+      return (
+        <RestaurantHalls
+          restaurant={context.restaurant}
+          items={section.items as never}
+          primaryLabel={section.primaryLabel}
+          primaryUrl={section.primaryUrl}
+        />
+      );
     case "restaurant-enquiry":
       return <RestaurantEnquiry restaurant={context.restaurant} />;
     case "careers-hero":
       return <CareersHero />;
     case "careers-features":
-      return <CareersValueFeatures />;
+      return <CareersValueFeatures items={section.items as never} />;
     case "careers-jobs":
       return <CareersJobs jobs={context.jobs} />;
     case "careers-enquiry":
@@ -91,9 +98,22 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
     case "suppliers-hero":
       return <SuppliersHero />;
     case "suppliers-looking":
-      return <SuppliersLookingFor />;
+      return (
+        <SuppliersLookingFor
+          items={section.items as never}
+          galleryUrls={section.galleryUrls}
+          primaryLabel={section.primaryLabel}
+          primaryUrl={section.primaryUrl}
+        />
+      );
     case "suppliers-process":
-      return <SuppliersProcess />;
+      return (
+        <SuppliersProcess
+          items={section.items as never}
+          primaryLabel={section.primaryLabel}
+          primaryUrl={section.primaryUrl}
+        />
+      );
     case "suppliers-enquiry":
       return <SuppliersEnquiry imageUrl={section.imageUrl} />;
     case "about-hero":
@@ -101,7 +121,7 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
     case "about-story":
       return <AboutStory />;
     case "about-pillars":
-      return <AboutPillars />;
+      return <AboutPillars items={section.items as never} />;
     case "about-bento":
       return (
         <KoopsBentoSection
@@ -115,7 +135,7 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
     case "contact-form":
       return <ContactForm options={context.options} imageUrl={section.imageUrl} />;
     case "contact-channels":
-      return <ContactChannels />;
+      return <ContactChannels items={section.items as never} />;
     default:
       return null;
   }

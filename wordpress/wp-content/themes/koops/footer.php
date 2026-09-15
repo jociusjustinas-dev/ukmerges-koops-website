@@ -16,7 +16,7 @@
             </div>
         </div>
         <nav class="footer-nav" aria-label="Poraštės navigacija">
-            <div><strong>Pagrindiniai</strong><a href="<?php echo esc_url($store_url); ?>">Parduotuvės</a><a href="<?php echo esc_url(home_url('/naujienos/')); ?>">Naujienos</a><a href="<?php echo esc_url(get_post_type_archive_link('koops_classified') ?: home_url('/skelbimai/')); ?>">Skelbimai</a><a href="<?php echo esc_url(home_url('/restoranas/')); ?>">Restoranas</a></div>
+            <div><strong>Pagrindiniai</strong><a href="<?php echo esc_url($store_url); ?>">Parduotuvės</a><a href="<?php echo esc_url(home_url('/leidiniai/')); ?>">Leidiniai</a><a href="<?php echo esc_url(home_url('/naujienos/')); ?>">Naujienos</a><a href="<?php echo esc_url(get_post_type_archive_link('koops_classified') ?: home_url('/skelbimai/')); ?>">Skelbimai</a><a href="<?php echo esc_url(home_url('/restoranas/')); ?>">Restoranas</a></div>
             <div><strong>KOOPS</strong><a href="<?php echo esc_url(home_url('/karjera/')); ?>">Karjera</a><a href="<?php echo esc_url(home_url('/tiekejams/')); ?>">Tiekėjams</a><a href="<?php echo esc_url(home_url('/apie/')); ?>">Apie mus</a><a href="<?php echo esc_url(home_url('/kontaktai/')); ?>">Kontaktai</a></div>
             <div><strong>Kontaktai</strong><a href="<?php echo esc_url(koops_phone_href(koops_option('phone'))); ?>"><?php echo esc_html(koops_option('phone')); ?></a><a href="mailto:<?php echo esc_attr(koops_option('email')); ?>"><?php echo esc_html(koops_option('email')); ?></a><a href="<?php echo esc_url(koops_option('privacy_url')); ?>">Privatumo politika</a></div>
         </nav>

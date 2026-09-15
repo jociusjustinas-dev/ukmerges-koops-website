@@ -27,7 +27,7 @@ function applyContent(root: HTMLElement, section: CmsPageSection) {
   if (overrides.has("description")) {
     setText(
       root.querySelector(
-        "[data-cms-field='description'], .body-large, .stores-directory-lead, .classifieds-directory-lead, p:not(.section-label)",
+        "[data-cms-field='description'], .body-large, .stores-directory-lead, .classifieds-directory-lead",
       ),
       section.description,
     );
@@ -51,6 +51,34 @@ function applyContent(root: HTMLElement, section: CmsPageSection) {
       if (section.galleryUrls?.[index]) applyImage(image, section.galleryUrls[index]);
     });
   }
+
+  if (overrides.has("items") && Array.isArray(section.items)) {
+    applyFaqItems(root, section.items);
+  }
+}
+
+function applyFaqItems(root: HTMLElement, items: NonNullable<CmsPageSection["items"]>) {
+  const list = root.querySelector(".stores-faq-list");
+  if (!list) return;
+  list.replaceChildren();
+  items.forEach((item, index) => {
+    const question = String(item.question || "").trim();
+    const answer = String(item.answer || "").trim();
+    if (!question && !answer) return;
+    const details = document.createElement("details");
+    if (index === 0) details.open = true;
+    const summary = document.createElement("summary");
+    const questionSpan = document.createElement("span");
+    questionSpan.textContent = question;
+    const toggle = document.createElement("span");
+    toggle.className = "stores-faq-toggle";
+    toggle.setAttribute("aria-hidden", "true");
+    summary.append(questionSpan, toggle);
+    const paragraph = document.createElement("p");
+    paragraph.textContent = answer;
+    details.append(summary, paragraph);
+    list.appendChild(details);
+  });
 }
 
 function applyAnchor(root: HTMLElement, section: CmsPageSection) {
