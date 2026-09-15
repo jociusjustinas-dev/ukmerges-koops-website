@@ -6,7 +6,6 @@ import { restaurant as restaurantDefaults } from "../../lib/restaurant";
 import type { Store } from "../../lib/stores";
 import { suppliersContact } from "../../lib/suppliers";
 import type { NewsItem } from "../../lib/news";
-import type { Flyer } from "../../lib/flyers";
 import {
   defaultStoreFaqs,
   defaultRestaurantHalls,
@@ -14,7 +13,6 @@ import {
   type CmsFaqItem,
   type CmsHallItem,
 } from "../../lib/cms-items";
-import { FlyerCards } from "../FlyersListing";
 import type { WordPressOptions } from "../../lib/cms-render";
 import { CareerApplyForm } from "../CareerApplyForm";
 import { ContactEnquiryForm } from "../ContactEnquiryForm";
@@ -102,28 +100,15 @@ export function StoresFaq({
 
 export function NewsListingSection({
   items,
-  flyers = [],
   title,
 }: {
   items: NewsItem[];
-  flyers?: Flyer[];
   title?: string;
 }) {
-  const currentFlyers = flyers.filter((flyer) => flyer.pages.length || flyer.pdfUrl || flyer.image);
-
   return (
     <section className="tt-news news-page-main" id="news-listing" aria-labelledby="news-archive-title" data-byq-component="terra-tory-blog-grid-1" data-cms-section="news-listing">
       <div className="tt-container">
         <NewsPageHeading title={title} />
-        {currentFlyers.length ? (
-          <div className="news-flyers-strip">
-            <div className="news-flyers-strip-head">
-              <p className="section-label">AKCIJŲ LEIDINIAI</p>
-              <a className="text-link" href="/leidiniai">Visi leidiniai <span aria-hidden="true">→</span></a>
-            </div>
-            <FlyerCards items={currentFlyers} compact />
-          </div>
-        ) : null}
         <NewsListing items={items} />
       </div>
     </section>

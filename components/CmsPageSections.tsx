@@ -79,7 +79,6 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
       return (
         <HomeNews
           items={context.featuredNews}
-          flyers={context.flyers}
           {...headingProps(section)}
         />
       );
@@ -111,7 +110,7 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
     case "stores-faq":
       return <StoresFaq items={section.items as never} eyebrow={section.eyebrow} title={section.title} />;
     case "news-listing":
-      return <NewsListingSection items={context.news} flyers={context.flyers} title={section.title} />;
+      return <NewsListingSection items={context.news} title={section.title} />;
     case "flyers-listing":
       return (
         <FlyersListing
