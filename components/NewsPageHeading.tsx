@@ -4,8 +4,9 @@ import * as React from "react";
 import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
 
 /** Naujienų archyvo H1 su brūkšnio intro — kaip ContactsHeading, be label ir lead */
-export function NewsPageHeading() {
+export function NewsPageHeading({ title }: { title?: string } = {}) {
   const rootRef = React.useRef<HTMLDivElement>(null);
+  const heading = title?.trim() || "Naujienos ir akcijos";
 
   React.useEffect(() => {
     const root = rootRef.current;
@@ -33,7 +34,7 @@ export function NewsPageHeading() {
 
         clearFallback();
 
-        const title = root.querySelector<HTMLElement>(".news-heading-title");
+        const titleEl = root.querySelector<HTMLElement>(".news-heading-title");
         const pushLine = root.querySelector<HTMLElement>(".news-heading-title-rule");
 
         let pushWidth = 0;
@@ -49,7 +50,7 @@ export function NewsPageHeading() {
           defaults: { duration: 0.75, ease: "power3.out" },
           onComplete: () => revealIntroImmediately(root),
         });
-        if (title) intro.fromTo(title, { y: 20 }, { y: 0 }, 0.12);
+        if (titleEl) intro.fromTo(titleEl, { y: 20 }, { y: 0 }, 0.12);
         if (pushLine && pushWidth) {
           intro.to(pushLine, { width: pushWidth, duration: 0.7, ease: "power2.out", clearProps: "width" }, 0.28);
         }
@@ -67,16 +68,8 @@ export function NewsPageHeading() {
 
   return (
     <div className="tt-section-header news-page-header news-heading" ref={rootRef}>
-      <h1 id="news-archive-title" className="careers-hero-title news-heading-title">
-        <span className="careers-hero-title-line">Naujienos</span>
-        <span className="careers-hero-title-row">
-          <i
-            className="careers-hero-title-rule news-heading-title-rule"
-            style={{ width: 0 }}
-            aria-hidden="true"
-          />
-          <span>ir akcijos</span>
-        </span>
+      <h1 id="news-archive-title" className="careers-hero-title news-heading-title" data-cms-field="title">
+        {heading}
       </h1>
     </div>
   );

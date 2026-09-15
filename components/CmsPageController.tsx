@@ -27,7 +27,7 @@ function applyContent(root: HTMLElement, section: CmsPageSection) {
   if (overrides.has("description")) {
     setText(
       root.querySelector(
-        "[data-cms-field='description'], .body-large, .stores-directory-lead, .classifieds-directory-lead",
+        "[data-cms-field='description'], .body-large, .stores-directory-lead, .classifieds-directory-lead, .flyers-lead, .careers-hero-lead, .about-hero-lead, .suppliers-hero-lead, .contacts-heading-lead",
       ),
       section.description,
     );

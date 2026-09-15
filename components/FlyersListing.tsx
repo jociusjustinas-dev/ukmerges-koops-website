@@ -43,18 +43,35 @@ export function FlyerCards({ items, compact = false }: { items: Flyer[]; compact
   );
 }
 
-export function FlyersListing({ items }: { items: Flyer[] }) {
+export function FlyersListing({
+  items,
+  eyebrow,
+  title,
+  description,
+}: {
+  items: Flyer[];
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+}) {
   const flyers = sortFlyers(items);
+  const lead =
+    description?.trim() ||
+    "Viršelis, galiojimo datos ir puslapių peržiūra. PDF atsisiuntimas — jei norite atsispausdinti.";
 
   return (
     <section className="tt-news flyers-page-main" id="flyers-listing" aria-labelledby="flyers-archive-title" data-cms-section="flyers-listing">
       <div className="tt-container">
         <div className="tt-section-header news-page-header">
-          <p className="section-label light-label">AKCIJOS</p>
-          <h1 id="flyers-archive-title" className="careers-hero-title">
-            Leidiniai
+          <p className="section-label light-label" data-cms-field="eyebrow">
+            {eyebrow?.trim() || "AKCIJOS"}
+          </p>
+          <h1 id="flyers-archive-title" className="careers-hero-title" data-cms-field="title">
+            {title?.trim() || "Leidiniai"}
           </h1>
-          <p className="flyers-lead">Viršelis, galiojimo datos ir puslapių peržiūra. PDF atsisiuntimas — jei norite atsispausdinti.</p>
+          <p className="flyers-lead" data-cms-field="description">
+            {lead}
+          </p>
         </div>
         {flyers.length ? (
           <FlyerCards items={flyers} />

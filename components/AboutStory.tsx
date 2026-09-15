@@ -2,7 +2,24 @@ import { RollingLabel } from "./RollingLabel";
 import { aboutOrg, aboutStory } from "../lib/about";
 
 /** BYQ: terra-tory-combo-6 — about story */
-export function AboutStory() {
+export function AboutStory({
+  eyebrow,
+  title,
+  description,
+  primaryLabel,
+  primaryUrl,
+  imageUrl,
+}: {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  primaryLabel?: string;
+  primaryUrl?: string;
+  imageUrl?: string;
+} = {}) {
+  const ctaLabel = primaryLabel?.trim() || "Rasti parduotuvę";
+  const ctaHref = primaryUrl?.trim() || "/parduotuves";
+
   return (
     <section data-cms-section="about-story"
       className="tt-story about-story"
@@ -12,15 +29,24 @@ export function AboutStory() {
     >
       <div className="tt-container">
         <div className="story-headline">
-          <p className="section-label light-label">{aboutStory.label}</p>
-          <h2 id="about-story-title">{aboutStory.title}</h2>
+          <p className="section-label light-label" data-cms-field="eyebrow">
+            {eyebrow?.trim() || aboutStory.label}
+          </p>
+          <h2 id="about-story-title" data-cms-field="title">
+            {title?.trim() || aboutStory.title}
+          </h2>
         </div>
         <div className="story-grid">
           <div className="story-image">
-            <img src={aboutStory.image.src} alt={aboutStory.image.alt} loading="lazy" data-cms-field="image" />
+            <img
+              src={imageUrl?.trim() || aboutStory.image.src}
+              alt={aboutStory.image.alt}
+              loading="lazy"
+              data-cms-field="image"
+            />
           </div>
           <div className="story-copy">
-            <p>{aboutStory.body}</p>
+            <p data-cms-field="description">{description?.trim() || aboutStory.body}</p>
             <dl>
               {aboutStory.facts.map((fact) => (
                 <div key={fact.label}>
@@ -30,8 +56,8 @@ export function AboutStory() {
               ))}
             </dl>
             <div className="story-actions">
-              <a className="pill-button accent" href="/parduotuves">
-                <RollingLabel>Rasti parduotuvę</RollingLabel>
+              <a className="pill-button accent" href={ctaHref} data-cms-field="primary-link">
+                <RollingLabel>{ctaLabel}</RollingLabel>
               </a>
               <a
                 className="pill-button outline-light"

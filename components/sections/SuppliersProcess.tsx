@@ -8,10 +8,14 @@ import {
 /** BYQ: structured-data-2 / tt-jobs — process steps (kaip veikia) */
 export function SuppliersProcess({
   items,
+  title,
+  description,
   primaryLabel,
   primaryUrl,
 }: {
   items?: CmsProcessItem[];
+  title?: string;
+  description?: string;
   primaryLabel?: string;
   primaryUrl?: string;
 }) {
@@ -30,10 +34,11 @@ export function SuppliersProcess({
       <div className="tt-container jobs-layout">
         <div className="jobs-intro">
           <h2 id="suppliers-process-title" data-cms-field="title">
-            Trys žingsniai iki kontakto
+            {title?.trim() || "Trys žingsniai iki kontakto"}
           </h2>
           <p data-cms-field="description">
-            Aiškus kelias: ką pateikti, ką darome mes ir kas vyks po užklausos — be spėliojimo.
+            {description?.trim() ||
+              "Aiškus kelias: ką pateikti, ką darome mes ir kas vyks po užklausos — be spėliojimo."}
           </p>
           <a className="pill-button accent" href={ctaHref} aria-label="Siųsti produkcijos pasiūlymą" data-cms-field="primary-link">
             <RollingLabel>{ctaLabel}</RollingLabel>

@@ -25,8 +25,23 @@ const gallery = [
 ] as const;
 
 /** BYQ: terra-tory-hero-6 — careers hero + image grid */
-export function CareersHero() {
+export function CareersHero({
+  eyebrow,
+  description,
+  primaryLabel,
+  primaryUrl,
+}: {
+  eyebrow?: string;
+  description?: string;
+  primaryLabel?: string;
+  primaryUrl?: string;
+} = {}) {
   const rootRef = React.useRef<HTMLElement>(null);
+  const ctaLabel = primaryLabel?.trim() || "Laisvos pozicijos";
+  const ctaHref = primaryUrl?.trim() || "#pozicijos";
+  const lead =
+    description?.trim() ||
+    "KOOPS ieško žmonių parduotuvėse, restorane „Vilkmergė“ ir logistikoje. Aiškus skelbimas, vieta ir paprastas kandidatavimo kelias — be spėliojimo.";
 
   React.useLayoutEffect(() => {
     const root = rootRef.current;
@@ -111,10 +126,12 @@ export function CareersHero() {
     >
       <div className="tt-container">
         <div className="careers-hero-top">
-          <p className="section-label careers-hero-label">KARJERA</p>
+          <p className="section-label careers-hero-label" data-cms-field="eyebrow">
+            {eyebrow?.trim() || "KARJERA"}
+          </p>
           <div className="careers-hero-main">
             <div className="careers-hero-heading">
-              <h1 id="careers-hero-title" className="careers-hero-title">
+              <h1 id="careers-hero-title" className="careers-hero-title" data-cms-field="title">
                 <span className="careers-hero-title-line">Darbas arti</span>
                 <span className="careers-hero-title-row">
                   <i className="careers-hero-title-rule" aria-hidden="true" />
@@ -123,14 +140,13 @@ export function CareersHero() {
                 <span className="careers-hero-title-line">Ukmergėje ir rajone</span>
               </h1>
               <div className="careers-hero-actions">
-                <a className="pill-button dark" href="#pozicijos" aria-label="Žiūrėti laisvas pozicijas">
-                  <RollingLabel>Laisvos pozicijos</RollingLabel>
+                <a className="pill-button dark" href={ctaHref} aria-label="Žiūrėti laisvas pozicijas" data-cms-field="primary-link">
+                  <RollingLabel>{ctaLabel}</RollingLabel>
                 </a>
               </div>
             </div>
-            <p className="careers-hero-lead">
-              KOOPS ieško žmonių parduotuvėse, restorane „Vilkmergė“ ir logistikoje. Aiškus skelbimas,
-              vieta ir paprastas kandidatavimo kelias — be spėliojimo.
+            <p className="careers-hero-lead" data-cms-field="description">
+              {lead}
             </p>
           </div>
         </div>

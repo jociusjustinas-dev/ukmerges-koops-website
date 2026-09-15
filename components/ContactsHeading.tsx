@@ -4,8 +4,18 @@ import * as React from "react";
 import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
 
 /** H1 su brūkšnio intro animacija — kaip kituose puslapiuose */
-export function ContactsHeading() {
+export function ContactsHeading({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+} = {}) {
   const rootRef = React.useRef<HTMLDivElement>(null);
+  const heading = title?.trim() || "Susisiekite su KOOPS";
+  const lead = description?.trim() || "Adresas, telefonas ar trumpa žinutė — be spėliojimo.";
 
   React.useEffect(() => {
     const root = rootRef.current;
@@ -34,11 +44,11 @@ export function ContactsHeading() {
         clearFallback();
 
         const label = root.querySelector<HTMLElement>(".contacts-heading-label");
-        const title = root.querySelector<HTMLElement>(".contacts-heading-title");
+        const titleEl = root.querySelector<HTMLElement>(".contacts-heading-title");
         const pushLine = root.querySelector<HTMLElement>(".contacts-heading-title-rule");
-        const lead = root.querySelector<HTMLElement>(".contacts-heading-lead");
+        const leadEl = root.querySelector<HTMLElement>(".contacts-heading-lead");
 
-        const targets = [label, lead].filter(Boolean) as HTMLElement[];
+        const targets = [label, leadEl].filter(Boolean) as HTMLElement[];
         gsap.set(targets, { autoAlpha: 0 });
 
         let pushWidth = 0;
@@ -55,11 +65,11 @@ export function ContactsHeading() {
           onComplete: () => revealIntroImmediately(root),
         });
         if (label) intro.fromTo(label, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.05);
-        if (title) intro.fromTo(title, { y: 20 }, { y: 0 }, 0.12);
+        if (titleEl) intro.fromTo(titleEl, { y: 20 }, { y: 0 }, 0.12);
         if (pushLine && pushWidth) {
           intro.to(pushLine, { width: pushWidth, duration: 0.7, ease: "power2.out", clearProps: "width" }, 0.28);
         }
-        if (lead) intro.fromTo(lead, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.36);
+        if (leadEl) intro.fromTo(leadEl, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1 }, 0.36);
       },
     );
       revert = () => media.revert();
@@ -74,20 +84,14 @@ export function ContactsHeading() {
 
   return (
     <div className="contact-heading contacts-heading" ref={rootRef}>
-      <p className="section-label contacts-heading-label">KONTAKTAI</p>
-      <h1 id="contacts-form-title" className="careers-hero-title contacts-heading-title">
-        <span className="careers-hero-title-line">Susisiekite</span>
-        <span className="careers-hero-title-row">
-          <i
-            className="careers-hero-title-rule contacts-heading-title-rule"
-            style={{ width: 0 }}
-            aria-hidden="true"
-          />
-          <span>su KOOPS</span>
-        </span>
+      <p className="section-label contacts-heading-label" data-cms-field="eyebrow">
+        {eyebrow?.trim() || "KONTAKTAI"}
+      </p>
+      <h1 id="contacts-form-title" className="careers-hero-title contacts-heading-title" data-cms-field="title">
+        {heading}
       </h1>
-      <p className="contacts-heading-lead">
-        Adresas, telefonas ar trumpa žinutė — be spėliojimo.
+      <p className="contacts-heading-lead" data-cms-field="description">
+        {lead}
       </p>
     </div>
   );

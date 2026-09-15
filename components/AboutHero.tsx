@@ -7,8 +7,23 @@ import { revealIntroImmediately, withIntroFallback } from "../lib/motionIntro";
 import { RollingLabel } from "./RollingLabel";
 
 /** BYQ: terra-tory-hero-6 — about hero */
-export function AboutHero() {
+export function AboutHero({
+  eyebrow,
+  description,
+  primaryLabel,
+  primaryUrl,
+}: {
+  eyebrow?: string;
+  description?: string;
+  primaryLabel?: string;
+  primaryUrl?: string;
+} = {}) {
   const rootRef = React.useRef<HTMLElement>(null);
+  const ctaLabel = primaryLabel?.trim() || "Rasti parduotuvę";
+  const ctaHref = primaryUrl?.trim() || "/parduotuves";
+  const lead =
+    description?.trim() ||
+    "Ukmergės rajono vartotojų kooperatyvas — parduotuvės, restoranas ir partnerystė su vietos žmonėmis kasdien.";
 
   React.useLayoutEffect(() => {
     const root = rootRef.current;
@@ -93,10 +108,12 @@ export function AboutHero() {
     >
       <div className="tt-container">
         <div className="careers-hero-top">
-          <p className="section-label about-hero-label">APIE KOOPS</p>
+          <p className="section-label about-hero-label" data-cms-field="eyebrow">
+            {eyebrow?.trim() || "APIE KOOPS"}
+          </p>
           <div className="careers-hero-main">
             <div className="careers-hero-heading">
-              <h1 id="about-hero-title" className="careers-hero-title about-hero-title">
+              <h1 id="about-hero-title" className="careers-hero-title about-hero-title" data-cms-field="title">
                 <span className="careers-hero-title-line">Vietos žmonėms.</span>
                 <span className="careers-hero-title-row">
                   <i className="careers-hero-title-rule about-hero-title-rule" aria-hidden="true" />
@@ -104,14 +121,13 @@ export function AboutHero() {
                 </span>
               </h1>
               <div className="careers-hero-actions about-hero-actions">
-                <a className="pill-button dark" href="/parduotuves" aria-label="Rasti KOOPS parduotuvę">
-                  <RollingLabel>Rasti parduotuvę</RollingLabel>
+                <a className="pill-button dark" href={ctaHref} aria-label="Rasti KOOPS parduotuvę" data-cms-field="primary-link">
+                  <RollingLabel>{ctaLabel}</RollingLabel>
                 </a>
               </div>
             </div>
-            <p className="careers-hero-lead about-hero-lead">
-              Ukmergės rajono vartotojų kooperatyvas — parduotuvės, restoranas ir partnerystė su vietos
-              žmonėmis kasdien.
+            <p className="careers-hero-lead about-hero-lead" data-cms-field="description">
+              {lead}
             </p>
           </div>
         </div>

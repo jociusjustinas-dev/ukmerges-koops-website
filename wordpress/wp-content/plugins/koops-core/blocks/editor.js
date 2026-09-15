@@ -20,10 +20,20 @@
   const { PanelBody, SelectControl, TextControl, TextareaControl, ToggleControl, Button } = components;
   const catalog = (window.koopsSectionEditor && window.koopsSectionEditor.catalog) || {};
   const defaults = (window.koopsSectionEditor && window.koopsSectionEditor.defaults) || {};
+  const fieldSchemas = (window.koopsSectionEditor && window.koopsSectionEditor.fieldSchemas) || {};
   const itemSchemas = (window.koopsSectionEditor && window.koopsSectionEditor.itemSchemas) || {};
   const frontendUrl = ((window.koopsSectionEditor && window.koopsSectionEditor.frontendUrl) || '').replace(/\/$/, '');
   const previewBase = (window.koopsSectionEditor && window.koopsSectionEditor.previewBase) || '';
   const previewVersion = (window.koopsSectionEditor && window.koopsSectionEditor.previewVersion) || '';
+
+  function sectionAllowsField(sectionType, field) {
+    const schema = fieldSchemas[sectionType];
+    if (!schema) {
+      // Unknown type: keep legacy full form until schema is defined.
+      return true;
+    }
+    return schema.indexOf(field) !== -1;
+  }
   function sectionTypeOptions() {
     return [{ label: 'Pasirinkite sekciją', value: '' }].concat(
       Object.entries(catalog).map(function ([value, item]) {
@@ -475,6 +485,9 @@
     const a = props.attributes;
     const set = props.setAttributes;
     const anchorFallback = defaultAnchor(a.sectionType);
+    const allows = function (field) {
+      return sectionAllowsField(a.sectionType, field);
+    };
 
     return el(
       PanelBody,
@@ -506,11 +519,21 @@
         placeholder: anchorFallback,
         onChange: (anchor) => set({ anchor })
       }),
-      el(TextControl, { label: 'Mažoji antraštė', value: a.eyebrow, onChange: (eyebrow) => set({ eyebrow }) }),
-      el(TextareaControl, { label: 'Antraštė', help: 'Naują eilutę įrašykite Enter klavišu.', value: a.title, onChange: (title) => set({ title }) }),
-      el(TextareaControl, { label: 'Aprašymas', value: a.description, onChange: (description) => set({ description }) }),
-      el(TextControl, { label: 'Pagrindinio mygtuko tekstas', value: a.primaryLabel, onChange: (primaryLabel) => set({ primaryLabel }) }),
-      el(KoopsLinkControl, { label: 'Pagrindinio mygtuko nuoroda', value: a.primaryUrl, onChange: (primaryUrl) => set({ primaryUrl }) }),
+      allows('eyebrow')
+        ? el(TextControl, { label: 'Mažoji antraštė', value: a.eyebrow, onChange: (eyebrow) => set({ eyebrow }) })
+        : null,
+      allows('title')
+        ? el(TextareaControl, { label: 'Antraštė', help: 'Naują eilutę įrašykite Enter klavišu.', value: a.title, onChange: (title) => set({ title }) })
+        : null,
+      allows('description')
+        ? el(TextareaControl, { label: 'Aprašymas', value: a.description, onChange: (description) => set({ description }) })
+        : null,
+      allows('primary')
+        ? el(TextControl, { label: 'Pagrindinio mygtuko tekstas', value: a.primaryLabel, onChange: (primaryLabel) => set({ primaryLabel }) })
+        : null,
+      allows('primary')
+        ? el(KoopsLinkControl, { label: 'Pagrindinio mygtuko nuoroda', value: a.primaryUrl, onChange: (primaryUrl) => set({ primaryUrl }) })
+        : null,
       mediaControlFor(a, set),
       el(KoopsItemsControl, {
         sectionType: a.sectionType,

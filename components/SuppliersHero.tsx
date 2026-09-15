@@ -25,8 +25,23 @@ const gallery = [
 ] as const;
 
 /** BYQ: terra-tory-hero-6 — suppliers hero */
-export function SuppliersHero() {
+export function SuppliersHero({
+  eyebrow,
+  description,
+  primaryLabel,
+  primaryUrl,
+}: {
+  eyebrow?: string;
+  description?: string;
+  primaryLabel?: string;
+  primaryUrl?: string;
+} = {}) {
   const rootRef = React.useRef<HTMLElement>(null);
+  const ctaLabel = primaryLabel?.trim() || "Siųsti pasiūlymą";
+  const ctaHref = primaryUrl?.trim() || "#forma";
+  const lead =
+    description?.trim() ||
+    "Ieškome patikimų gamintojų ir tiekėjų. Aišku, ką pateikti, kam rašyti ir kas vyks po užklausos — be spėliojimo.";
 
   React.useLayoutEffect(() => {
     const root = rootRef.current;
@@ -111,10 +126,12 @@ export function SuppliersHero() {
     >
       <div className="tt-container">
         <div className="careers-hero-top">
-          <p className="section-label suppliers-hero-label">TIEKĖJAMS</p>
+          <p className="section-label suppliers-hero-label" data-cms-field="eyebrow">
+            {eyebrow?.trim() || "TIEKĖJAMS"}
+          </p>
           <div className="careers-hero-main">
             <div className="careers-hero-heading">
-              <h1 id="suppliers-hero-title" className="careers-hero-title suppliers-hero-title">
+              <h1 id="suppliers-hero-title" className="careers-hero-title suppliers-hero-title" data-cms-field="title">
                 <span className="careers-hero-title-line">Auginkime</span>
                 <span className="careers-hero-title-row">
                   <i className="careers-hero-title-rule suppliers-hero-title-rule" aria-hidden="true" />
@@ -123,14 +140,13 @@ export function SuppliersHero() {
                 <span className="careers-hero-title-line">kartu</span>
               </h1>
               <div className="careers-hero-actions suppliers-hero-actions">
-                <a className="pill-button dark" href="#forma" aria-label="Siųsti produkcijos pasiūlymą">
-                  <RollingLabel>Siųsti pasiūlymą</RollingLabel>
+                <a className="pill-button dark" href={ctaHref} aria-label="Siųsti produkcijos pasiūlymą" data-cms-field="primary-link">
+                  <RollingLabel>{ctaLabel}</RollingLabel>
                 </a>
               </div>
             </div>
-            <p className="careers-hero-lead suppliers-hero-lead">
-              Ieškome patikimų gamintojų ir tiekėjų. Aišku, ką pateikti, kam rašyti ir kas vyks po
-              užklausos — be spėliojimo.
+            <p className="careers-hero-lead suppliers-hero-lead" data-cms-field="description">
+              {lead}
             </p>
           </div>
         </div>

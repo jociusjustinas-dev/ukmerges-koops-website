@@ -42,6 +42,16 @@ type Props = {
   skipFooterCta?: boolean;
 };
 
+function headingProps(section: CmsPageSection) {
+  return {
+    eyebrow: section.eyebrow,
+    title: section.title,
+    description: section.description,
+    primaryLabel: section.primaryLabel,
+    primaryUrl: section.primaryUrl,
+  };
+}
+
 function renderSection(section: CmsPageSection, context: CmsRenderContext) {
   switch (section.type) {
     case "home-hero":
@@ -63,15 +73,22 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
     case "footer-cta":
       return <FooterCta />;
     case "stores-directory":
-      return <StoresDirectory stores={context.stores} />;
+      return <StoresDirectory stores={context.stores} {...headingProps(section)} />;
     case "stores-faq":
-      return <StoresFaq items={section.items as never} />;
+      return <StoresFaq items={section.items as never} eyebrow={section.eyebrow} title={section.title} />;
     case "news-listing":
-      return <NewsListingSection items={context.news} flyers={context.flyers} />;
+      return <NewsListingSection items={context.news} flyers={context.flyers} title={section.title} />;
     case "flyers-listing":
-      return <FlyersListing items={context.flyers} />;
+      return (
+        <FlyersListing
+          items={context.flyers}
+          eyebrow={section.eyebrow}
+          title={section.title}
+          description={section.description}
+        />
+      );
     case "classifieds-listing":
-      return <ClassifiedsListing items={context.classifieds} />;
+      return <ClassifiedsListing items={context.classifieds} {...headingProps(section)} />;
     case "restaurant-hero":
       return <RestaurantHero restaurant={context.restaurant} />;
     case "restaurant-features":
@@ -86,17 +103,17 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
         />
       );
     case "restaurant-enquiry":
-      return <RestaurantEnquiry restaurant={context.restaurant} />;
+      return <RestaurantEnquiry restaurant={context.restaurant} {...headingProps(section)} />;
     case "careers-hero":
-      return <CareersHero />;
+      return <CareersHero {...headingProps(section)} />;
     case "careers-features":
       return <CareersValueFeatures items={section.items as never} />;
     case "careers-jobs":
-      return <CareersJobs jobs={context.jobs} />;
+      return <CareersJobs jobs={context.jobs} {...headingProps(section)} />;
     case "careers-enquiry":
-      return <CareersEnquiry />;
+      return <CareersEnquiry {...headingProps(section)} />;
     case "suppliers-hero":
-      return <SuppliersHero />;
+      return <SuppliersHero {...headingProps(section)} />;
     case "suppliers-looking":
       return (
         <SuppliersLookingFor
@@ -110,16 +127,18 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
       return (
         <SuppliersProcess
           items={section.items as never}
+          title={section.title}
+          description={section.description}
           primaryLabel={section.primaryLabel}
           primaryUrl={section.primaryUrl}
         />
       );
     case "suppliers-enquiry":
-      return <SuppliersEnquiry imageUrl={section.imageUrl} />;
+      return <SuppliersEnquiry imageUrl={section.imageUrl} {...headingProps(section)} />;
     case "about-hero":
-      return <AboutHero />;
+      return <AboutHero {...headingProps(section)} />;
     case "about-story":
-      return <AboutStory />;
+      return <AboutStory {...headingProps(section)} imageUrl={section.imageUrl} />;
     case "about-pillars":
       return <AboutPillars items={section.items as never} />;
     case "about-bento":
@@ -133,9 +152,9 @@ function renderSection(section: CmsPageSection, context: CmsRenderContext) {
         />
       );
     case "contact-form":
-      return <ContactForm options={context.options} imageUrl={section.imageUrl} />;
+      return <ContactForm options={context.options} imageUrl={section.imageUrl} {...headingProps(section)} />;
     case "contact-channels":
-      return <ContactChannels items={section.items as never} />;
+      return <ContactChannels items={section.items as never} title={section.title} description={section.description} />;
     default:
       return null;
   }

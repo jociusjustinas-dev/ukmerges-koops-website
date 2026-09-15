@@ -6,7 +6,15 @@ import {
 } from "../../lib/cms-items";
 
 /** BYQ: structured-data-2 — contact destination channels */
-export function ContactChannels({ items }: { items?: CmsChannelItem[] }) {
+export function ContactChannels({
+  items,
+  title,
+  description,
+}: {
+  items?: CmsChannelItem[];
+  title?: string;
+  description?: string;
+}) {
   const channels = sectionItemsOrDefault(items, defaultContactChannels);
 
   return (
@@ -20,10 +28,11 @@ export function ContactChannels({ items }: { items?: CmsChannelItem[] }) {
       <div className="tt-container jobs-layout">
         <div className="jobs-intro">
           <h2 id="contacts-channels-title" data-cms-field="title">
-            Kur kreiptis
+            {title?.trim() || "Kur kreiptis"}
           </h2>
           <p data-cms-field="description">
-            Pasirinkite temą — greičiau rasite adresą, užklausą ar darbo pasiūlymą.
+            {description?.trim() ||
+              "Pasirinkite temą — greičiau rasite adresą, užklausą ar darbo pasiūlymą."}
           </p>
         </div>
 

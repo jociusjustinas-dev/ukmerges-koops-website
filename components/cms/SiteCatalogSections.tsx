@@ -28,35 +28,58 @@ import { SupplierForm } from "../SupplierForm";
 
 export const storeFaqs = defaultStoreFaqs;
 
-export function StoresDirectory({ stores }: { stores: Store[] }) {
+export function StoresDirectory({
+  stores,
+  eyebrow,
+  title,
+  description,
+}: {
+  stores: Store[];
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+}) {
+  const lead = description?.trim() || `${stores.length} parduotuvės Ukmergėje ir rajone.`;
+
   return (
     <section className="stores-directory" id="sarasas" aria-labelledby="stores-list-title" data-cms-section="stores-directory">
       <div className="tt-container">
-        <p className="section-label light-label">PARDUOTUVĖS</p>
-        <h1 className="location-headline" id="stores-list-title">
-          <span>Raskite </span>
-          <span>artimiausią </span>
-          <span className="title-push-break" aria-hidden="true" />
-          <i className="title-push-line" style={{ width: 0 }} aria-hidden="true" />
-          <span>KOOPS </span>
-          <span>parduotuvę</span>
+        <p className="section-label light-label" data-cms-field="eyebrow">
+          {eyebrow?.trim() || "PARDUOTUVĖS"}
+        </p>
+        <h1 className="location-headline" id="stores-list-title" data-cms-field="title">
+          {title?.trim() || "Raskite artimiausią KOOPS parduotuvę"}
         </h1>
-        <p className="stores-directory-lead">{stores.length} parduotuvės Ukmergėje ir rajone.</p>
+        <p className="stores-directory-lead" data-cms-field="description">
+          {lead}
+        </p>
         <StoresFinder stores={stores} />
       </div>
     </section>
   );
 }
 
-export function StoresFaq({ items }: { items?: CmsFaqItem[] }) {
+export function StoresFaq({
+  items,
+  eyebrow,
+  title,
+}: {
+  items?: CmsFaqItem[];
+  eyebrow?: string;
+  title?: string;
+}) {
   const faqs = sectionItemsOrDefault(items, defaultStoreFaqs);
 
   return (
     <section className="stores-faq" id="stores-faq" aria-labelledby="stores-faq-title" data-cms-section="stores-faq">
       <div className="tt-container stores-faq-layout">
         <div>
-          <p className="section-label" data-cms-field="eyebrow">GREITI ATSAKYMAI</p>
-          <h2 id="stores-faq-title" data-cms-field="title">Kur, kada ir kaip — be spėliojimo.</h2>
+          <p className="section-label" data-cms-field="eyebrow">
+            {eyebrow?.trim() || "GREITI ATSAKYMAI"}
+          </p>
+          <h2 id="stores-faq-title" data-cms-field="title">
+            {title?.trim() || "Kur, kada ir kaip — be spėliojimo."}
+          </h2>
           <p className="stores-faq-lead" data-cms-field="description" hidden>
             Atsakymai apie parduotuvių vietas, darbo laiką, maršrutą ir kontaktus.
           </p>
@@ -77,13 +100,21 @@ export function StoresFaq({ items }: { items?: CmsFaqItem[] }) {
   );
 }
 
-export function NewsListingSection({ items, flyers = [] }: { items: NewsItem[]; flyers?: Flyer[] }) {
+export function NewsListingSection({
+  items,
+  flyers = [],
+  title,
+}: {
+  items: NewsItem[];
+  flyers?: Flyer[];
+  title?: string;
+}) {
   const currentFlyers = flyers.filter((flyer) => flyer.pages.length || flyer.pdfUrl || flyer.image);
 
   return (
     <section className="tt-news news-page-main" id="news-listing" aria-labelledby="news-archive-title" data-byq-component="terra-tory-blog-grid-1" data-cms-section="news-listing">
       <div className="tt-container">
-        <NewsPageHeading />
+        <NewsPageHeading title={title} />
         {currentFlyers.length ? (
           <div className="news-flyers-strip">
             <div className="news-flyers-strip-head">
@@ -99,13 +130,37 @@ export function NewsListingSection({ items, flyers = [] }: { items: NewsItem[]; 
   );
 }
 
-export function ClassifiedsListing({ items }: { items: Classified[] }) {
+export function ClassifiedsListing({
+  items,
+  eyebrow,
+  title,
+  description,
+  primaryLabel,
+  primaryUrl,
+}: {
+  items: Classified[];
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  primaryLabel?: string;
+  primaryUrl?: string;
+}) {
+  const ctaLabel = primaryLabel?.trim() || "Susisiekti";
+  const ctaHref = primaryUrl?.trim() || "/kontaktai";
+
   return (
     <section className="classifieds-directory" id="classifieds-listing" aria-labelledby="classifieds-title" data-cms-section="classifieds-listing">
       <div className="tt-container classifieds-directory-inner">
-        <p className="section-label light-label">KOOPS SKELBIMAI</p>
-        <h1 id="classifieds-title">Skelbimai</h1>
-        <p className="classifieds-directory-lead">Nuomojamos patalpos, turto pasiūlymai ir kita aktuali KOOPS informacija vienoje vietoje.</p>
+        <p className="section-label light-label" data-cms-field="eyebrow">
+          {eyebrow?.trim() || "KOOPS SKELBIMAI"}
+        </p>
+        <h1 id="classifieds-title" data-cms-field="title">
+          {title?.trim() || "Skelbimai"}
+        </h1>
+        <p className="classifieds-directory-lead" data-cms-field="description">
+          {description?.trim() ||
+            "Nuomojamos patalpos, turto pasiūlymai ir kita aktuali KOOPS informacija vienoje vietoje."}
+        </p>
         <div className="classifieds-listing">
           {items.length ? (
             <div className="classifieds-grid">
@@ -131,8 +186,8 @@ export function ClassifiedsListing({ items }: { items: Classified[] }) {
             <div className="classifieds-empty">
               <h2>Naujų skelbimų šiuo metu nėra</h2>
               <p>Jei domina KOOPS nuomojamos patalpos ar kitas turtas, susisiekite su administracija.</p>
-              <a className="pill-button accent" href="/kontaktai">
-                <RollingLabel>Susisiekti</RollingLabel>
+              <a className="pill-button accent" href={ctaHref} data-cms-field="primary-link">
+                <RollingLabel>{ctaLabel}</RollingLabel>
               </a>
             </div>
           )}
@@ -218,14 +273,27 @@ export function RestaurantHalls({
   );
 }
 
-export function RestaurantEnquiry({ restaurant }: { restaurant: typeof restaurantDefaults }) {
+export function RestaurantEnquiry({
+  restaurant,
+  eyebrow,
+  title,
+  description,
+}: {
+  restaurant: typeof restaurantDefaults;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+}) {
   return (
     <section className="restaurant-enquiry" id="uzklausa" aria-labelledby="restaurant-enquiry-title" data-byq-component="terra-tory-contact-1" data-cms-section="restaurant-enquiry">
       <div className="tt-container restaurant-enquiry-grid">
         <div className="restaurant-enquiry-intro">
-          <p className="section-label">KONTAKTAI IR UŽKLAUSA</p>
-          <h2 id="restaurant-enquiry-title">Susisiekite arba parašykite</h2>
-          <p>Skambinkite tiesiogiai arba užpildykite trumpą formą — suderinsime salę, datą ir meniu.</p>
+          <p className="section-label" data-cms-field="eyebrow">{eyebrow?.trim() || "KONTAKTAI IR UŽKLAUSA"}</p>
+          <h2 id="restaurant-enquiry-title" data-cms-field="title">{title?.trim() || "Susisiekite arba parašykite"}</h2>
+          <p data-cms-field="description">
+            {description?.trim() ||
+              "Skambinkite tiesiogiai arba užpildykite trumpą formą — suderinsime salę, datą ir meniu."}
+          </p>
           <div className="contact-details">
             <div>
               <strong>Telefonai</strong>
@@ -247,19 +315,39 @@ export function RestaurantEnquiry({ restaurant }: { restaurant: typeof restauran
   );
 }
 
-export function CareersJobs({ jobs }: { jobs: Job[] }) {
+export function CareersJobs({
+  jobs,
+  eyebrow,
+  title,
+  description,
+  primaryLabel,
+  primaryUrl,
+}: {
+  jobs: Job[];
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  primaryLabel?: string;
+  primaryUrl?: string;
+}) {
+  const ctaLabel = primaryLabel?.trim() || "Neradau pozicijos";
+  const ctaHref = primaryUrl?.trim() || "#susisiekti";
+
   return (
     <section className="tt-jobs careers-jobs" id="pozicijos" aria-labelledby="careers-jobs-title" data-byq-component="structured-data-2-careers" data-cms-section="careers-jobs">
       <div className="tt-container jobs-layout">
         <div className="jobs-intro">
-          <p className="section-label light-label">LAISVOS POZICIJOS</p>
-          <h2 id="careers-jobs-title" className="jobs-title-with-rule">
-            Darbas arti
-            <i className="jobs-title-rule" aria-hidden="true" />
-            <span> namų</span>
+          <p className="section-label light-label" data-cms-field="eyebrow">{eyebrow?.trim() || "LAISVOS POZICIJOS"}</p>
+          <h2 id="careers-jobs-title" className="jobs-title-with-rule" data-cms-field="title">
+            {title?.trim() || "Darbas arti namų"}
           </h2>
-          <p>Pasirinkite poziciją ir pereikite prie kandidatavimo formos. Nerandate tinkamos pozicijos? Parašykite mums žemiau.</p>
-          <a className="pill-button accent" href="#susisiekti"><RollingLabel>Neradau pozicijos</RollingLabel></a>
+          <p data-cms-field="description">
+            {description?.trim() ||
+              "Pasirinkite poziciją ir pereikite prie kandidatavimo formos. Nerandate tinkamos pozicijos? Parašykite mums žemiau."}
+          </p>
+          <a className="pill-button accent" href={ctaHref} data-cms-field="primary-link">
+            <RollingLabel>{ctaLabel}</RollingLabel>
+          </a>
         </div>
         <div className="jobs-list" role="region" aria-label="Darbo pasiūlymai">
           {jobs.map((job) => (
@@ -284,14 +372,25 @@ export function CareersJobs({ jobs }: { jobs: Job[] }) {
   );
 }
 
-export function CareersEnquiry() {
+export function CareersEnquiry({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+} = {}) {
   return (
     <section className="restaurant-enquiry careers-apply" id="susisiekti" aria-labelledby="careers-apply-title" data-byq-component="terra-tory-contact-1" data-cms-section="careers-enquiry">
       <div className="tt-container restaurant-enquiry-grid">
         <div className="restaurant-enquiry-intro">
-          <p className="section-label">NERADOTE POZICIJOS?</p>
-          <h2 id="careers-apply-title">Parašykite mums</h2>
-          <p>Jei sąraše nėra jums tinkamo skelbimo — palikite kontaktus ir trumpą žinutę. Galite prisegti CV. Arba paskambinkite.</p>
+          <p className="section-label" data-cms-field="eyebrow">{eyebrow?.trim() || "NERADOTE POZICIJOS?"}</p>
+          <h2 id="careers-apply-title" data-cms-field="title">{title?.trim() || "Parašykite mums"}</h2>
+          <p data-cms-field="description">
+            {description?.trim() ||
+              "Jei sąraše nėra jums tinkamo skelbimo — palikite kontaktus ir trumpą žinutę. Galite prisegti CV. Arba paskambinkite."}
+          </p>
           <div className="contact-details">
             <div><strong>Telefonas</strong><p><a href={careersContact.phoneHref}>{careersContact.phoneDisplay}</a></p></div>
             <div><strong>El. paštas</strong><p><a href={`mailto:${careersContact.email}`}>{careersContact.email}</a></p></div>
@@ -304,15 +403,27 @@ export function CareersEnquiry() {
   );
 }
 
-export function SuppliersEnquiry({ imageUrl }: { imageUrl?: string }) {
+export function SuppliersEnquiry({
+  imageUrl,
+  eyebrow,
+  title,
+  description,
+}: {
+  imageUrl?: string;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+}) {
   return (
     <section className="tt-contact suppliers-contact" id="forma" aria-labelledby="suppliers-form-title" data-byq-component="terra-tory-contact-1" data-cms-section="suppliers-enquiry">
       <div className="tt-container contact-grid">
         <div className="contact-content">
           <div className="contact-heading">
-            <p className="section-label">PASIŪLYMO FORMA</p>
-            <h2 id="suppliers-form-title">Pasiūlykite savo produkciją</h2>
-            <p>Užpildykite trumpą formą — paruošime laišką.</p>
+            <p className="section-label" data-cms-field="eyebrow">{eyebrow?.trim() || "PASIŪLYMO FORMA"}</p>
+            <h2 id="suppliers-form-title" data-cms-field="title">{title?.trim() || "Pasiūlykite savo produkciją"}</h2>
+            <p data-cms-field="description">
+              {description?.trim() || "Užpildykite trumpą formą — paruošime laišką."}
+            </p>
           </div>
           <div className="contact-details">
             <div><strong>Adresas</strong><p>{suppliersContact.addressLines[0]}<br />{suppliersContact.addressLines[1]}</p></div>
@@ -333,7 +444,19 @@ function phoneHref(phone: string) {
   return `tel:${phone.replace(/[^\d+]/g, "").replace(/^0/, "+370")}`;
 }
 
-export function ContactForm({ options, imageUrl }: { options: WordPressOptions; imageUrl?: string }) {
+export function ContactForm({
+  options,
+  imageUrl,
+  eyebrow,
+  title,
+  description,
+}: {
+  options: WordPressOptions;
+  imageUrl?: string;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+}) {
   const addressLines = (options.address || contactsOrg.addressLines.join(", ")).split(/,\s*(?=LT-|\d{5}|Ukmergė)/, 2);
   const org = {
     addressLines: [addressLines[0] || contactsOrg.addressLines[0], addressLines[1] || contactsOrg.addressLines[1]],
@@ -353,7 +476,7 @@ export function ContactForm({ options, imageUrl }: { options: WordPressOptions; 
     <section className="tt-contact contacts-form-section" id="forma" aria-labelledby="contacts-form-title" data-byq-component="terra-tory-contact-1" data-cms-section="contact-form">
       <div className="tt-container contact-grid">
         <div className="contact-content">
-          <ContactsHeading />
+          <ContactsHeading eyebrow={eyebrow} title={title} description={description} />
           <div className="contact-details">
             <div><strong>Adresas</strong><p>{org.addressLines[0]}<br />{org.addressLines[1]}</p></div>
             <div><strong>El. paštas</strong><p><a href={`mailto:${org.email}`}>{org.email}</a></p></div>

@@ -225,6 +225,57 @@ function koops_section_content_defaults(): array
     ];
 }
 
+/**
+ * Which sidebar fields to show per section type.
+ * Always shown separately: enabled, sectionType, anchor.
+ * Media uses catalog[*].media; items use koops_section_item_schemas().
+ *
+ * @return array<string, list<string>>
+ */
+function koops_section_editable_fields(): array
+{
+    return [
+        'home-hero' => ['eyebrow', 'title', 'description', 'primary'],
+        'home-bento' => ['eyebrow', 'title'],
+        'home-stores' => ['title', 'primary'],
+        'home-news' => ['eyebrow', 'title', 'primary'],
+        'home-restaurant' => ['eyebrow', 'title', 'primary'],
+        'home-jobs' => ['eyebrow', 'title', 'primary'],
+        'home-values' => ['eyebrow', 'title'],
+        'home-suppliers' => ['eyebrow', 'title', 'description'],
+        'footer-cta' => ['eyebrow', 'title', 'primary'],
+
+        'stores-directory' => ['eyebrow', 'title', 'description'],
+        'stores-faq' => ['eyebrow', 'title'],
+        'news-listing' => ['title'],
+        'flyers-listing' => ['eyebrow', 'title', 'description'],
+        'classifieds-listing' => ['eyebrow', 'title', 'description', 'primary'],
+
+        'restaurant-hero' => ['eyebrow', 'title', 'primary'],
+        'restaurant-features' => ['eyebrow', 'title'],
+        'restaurant-halls' => ['eyebrow', 'title', 'primary'],
+        'restaurant-enquiry' => ['eyebrow', 'title', 'description'],
+
+        'careers-hero' => ['eyebrow', 'title', 'description', 'primary'],
+        'careers-features' => ['eyebrow', 'title'],
+        'careers-jobs' => ['eyebrow', 'title', 'description', 'primary'],
+        'careers-enquiry' => ['eyebrow', 'title', 'description'],
+
+        'suppliers-hero' => ['eyebrow', 'title', 'description', 'primary'],
+        'suppliers-looking' => ['eyebrow', 'title', 'primary'],
+        'suppliers-process' => ['title', 'description', 'primary'],
+        'suppliers-enquiry' => ['eyebrow', 'title', 'description'],
+
+        'about-hero' => ['eyebrow', 'title', 'description', 'primary'],
+        'about-story' => ['eyebrow', 'title', 'description', 'primary'],
+        'about-pillars' => ['eyebrow', 'title'],
+        'about-bento' => ['eyebrow', 'title'],
+
+        'contact-form' => ['eyebrow', 'title', 'description'],
+        'contact-channels' => ['title', 'description'],
+    ];
+}
+
 function koops_section_item_schemas(): array
 {
     return [
@@ -586,6 +637,7 @@ function koops_register_section_block(): void
     wp_localize_script('koops-section-editor-script', 'koopsSectionEditor', [
         'catalog' => koops_section_catalog(),
         'defaults' => koops_defaults_for_editor(),
+        'fieldSchemas' => koops_section_editable_fields(),
         'itemSchemas' => koops_section_item_schemas(),
         'frontendUrl' => untrailingslashit($frontend_url),
         'previewBase' => KOOPS_CORE_URL . 'assets/previews/',
