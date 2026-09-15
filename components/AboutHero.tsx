@@ -9,21 +9,32 @@ import { RollingLabel } from "./RollingLabel";
 /** BYQ: terra-tory-hero-6 — about hero */
 export function AboutHero({
   eyebrow,
+  title,
   description,
   primaryLabel,
   primaryUrl,
+  galleryUrls,
 }: {
   eyebrow?: string;
+  title?: string;
   description?: string;
   primaryLabel?: string;
   primaryUrl?: string;
+  galleryUrls?: string[];
 } = {}) {
   const rootRef = React.useRef<HTMLElement>(null);
   const ctaLabel = primaryLabel?.trim() || "Rasti parduotuvę";
   const ctaHref = primaryUrl?.trim() || "/parduotuves";
+  const heading = title?.trim() || "Vietos žmonėms. Vietos verslui.";
   const lead =
     description?.trim() ||
     "Ukmergės rajono vartotojų kooperatyvas — parduotuvės, restoranas ir partnerystė su vietos žmonėmis kasdien.";
+  const frames = galleryUrls?.filter(Boolean).length
+    ? galleryUrls.filter(Boolean).map((src, index) => ({
+        src,
+        alt: aboutHeroGallery[index]?.alt || `KOOPS nuotrauka ${index + 1}`,
+      }))
+    : aboutHeroGallery;
 
   React.useLayoutEffect(() => {
     const root = rootRef.current;
@@ -113,12 +124,8 @@ export function AboutHero({
           </p>
           <div className="careers-hero-main">
             <div className="careers-hero-heading">
-              <h1 id="about-hero-title" className="careers-hero-title about-hero-title" data-cms-field="title">
-                <span className="careers-hero-title-line">Vietos žmonėms.</span>
-                <span className="careers-hero-title-row">
-                  <i className="careers-hero-title-rule about-hero-title-rule" aria-hidden="true" />
-                  <span>Vietos verslui.</span>
-                </span>
+              <h1 id="about-hero-title" className="careers-hero-title about-hero-title" data-cms-field="title" style={{ whiteSpace: "pre-line" }}>
+                {heading}
               </h1>
               <div className="careers-hero-actions about-hero-actions">
                 <a className="pill-button dark" href={ctaHref} aria-label="Rasti KOOPS parduotuvę" data-cms-field="primary-link">
@@ -133,7 +140,7 @@ export function AboutHero({
         </div>
 
         <div className="careers-hero-gallery" aria-label="KOOPS ir Ukmergės krašto nuotraukos">
-          {aboutHeroGallery.map((item, index) => (
+          {frames.map((item, index) => (
             <figure
               key={item.src}
               className="careers-hero-frame about-hero-frame"

@@ -16,7 +16,7 @@ export const metadata = createPageMetadata({
 
 export default async function RestaurantPage() {
   const cms = await getKoopsCmsData();
-  const { context, sections, hasFooterCta } = getCmsPageView(cms, "restoranas");
+  const { context, sections, footerCtaProps } = getCmsPageView(cms, "restoranas");
   const restaurant = context.restaurant;
   const schema = {
     "@context": "https://schema.org",
@@ -50,7 +50,7 @@ export default async function RestaurantPage() {
       </main>
       <CmsPageController page="restoranas" sections={sections} />
 
-      <SiteFooter showCta={hasFooterCta} />
+      <SiteFooter {...footerCtaProps} />
     </div>
   );
 }

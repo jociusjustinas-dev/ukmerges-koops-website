@@ -14,7 +14,7 @@ export const metadata = createPageMetadata({
 
 export default async function NewsArchivePage() {
   const cms = await getKoopsCmsData();
-  const { context, sections, hasFooterCta } = getCmsPageView(cms, "naujienos");
+  const { context, sections, footerCtaProps } = getCmsPageView(cms, "naujienos");
 
   return (
     <div className="site-shell news-page" id="pradzia" data-cms-page="naujienos">
@@ -26,14 +26,7 @@ export default async function NewsArchivePage() {
       </main>
       <CmsPageController page="naujienos" sections={sections} />
 
-      <SiteFooter
-        showCta={hasFooterCta}
-        ctaHref="/parduotuves"
-        ctaLabel="Rasti parduotuvę"
-        ctaAriaLabel="Rasti KOOPS parduotuvę"
-        ctaTitleDesktop={["Parduotuvė gali būti", "arčiau, nei manote"]}
-        ctaTitleMobile={["Parduotuvė gali", "būti arčiau,", "nei manote"]}
-      />
+      <SiteFooter {...footerCtaProps} />
     </div>
   );
 }

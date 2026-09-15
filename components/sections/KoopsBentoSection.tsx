@@ -1,5 +1,8 @@
 type KoopsBentoSectionProps = {
   cmsSection?: string;
+  eyebrow?: string;
+  title?: string;
+  galleryUrls?: string[];
   wideImage?: {
     src: string;
     alt: string;
@@ -8,11 +11,17 @@ type KoopsBentoSectionProps = {
 
 export function KoopsBentoSection({
   cmsSection = "home-bento",
+  eyebrow,
+  title,
+  galleryUrls,
   wideImage = {
     src: "/local-produce-couple.jpg",
     alt: "Vietos produkcija KOOPS parduotuvėje",
   },
 }: KoopsBentoSectionProps) {
+  const tallImage = galleryUrls?.find(Boolean) || "/koops-hero.jpg";
+  const wideSrc = galleryUrls?.filter(Boolean)[1] || wideImage.src;
+
   return (
     <section
       id={cmsSection}
@@ -24,8 +33,12 @@ export function KoopsBentoSection({
       <div className="tt-container">
         <header className="koops-bento-header">
           <div className="dashed-divider" aria-hidden="true" />
-          <p className="section-label">KOOPS KASDIEN</p>
-          <h2 id="koops-bento-title">Viskas, ko reikia — arčiau jūsų</h2>
+          <p className="section-label" data-cms-field="eyebrow">
+            {eyebrow?.trim() || "KOOPS KASDIEN"}
+          </p>
+          <h2 id="koops-bento-title" data-cms-field="title">
+            {title?.trim() || "Viskas, ko reikia — arčiau jūsų"}
+          </h2>
         </header>
 
         <div className="koops-bento-grid">
@@ -46,7 +59,7 @@ export function KoopsBentoSection({
             aria-label="Rasti artimiausią KOOPS parduotuvę"
           >
             <img
-              src="/koops-hero.jpg"
+              src={tallImage}
               alt="KOOPS parduotuvė Ukmergės rajone"
               loading="lazy"
               data-cms-field="gallery-item"
@@ -81,7 +94,7 @@ export function KoopsBentoSection({
             aria-label="Rasti artimiausią KOOPS parduotuvę"
           >
             <img
-              src={wideImage.src}
+              src={wideSrc}
               alt={wideImage.alt}
               loading="lazy"
               data-cms-field="gallery-item"

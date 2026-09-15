@@ -14,7 +14,7 @@ export const metadata = createPageMetadata({
 
 export default async function FlyersArchivePage() {
   const cms = await getKoopsCmsData();
-  const { context, sections, hasFooterCta } = getCmsPageView(cms, "leidiniai");
+  const { context, sections, footerCtaProps } = getCmsPageView(cms, "leidiniai");
 
   return (
     <div className="site-shell flyers-page" id="pradzia" data-cms-page="leidiniai">
@@ -26,14 +26,7 @@ export default async function FlyersArchivePage() {
       </main>
       <CmsPageController page="leidiniai" sections={sections} />
 
-      <SiteFooter
-        showCta={hasFooterCta}
-        ctaHref="/parduotuves"
-        ctaLabel="Rasti parduotuvę"
-        ctaAriaLabel="Rasti KOOPS parduotuvę"
-        ctaTitleDesktop={["Parduotuvė gali būti", "arčiau, nei manote"]}
-        ctaTitleMobile={["Parduotuvė gali", "būti arčiau,", "nei manote"]}
-      />
+      <SiteFooter {...footerCtaProps} />
     </div>
   );
 }

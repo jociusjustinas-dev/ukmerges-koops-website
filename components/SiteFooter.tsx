@@ -12,25 +12,29 @@ function phoneHref(phone: string) {
 
 type SiteFooterProps = {
   showCta?: boolean;
+  eyebrow?: string;
+  title?: string;
   ctaHref?: string;
   ctaLabel?: string;
   ctaAriaLabel?: string;
-  ctaTitleDesktop?: [string, string];
-  ctaTitleMobile?: [string, string, string];
 };
 
 export function SiteFooter({
   showCta = true,
+  eyebrow,
+  title,
   ctaHref = "/parduotuves",
   ctaLabel = "Rasti parduotuvę",
   ctaAriaLabel = "Rasti KOOPS parduotuvę",
-  ctaTitleDesktop = ["Parduotuvė gali būti", "arčiau, nei manote"],
-  ctaTitleMobile = ["Parduotuvė gali", "būti arčiau,", "nei manote"],
 }: SiteFooterProps) {
   const footerRef = React.useRef<HTMLElement>(null);
   const cms = useCmsOptions();
   const phone = cms.phone || "0 340 53235";
   const email = cms.email || "direktore@urvk.lt";
+  const ctaEyebrow = eyebrow?.trim() || "KOOPS";
+  const ctaTitle = title?.trim() || "Parduotuvė gali būti arčiau, nei manote";
+  const buttonLabel = ctaLabel?.trim() || "Rasti parduotuvę";
+  const buttonHref = ctaHref?.trim() || "/parduotuves";
 
   React.useEffect(() => {
     const footer = footerRef.current;
@@ -103,21 +107,14 @@ export function SiteFooter({
         <section className="footer-cta" id="footer-cta" aria-labelledby="footer-cta-title" data-cms-section="footer-cta">
           <div className="orbit footer-orbit-one" aria-hidden="true" />
           <div className="orbit footer-orbit-two" aria-hidden="true" />
-          <p className="section-label light-label">KOOPS</p>
-          <h2 id="footer-cta-title">
-            <span className="footer-title-desktop">
-              {ctaTitleDesktop.map((line) => (
-                <span key={line}>{line}</span>
-              ))}
-            </span>
-            <span className="footer-title-mobile">
-              {ctaTitleMobile.map((line) => (
-                <span key={line}>{line}</span>
-              ))}
-            </span>
+          <p className="section-label light-label" data-cms-field="eyebrow">
+            {ctaEyebrow}
+          </p>
+          <h2 id="footer-cta-title" data-cms-field="title" style={{ whiteSpace: "pre-line" }}>
+            {ctaTitle}
           </h2>
-          <a className="pill-button accent" href={ctaHref} aria-label={ctaAriaLabel}>
-            <RollingLabel>{ctaLabel}</RollingLabel>
+          <a className="pill-button accent" href={buttonHref} aria-label={ctaAriaLabel} data-cms-field="primary-link">
+            <RollingLabel>{buttonLabel}</RollingLabel>
           </a>
         </section>
       ) : null}

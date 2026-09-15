@@ -9,11 +9,15 @@ import {
 export function SuppliersLookingFor({
   items,
   galleryUrls,
+  eyebrow,
+  title,
   primaryLabel,
   primaryUrl,
 }: {
   items?: CmsLookingItem[];
   galleryUrls?: string[];
+  eyebrow?: string;
+  title?: string;
   primaryLabel?: string;
   primaryUrl?: string;
 }) {
@@ -36,10 +40,10 @@ export function SuppliersLookingFor({
         <header className="koops-bento-header">
           <div className="dashed-divider" aria-hidden="true" />
           <p className="section-label" data-cms-field="eyebrow">
-            KO IEŠKOME
+            {eyebrow?.trim() || "KO IEŠKOME"}
           </p>
           <h2 id="suppliers-looking-title" data-cms-field="title">
-            Produkcija, kuri tinka KOOPS lentynoms
+            {title?.trim() || "Produkcija, kuri tinka KOOPS lentynoms"}
           </h2>
         </header>
 

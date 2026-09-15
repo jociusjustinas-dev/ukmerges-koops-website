@@ -31,6 +31,11 @@ type HomePageProps = {
 };
 
 export function HomePage({ context, sections }: HomePageProps) {
+  const footerCta = sections.find((section) => section.type === "footer-cta" && section.enabled !== false);
+  const footerEyebrow = footerCta?.eyebrow?.trim() || "KOOPS";
+  const footerTitle = footerCta?.title?.trim() || "Parduotuvė gali būti arčiau, nei manote";
+  const footerLabel = footerCta?.primaryLabel?.trim() || "Rasti parduotuvę";
+  const footerHref = footerCta?.primaryUrl?.trim() || "/parduotuves";
   const pageRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -416,13 +421,15 @@ export function HomePage({ context, sections }: HomePageProps) {
       <CmsPageController page="pradinis" sections={sections} />
 
         {/* BYQ: terra-tory-footer-1 */}
-      <footer className="tt-footer" id="kontaktai" data-byq-component="terra-tory-footer-1">
+      <footer className={`tt-footer${footerCta ? "" : " is-no-cta"}`} id="kontaktai" data-byq-component="terra-tory-footer-1">
+        {footerCta ? (
         <section className="footer-cta" id="footer-cta" aria-labelledby="footer-cta-title" data-cms-section="footer-cta">
           <div className="orbit footer-orbit-one" aria-hidden="true" /><div className="orbit footer-orbit-two" aria-hidden="true" />
-          <p className="section-label light-label">KOOPS</p>
-          <h2 id="footer-cta-title"><span className="footer-title-desktop"><span>Parduotuvė gali būti</span><span>arčiau, nei manote</span></span><span className="footer-title-mobile"><span>Parduotuvė gali</span><span>būti arčiau,</span><span>nei manote</span></span></h2>
-          <a className="pill-button accent" href="/parduotuves" aria-label="Rasti KOOPS parduotuvę"><RollingLabel>Rasti parduotuvę</RollingLabel></a>
+          <p className="section-label light-label" data-cms-field="eyebrow">{footerEyebrow}</p>
+          <h2 id="footer-cta-title" data-cms-field="title" style={{ whiteSpace: "pre-line" }}>{footerTitle}</h2>
+          <a className="pill-button accent" href={footerHref} aria-label="Rasti KOOPS parduotuvę" data-cms-field="primary-link"><RollingLabel>{footerLabel}</RollingLabel></a>
         </section>
+        ) : null}
         <div className="footer-reveal">
           <div className="tt-container footer-content">
             <div className="footer-grid">

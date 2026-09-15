@@ -27,21 +27,32 @@ const gallery = [
 /** BYQ: terra-tory-hero-6 — careers hero + image grid */
 export function CareersHero({
   eyebrow,
+  title,
   description,
   primaryLabel,
   primaryUrl,
+  galleryUrls,
 }: {
   eyebrow?: string;
+  title?: string;
   description?: string;
   primaryLabel?: string;
   primaryUrl?: string;
+  galleryUrls?: string[];
 } = {}) {
   const rootRef = React.useRef<HTMLElement>(null);
   const ctaLabel = primaryLabel?.trim() || "Laisvos pozicijos";
   const ctaHref = primaryUrl?.trim() || "#pozicijos";
+  const heading = title?.trim() || "Darbas arti namų Ukmergėje ir rajone";
   const lead =
     description?.trim() ||
     "KOOPS ieško žmonių parduotuvėse, restorane „Vilkmergė“ ir logistikoje. Aiškus skelbimas, vieta ir paprastas kandidatavimo kelias — be spėliojimo.";
+  const frames = galleryUrls?.filter(Boolean).length
+    ? galleryUrls.filter(Boolean).map((src, index) => ({
+        src,
+        alt: gallery[index]?.alt || `KOOPS darbo aplinkos nuotrauka ${index + 1}`,
+      }))
+    : gallery;
 
   React.useLayoutEffect(() => {
     const root = rootRef.current;
@@ -131,13 +142,8 @@ export function CareersHero({
           </p>
           <div className="careers-hero-main">
             <div className="careers-hero-heading">
-              <h1 id="careers-hero-title" className="careers-hero-title" data-cms-field="title">
-                <span className="careers-hero-title-line">Darbas arti</span>
-                <span className="careers-hero-title-row">
-                  <i className="careers-hero-title-rule" aria-hidden="true" />
-                  <span> namų</span>
-                </span>
-                <span className="careers-hero-title-line">Ukmergėje ir rajone</span>
+              <h1 id="careers-hero-title" className="careers-hero-title" data-cms-field="title" style={{ whiteSpace: "pre-line" }}>
+                {heading}
               </h1>
               <div className="careers-hero-actions">
                 <a className="pill-button dark" href={ctaHref} aria-label="Žiūrėti laisvas pozicijas" data-cms-field="primary-link">
@@ -152,7 +158,7 @@ export function CareersHero({
         </div>
 
         <div className="careers-hero-gallery" aria-label="KOOPS darbo aplinkos nuotraukos">
-          {gallery.map((item, index) => (
+          {frames.map((item, index) => (
             <figure
               key={item.src}
               className="careers-hero-frame"

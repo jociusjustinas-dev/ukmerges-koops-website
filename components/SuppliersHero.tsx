@@ -27,21 +27,32 @@ const gallery = [
 /** BYQ: terra-tory-hero-6 — suppliers hero */
 export function SuppliersHero({
   eyebrow,
+  title,
   description,
   primaryLabel,
   primaryUrl,
+  galleryUrls,
 }: {
   eyebrow?: string;
+  title?: string;
   description?: string;
   primaryLabel?: string;
   primaryUrl?: string;
+  galleryUrls?: string[];
 } = {}) {
   const rootRef = React.useRef<HTMLElement>(null);
   const ctaLabel = primaryLabel?.trim() || "Siųsti pasiūlymą";
   const ctaHref = primaryUrl?.trim() || "#forma";
+  const heading = title?.trim() || "Auginkime vietos pasiūlą kartu";
   const lead =
     description?.trim() ||
     "Ieškome patikimų gamintojų ir tiekėjų. Aišku, ką pateikti, kam rašyti ir kas vyks po užklausos — be spėliojimo.";
+  const frames = galleryUrls?.filter(Boolean).length
+    ? galleryUrls.filter(Boolean).map((src, index) => ({
+        src,
+        alt: gallery[index]?.alt || `Vietos produkcijos nuotrauka ${index + 1}`,
+      }))
+    : gallery;
 
   React.useLayoutEffect(() => {
     const root = rootRef.current;
@@ -131,13 +142,8 @@ export function SuppliersHero({
           </p>
           <div className="careers-hero-main">
             <div className="careers-hero-heading">
-              <h1 id="suppliers-hero-title" className="careers-hero-title suppliers-hero-title" data-cms-field="title">
-                <span className="careers-hero-title-line">Auginkime</span>
-                <span className="careers-hero-title-row">
-                  <i className="careers-hero-title-rule suppliers-hero-title-rule" aria-hidden="true" />
-                  <span>vietos pasiūlą</span>
-                </span>
-                <span className="careers-hero-title-line">kartu</span>
+              <h1 id="suppliers-hero-title" className="careers-hero-title suppliers-hero-title" data-cms-field="title" style={{ whiteSpace: "pre-line" }}>
+                {heading}
               </h1>
               <div className="careers-hero-actions suppliers-hero-actions">
                 <a className="pill-button dark" href={ctaHref} aria-label="Siųsti produkcijos pasiūlymą" data-cms-field="primary-link">
@@ -152,7 +158,7 @@ export function SuppliersHero({
         </div>
 
         <div className="careers-hero-gallery" aria-label="Vietos produkcijos ir krašto nuotraukos">
-          {gallery.map((item, index) => (
+          {frames.map((item, index) => (
             <figure
               key={item.src}
               className="careers-hero-frame suppliers-hero-frame"

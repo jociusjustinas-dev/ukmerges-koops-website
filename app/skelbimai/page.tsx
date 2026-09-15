@@ -15,7 +15,7 @@ export const metadata = createPageMetadata({
 
 export default async function ClassifiedsPage() {
   const cms = await getKoopsCmsData();
-  const { context, sections, hasFooterCta } = getCmsPageView(cms, "skelbimai");
+  const { context, sections, footerCtaProps } = getCmsPageView(cms, "skelbimai");
 
   return (
     <div className="site-shell classifieds-page" id="pradzia" data-cms-page="skelbimai">
@@ -28,7 +28,7 @@ export default async function ClassifiedsPage() {
       </main>
       <CmsPageController page="skelbimai" sections={sections} />
 
-      <SiteFooter showCta={hasFooterCta} />
+      <SiteFooter {...footerCtaProps} />
     </div>
   );
 }

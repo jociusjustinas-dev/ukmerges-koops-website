@@ -25,7 +25,15 @@ const icons = [
 ];
 
 /** BYQ: terra-tory value features — adapted for careers */
-export function CareersValueFeatures({ items }: { items?: CmsFeatureItem[] }) {
+export function CareersValueFeatures({
+  items,
+  eyebrow,
+  title,
+}: {
+  items?: CmsFeatureItem[];
+  eyebrow?: string;
+  title?: string;
+}) {
   const gridRef = React.useRef<HTMLDivElement>(null);
   const [visible, setVisible] = React.useState(false);
   const features = sectionItemsOrDefault(items, defaultCareersFeatures);
@@ -67,10 +75,10 @@ export function CareersValueFeatures({ items }: { items?: CmsFeatureItem[] }) {
         <div className="restaurant-features-layout">
           <div className="restaurant-features-intro">
             <p className="section-label" data-cms-field="eyebrow">
-              KODĖL KOOPS
+              {eyebrow?.trim() || "KODĖL KOOPS"}
             </p>
             <h2 id="careers-features-title" data-cms-field="title">
-              Vietos darbas, aiškus kelias ir komanda šalia
+              {title?.trim() || "Vietos darbas, aiškus kelias ir komanda šalia"}
             </h2>
           </div>
 

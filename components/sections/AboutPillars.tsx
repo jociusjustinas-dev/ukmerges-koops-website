@@ -22,7 +22,15 @@ const icons = [
 ];
 
 /** BYQ: terra-tory value features — žmonės · vieta · istorija */
-export function AboutPillars({ items }: { items?: CmsFeatureItem[] }) {
+export function AboutPillars({
+  items,
+  eyebrow,
+  title,
+}: {
+  items?: CmsFeatureItem[];
+  eyebrow?: string;
+  title?: string;
+}) {
   const gridRef = React.useRef<HTMLDivElement>(null);
   const [visible, setVisible] = React.useState(false);
   const pillars = sectionItemsOrDefault(items, defaultAboutPillars);
@@ -64,10 +72,10 @@ export function AboutPillars({ items }: { items?: CmsFeatureItem[] }) {
         <div className="restaurant-features-layout about-pillars-layout">
           <div className="restaurant-features-intro">
             <p className="section-label" data-cms-field="eyebrow">
-              KAS ESAME
+              {eyebrow?.trim() || "KAS ESAME"}
             </p>
             <h2 id="about-pillars-title" data-cms-field="title">
-              Trys atramos, ant kurių stovi KOOPS
+              {title?.trim() || "Trys atramos, ant kurių stovi KOOPS"}
             </h2>
           </div>
 

@@ -16,7 +16,7 @@ export const metadata = createPageMetadata({
 
 export default async function StoresPage() {
   const cms = await getKoopsCmsData();
-  const { context, sections, hasFooterCta } = getCmsPageView(cms, "parduotuves");
+  const { context, sections, footerCtaProps } = getCmsPageView(cms, "parduotuves");
   const faqSection = sections.find((section) => section.type === "stores-faq");
   const faqs = sectionItemsOrDefault(faqSection?.items as CmsFaqItem[] | undefined, defaultStoreFaqs);
 
@@ -42,14 +42,7 @@ export default async function StoresPage() {
           }
         )),
       }) }} />
-      <SiteFooter
-        showCta={hasFooterCta}
-        ctaHref="/restoranas"
-        ctaLabel="Apie restoraną"
-        ctaAriaLabel="Apie restoraną Vilkmergė"
-        ctaTitleDesktop={["Stalui ir šventei —", "restoranas Vilkmergė"]}
-        ctaTitleMobile={["Stalui ir šventei —", "restoranas", "Vilkmergė"]}
-      />
+      <SiteFooter {...footerCtaProps} />
     </div>
   );
 }

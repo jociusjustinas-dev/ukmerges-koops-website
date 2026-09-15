@@ -21,7 +21,7 @@ function phoneHref(phone: string) {
 
 export default async function ContactsPage() {
   const cms = await getKoopsCmsData();
-  const { context, sections, hasFooterCta } = getCmsPageView(cms, "kontaktai");
+  const { context, sections, footerCtaProps } = getCmsPageView(cms, "kontaktai");
   const options = cms.options;
   const addressLines = (options.address || contactsOrg.addressLines.join(", ")).split(/,\s*(?=LT-|\d{5}|Ukmergė)/, 2);
   const org = {
@@ -72,7 +72,7 @@ export default async function ContactsPage() {
       </main>
       <CmsPageController page="kontaktai" sections={sections} />
 
-      <SiteFooter showCta={hasFooterCta} />
+      <SiteFooter {...footerCtaProps} />
     </div>
   );
 }

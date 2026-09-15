@@ -219,8 +219,6 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
         ctaHref="/parduotuves"
         ctaLabel="Rasti parduotuvę"
         ctaAriaLabel="Rasti KOOPS parduotuvę"
-        ctaTitleDesktop={["Parduotuvė gali būti", "arčiau, nei manote"]}
-        ctaTitleMobile={["Parduotuvė gali", "būti arčiau,", "nei manote"]}
       />
     </div>
   );

@@ -89,9 +89,18 @@ export function resolvePageSections(page: string, sections?: CmsPageSection[]): 
 export function getCmsPageView(cms: KoopsCmsData, page: string) {
   const context = createCmsRenderContext(cms);
   const sections = resolvePageSections(page, cms.pages[page]?.sections);
+  const footerCta = sections.find((section) => section.type === "footer-cta" && section.enabled !== false);
   return {
     context,
     sections,
-    hasFooterCta: sections.some((section) => section.type === "footer-cta"),
+    footerCta,
+    hasFooterCta: Boolean(footerCta),
+    footerCtaProps: {
+      showCta: Boolean(footerCta),
+      eyebrow: footerCta?.eyebrow,
+      title: footerCta?.title,
+      ctaLabel: footerCta?.primaryLabel,
+      ctaHref: footerCta?.primaryUrl,
+    },
   };
 }

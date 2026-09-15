@@ -16,7 +16,7 @@ export const metadata = createPageMetadata({
 
 export default async function AboutPage() {
   const cms = await getKoopsCmsData();
-  const { context, sections, hasFooterCta } = getCmsPageView(cms, "apie");
+  const { context, sections, footerCtaProps } = getCmsPageView(cms, "apie");
   const schema = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -47,7 +47,7 @@ export default async function AboutPage() {
       </main>
       <CmsPageController page="apie" sections={sections} />
 
-      <SiteFooter showCta={hasFooterCta} />
+      <SiteFooter {...footerCtaProps} />
     </div>
   );
 }

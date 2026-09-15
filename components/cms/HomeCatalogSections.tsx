@@ -38,11 +38,29 @@ const restaurantSlides = [
   { src: "/vilkmerge-menu.jpg", alt: "Restorano „Vilkmergė“ ruošiami užkandžiai" },
 ];
 
-export function HomeHero({ imageUrl }: { imageUrl?: string }) {
+export function HomeHero({
+  imageUrl,
+  eyebrow,
+  title,
+  description,
+  primaryLabel,
+  primaryUrl,
+}: {
+  imageUrl?: string;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  primaryLabel?: string;
+  primaryUrl?: string;
+}) {
   const [heroUpdateIndex, setHeroUpdateIndex] = React.useState(0);
   const [heroUpdatesPaused, setHeroUpdatesPaused] = React.useState(false);
   const activeHeroUpdate = heroUpdates[heroUpdateIndex];
   const heroImage = imageUrl?.trim() || "/koops-hero-market.jpg";
+  const ctaLabel = primaryLabel?.trim() || "Rasti parduotuvę";
+  const ctaHref = primaryUrl?.trim() || "/parduotuves";
+  const heading = title?.trim() || "KOOPS parduotuvės arčiau jūsų.";
+  const lead = description?.trim() || "Raskite artimiausią parduotuvę, jos darbo laiką ir maršrutą.";
 
   React.useEffect(() => {
     if (heroUpdatesPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -62,18 +80,17 @@ export function HomeHero({ imageUrl }: { imageUrl?: string }) {
         <div className="tt-container tt-hero-stage">
           <div className="tt-hero-content">
             <div className="tt-hero-top">
-              <p className="section-label light-label">UKMERGĖJE IR RAJONE</p>
-              <h1>
-                <span>KOOPS </span>
-                <span>parduotuvės </span>
-                <span className="hero-title-break" aria-hidden="true" />
-                <i className="hero-headline-line title-push-line" style={{ width: 0 }} aria-hidden="true" />
-                <span>arčiau </span>
-                <span>jūsų.</span>
+              <p className="section-label light-label" data-cms-field="eyebrow">
+                {eyebrow?.trim() || "UKMERGĖJE IR RAJONE"}
+              </p>
+              <h1 data-cms-field="title" style={{ whiteSpace: "pre-line" }}>
+                {heading}
               </h1>
-              <p className="body-large">Raskite artimiausią parduotuvę, jos darbo laiką ir maršrutą.</p>
-              <a className="pill-button accent" href="/parduotuves" aria-label="Rasti artimiausią parduotuvę">
-                <RollingLabel>Rasti parduotuvę</RollingLabel>
+              <p className="body-large" data-cms-field="description">
+                {lead}
+              </p>
+              <a className="pill-button accent" href={ctaHref} aria-label="Rasti artimiausią parduotuvę" data-cms-field="primary-link">
+                <RollingLabel>{ctaLabel}</RollingLabel>
               </a>
             </div>
           </div>
@@ -118,9 +135,22 @@ export function HomeHero({ imageUrl }: { imageUrl?: string }) {
   );
 }
 
-export function HomeStores({ stores }: { stores: Store[] }) {
+export function HomeStores({
+  stores,
+  title,
+  primaryLabel,
+  primaryUrl,
+}: {
+  stores: Store[];
+  title?: string;
+  primaryLabel?: string;
+  primaryUrl?: string;
+}) {
   const [locationSlide, setLocationSlide] = React.useState(0);
   const locationCarouselRef = React.useRef<HTMLDivElement>(null);
+  const heading = title?.trim() || "Raskite artimiausią KOOPS parduotuvę";
+  const ctaLabel = primaryLabel?.trim() || "Visos parduotuvės";
+  const ctaHref = primaryUrl?.trim() || "/parduotuves";
 
   const showLocationSlide = (index: number) => {
     const track = locationCarouselRef.current;
@@ -146,8 +176,8 @@ export function HomeStores({ stores }: { stores: Store[] }) {
   return (
     <section className="tt-locations" id="parduotuves" aria-labelledby="parduotuviu-antraste" data-byq-component="terra-tory-team-1" data-cms-section="home-stores">
       <div className="tt-container">
-        <div className="location-headline" id="parduotuviu-antraste">
-          <span>Raskite </span><span>artimiausią </span><span className="title-push-break" aria-hidden="true" /><i className="title-push-line" style={{ width: 0 }} aria-hidden="true" /><span>KOOPS </span><span>parduotuvę</span>
+        <div className="location-headline" id="parduotuviu-antraste" data-cms-field="title" style={{ whiteSpace: "pre-line" }}>
+          {heading}
         </div>
         <div className="location-carousel" role="region" aria-roledescription="karuselė" aria-label="KOOPS parduotuvės">
           <div className="location-grid" ref={locationCarouselRef} onScroll={handleLocationScroll}>
@@ -198,25 +228,45 @@ export function HomeStores({ stores }: { stores: Store[] }) {
           </div>
           <p className="sr-only" aria-live="polite">Parduotuvė {locationSlide + 1} iš {stores.length}</p>
         </div>
-        <a className="pill-button accent section-cta" href="/parduotuves">
-          <RollingLabel>Visos parduotuvės</RollingLabel>
+        <a className="pill-button accent section-cta" href={ctaHref} data-cms-field="primary-link">
+          <RollingLabel>{ctaLabel}</RollingLabel>
         </a>
       </div>
     </section>
   );
 }
 
-export function HomeNews({ items, flyers = [] }: { items: NewsItem[]; flyers?: Flyer[] }) {
+export function HomeNews({
+  items,
+  flyers = [],
+  eyebrow,
+  title,
+  primaryLabel,
+  primaryUrl,
+}: {
+  items: NewsItem[];
+  flyers?: Flyer[];
+  eyebrow?: string;
+  title?: string;
+  primaryLabel?: string;
+  primaryUrl?: string;
+}) {
   const featuredFlyer = sortFlyers(flyers).find((flyer) => isFlyerCurrent(flyer)) || sortFlyers(flyers)[0];
   const newsCards = featuredFlyer ? items.filter((item) => item.tone !== "featured").slice(0, 3) : items;
+  const ctaLabel = primaryLabel?.trim() || "Visos naujienos";
+  const ctaHref = primaryUrl?.trim() || "/naujienos";
 
   return (
     <section className="tt-news" id="naujienos" aria-labelledby="naujienu-antraste" data-byq-component="terra-tory-blog-grid-1" data-cms-section="home-news">
       <div className="tt-container">
         <div className="tt-section-header">
           <div className="dashed-divider" />
-          <p className="section-label">AKTUALU</p>
-          <h2 id="naujienu-antraste">Naujienos ir akcijos</h2>
+          <p className="section-label" data-cms-field="eyebrow">
+            {eyebrow?.trim() || "AKTUALU"}
+          </p>
+          <h2 id="naujienu-antraste" data-cms-field="title" style={{ whiteSpace: "pre-line" }}>
+            {title?.trim() || "Naujienos ir akcijos"}
+          </h2>
         </div>
         <div className="news-bento">
           {featuredFlyer ? (
@@ -264,28 +314,49 @@ export function HomeNews({ items, flyers = [] }: { items: NewsItem[]; flyers?: F
             );
           })}
         </div>
-        <a className="pill-button dark section-cta" href="/naujienos">
-          <RollingLabel>Visos naujienos</RollingLabel>
+        <a className="pill-button dark section-cta" href={ctaHref} data-cms-field="primary-link">
+          <RollingLabel>{ctaLabel}</RollingLabel>
         </a>
       </div>
     </section>
   );
 }
 
-export function HomeRestaurant({ restaurant, galleryUrls }: { restaurant: typeof restaurantDefaults; galleryUrls?: string[] }) {
+export function HomeRestaurant({
+  restaurant,
+  galleryUrls,
+  eyebrow,
+  title,
+  description,
+  primaryLabel,
+  primaryUrl,
+}: {
+  restaurant: typeof restaurantDefaults;
+  galleryUrls?: string[];
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  primaryLabel?: string;
+  primaryUrl?: string;
+}) {
   const [restaurantSlide, setRestaurantSlide] = React.useState(0);
   const restaurantGallery = galleryUrls?.filter(Boolean).length
     ? galleryUrls.filter(Boolean).map((src, index) => ({ src, alt: restaurantSlides[index]?.alt || `Restorano nuotrauka ${index + 1}` }))
     : restaurantSlides;
+  const ctaLabel = primaryLabel?.trim() || "Siųsti užklausą";
+  const ctaHref = primaryUrl?.trim() || "/restoranas#uzklausa";
+  const heading = title?.trim() || "Restoranas „Vilkmergė“ – vieta, kur gyvena atsiminimai.";
+  const lead = description?.trim() || "Miesto širdyje įsikūręs restoranas laukia Jūsų.";
 
   return (
     <section className="tt-story" id="restoranas" aria-labelledby="restorano-antraste" data-byq-component="terra-tory-combo-6" data-cms-section="home-restaurant">
       <div className="tt-container">
         <div className="story-headline">
-          <p className="section-label light-label">RESTORANAS „VILKMERGĖ“ · NUO 1965 METŲ</p>
-          <h2 id="restorano-antraste">
-            <span className="story-title-desktop">Restoranas „Vilkmergė“ – vieta, kur gyvena atsiminimai.</span>
-            <span className="story-title-mobile"><span>Restoranas „Vilkmergė“ –</span><span>vieta, kur gyvena</span><span>atsiminimai.</span></span>
+          <p className="section-label light-label" data-cms-field="eyebrow">
+            {eyebrow?.trim() || "RESTORANAS „VILKMERGĖ“ · NUO 1965 METŲ"}
+          </p>
+          <h2 id="restorano-antraste" data-cms-field="title" style={{ whiteSpace: "pre-line" }}>
+            {heading}
           </h2>
         </div>
         <div className="story-grid">
@@ -311,7 +382,7 @@ export function HomeRestaurant({ restaurant, galleryUrls }: { restaurant: typeof
             <p className="sr-only" aria-live="polite">Nuotrauka {restaurantSlide + 1} iš {restaurantGallery.length}</p>
           </div>
           <div className="story-copy">
-            <p>Miesto širdyje įsikūręs restoranas laukia Jūsų.</p>
+            <p data-cms-field="description">{lead}</p>
             <p className="story-summary">Restorane galime priimti iki {restaurant.maxGuests} svečių. Siūlome {restaurant.hallsCount} skirtingo dydžio sales: Didžiąją, barą ir mažąją.</p>
             <dl>
               <div><dt>Pokylių salės</dt><dd>{restaurant.hallsCount} salės</dd></div>
@@ -326,7 +397,7 @@ export function HomeRestaurant({ restaurant, galleryUrls }: { restaurant: typeof
               </dl>
             </div>
             <div className="story-actions">
-              <a className="pill-button accent" href="/restoranas#uzklausa"><RollingLabel>Siųsti užklausą</RollingLabel></a>
+              <a className="pill-button accent" href={ctaHref} data-cms-field="primary-link"><RollingLabel>{ctaLabel}</RollingLabel></a>
               <a className="pill-button outline-light" href="/restoranas"><RollingLabel>Apie restoraną</RollingLabel></a>
             </div>
           </div>
@@ -336,19 +407,37 @@ export function HomeRestaurant({ restaurant, galleryUrls }: { restaurant: typeof
   );
 }
 
-export function HomeJobs({ jobs }: { jobs: Job[] }) {
+export function HomeJobs({
+  jobs,
+  eyebrow,
+  title,
+  description,
+  primaryLabel,
+  primaryUrl,
+}: {
+  jobs: Job[];
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  primaryLabel?: string;
+  primaryUrl?: string;
+}) {
+  const ctaLabel = primaryLabel?.trim() || "Visi darbo pasiūlymai";
+  const ctaHref = primaryUrl?.trim() || "/karjera";
+
   return (
     <section className="tt-jobs" id="karjera" aria-labelledby="karjeros-antraste" data-byq-component="structured-data-2-careers" data-cms-section="home-jobs">
       <div className="tt-container jobs-layout">
         <div className="jobs-intro">
-          <p className="section-label light-label">KARJERA</p>
-          <h2 id="karjeros-antraste" className="jobs-title-with-rule">
-            Darbas arti
-            <i className="jobs-title-rule" aria-hidden="true" />
-            <span> namų</span>
+          <p className="section-label light-label" data-cms-field="eyebrow">{eyebrow?.trim() || "KARJERA"}</p>
+          <h2 id="karjeros-antraste" className="jobs-title-with-rule" data-cms-field="title" style={{ whiteSpace: "pre-line" }}>
+            {title?.trim() || "Darbas arti namų"}
           </h2>
-          <p>Prisijunkite prie KOOPS komandos Ukmergėje ir rajone. Susipažinkite su šiuo metu siūlomomis darbo vietomis.</p>
-          <a className="pill-button accent" href="/karjera"><RollingLabel>Visi darbo pasiūlymai</RollingLabel></a>
+          <p data-cms-field="description">
+            {description?.trim() ||
+              "Prisijunkite prie KOOPS komandos Ukmergėje ir rajone. Susipažinkite su šiuo metu siūlomomis darbo vietomis."}
+          </p>
+          <a className="pill-button accent" href={ctaHref} data-cms-field="primary-link"><RollingLabel>{ctaLabel}</RollingLabel></a>
         </div>
         <div className="jobs-list" role="region" aria-label="Naujausi darbo pasiūlymai">
           {jobs.slice(0, 3).map((job) => (
@@ -368,15 +457,30 @@ export function HomeJobs({ jobs }: { jobs: Job[] }) {
   );
 }
 
-export function HomeSuppliers({ imageUrl }: { imageUrl?: string }) {
+export function HomeSuppliers({
+  imageUrl,
+  eyebrow,
+  title,
+  description,
+}: {
+  imageUrl?: string;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+}) {
   return (
     <section className="tt-contact" id="tiekejams" aria-labelledby="tiekeju-antraste" data-byq-component="terra-tory-contact-1" data-cms-section="home-suppliers">
       <div className="tt-container contact-grid">
         <div className="contact-content">
           <div className="contact-heading">
-            <p className="section-label">TIEKĖJAMS</p>
-            <h2 id="tiekeju-antraste">Auginkime vietos pasiūlą kartu</h2>
-            <p>Ieškome patikimų gamintojų ir tiekėjų, norinčių pasiūlyti savo produkciją KOOPS pirkėjams.</p>
+            <p className="section-label" data-cms-field="eyebrow">{eyebrow?.trim() || "TIEKĖJAMS"}</p>
+            <h2 id="tiekeju-antraste" data-cms-field="title" style={{ whiteSpace: "pre-line" }}>
+              {title?.trim() || "Auginkime vietos pasiūlą kartu"}
+            </h2>
+            <p data-cms-field="description">
+              {description?.trim() ||
+                "Ieškome patikimų gamintojų ir tiekėjų, norinčių pasiūlyti savo produkciją KOOPS pirkėjams."}
+            </p>
           </div>
           <div className="contact-details">
             <div><strong>Adresas</strong><p>Vasario 16-osios g. 30<br />LT-20130 Ukmergė</p></div>
@@ -392,18 +496,30 @@ export function HomeSuppliers({ imageUrl }: { imageUrl?: string }) {
   );
 }
 
-export function FooterCta() {
+export function FooterCta({
+  eyebrow,
+  title,
+  primaryLabel,
+  primaryUrl,
+}: {
+  eyebrow?: string;
+  title?: string;
+  primaryLabel?: string;
+  primaryUrl?: string;
+} = {}) {
+  const ctaLabel = primaryLabel?.trim() || "Rasti parduotuvę";
+  const ctaHref = primaryUrl?.trim() || "/parduotuves";
+
   return (
     <section className="footer-cta" id="footer-cta" aria-labelledby="footer-cta-title" data-cms-section="footer-cta">
       <div className="orbit footer-orbit-one" aria-hidden="true" />
       <div className="orbit footer-orbit-two" aria-hidden="true" />
-      <p className="section-label light-label">KOOPS</p>
-      <h2 id="footer-cta-title">
-        <span className="footer-title-desktop"><span>Parduotuvė gali būti</span><span>arčiau, nei manote</span></span>
-        <span className="footer-title-mobile"><span>Parduotuvė gali</span><span>būti arčiau,</span><span>nei manote</span></span>
+      <p className="section-label light-label" data-cms-field="eyebrow">{eyebrow?.trim() || "KOOPS"}</p>
+      <h2 id="footer-cta-title" data-cms-field="title" style={{ whiteSpace: "pre-line" }}>
+        {title?.trim() || "Parduotuvė gali būti arčiau, nei manote"}
       </h2>
-      <a className="pill-button accent" href="/parduotuves" aria-label="Rasti KOOPS parduotuvę">
-        <RollingLabel>Rasti parduotuvę</RollingLabel>
+      <a className="pill-button accent" href={ctaHref} aria-label="Rasti KOOPS parduotuvę" data-cms-field="primary-link">
+        <RollingLabel>{ctaLabel}</RollingLabel>
       </a>
     </section>
   );

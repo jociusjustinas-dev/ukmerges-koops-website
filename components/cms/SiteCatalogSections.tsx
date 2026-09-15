@@ -199,11 +199,15 @@ export function ClassifiedsListing({
 
 export function RestaurantHalls({
   items,
+  eyebrow,
+  title,
   primaryLabel,
   primaryUrl,
 }: {
   restaurant?: typeof restaurantDefaults;
   items?: CmsHallItem[];
+  eyebrow?: string;
+  title?: string;
   primaryLabel?: string;
   primaryUrl?: string;
 }) {
@@ -221,8 +225,8 @@ export function RestaurantHalls({
       <div className="tt-container">
         <header className="koops-bento-header">
           <div className="dashed-divider" aria-hidden="true" />
-          <p className="section-label" data-cms-field="eyebrow">SALĖS</p>
-          <h2 id="restaurant-halls-title" data-cms-field="title">Salės ir talpa</h2>
+          <p className="section-label" data-cms-field="eyebrow">{eyebrow?.trim() || "SALĖS"}</p>
+          <h2 id="restaurant-halls-title" data-cms-field="title">{title?.trim() || "Salės ir talpa"}</h2>
           <p data-cms-field="description" hidden>Vestuvės, jubiliejai, įmonių vakarai.</p>
         </header>
         {/* Fixed 4×2 bento order: card · tall · card · media · media · accent(span 2) */}

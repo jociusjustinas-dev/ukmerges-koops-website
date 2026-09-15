@@ -188,8 +188,7 @@ export default async function StoreDetailPage({ params }: StorePageProps) {
         ctaHref="/#restoranas"
         ctaLabel="Apie restoraną"
         ctaAriaLabel="Apie restoraną Vilkmergė"
-        ctaTitleDesktop={["Stalui ir šventei —", "restoranas Vilkmergė"]}
-        ctaTitleMobile={["Stalui ir šventei —", "restoranas", "Vilkmergė"]}
+        title={"Stalui ir šventei —\nrestoranas Vilkmergė"}
       />
     </div>
   );

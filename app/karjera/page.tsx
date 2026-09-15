@@ -15,7 +15,7 @@ export const metadata = createPageMetadata({
 
 export default async function CareersPage() {
   const cms = await getKoopsCmsData();
-  const { context, sections, hasFooterCta } = getCmsPageView(cms, "karjera");
+  const { context, sections, footerCtaProps } = getCmsPageView(cms, "karjera");
   const jobSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -42,7 +42,7 @@ export default async function CareersPage() {
       </main>
       <CmsPageController page="karjera" sections={sections} />
 
-      <SiteFooter showCta={hasFooterCta} />
+      <SiteFooter {...footerCtaProps} />
     </div>
   );
 }

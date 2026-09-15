@@ -35,7 +35,13 @@ const valueFeatures = [
   },
 ];
 
-export function KoopsValueFeaturesSection() {
+export function KoopsValueFeaturesSection({
+  eyebrow,
+  title,
+}: {
+  eyebrow?: string;
+  title?: string;
+} = {}) {
   const trackRef = React.useRef<HTMLDivElement>(null);
   const firstSetRef = React.useRef<HTMLDivElement>(null);
   const setWidthRef = React.useRef(0);
@@ -118,8 +124,12 @@ export function KoopsValueFeaturesSection() {
     <section className="tt-about" id="apie" aria-labelledby="apie-antraste" data-byq-component="terra-tory-services-1" data-cms-section="home-values">
       <div className="tt-container">
         <div className="about-marquee-header">
-          <p className="section-label">APIE KOOPS</p>
-          <h2 id="apie-antraste">Vietos žmonėms. Vietos verslui.</h2>
+          <p className="section-label" data-cms-field="eyebrow">
+            {eyebrow?.trim() || "APIE KOOPS"}
+          </p>
+          <h2 id="apie-antraste" data-cms-field="title" style={{ whiteSpace: "pre-line" }}>
+            {title?.trim() || "Vietos žmonėms. Vietos verslui."}
+          </h2>
         </div>
         <div className="about-intro">
           <p>Ukmergės rajono vartotojų kooperatyvas savo istoriją skaičiuoja nuo 1996 metų, kai buvo reorganizuota Ukmergės rajkoopsąjunga. Bendrovė vykdo mažmeninę prekybą, nuomoja nekilnojamąjį turtą ir teikia depozito surinkimo, Perlo, Olifejos, pinigų išgryninimo bei kitas paslaugas.</p>

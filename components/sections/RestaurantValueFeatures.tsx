@@ -25,7 +25,15 @@ const icons = [
 ];
 
 /** BYQ: terra-tory value features — split label/heading + 2×2 cards */
-export function RestaurantValueFeatures({ items }: { items?: CmsFeatureItem[] }) {
+export function RestaurantValueFeatures({
+  items,
+  eyebrow,
+  title,
+}: {
+  items?: CmsFeatureItem[];
+  eyebrow?: string;
+  title?: string;
+}) {
   const gridRef = React.useRef<HTMLDivElement>(null);
   const [visible, setVisible] = React.useState(false);
   const features = sectionItemsOrDefault(items, defaultRestaurantFeatures);
@@ -67,10 +75,10 @@ export function RestaurantValueFeatures({ items }: { items?: CmsFeatureItem[] })
         <div className="restaurant-features-layout">
           <div className="restaurant-features-intro">
             <p className="section-label" data-cms-field="eyebrow">
-              ERDVĖ RENGINIUI
+              {eyebrow?.trim() || "ERDVĖ RENGINIUI"}
             </p>
             <h2 id="restaurant-features-title" data-cms-field="title">
-              Trys salės Ukmergės centre — viskas, ko reikia šventei
+              {title?.trim() || "Trys salės Ukmergės centre — viskas, ko reikia šventei"}
             </h2>
           </div>
 
