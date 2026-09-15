@@ -199,8 +199,42 @@ export function TvsGuide() {
               <li>Spauskite <strong>+</strong> → <strong>Blokai</strong> → <strong>KOOPS sekcijos</strong>.</li>
               <li>Pasirinkite sekciją pagal nuotrauką ir pavadinimą, pvz. „Pradinis · Hero“. Bet kurią sekciją galima įdėti į bet kurį puslapį.</li>
               <li>Paspaudę bloką dešinėje rasite laukus: antraštė, aprašymas, mygtukas, nuoroda, nuotrauka ar galerija.</li>
+              <li>Kai kuriose sekcijose apačioje yra <strong>sąrašas</strong> — klausimai, salės, privalumų kortelės. Ten galite pridėti, pašalinti ir keisti eiliškumą (↑↓).</li>
               <li>Jei sekcijos laikinai nereikia — išjunkite „Rodyti svetainėje“, netrinkite viso bloko.</li>
             </ol>
+            <div className="guide-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Sekcija</th>
+                    <th>Ką galima keisti sąraše</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Parduotuvės · Klausimai</td>
+                    <td>Visi klausimai ir atsakymai — ne tik pirmąjį</td>
+                  </tr>
+                  <tr>
+                    <td>Restoranas · Salės</td>
+                    <td>Kiekvienos salės pavadinimas, talpa, aprašymas, nuotrauka</td>
+                  </tr>
+                  <tr>
+                    <td>Restoranas · Privalumai, Karjera · Privalumai</td>
+                    <td>Kortelių antraštės ir tekstai (pvz. svečių skaičius)</td>
+                  </tr>
+                  <tr>
+                    <td>Tiekėjams · Ko ieškome / Procesas</td>
+                    <td>Kategorijos ir žingsniai</td>
+                  </tr>
+                  <tr>
+                    <td>Apie · Trys atramos, Kontaktai · Kur kreiptis</td>
+                    <td>Kortelių tekstai ir nuorodos</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Bendrą restorano talpą (pvz. 154) keiskite <strong>KOOPS → Bendri duomenys</strong>. Atskirų salių skaičius — bloke „Restoranas · Salės“.</p>
             <p>Drobėje matote tikrą svetainės vaizdą. Spustelėjus sekciją pažymimas atitinkamas blokas. Lauką WordPress laiko pakeitimu tik tada, kai jis skiriasi nuo numatytojo.</p>
           </section>
 
@@ -218,16 +252,16 @@ export function TvsGuide() {
 
           <section id="leidiniai" className="guide-section">
             <h2>Leidiniai</h2>
-            <p>Kelias: <strong>Leidiniai → Pridėti naują</strong>. Svetainėje jie rodomi <code>/leidiniai</code> ir naujienų puslapio viršuje.</p>
-            <ul>
-              <li>pavadinimas ir santrauka — kortelės tekstas;</li>
-              <li><strong>Viršelis</strong> — katalogo nuotrauka;</li>
-              <li><strong>Tipas</strong> — akcijų leidinys arba TOP pasiūlymai;</li>
-              <li><strong>Galioja nuo / iki</strong> — datos kortelėje ir rikiavime;</li>
-              <li><strong>PDF leidinys</strong> — atsisiuntimui. Jei serveryje yra Imagick, puslapiai sugeneruojami automatiškai;</li>
-              <li><strong>Puslapių nuotraukos</strong> — jei automatinė konversija neveikia, įkelkite JPG iš eilės.</li>
-            </ul>
-            <p>Neperrinkite kiekvienos prekės atskirai. Lankytojas varto puslapius ir, jei reikia, atsisiunčia PDF.</p>
+            <p>Kelias: <strong>Leidiniai → Pridėti naują</strong>. Svetainėje jie rodomi <code>/leidiniai</code> ir naujienų puslapio viršuje. Visi laukai — dešinėje skydelyje <strong>Leidinio duomenys</strong>.</p>
+            <ol>
+              <li>Įrašykite pavadinimą ir santrauką (kortelės tekstas).</li>
+              <li>Nustatykite <strong>Tipą</strong> (akcijų leidinys / TOP / kitas) ir datas <strong>Galioja nuo / iki</strong>.</li>
+              <li>Įkelkite <strong>Viršelį</strong> — jei neįkelsite, po išsaugojimo imamas pirmas puslapis.</li>
+              <li>Spauskite <strong>Įkelti PDF</strong> — atsidaro medijos biblioteka (ne „Choose File“ eilutė).</li>
+              <li>Spauskite <strong>Publikuoti / Atnaujinti</strong>. Serveris pats paverčia PDF puslapius į nuotraukas.</li>
+              <li>Po išsaugojimo atidarykite <strong>Redaguoti puslapius</strong>: pašalinkite nereikalingus, pakeiskite eiliškumą. Iš PDF negalima pažymėti „tik 3 ir 7 puslapį“ — pirmiausia sugeneruojami visi, tada galerijoje išimami nereikalingi.</li>
+            </ol>
+            <p>Jei po PDF išsaugojimo puslapiai neatsiranda — įkelkite JPG rankiniu būdu per tą pačią galeriją. Lankytojas varto nuotraukas svetainėje; PDF lieka mygtukui „Atsisiųsti PDF“.</p>
           </section>
 
           <section id="parduotuves" className="guide-section">
@@ -357,8 +391,20 @@ export function TvsGuide() {
                     <td>Puslapiai → Pradinis → hero sekcija</td>
                   </tr>
                   <tr>
-                    <td>Paskelbti akciją</td>
+                    <td>Paskelbti akciją / naujieną</td>
                     <td>Įrašai → Pridėti naują</td>
+                  </tr>
+                  <tr>
+                    <td>Įkelti akcijų leidinį</td>
+                    <td>Leidiniai → Pridėti naują → PDF + datos</td>
+                  </tr>
+                  <tr>
+                    <td>Pakeisti FAQ klausimus</td>
+                    <td>Puslapiai → Parduotuvės → Klausimai → sąrašas dešinėje</td>
+                  </tr>
+                  <tr>
+                    <td>Pakeisti salės talpą ar nuotrauką</td>
+                    <td>Puslapiai → Restoranas → Salės → sąrašas dešinėje</td>
                   </tr>
                   <tr>
                     <td>Pataisyti parduotuvės darbo laiką</td>

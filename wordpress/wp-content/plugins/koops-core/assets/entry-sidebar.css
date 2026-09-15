@@ -82,6 +82,24 @@
   max-width: 100%;
 }
 
+.koops-entry-sidebar .koops-media-control__previews {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0 0 8px;
+}
+.koops-entry-sidebar .koops-media-control__previews img {
+  display: block;
+  width: 100%;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.koops-entry-sidebar .koops-media-filename {
+  margin: 0 0 8px;
+  word-break: break-word;
+}
+
 body.post-type-koops_store .edit-post-visual-editor .block-editor-block-list__layout {
   min-height: 0;
 }

@@ -206,7 +206,14 @@
     }, []);
     const fields = schema[postType] || {};
     const meta = useSelect(function (select) {
-      return select('core/editor').getEditedPostAttribute('meta') || {};
+      const current = select('core/editor').getEditedPostAttribute('meta') || {};
+      const pdfId = parseInt(current.koops_pdf_id, 10) || 0;
+      if (pdfId) select('core').getMedia(pdfId);
+      String(current.koops_page_ids || '').split(',').forEach(function (id) {
+        const num = parseInt(id, 10);
+        if (num) select('core').getMedia(num);
+      });
+      return current;
     }, []);
     const { editPost } = useDispatch('core/editor');
     const taxonomy = taxonomies[postType];
@@ -221,7 +228,8 @@
           'taxonomy-panel-koops_store_area',
           'taxonomy-panel-koops_classified_category',
           'taxonomy-panel-category',
-          'discussion-panel'
+          'discussion-panel',
+          'meta-panel'
         ].forEach(function (panel) {
           try {
             editor.removeEditorPanel(panel);
@@ -252,6 +260,9 @@
       },
       postType === 'koops_store'
         ? wrapField('hint', el('p', { className: 'koops-entry-sidebar__hint', style: { margin: 0 } }, 'Nuotrauka, teritorija ir kontaktai — visi šiame skydelyje.'))
+        : null,
+      postType === 'koops_flyer'
+        ? wrapField('hint', el('p', { className: 'koops-entry-sidebar__hint', style: { margin: 0 } }, 'Įkelkite PDF ir išsaugokite — puslapiai taps nuotraukomis. Tada galerijoje galite išimti nereikalingus puslapius arba pakeisti eiliškumą.'))
         : null,
       wrapField('photo', el(KoopsFeaturedImage, { label: postType === 'koops_flyer' ? 'Viršelis' : 'Nuotrauka' })),
       taxonomy
@@ -300,71 +311,102 @@
             }
           }));
         }
-        if (field.type === 'file' && MediaUpload && MediaUploadCheck) {
+        if (field.type === 'file') {
           const fileId = parseInt(value, 10) || 0;
-          const fileMedia = wp.data.select('core').getMedia(fileId);
-          return wrapField(key, el(MediaUploadCheck, null, el(MediaUpload, {
-            allowedTypes: ['application/pdf'],
-            value: fileId,
-            onSelect: function (item) {
-              updateMeta(key, item && item.id ? item.id : 0);
-            },
-            render: function (args) {
-              return el(
-                'div',
-                { className: 'koops-media-control' },
-                el('span', { className: 'koops-media-control__label' }, field.label),
-                fileMedia
-                  ? el('p', { style: { margin: '8px 0' } }, fileMedia.title || fileMedia.source_url || 'PDF')
-                  : el('div', { className: 'koops-media-control__empty' }, 'PDF nepasirinktas'),
-                el(
-                  'div',
-                  { className: 'koops-media-control__actions' },
-                  el(Button, { variant: 'secondary', onClick: args.open }, fileId ? 'Keisti PDF' : 'Įkelti PDF'),
-                  fileId
-                    ? el(Button, {
-                        variant: 'tertiary',
-                        isDestructive: true,
-                        onClick: function () {
-                          updateMeta(key, 0);
-                        }
-                      }, 'Pašalinti')
-                    : null
-                )
-              );
-            }
-          })));
+          const fileMedia = fileId ? wp.data.select('core').getMedia(fileId) : null;
+          return wrapField(key, el(
+            'div',
+            { className: 'koops-media-control' },
+            el('span', { className: 'koops-media-control__label' }, field.label),
+            fileMedia
+              ? el('p', { className: 'koops-media-filename' }, fileMedia.title || fileMedia.source_url || 'PDF')
+              : el('div', { className: 'koops-media-control__empty' }, 'PDF nepasirinktas'),
+            el(
+              'div',
+              { className: 'koops-media-control__actions' },
+              el(Button, {
+                variant: 'secondary',
+                onClick: function () {
+                  if (!wp.media) return;
+                  const frame = wp.media({
+                    title: 'Pasirinkti PDF',
+                    library: { type: 'application/pdf' },
+                    button: { text: 'Naudoti PDF' },
+                    multiple: false
+                  });
+                  frame.on('select', function () {
+                    const file = frame.state().get('selection').first().toJSON();
+                    updateMeta(key, file && file.id ? file.id : 0);
+                  });
+                  frame.open();
+                }
+              }, fileId ? 'Keisti PDF' : 'Įkelti PDF'),
+              fileId
+                ? el(Button, {
+                    variant: 'link',
+                    isDestructive: true,
+                    onClick: function () {
+                      updateMeta(key, 0);
+                    }
+                  }, 'Pašalinti')
+                : null
+            )
+          ));
         }
-        if (field.type === 'gallery_ids' && MediaUpload && MediaUploadCheck) {
+        if (field.type === 'gallery_ids') {
           const ids = String(value || '')
             .split(',')
             .map(function (id) { return parseInt(id, 10) || 0; })
             .filter(Boolean);
-          return wrapField(key, el(MediaUploadCheck, null, el(MediaUpload, {
-            allowedTypes: ['image'],
-            multiple: true,
-            gallery: true,
-            value: ids,
-            onSelect: function (items) {
-              const next = (Array.isArray(items) ? items : [items])
-                .map(function (item) { return item && item.id ? item.id : 0; })
-                .filter(Boolean);
-              updateMeta(key, next.join(','));
-            },
-            render: function (args) {
-              return el(
-                'div',
-                { className: 'koops-media-control' },
-                el('span', { className: 'koops-media-control__label' }, field.label),
-                el('p', { style: { margin: '8px 0' } }, ids.length ? ids.length + ' puslapiai' : 'Puslapiai nepasirinkti — įkėlus PDF jie sugeneruojami automatiškai, jei serveryje yra Imagick.'),
-                el(
+          const thumbs = ids.map(function (id) {
+            const media = wp.data.select('core').getMedia(id);
+            const sizes = media && media.media_details && media.media_details.sizes;
+            return (sizes && sizes.thumbnail && sizes.thumbnail.source_url) || (media && media.source_url) || '';
+          }).filter(Boolean);
+          return wrapField(key, el(
+            'div',
+            { className: 'koops-media-control' },
+            el('span', { className: 'koops-media-control__label' }, 'Puslapiai svetainėje'),
+            thumbs.length
+              ? el(
                   'div',
-                  { className: 'koops-media-control__actions' },
-                  el(Button, { variant: 'secondary', onClick: args.open }, ids.length ? 'Keisti puslapius' : 'Įkelti puslapius')
+                  { className: 'koops-media-control__previews is-gallery' },
+                  thumbs.slice(0, 8).map(function (url, index) {
+                    return el('img', { src: url, alt: '', key: url + '-' + index });
+                  })
                 )
-              );
-            }
-          })));
+              : el('div', { className: 'koops-media-control__empty' }, 'Įkėlus PDF ir išsaugojus, puslapiai atsiras čia.'),
+            el('p', { className: 'koops-entry-sidebar__hint' }, ids.length ? ids.length + ' puslapiai. Galite pašalinti nereikalingus arba pakeisti eiliškumą.' : 'Jei PDF nesugeneruoja puslapių, įkelkite nuotraukas rankiniu būdu.'),
+            el(
+              'div',
+              { className: 'koops-media-control__actions' },
+              el(Button, {
+                variant: 'secondary',
+                onClick: function () {
+                  if (!wp.media) return;
+                  function save(selection) {
+                    const items = typeof selection.toJSON === 'function'
+                      ? selection.toJSON()
+                      : selection.map(function (model) { return model.toJSON ? model.toJSON() : model; });
+                    updateMeta(key, items.map(function (item) { return item.id; }).filter(Boolean).join(','));
+                  }
+                  if (ids.length && wp.media.gallery && typeof wp.media.gallery.edit === 'function') {
+                    wp.media.gallery.edit('[gallery ids="' + ids.join(',') + '"]').state('gallery-edit').on('update', save);
+                    return;
+                  }
+                  const frame = wp.media({
+                    frame: 'post',
+                    state: 'gallery-library',
+                    title: 'Puslapių nuotraukos',
+                    multiple: true,
+                    library: { type: 'image' }
+                  });
+                  frame.on('update', save);
+                  frame.open();
+                }
+              }, ids.length ? 'Redaguoti puslapius' : 'Įkelti puslapius rankiniu būdu')
+            )
+          ));
         }
         return wrapField(key, el(TextControl, {
           label: field.label,
@@ -392,6 +434,32 @@
         },
         el(KoopsEntryFields)
       );
+    }
+  });
+
+  function FlyerCanvasGuide() {
+    const postType = useSelect(function (select) {
+      return select('core/editor').getCurrentPostType();
+    }, []);
+
+    wp.element.useEffect(function () {
+      if (postType !== 'koops_flyer') return undefined;
+      const card = document.createElement('div');
+      card.className = 'koops-flyer-guide';
+      card.innerHTML = '<h2>Kaip įkelti leidinį</h2><ol><li>Dešinėje <strong>Leidinio duomenys</strong> įkelkite PDF.</li><li>Nustatykite datas ir viršelį.</li><li>Išsaugokite — puslapiai taps nuotraukomis.</li><li>Jei reikia, „Puslapiai“ galerijoje išimkite nereikalingus arba pakeiskite eiliškumą.</li></ol>';
+      const host = document.querySelector('.editor-visual-editor, .edit-post-visual-editor');
+      if (host) host.prepend(card);
+      return function () {
+        card.remove();
+      };
+    }, [postType]);
+
+    return null;
+  }
+
+  wp.plugins.registerPlugin('koops-flyer-guide', {
+    render: function () {
+      return el(FlyerCanvasGuide);
     }
   });
 })(window.wp);

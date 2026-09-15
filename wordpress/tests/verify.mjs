@@ -78,6 +78,10 @@ if (!entrySidebar.includes('function previewLinkLabel')) throw new Error('Ilgos 
 const entryCss = fs.readFileSync(path.join(plugin, 'assets/entry-sidebar.css'), 'utf8');
 if (!entryCss.includes('unicode-range: U+0000-00FF')) throw new Error('Admin Inter turi turėti bazinį lotynų / tarpo glifą');
 if (!entrySidebar.includes('function wrapField')) throw new Error('Kiekvienas sidebar laukas turi turėti atskirą tarpą');
+if (!entrySidebar.includes('Pasirinkti PDF')) throw new Error('Leidinio PDF turi būti native media parinkiklis');
+if (!entrySidebar.includes('Redaguoti puslapius')) throw new Error('Leidinio puslapiai turi atidaryti native galeriją');
+if (!pluginPhp.includes('koops_use_block_editor_for_flyers')) throw new Error('Leidiniai turi naudoti Gutenberg redaktorių');
+if (!fs.existsSync(path.join(plugin, 'assets/flyer-metabox.js'))) throw new Error('Trūksta leidinio media parinkiklio');
 if (!entrySidebar.includes('koops-entry-field')) throw new Error('Sidebar laukai turi būti atskirti koops-entry-field');
 if (!pluginPhp.includes('koops-editor-chrome-font-fix')) throw new Error('Gutenberg sidebar turi priverstinai naudoti sisteminį šriftą');
 if (!pluginPhp.includes('koops-admin-colors')) throw new Error('Admin turi krauti KOOPS akcento spalvas');

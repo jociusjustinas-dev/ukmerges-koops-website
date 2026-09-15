@@ -2,7 +2,7 @@
 /**
  * Plugin Name: KOOPS Core
  * Description: KOOPS turinio tipai, valdymo laukai, bendri duomenys ir formos.
- * Version: 0.20.0
+ * Version: 0.20.1
  * Author: KOOPS
  * Text Domain: koops
  */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('KOOPS_CORE_VERSION', '0.20.0');
+define('KOOPS_CORE_VERSION', '0.20.1');
 define('KOOPS_CORE_PATH', plugin_dir_path(__FILE__));
 define('KOOPS_CORE_URL', plugin_dir_url(__FILE__));
 
@@ -65,9 +65,7 @@ function koops_register_content_types(): void
             'rewrite' => ['slug' => $config['slug'], 'with_front' => false],
             'menu_icon' => $config['icon'],
             'menu_position' => 20,
-            'supports' => $type === 'koops_flyer'
-                ? ['title', 'excerpt', 'thumbnail', 'revisions', 'custom-fields']
-                : ['title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'custom-fields'],
+            'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'custom-fields'],
         ]);
     }
 
@@ -253,6 +251,29 @@ function koops_render_meta_box(WP_Post $post): void
         } elseif ($field['type'] === 'url') {
             echo '<span>' . esc_html($field['label']) . '</span>';
             koops_render_url_picker($key, (string) $value, $key);
+        } elseif ($field['type'] === 'file') {
+            $file_id = absint($value);
+            $file_url = $file_id ? (string) wp_get_attachment_url($file_id) : '';
+            $file_name = $file_id ? (string) basename((string) get_attached_file($file_id)) : '';
+            printf(
+                '<span>%1$s</span><input type="hidden" class="koops-media-id" name="%2$s" value="%3$d"><div class="koops-media-control"><p class="koops-media-filename">%4$s</p><p><button type="button" class="button koops-pick-pdf">%5$s</button> %6$s</p></div>',
+                esc_html($field['label']),
+                esc_attr($key),
+                $file_id,
+                $file_name ? esc_html($file_name) : 'PDF nepasirinktas',
+                $file_id ? 'Keisti PDF' : 'Įkelti PDF',
+                $file_url ? '<a href="' . esc_url($file_url) . '" target="_blank" rel="noreferrer">Atidaryti</a>' : ''
+            );
+        } elseif ($field['type'] === 'gallery_ids') {
+            $ids = koops_parse_id_list((string) $value);
+            printf(
+                '<span>%1$s</span><input type="hidden" class="koops-gallery-ids" name="%2$s" value="%3$s"><p>%4$s</p><p><button type="button" class="button koops-pick-pages">%5$s</button></p><p class="description">Įkėlus PDF ir išsaugojus, puslapiai sugeneruojami automatiškai. Čia galite pašalinti nereikalingus ar pakeisti eiliškumą.</p>',
+                esc_html($field['label']),
+                esc_attr($key),
+                esc_attr(implode(',', $ids)),
+                $ids ? esc_html(sprintf('%d puslapiai', count($ids))) : 'Puslapiai dar nesugeneruoti',
+                $ids ? 'Redaguoti puslapius' : 'Įkelti puslapius rankiniu būdu'
+            );
         } else {
             printf(
                 '<span>%1$s</span><input type="%2$s" name="%3$s" value="%4$s" %5$s style="width:100%%">',
@@ -326,19 +347,29 @@ function koops_flyer_after_save(int $post_id, WP_Post $post): void
 function koops_flyer_generate_pages(int $post_id): void
 {
     $pdf_id = absint(get_post_meta($post_id, 'koops_pdf_id', true));
+    $converted = absint(get_post_meta($post_id, '_koops_pdf_converted', true));
+    $existing_pages = koops_parse_id_list((string) get_post_meta($post_id, 'koops_page_ids', true));
+
     if (!$pdf_id) {
         return;
     }
-    $existing_pages = koops_parse_id_list((string) get_post_meta($post_id, 'koops_page_ids', true));
-    if ($existing_pages) {
+    if ($existing_pages && $converted === $pdf_id) {
+        if (!has_post_thumbnail($post_id)) {
+            set_post_thumbnail($post_id, $existing_pages[0]);
+        }
+        return;
+    }
+    if ($existing_pages && !$converted) {
         if (!has_post_thumbnail($post_id)) {
             set_post_thumbnail($post_id, $existing_pages[0]);
         }
         return;
     }
     if (!class_exists('Imagick')) {
+        update_post_meta($post_id, '_koops_pdf_needs_imagick', 1);
         return;
     }
+    delete_post_meta($post_id, '_koops_pdf_needs_imagick');
     $file = get_attached_file($pdf_id);
     if (!$file || !file_exists($file)) {
         return;
@@ -389,6 +420,11 @@ function koops_flyer_generate_pages(int $post_id): void
     if (!$ids) {
         return;
     }
+    foreach ($existing_pages as $old_id) {
+        if (!in_array($old_id, $ids, true) && (int) wp_get_post_parent_id($old_id) === $post_id) {
+            wp_delete_attachment($old_id, true);
+        }
+    }
     update_post_meta($post_id, 'koops_page_ids', implode(',', $ids));
     update_post_meta($post_id, '_koops_pdf_converted', $pdf_id);
     if (!has_post_thumbnail($post_id)) {
@@ -396,6 +432,31 @@ function koops_flyer_generate_pages(int $post_id): void
     }
 }
 add_action('save_post_koops_flyer', 'koops_flyer_after_save', 20, 2);
+
+function koops_use_block_editor_for_flyers(bool $use, string $post_type): bool
+{
+    if ($post_type === 'koops_flyer') {
+        return true;
+    }
+    return $use;
+}
+add_filter('use_block_editor_for_post_type', 'koops_use_block_editor_for_flyers', 10, 2);
+
+function koops_flyer_admin_notice(): void
+{
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || $screen->post_type !== 'koops_flyer' || $screen->base !== 'post') {
+        return;
+    }
+    $post_id = isset($_GET['post']) ? absint($_GET['post']) : 0;
+    if (!$post_id) {
+        return;
+    }
+    if (get_post_meta($post_id, '_koops_pdf_needs_imagick', true)) {
+        echo '<div class="notice notice-warning"><p>PDF įkeltas, bet serveryje nėra Imagick — puslapių nuotraukų sugeneruoti nepavyko. Įkelkite puslapius rankiniu būdu lauke „Puslapiai“.</p></div>';
+    }
+}
+add_action('admin_notices', 'koops_flyer_admin_notice');
 
 function koops_maybe_flush_rewrites(): void
 {
@@ -520,6 +581,16 @@ add_action('admin_enqueue_scripts', static function (): void {
     $screen = function_exists('get_current_screen') ? get_current_screen() : null;
     if ($screen && isset(koops_meta_schema()[$screen->post_type ?? ''])) {
         wp_enqueue_style('koops-entry-sidebar');
+        wp_enqueue_media();
+    }
+    if ($screen && $screen->post_type === 'koops_flyer') {
+        wp_enqueue_script(
+            'koops-flyer-metabox',
+            KOOPS_CORE_URL . 'assets/flyer-metabox.js',
+            ['jquery', 'media-editor'],
+            KOOPS_CORE_VERSION,
+            true
+        );
     }
 });
 
@@ -542,6 +613,34 @@ body.block-editor-page .edit-post-sidebar{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",Arial,sans-serif!important;
   letter-spacing:0!important;
   word-spacing:.12em!important;
+}
+body.post-type-koops_flyer .block-editor-default-block-appender,
+body.post-type-koops_flyer .block-list-appender,
+body.post-type-koops_flyer .editor-collapsible-block-toolbar {
+  display: none !important;
+}
+body.post-type-koops_flyer .edit-post-visual-editor {
+  background: #f6f7f7;
+}
+.koops-flyer-guide {
+  max-width: 640px;
+  margin: 48px auto;
+  padding: 28px 32px;
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+}
+.koops-flyer-guide h2 {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+.koops-flyer-guide ol {
+  margin: 0;
+  padding-left: 20px;
+}
+.koops-flyer-guide li {
+  margin: 0 0 8px;
+  line-height: 1.5;
 }
 </style>';
 }
