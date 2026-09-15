@@ -915,6 +915,7 @@ function koops_create_primary_menu(): void
     if (!$existing) {
         $items = [
             ['Parduotuvės', get_post_type_archive_link('koops_store')],
+            ['Leidiniai', home_url('/leidiniai/')],
             ['Naujienos', home_url('/naujienos/')],
             ['Skelbimai', get_post_type_archive_link('koops_classified')],
             ['Restoranas', home_url('/restoranas/')],

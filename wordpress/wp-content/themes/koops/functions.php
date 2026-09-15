@@ -60,6 +60,7 @@ function koops_primary_navigation(): void
     }
     $items = [
         ['Parduotuvės', get_post_type_archive_link('koops_store') ?: home_url('/parduotuves/')],
+        ['Leidiniai', home_url('/leidiniai/')],
         ['Naujienos', home_url('/naujienos/')],
         ['Skelbimai', get_post_type_archive_link('koops_classified') ?: home_url('/skelbimai/')],
         ['Restoranas', home_url('/restoranas/')],
