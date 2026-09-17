@@ -705,6 +705,11 @@ function koops_register_section_block(): void
         'variations' => koops_section_block_variations(),
     ]);
 
+    // Force fresh ?ver= past LiteSpeed year-long Cache-Control on editor.js.
+    if (function_exists('wp_scripts') && isset(wp_scripts()->registered['koops-section-editor-script'])) {
+        wp_scripts()->registered['koops-section-editor-script']->ver = koops_asset_version();
+    }
+
     $options = get_option('koops_options', []);
     $frontend_url = is_array($options) && !empty($options['frontend_url'])
         ? esc_url_raw((string) $options['frontend_url'])
@@ -717,7 +722,7 @@ function koops_register_section_block(): void
         'itemSchemas' => koops_section_item_schemas(),
         'frontendUrl' => untrailingslashit($frontend_url),
         'previewBase' => KOOPS_CORE_URL . 'assets/previews/',
-        'previewVersion' => KOOPS_CORE_VERSION,
+        'previewVersion' => koops_asset_version(),
         'restNonce' => wp_create_nonce('wp_rest'),
         'ensureMediaUrl' => rest_url('koops/v1/manage/media/ensure'),
         'pageSlug' => '',

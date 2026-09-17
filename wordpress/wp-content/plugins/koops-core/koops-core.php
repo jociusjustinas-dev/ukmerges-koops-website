@@ -2,7 +2,7 @@
 /**
  * Plugin Name: KOOPS Core
  * Description: KOOPS turinio tipai, valdymo laukai, bendri duomenys ir formos.
- * Version: 0.20.7
+ * Version: 0.20.8
  * Author: KOOPS
  * Text Domain: koops
  */
@@ -11,9 +11,19 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('KOOPS_CORE_VERSION', '0.20.7');
+define('KOOPS_CORE_VERSION', '0.20.8');
 define('KOOPS_CORE_PATH', plugin_dir_path(__FILE__));
 define('KOOPS_CORE_URL', plugin_dir_url(__FILE__));
+
+/**
+ * Asset version for admin/editor scripts. Optional bust option forces browsers
+ * past long-lived LiteSpeed/CDN cache without a full plugin version bump.
+ */
+function koops_asset_version(): string
+{
+    $bust = (string) get_option('koops_asset_bust', '');
+    return $bust !== '' ? KOOPS_CORE_VERSION . '.' . $bust : KOOPS_CORE_VERSION;
+}
 
 require_once KOOPS_CORE_PATH . 'includes/modular-pages.php';
 
@@ -504,13 +514,13 @@ function koops_register_link_picker_assets(): void
         'koops-admin-link-picker',
         KOOPS_CORE_URL . 'assets/admin-link-picker.css',
         ['editor'],
-        KOOPS_CORE_VERSION
+        koops_asset_version()
     );
     wp_register_script(
         'koops-admin-link-picker',
         KOOPS_CORE_URL . 'assets/admin-link-picker.js',
         ['jquery', 'wplink'],
-        KOOPS_CORE_VERSION,
+        koops_asset_version(),
         true
     );
 }
@@ -522,7 +532,7 @@ function koops_register_admin_colors(): void
         'koops-admin-colors',
         KOOPS_CORE_URL . 'assets/admin-colors.css',
         [],
-        KOOPS_CORE_VERSION
+        koops_asset_version()
     );
 }
 add_action('init', 'koops_register_admin_colors');
@@ -541,13 +551,13 @@ function koops_register_entry_sidebar_assets(): void
         'koops-entry-sidebar',
         KOOPS_CORE_URL . 'assets/entry-sidebar.css',
         ['koops-admin-link-picker'],
-        KOOPS_CORE_VERSION
+        koops_asset_version()
     );
     wp_register_script(
         'koops-entry-sidebar',
         KOOPS_CORE_URL . 'assets/entry-sidebar.js',
         ['wp-plugins', 'wp-edit-post', 'wp-editor', 'wp-element', 'wp-components', 'wp-data', 'wp-core-data', 'wp-block-editor', 'koops-admin-link-picker'],
-        KOOPS_CORE_VERSION,
+        koops_asset_version(),
         true
     );
 }
@@ -588,7 +598,7 @@ add_action('admin_enqueue_scripts', static function (): void {
             'koops-flyer-metabox',
             KOOPS_CORE_URL . 'assets/flyer-metabox.js',
             ['jquery', 'media-editor'],
-            KOOPS_CORE_VERSION,
+            koops_asset_version(),
             true
         );
     }
