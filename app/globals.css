@@ -2514,9 +2514,6 @@ html.store-drawer-open { overflow: hidden; }
 .restaurant-hero-media-marquee .restaurant-gallery-frame.is-big {
   width: min(46vw, 560px);
 }
-.restaurant-hero-media-marquee .restaurant-gallery-frame.is-big:only-child {
-  width: 100%;
-}
 @media (prefers-reduced-motion: reduce) {
   .restaurant-hero-media {
     opacity: 1;
@@ -2525,6 +2522,9 @@ html.store-drawer-open { overflow: hidden; }
   }
   .restaurant-hero-title-rule {
     width: clamp(72px, 18vw, 240px);
+  }
+  .restaurant-gallery-track {
+    transform: none !important;
   }
 }
 
@@ -2650,17 +2650,24 @@ html.store-drawer-open { overflow: hidden; }
   line-height: 1.45;
 }
 
-.restaurant-gallery-marquee { overflow: hidden; }
+.restaurant-gallery-marquee {
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+.restaurant-gallery-marquee.is-dragging { cursor: grabbing; }
 .restaurant-gallery-track {
   display: flex;
-  width: 100%;
-  gap: 0;
+  width: max-content;
+  will-change: transform;
 }
 .restaurant-gallery-strip {
   display: flex;
-  flex: none;
-  width: 100%;
+  flex: 0 0 auto;
   gap: 20px;
+  padding-right: 20px;
 }
 .restaurant-gallery-frame {
   position: relative;
@@ -2670,11 +2677,9 @@ html.store-drawer-open { overflow: hidden; }
   overflow: hidden;
   border-radius: var(--radius-card);
   background: var(--color-bone-canvas);
+  pointer-events: none;
 }
 .restaurant-gallery-frame.is-big { width: 420px; }
-.restaurant-gallery-frame:only-child {
-  width: 100%;
-}
 .restaurant-gallery-frame img {
   width: 100%;
   height: 100%;
