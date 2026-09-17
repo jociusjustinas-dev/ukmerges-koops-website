@@ -3332,6 +3332,22 @@ html.store-drawer-open { overflow: hidden; }
   text-transform: none;
   letter-spacing: 0;
 }
+.jobs-empty {
+  margin: 0;
+  padding: 48px 24px;
+  max-width: 36ch;
+  align-self: center;
+  text-align: center;
+  color: var(--color-morning-mist);
+  font-size: 17px;
+  line-height: 1.45;
+}
+.jobs-list:has(.jobs-empty) {
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  border-top: 0;
+}
 .careers-jobs .job-row-copy {
   gap: 10px;
 }
