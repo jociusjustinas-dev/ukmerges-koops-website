@@ -339,22 +339,26 @@ export function CareersJobs({
           </a>
         </div>
         <div className="jobs-list" role="region" aria-label="Darbo pasiūlymai">
-          {jobs.map((job) => (
-            <a className="job-row" href={job.applyUrl} key={job.id} aria-label={`${job.title} — kandidatuoti`}>
-              <div className="job-row-copy">
-                <h3>{job.title}</h3>
-                <div className="job-row-meta">
-                  <span>{job.type}</span>
-                  <span aria-hidden="true">•</span>
-                  <span>{job.location}</span>
-                  <span aria-hidden="true">•</span>
-                  <span>{job.employment}</span>
+          {jobs.length ? (
+            jobs.map((job) => (
+              <a className="job-row" href={job.applyUrl} key={job.id} aria-label={`${job.title} — kandidatuoti`}>
+                <div className="job-row-copy">
+                  <h3>{job.title}</h3>
+                  <div className="job-row-meta">
+                    <span>{job.type}</span>
+                    <span aria-hidden="true">•</span>
+                    <span>{job.location}</span>
+                    <span aria-hidden="true">•</span>
+                    <span>{job.employment}</span>
+                  </div>
+                  <p className="job-row-summary">{job.summary}</p>
                 </div>
-                <p className="job-row-summary">{job.summary}</p>
-              </div>
-              <span className="job-row-arrow" aria-hidden="true"><AvenirButtonArrow /></span>
-            </a>
-          ))}
+                <span className="job-row-arrow" aria-hidden="true"><AvenirButtonArrow /></span>
+              </a>
+            ))
+          ) : (
+            <p className="jobs-empty">Šiuo metu laisvų pozicijų nėra. Palikite užklausą žemiau — susisieksime, kai atsiras tinkamas pasiūlymas.</p>
+          )}
         </div>
       </div>
     </section>

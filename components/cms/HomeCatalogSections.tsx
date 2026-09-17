@@ -417,17 +417,21 @@ export function HomeJobs({
           <a className="pill-button accent" href={ctaHref} data-cms-field="primary-link"><RollingLabel>{ctaLabel}</RollingLabel></a>
         </div>
         <div className="jobs-list" role="region" aria-label="Naujausi darbo pasiūlymai">
-          {jobs.slice(0, 3).map((job) => (
-            <a className="job-row" href={job.applyUrl} key={job.id} aria-label={`${job.title} — kandidatuoti`}>
-              <div className="job-row-copy">
-                <h3>{job.title}</h3>
-                <div className="job-row-meta">
-                  <span>{job.type}</span><span aria-hidden="true">•</span><span>{job.location}</span>
+          {jobs.length ? (
+            jobs.slice(0, 3).map((job) => (
+              <a className="job-row" href={job.applyUrl} key={job.id} aria-label={`${job.title} — kandidatuoti`}>
+                <div className="job-row-copy">
+                  <h3>{job.title}</h3>
+                  <div className="job-row-meta">
+                    <span>{job.type}</span><span aria-hidden="true">•</span><span>{job.location}</span>
+                  </div>
                 </div>
-              </div>
-              <span className="job-row-arrow" aria-hidden="true"><AvenirButtonArrow /></span>
-            </a>
-          ))}
+                <span className="job-row-arrow" aria-hidden="true"><AvenirButtonArrow /></span>
+              </a>
+            ))
+          ) : (
+            <p className="jobs-empty">Šiuo metu laisvų pozicijų nėra. Kandidatuoti galite per karjeros formą.</p>
+          )}
         </div>
       </div>
     </section>

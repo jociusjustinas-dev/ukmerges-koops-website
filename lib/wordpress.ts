@@ -276,7 +276,8 @@ export async function getKoopsCmsData(): Promise<KoopsCmsData> {
       stores: liveStores.length ? liveStores : fallback.stores,
       news: liveNews.length ? liveNews : fallback.news,
       classifieds: liveClassifieds,
-      jobs: liveJobs.length ? liveJobs : fallback.jobs,
+      // Empty WP list is intentional (client deleted all openings) — do not revive demo jobs.
+      jobs: liveJobs,
       flyers: liveFlyers.length ? liveFlyers : fallback.flyers,
       pages: raw.pages || {},
     };
